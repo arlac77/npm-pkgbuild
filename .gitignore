@@ -1,0 +1,9 @@
+node_modules
+build
+dist
+*.log
+*.dump
+.DS_Store
+.nyc_output
+.test
+.tmp

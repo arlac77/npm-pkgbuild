@@ -1,0 +1,4 @@
+{
+  "name": "npm-pkgbuild",
+  "description": "create arch linux package from npm"
+}

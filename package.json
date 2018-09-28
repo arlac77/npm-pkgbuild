@@ -4,10 +4,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
+  "bin": {
+    "npm-pkgbuild": "bin/npm-pkgbuild.mjs"
+  },
   "description": "create arch linux package from npm",
   "keywords": [
-    "npm-package-template"
+    "aur",
+    "pkgbuild",
+    "arch-linux"
   ],
   "contributors": [
     {
@@ -46,7 +50,7 @@
     "travis-deploy-once": "^5.0.9"
   },
   "engines": {
-    "node": ">=8.12"
+    "node": ">=10.11"
   },
   "repository": {
     "type": "git",
@@ -70,7 +74,7 @@
   "nyc": {
     "include": [
       "build/*-test.js",
-      "src/**/*.js"
+      "src/**/*.mjs"
     ],
     "reporter": [
       "lcov",

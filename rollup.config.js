@@ -5,10 +5,12 @@ import json from "rollup-plugin-json";
 import cleanup from "rollup-plugin-cleanup";
 import pkg from "./package.json";
 
+const external = ["fs", "path"];
+
 export default [
   ...Object.keys(pkg.bin || {}).map(name => {
     return {
-      input: `src/${name}.js`,
+      input: `src/${name}.mjs`,
       output: {
         file: pkg.bin[name],
         format: "cjs",
@@ -16,6 +18,7 @@ export default [
           "#!/usr/bin/env -S node --experimental-modules --experimental-worker",
         interop: false
       },
+      external,
       plugins: [
         resolve(),
         commonjs(),
@@ -36,6 +39,7 @@ export default [
       format: "cjs",
       interop: false
     },
+    external,
     plugins: [resolve(), commonjs(), cleanup()]
   }
 ];

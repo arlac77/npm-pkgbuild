@@ -4,9 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "bin": {
-    "npm-pkgbuild": "bin/npm-pkgbuild.mjs"
-  },
+  "main": "dist/index.js",
   "description": "create arch linux package from npm",
   "keywords": [
     "aur",
@@ -20,6 +18,9 @@
     }
   ],
   "license": "BSD-2-Clause",
+  "bin": {
+    "npm-pkgbuild": "bin/npm-pkgbuild.mjs"
+  },
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
     "precover": "rollup -c tests/rollup.config.js",

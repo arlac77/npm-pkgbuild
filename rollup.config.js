@@ -10,7 +10,7 @@ const external = ["fs", "path"];
 export default [
   ...Object.keys(pkg.bin || {}).map(name => {
     return {
-      input: `src/${name}.mjs`,
+      input: `src/${name}-cli.mjs`,
       output: {
         file: pkg.bin[name],
         format: "cjs",

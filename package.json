@@ -4,7 +4,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
+  "main": "dist/npm-pkgbuild.js",
+  "module": "src/npm-pkgbuild.mjs",
   "description": "create arch linux package from npm",
   "keywords": [
     "aur",
@@ -19,7 +20,7 @@
   ],
   "license": "BSD-2-Clause",
   "bin": {
-    "npm-pkgbuild": "bin/npm-pkgbuild.mjs"
+    "npm-pkgbuild": "bin/npm-pkgbuild-cli.mjs"
   },
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
@@ -28,12 +29,14 @@
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "docs": "documentation readme {{module}} --section=API",
-    "lint": "documentation lint {{module}}",
+    "docs": "documentation readme src/npm-pkgbuild.mjs --section=API",
+    "lint": "documentation lint src/npm-pkgbuild.mjs",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
   },
-  "dependencies": {},
+  "dependencies": {
+    "caporal": "^0.10.0"
+  },
   "devDependencies": {
     "documentation": "^8.1.2",
     "markdown-doctest": "^0.9.1",

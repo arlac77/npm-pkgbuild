@@ -1,8 +1,7 @@
-import { createWriteStream } from "fs";
 import { join } from "path";
 import fs from "fs";
 
-async function npm2pkgbuild(dir, out) {
+export async function npm2pkgbuild(dir, out) {
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
     await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
@@ -49,5 +48,3 @@ build() {
 `
   );
 }
-
-npm2pkgbuild(process.cwd(), process.stdout);

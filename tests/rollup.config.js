@@ -11,7 +11,7 @@ export default {
     sourcemap: true,
     interop: false
   },
-  external: ["ava", "fs", "path"],
+  external: ["ava", "fs", "path", "stream", "util"],
   plugins: [
     multiEntry(),
     resolve(),

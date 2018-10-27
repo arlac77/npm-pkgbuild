@@ -6,9 +6,7 @@ branches:
   only:
     - master
     - /^greenkeeper/.*$/
-cache:
-  directories:
-    - node_modules
+cache: npm
 before_install:
   - npm i -g npm@latest
 before_script:

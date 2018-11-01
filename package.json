@@ -20,7 +20,7 @@
   ],
   "license": "BSD-2-Clause",
   "bin": {
-    "npm-pkgbuild": "bin/npm-pkgbuild-cli.mjs"
+    "npm-pkgbuild": "bin/npm-pkgbuild"
   },
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
@@ -55,7 +55,7 @@
     "travis-deploy-once": "^5.0.9"
   },
   "engines": {
-    "node": ">=10.12"
+    "node": ">=10.13"
   },
   "repository": {
     "type": "git",

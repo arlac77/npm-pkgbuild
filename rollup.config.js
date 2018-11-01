@@ -5,7 +5,7 @@ import json from "rollup-plugin-json";
 import cleanup from "rollup-plugin-cleanup";
 import pkg from "./package.json";
 
-const external = [ "fs", "path", "stream", "util"];
+const external = ["fs", "path", "stream", "util", "caporal"];
 
 export default [
   ...Object.keys(pkg.bin || {}).map(name => {
@@ -20,7 +20,6 @@ export default [
       },
       external,
       plugins: [
-        resolve(),
         commonjs(),
         json({
           include: "package.json",
@@ -40,6 +39,6 @@ export default [
       interop: false
     },
     external,
-    plugins: [resolve(), commonjs(), cleanup()]
+    plugins: [resolve(), commonjs(), json(), cleanup()]
   }
 ];

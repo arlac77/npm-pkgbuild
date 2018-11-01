@@ -1,8 +1,7 @@
 import { version } from "../package.json";
-import { npm2pkgbuild } from './npm-pkgbuild';
+import { npm2pkgbuild } from "./npm-pkgbuild";
 import { createWriteStream } from "fs";
-
-const program = require("caporal");
+import program from "caporal";
 
 program
   .description("create arch linux package from npm")
@@ -11,5 +10,4 @@ program
     npm2pkgbuild(process.cwd(), process.stdout);
   });
 
-
-  program.parse(process.argv);
+program.parse(process.argv);

@@ -35,7 +35,7 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "caporal": "^0.10.0"
+    "caporal": "^1.1.0"
   },
   "devDependencies": {
     "ava": "^1.0.0-rc.1",

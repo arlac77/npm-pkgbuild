@@ -23,8 +23,7 @@
     "npm-pkgbuild": "bin/npm-pkgbuild"
   },
   "scripts": {
-    "cover": "nyc --temp-directory build/nyc ava",
-    "precover": "rollup -c tests/rollup.config.js",
+    "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
     "test": "ava",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
@@ -38,21 +37,20 @@
     "caporal": "^1.1.0"
   },
   "devDependencies": {
-    "ava": "^1.0.0-rc.1",
+    "ava": "^1.0.0-rc.2",
     "documentation": "^8.1.2",
     "markdown-doctest": "^0.9.1",
-    "nyc": "^13.1.0",
-    "rollup": "^0.67.0",
+    "rollup": "^0.67.1",
     "rollup-plugin-cleanup": "^3.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-executable": "^1.3.0",
-    "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.4.0",
-    "semantic-release": "^15.10.8",
+    "semantic-release": "^15.12.0",
     "stream-buffers": "^3.0.2",
-    "travis-deploy-once": "^5.0.9"
+    "travis-deploy-once": "^5.0.9",
+    "c8": "^3.2.1",
+    "esm": "^3.0.84"
   },
   "engines": {
     "node": ">=10.13"
@@ -67,28 +65,18 @@
   "homepage": "https://github.com/arlac77/npm-pkgbuild#readme",
   "ava": {
     "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "env"
+      "tests/*-test.js",
+      "tests/*-test.mjs"
     ],
     "require": [
-      "babel-register"
-    ]
-  },
-  "nyc": {
-    "include": [
-      "build/*-test.js",
-      "src/**/*.mjs"
+      "esm"
     ],
-    "reporter": [
-      "lcov",
-      "text"
+    "extensions": [
+      "js",
+      "mjs"
     ],
-    "report-dir": "./build/coverage"
-  },
-  "xo": {
-    "space": true
+    "babel": false,
+    "compileEnhancements": false
   },
   "template": {
     "repository": {

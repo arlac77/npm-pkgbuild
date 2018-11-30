@@ -1,3 +1,4 @@
+import { createWriteStream } from "fs";
 import { join } from "path";
 import fs from "fs";
 
@@ -38,7 +39,7 @@ pkgver() {
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
-build() {
+package() {
   cd "${pkg.name}"
   npm install
   npm install --production

@@ -8,6 +8,11 @@ export async function npm2pkgbuild(dir, out) {
     await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
   );
 
+  let repo = pkg.repository.url;
+  if(!repo.startsWith('git+')) {
+    repo = 'git+' + repo;
+  }
+
   out.write(
     `# Maintainer: ${pkg.contributors[0].name} <${pkg.contributors[0].email}>
 pkgname=${pkg.name}
@@ -29,7 +34,7 @@ backup=()
 options=()
 install=
 changelog=
-source=(${pkg.name}::${pkg.repository.url})
+source=(${pkg.name}::${repo})
 noextract=()
 md5sums=('SKIP')
 validpgpkeys=()

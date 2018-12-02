@@ -49,7 +49,6 @@ package() {
   npm install
   npm install --production
   npm prune
-  nm-prune --force
 }
 `
   );

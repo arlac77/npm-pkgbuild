@@ -14,7 +14,7 @@ export async function npm2pkgbuild(dir, out) {
   }
 
   out.write(
-    `# Maintainer: ${pkg.contributors[0].name} <${pkg.contributors[0].email}>
+    `# ${pkg.contributors.map((c,i) => `${i?'Contributor':'Maintainer'}: ${c.name} <${c.email}>`).join('\n# ')}
 pkgname=${pkg.name}
 pkgrel=1
 pkgver=${pkg.version}
@@ -49,7 +49,16 @@ package() {
   npm install
   npm install --production
   npm prune
+
+  ${Object.keys(pkg.bin||{}).map(n => `install -Dm755 ${pkg.bin[n]} "\${pkgdir}/${pkg.bin[n]}"`).join('\n  ')}
+  install node_modules "\${pkgdir}/node_modules"
 }
 `
   );
+
+  await new Promise((resolve,reject) => {
+    out.on('close', resolve);
+    out.on('error', reject);
+    out.end();
+  });
 }

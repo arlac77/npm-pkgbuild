@@ -5,7 +5,7 @@ import json from "rollup-plugin-json";
 import cleanup from "rollup-plugin-cleanup";
 import pkg from "./package.json";
 
-const external = ["fs", "path", "stream", "util", "caporal"];
+const external = ["fs", "path", "stream", "util", "caporal", "execa"];
 
 export default [
   ...Object.keys(pkg.bin || {}).map(name => {

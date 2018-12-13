@@ -4,7 +4,9 @@ import { promisify } from 'util';
 import { finished } from 'stream';
 import fs from "fs";
 
-export async function npm2pkgbuild(dir, out) {
+export async function npm2pkgbuild(dir, out, options = {}) {
+  const installdir = options.installdir || '/';
+
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
     await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
@@ -94,7 +96,8 @@ build() {
 }
 
 package() {
-  (cd "\${srcdir}/${pkg.name}";tar cf - * )|(cd "\${pkgdir}";tar xf - )
+  mkdir -p "\${pkgdir}/${installdir}"
+  (cd "\${srcdir}/${pkg.name}";tar cf - * )|(cd "\${pkgdir}/${installdir}";tar xf - )
 }
 `
   );

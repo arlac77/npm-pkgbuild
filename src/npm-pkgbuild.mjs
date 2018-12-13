@@ -95,7 +95,7 @@ build() {
 }
 
 package() {
-  (cd "${srcdir}";tar cf - bin node_modules package.json)|(cd "${pkgdir}";tar xf - )
+  (cd "${srcdir}/${pkg.name}";tar cf - )|(cd "${pkgdir}";tar xf - )
 }
 `
   );

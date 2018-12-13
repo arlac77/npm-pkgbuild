@@ -95,7 +95,7 @@ build() {
 }
 
 package() {
-  (cd "${srcdir}/${pkg.name}";tar cf - )|(cd "${pkgdir}";tar xf - )
+  (cd "${srcdir}/${pkg.name}";tar cf - * )|(cd "${pkgdir}";tar xf - )
 }
 `
   );

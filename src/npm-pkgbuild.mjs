@@ -19,7 +19,7 @@ export async function npm2pkgbuild(dir, out) {
     `# ${pkg.contributors.map((c,i) => `${i?'Contributor':'Maintainer'}: ${c.name} <${c.email}>`).join('\n# ')}
 pkgname=${pkg.name}
 pkgrel=1
-pkgver=${pkg.version}
+pkgver=${pkg.version.replace(/[\w\-]+$/,'')}
 epoch=
 pkgdesc="${pkg.description}"
 arch=('any')
@@ -70,7 +70,7 @@ build() {
   find node_modules -iname "CONTRIBUTING*" -print0|xargs -r -0 rm
   find node_modules -iname "Contributors*" -print0|xargs -r -0 rm
   find node_modules -iname "CHANGES*" -print0|xargs -r -0 rm
-  find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm
+  find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
   find node_modules -iname "Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
   find . -name "jsdoc.json" -print0|xargs -r -0 rm

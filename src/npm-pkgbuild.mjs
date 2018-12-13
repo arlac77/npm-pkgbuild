@@ -36,7 +36,7 @@ backup=()
 options=()
 install=
 changelog=
-source=(${pkg.name}::${repo})
+source=(${repo})
 noextract=()
 md5sums=('SKIP')
 validpgpkeys=()
@@ -95,8 +95,8 @@ build() {
 }
 
 package() {
-  ${Object.keys(pkg.bin||{}).map(n => `install -Dm755 "\${srcdir}/${pkg.bin[n]}" "\${pkgdir}/${pkg.bin[n]}"`).join('\n  ')}
-  install "\${srcdir}/node_modules" "\${pkgdir}/node_modules"
+  ${Object.keys(pkg.bin||{}).map(n => `install -Dm755 "\${srcdir}/${pkg.name}$/{pkg.bin[n]}" "\${pkgdir}/${pkg.bin[n]}"`).join('\n  ')}
+  install "\${srcdir}/${pkg.name}/node_modules" "\${pkgdir}/node_modules"
 }
 `
   );

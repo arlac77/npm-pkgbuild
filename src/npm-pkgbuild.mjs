@@ -95,8 +95,8 @@ build() {
 }
 
 package() {
-  ${Object.keys(pkg.bin||{}).map(n => `install -Dm755 ${pkg.bin[n]} "\${pkgdir}/${pkg.bin[n]}"`).join('\n  ')}
-  install node_modules "\${pkgdir}/node_modules"
+  ${Object.keys(pkg.bin||{}).map(n => `install -Dm755 "\${srcdir}/${pkg.bin[n]}" "\${pkgdir}/${pkg.bin[n]}"`).join('\n  ')}
+  install "\${srcdir}/node_modules" "\${pkgdir}/node_modules"
 }
 `
   );

@@ -58,7 +58,6 @@ build() {
   find node_modules -iname tests -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname doc -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname docs -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname dist -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname example -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname examples -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname "readme*" -print0|xargs -r -0 rm

@@ -9,5 +9,5 @@ test("npm2pkgbuild", async t => {
 
   await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws);
 
-  t.regex(ws.getContentsAsString('utf8'), /source=\(pkgname::/);
+  t.regex(ws.getContentsAsString('utf8'), /source=\(git/);
 });

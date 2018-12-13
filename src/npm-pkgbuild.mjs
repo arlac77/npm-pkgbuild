@@ -49,8 +49,7 @@ pkgver() {
 build() {
   cd "${pkg.name}"
   npm install
-  npm install --production
-  npm prune
+  npm prune --production
   find . -name "*~" -print0|xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm

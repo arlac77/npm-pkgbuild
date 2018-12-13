@@ -13,9 +13,10 @@ program
   .action(async (args, options, logger) => {
     if (options.w !== undefined) {
       const wd = options.w;
-      const dest = createWriteStream(join(wd, "PKGBUILD"));
       await promises.mkdir(wd, { recursive: true });
 
+      const dest = createWriteStream(join(wd, "PKGBUILD"));
+      
       await npm2pkgbuild(process.cwd(), dest);
 
       const r = await execa("makepkg", ["-f"], { cwd: wd });

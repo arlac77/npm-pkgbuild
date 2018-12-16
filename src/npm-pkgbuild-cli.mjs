@@ -9,8 +9,8 @@ const { promises } = require("fs");
 program
   .description("create arch linux package from npm")
   .version(version)
-  .option("-i <dir>")
-  .option("-w <dir>")
+  .option("-i <dir>", "install directory", undefined, "/")
+  .option("-w <dir>", "workspace directory", undefined, "build")
   .action(async (args, options, logger) => {
     if (options.w !== undefined) {
       const wd = options.w;

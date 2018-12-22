@@ -9,6 +9,7 @@ const { promises } = require("fs");
 program
   .description("create arch linux package from npm")
   .version(version)
+  .option("-p <name>", "install hook", undefined)
   .option("-i <dir>", "install directory", undefined, "/")
   .option("-w <dir>", "workspace directory", undefined, "build")
   .action(async (args, options, logger) => {
@@ -17,8 +18,8 @@ program
       await promises.mkdir(wd, { recursive: true });
 
       const dest = createWriteStream(join(wd, "PKGBUILD"));
-      
-      await npm2pkgbuild(process.cwd(), dest, { installdir : options.i });
+ 
+      await npm2pkgbuild(process.cwd(), dest, { installdir : options.i, installHook: options.p });
 
       const r = await execa("makepkg", ["-f"], { cwd: wd });
       console.log(r.stderr);

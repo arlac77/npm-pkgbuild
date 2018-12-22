@@ -17,30 +17,34 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     repo = 'git+' + repo;
   }
 
+  const properties = {
+    url: pkg.homepage,
+    pkgdesc: pkg.description,
+    license: pkg.license,
+    pkgrel: 1,
+    pkgname : pkg.name
+    arch: 'any',
+    makedependes : 'git',
+    dependes: 'nodejs',
+    source: repo,
+    md5sums : 'SKIP',
+    install: options.installHook
+  };
+
   out.write(
     `# ${pkg.contributors.map((c,i) => `${i?'Contributor':'Maintainer'}: ${c.name} <${c.email}>`).join('\n# ')}
-pkgname=${pkg.name}
-pkgrel=1
 pkgver=${pkg.version.replace(/[\w\-]+$/,'')}
 epoch=
-pkgdesc="${pkg.description}"
-arch=('any')
-url="${pkg.homepage}"
-license=('${pkg.license}')
 groups=()
-depends=('nodejs')
-makedepends=('git')
 optdepends=()
 provides=()
 conflicts=()
 replaces=()
 backup=()
 options=()
-install=
+${Object.keys(properties).filter(k=>properties[k]!==undefined).map(k=> `${k}='${properties[k]}'`).join('\n')}
 changelog=
-source=(${repo})
 noextract=()
-md5sums=('SKIP')
 validpgpkeys=()
 
 pkgver() {

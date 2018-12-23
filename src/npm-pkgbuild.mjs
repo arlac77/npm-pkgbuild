@@ -4,6 +4,18 @@ import { promisify } from 'util';
 import { finished } from 'stream';
 import fs from "fs";
 
+function quote(v)
+{
+  if(v === undefined) return '';
+
+  if(Array.isArray(v)) {
+    return '(' + v.map(x=>quote(x)).join(',') + ')';
+  }
+  if(typeof v === 'number' || v instanceof Number) return v;
+
+  return v.match(/^\w+$/) ? v : "'" + v + "'";
+}
+
 export async function npm2pkgbuild(dir, out, options = {}) {
   const installdir = options.installdir || '/';
 
@@ -20,32 +32,32 @@ export async function npm2pkgbuild(dir, out, options = {}) {
   const properties = {
     url: pkg.homepage,
     pkgdesc: pkg.description,
-    license: pkg.license,
+    license: [pkg.license],
     pkgrel: 1,
-    pkgname : pkg.name
-    arch: 'any',
+    pkgver: pkg.version.replace(/[\w\-]+$/,''),
+    pkgname : pkg.name,
+    arch: ['any'],
     makedependes : 'git',
     dependes: 'nodejs',
-    source: repo,
-    md5sums : 'SKIP',
-    install: options.installHook
+    source: [repo],
+    md5sums : ['SKIP'],
+    install: options.installHook,
+    groups: [],
+    optdepends: [],
+    provides: [],
+    conflicts: [],
+    replaces: [],
+    backup: [],
+    options: [],
+    noextract: [],
+    validpgpkeys: []
   };
 
   out.write(
     `# ${pkg.contributors.map((c,i) => `${i?'Contributor':'Maintainer'}: ${c.name} <${c.email}>`).join('\n# ')}
-pkgver=${pkg.version.replace(/[\w\-]+$/,'')}
+${Object.keys(properties).filter(k=>properties[k]!==undefined).map(k=>`${k}=${quote(properties[k])}`).join('\n')}
 epoch=
-groups=()
-optdepends=()
-provides=()
-conflicts=()
-replaces=()
-backup=()
-options=()
-${Object.keys(properties).filter(k=>properties[k]!==undefined).map(k=> `${k}='${properties[k]}'`).join('\n')}
 changelog=
-noextract=()
-validpgpkeys=()
 
 pkgver() {
   cd "$pkgname"

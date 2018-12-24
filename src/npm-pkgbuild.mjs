@@ -1,23 +1,22 @@
 import { createWriteStream } from "fs";
 import { join } from "path";
-import { promisify } from 'util';
-import { finished } from 'stream';
+import { promisify } from "util";
+import { finished } from "stream";
 import fs from "fs";
 
-function quote(v)
-{
-  if(v === undefined) return '';
+function quote(v) {
+  if (v === undefined) return "";
 
-  if(Array.isArray(v)) {
-    return '(' + v.map(x=>quote(x)).join(',') + ')';
+  if (Array.isArray(v)) {
+    return "(" + v.map(x => quote(x)).join(",") + ")";
   }
-  if(typeof v === 'number' || v instanceof Number) return v;
+  if (typeof v === "number" || v instanceof Number) return v;
 
   return v.match(/^\w+$/) ? v : "'" + v + "'";
 }
 
 export async function npm2pkgbuild(dir, out, options = {}) {
-  const installdir = options.installdir || '/';
+  const installdir = options.installdir || "/";
 
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
@@ -25,8 +24,8 @@ export async function npm2pkgbuild(dir, out, options = {}) {
   );
 
   let repo = pkg.repository.url;
-  if(!repo.startsWith('git+')) {
-    repo = 'git+' + repo;
+  if (!repo.startsWith("git+")) {
+    repo = "git+" + repo;
   }
 
   const properties = {
@@ -34,13 +33,13 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     pkgdesc: pkg.description,
     license: [pkg.license],
     pkgrel: 1,
-    pkgver: pkg.version.replace(/[\w\-]+$/,''),
-    pkgname : pkg.name,
-    arch: ['any'],
-    makedependes : 'git',
-    dependes: 'nodejs',
+    pkgver: pkg.version.replace(/[\w\-]+$/, ""),
+    pkgname: pkg.name,
+    arch: ["any"],
+    makedependes: "git",
+    dependes: "nodejs",
     source: [repo],
-    md5sums : ['SKIP'],
+    md5sums: ["SKIP"],
     install: options.installHook,
     groups: [],
     optdepends: [],
@@ -54,10 +53,15 @@ export async function npm2pkgbuild(dir, out, options = {}) {
   };
 
   out.write(
-    `# ${pkg.contributors.map((c,i) => `${i?'Contributor':'Maintainer'}: ${c.name} <${c.email}>`).join('\n# ')}
-${Object.keys(properties).filter(k=>properties[k]!==undefined).map(k=>`${k}=${quote(properties[k])}`).join('\n')}
-epoch=
-changelog=
+    `# ${pkg.contributors
+      .map(
+        (c, i) => `${i ? "Contributor" : "Maintainer"}: ${c.name} <${c.email}>`
+      )
+      .join("\n# ")}
+${Object.keys(properties)
+      .filter(k => properties[k] !== undefined)
+      .map(k => `${k}=${quote(properties[k])}`)
+      .join("\n")}
 
 pkgver() {
   cd "$pkgname"
@@ -65,9 +69,10 @@ pkgver() {
 }
 
 build() {
-  cd "${pkg.name}"
+  cd "$pkgname"
   npm install
   npm prune --production
+  npm pack
   find . -name "*~" -print0|xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
@@ -75,8 +80,7 @@ build() {
   find node_modules -iname tests -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname doc -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname docs -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname example -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname examples -type d -print0|xargs -r -0 rm -rf
+  find node_modules -iname "example*" -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname "readme*" -print0|xargs -r -0 rm
   find node_modules -iname "AUTHORS*" -print0|xargs -r -0 rm
   find node_modules -iname "NOTICE*" -print0|xargs -r -0 rm
@@ -113,7 +117,11 @@ build() {
 
 package() {
   mkdir -p "\${pkgdir}/${installdir}"
-  (cd "\${srcdir}/${pkg.name}";tar cf - * )|(cd "\${pkgdir}/${installdir}";tar xf - )
+  cd "\${pkgdir}/${installdir}"
+  tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz
+  (cd "\${srcdir}/${
+    pkg.name
+  }";tar cf - node_modules)|(cd "\${pkgdir}/${installdir}";tar xf - )
 }
 `
   );

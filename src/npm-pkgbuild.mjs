@@ -116,12 +116,14 @@ build() {
 }
 
 package() {
-  mkdir -p "\${pkgdir}/${installdir}"
-  cd "\${pkgdir}/${installdir}"
+  mkdir -p "\${pkgdir}${installdir}"
+  cd "\${pkgdir}${installdir}"
   tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz
+  mv package/* .
+  rmdir package 
   (cd "\${srcdir}/${
     pkg.name
-  }";tar cf - node_modules)|(cd "\${pkgdir}/${installdir}";tar xf - )
+  }";tar cf - node_modules)|(cd "\${pkgdir}${installdir}";tar xf - )
 }
 `
   );

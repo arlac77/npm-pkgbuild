@@ -71,8 +71,8 @@ pkgver() {
 build() {
   cd "$pkgname"
   npm install
-  npm prune --production
   npm pack
+  npm prune --production
   find . -name "*~" -print0|xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
@@ -102,9 +102,9 @@ build() {
   find . -name ".verb.md" -print0|xargs -r -0 rm
   find . -name ".npmignore" -print0|xargs -r -0 rm
   find . -name ".travis.yml" -print0|xargs -r -0 rm
-  find . -name ".jshintrc" -print0|xargs -r -0 rm
-  find . -name ".eslintrc" -print0|xargs -r -0 rm
-  find . -name ".eslintignore" -print0|xargs -r -0 rm
+  find . -name ".jshintrc*" -print0|xargs -r -0 rm
+  find . -name ".eslintrc*" -print0|xargs -r -0 rm
+  find . -name ".eslintignore*" -print0|xargs -r -0 rm
   find . -name ".nvmrc" -print0|xargs -r -0 rm
   find . -name ".zuul.yml" -print0|xargs -r -0 rm
   find . -name ".doclets.yml" -print0|xargs -r -0 rm
@@ -120,7 +120,7 @@ package() {
   cd "\${pkgdir}${installdir}"
   tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz
   mv package/* .
-  rmdir package 
+  rmdir package
   (cd "\${srcdir}/${
     pkg.name
   }";tar cf - node_modules)|(cd "\${pkgdir}${installdir}";tar xf - )

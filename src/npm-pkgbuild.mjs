@@ -25,6 +25,8 @@ export async function npm2pkgbuild(dir, out, options = {}) {
   const installdir = options.installdir || pkg.pacman.installdir || "/";
   delete options.installdir;
   delete pkg.pacman.installdir;
+  
+  console.log(`installdir: ${installdir}`);
 
   let repo = pkg.repository.url;
   if (!repo.startsWith("git+")) {

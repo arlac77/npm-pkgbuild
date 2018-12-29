@@ -11,5 +11,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/arlac77/npm-pkgbuild.git"
+  },
+  "engines": { "node": ">=10.5"},
+  "pacman" : {
+     "group" : "webhook",
+     "backup" : ["systemd/npm-template-sync-github-hook.service"]
   }
 }

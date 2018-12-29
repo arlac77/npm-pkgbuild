@@ -8,7 +8,7 @@ function quote(v) {
   if (v === undefined) return "";
 
   if (Array.isArray(v)) {
-    return "(" + v.map(x => quote(x)).join(",") + ")";
+    return "(" + v.map(x => quote(x)).join(" ") + ")";
   }
   if (typeof v === "number" || v instanceof Number) return v;
 
@@ -17,6 +17,7 @@ function quote(v) {
 
 export async function npm2pkgbuild(dir, out, options = {}) {
   const installdir = options.installdir || "/";
+  delete options.installdir;
 
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
@@ -28,7 +29,7 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     repo = "git+" + repo;
   }
 
-  const properties = {
+  const properties = Object.assign({
     url: pkg.homepage,
     pkgdesc: pkg.description,
     license: [pkg.license],
@@ -36,21 +37,22 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     pkgver: pkg.version.replace(/[\w\-]+$/, ""),
     pkgname: pkg.name,
     arch: ["any"],
-    makedependes: "git",
-    dependes: "nodejs",
+    makedepends: "git",
+    depends: `nodejs${pkg.engines && pkg.engines.node ? pkg.engines.node : ""}`,
     source: [repo],
     md5sums: ["SKIP"],
-    install: options.installHook,
-    groups: [],
-    optdepends: [],
-    provides: [],
     conflicts: [],
     replaces: [],
-    backup: [],
-    options: [],
     noextract: [],
     validpgpkeys: []
-  };
+  }, pkg.pacman, options);
+
+  ["backup","groups","options","provides","depends","makedepends","optdepends"].forEach(k => {
+    const v = properties[k];
+    if(v !== undefined && !Array.isArray(v)) {
+      properties[k] = [v];
+    }
+  });
 
   out.write(
     `# ${pkg.contributors

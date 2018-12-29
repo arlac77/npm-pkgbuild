@@ -9,5 +9,8 @@ test("npm2pkgbuild", async t => {
 
   await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws);
 
-  t.regex(ws.getContentsAsString('utf8'), /source=\('git/);
+  const c = ws.getContentsAsString('utf8');
+  t.regex(c, /source=\('git/);
+  t.regex(c, /depends=.*nodejs>=10.5/);
+  t.regex(c, /backup=.*systemd\/npm-template/);
 });

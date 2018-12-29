@@ -16,7 +16,7 @@
     "node": ">=10.5"
   },
   "pacman": {
-    "group": "webhook",
+    "groups": "webhook",
     "backup": [
       "systemd/npm-template-sync-github-hook.service"
     ],

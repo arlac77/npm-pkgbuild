@@ -33,17 +33,17 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     {
       url: pkg.homepage,
       pkgdesc: pkg.description,
-      license: [pkg.license],
+      license: pkg.license,
       pkgrel: 1,
       pkgver: pkg.version.replace(/[\w\-]+$/, ""),
       pkgname: pkg.name,
-      arch: ["any"],
+      arch: "any",
       makedepends: "git",
       depends: `nodejs${
         pkg.engines && pkg.engines.node ? pkg.engines.node : ""
       }`,
-      source: [repo],
-      md5sums: ["SKIP"]
+      source: repo,
+      md5sums: "SKIP"
     },
     pkg.pacman,
     options
@@ -71,6 +71,12 @@ export async function npm2pkgbuild(dir, out, options = {}) {
       properties[k] = [v];
     }
   });
+
+  if (properties.backup !== undefined) {
+    properties.backup = properties.backup.map(name =>
+      join(installdir, name).substring(1)
+    );
+  }
 
   out.write(
     `# ${pkg.contributors

@@ -29,27 +29,45 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     repo = "git+" + repo;
   }
 
-  const properties = Object.assign({
-    url: pkg.homepage,
-    pkgdesc: pkg.description,
-    license: [pkg.license],
-    pkgrel: 1,
-    pkgver: pkg.version.replace(/[\w\-]+$/, ""),
-    pkgname: pkg.name,
-    arch: ["any"],
-    makedepends: "git",
-    depends: `nodejs${pkg.engines && pkg.engines.node ? pkg.engines.node : ""}`,
-    source: [repo],
-    md5sums: ["SKIP"],
-    conflicts: [],
-    replaces: [],
-    noextract: [],
-    validpgpkeys: []
-  }, pkg.pacman, options);
+  const properties = Object.assign(
+    {
+      url: pkg.homepage,
+      pkgdesc: pkg.description,
+      license: [pkg.license],
+      pkgrel: 1,
+      pkgver: pkg.version.replace(/[\w\-]+$/, ""),
+      pkgname: pkg.name,
+      arch: ["any"],
+      makedepends: "git",
+      depends: `nodejs${
+        pkg.engines && pkg.engines.node ? pkg.engines.node : ""
+      }`,
+      source: [repo],
+      md5sums: ["SKIP"]
+    },
+    pkg.pacman,
+    options
+  );
 
-  ["backup","groups","options","provides","depends","makedepends","optdepends"].forEach(k => {
+  [
+    "md5sums",
+    "source",
+    "arch",
+    "license",
+    "validpgpkeys",
+    "noextract",
+    "replaces",
+    "conflicts",
+    "backup",
+    "groups",
+    "options",
+    "provides",
+    "depends",
+    "makedepends",
+    "optdepends"
+  ].forEach(k => {
     const v = properties[k];
-    if(v !== undefined && !Array.isArray(v)) {
+    if (v !== undefined && !Array.isArray(v)) {
       properties[k] = [v];
     }
   });

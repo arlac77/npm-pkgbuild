@@ -4,7 +4,7 @@ import { WritableStreamBuffer } from "stream-buffers";
 
 import { npm2pkgbuild } from "../src/npm-pkgbuild";
 
-test("npm2pkgbuild", async t => {
+test("npm2pkgbuild simple", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
 
   await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws, {
@@ -15,4 +15,18 @@ test("npm2pkgbuild", async t => {
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
   t.regex(c, /backup=.*somewhere\/systemd\/npm-template/);
+});
+
+test("npm2pkgbuild systemd service", async t => {
+  const ws = new WritableStreamBuffer({ initialSize: 10240 });
+
+  await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws, {
+    installdir: "/somewhere"
+  });
+
+  const c = ws.getContentsAsString("utf8");
+  t.true(
+    c.indexOf("cp ${srcdir}/pkgname/systemd/npm-template-sync-github-hook*") >
+      100
+  );
 });

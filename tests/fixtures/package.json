@@ -20,6 +20,9 @@
     "backup": [
       "systemd/npm-template-sync-github-hook.service"
     ],
-    "install": "pacman.install"
+    "install": "pacman.install",
+    "services": {
+      "npm-template-sync-github-hook": "systemd/npm-template-sync-github-hook*"
+    }
   }
 }

@@ -15,18 +15,11 @@ function quote(v) {
   return v.match(/^\w+$/) ? v : "'" + v + "'";
 }
 
-export async function npm2pkgbuild(dir, out, options = {}) {
-
+export async function npm2pkgbuild(dir, out, options) {
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
     await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
   );
-
-  const installdir = options.installdir || pkg.pacman.installdir || "/";
-  delete options.installdir;
-  delete pkg.pacman.installdir;
-  
-  console.log(`installdir: ${installdir}`);
 
   let repo = pkg.repository.url;
   if (!repo.startsWith("git+")) {
@@ -35,6 +28,7 @@ export async function npm2pkgbuild(dir, out, options = {}) {
 
   const properties = Object.assign(
     {
+      installdir: "/",
       url: pkg.homepage,
       pkgdesc: pkg.description,
       license: pkg.license,
@@ -52,6 +46,13 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     pkg.pacman,
     options
   );
+
+  const installdir = properties.installdir;
+  const services = properties.services;
+  delete properties.installdir;
+  delete properties.services;
+
+  console.log(`installdir: ${installdir}`);
 
   [
     "md5sums",
@@ -80,6 +81,21 @@ export async function npm2pkgbuild(dir, out, options = {}) {
     properties.backup = properties.backup.map(name =>
       join(installdir, name).substring(1)
     );
+  }
+
+  let installServices = "";
+
+  if (services !== undefined) {
+    installServices =
+      'mkdir -p "${pkgdir}/usr/lib/systemd/system"\n' +
+      Object.keys(services)
+        .map(
+          n =>
+            "  cp " +
+            join("${srcdir}", pkg.name, services[n]) +
+            ' "${pkgdir}/usr/lib/systemd/system"'
+        )
+        .join("\n");
   }
 
   out.write(
@@ -146,6 +162,7 @@ build() {
 }
 
 package() {
+  ${installServices}
   mkdir -p "\${pkgdir}${installdir}"
   cd "\${pkgdir}${installdir}"
   tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz

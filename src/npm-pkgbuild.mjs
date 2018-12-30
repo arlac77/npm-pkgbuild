@@ -1,4 +1,3 @@
-import { createWriteStream } from "fs";
 import { join } from "path";
 import { promisify } from "util";
 import { finished } from "stream";
@@ -129,7 +128,8 @@ build() {
   npm install
   npm pack
   npm prune --production
-  find . -name "*~" -print0|xargs -r -0 rm
+  find . \( -name "*~" -o -name "*.mk" -o -name "*.bat" -o -name "*.tmp" -o -name "*.orig" \) -print0 \
+  | xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
   find node_modules -iname test -type d -print0|xargs -r -0 rm -rf
@@ -149,28 +149,21 @@ build() {
   find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
   find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
-  find node_modules -name "*.mk" -print0|xargs -r -0 rm
-  find node_modules -name "*.bat" -print0|xargs -r -0 rm
-  find node_modules -name "*.tmp" -print0|xargs -r -0 rm
-  find node_modules -name "*.orig" -print0|xargs -r -0 rm
   find . -name "jsdoc.json" -print0|xargs -r -0 rm
   find . -name "SECURITY.md" -print0|xargs -r -0 rm
   find . -name "SFTPStream.md" -print0|xargs -r -0 rm
   find . -name "LIMITS.md" -print0|xargs -r -0 rm
   find . -name "GOVERNANCE.md" -print0|xargs -r -0 rm
-  find . -name ".gitignore" -print0|xargs -r -0 rm
-  find . -name ".gitmodules" -print0|xargs -r -0 rm
+  find . -name ".git*" -print0|xargs -r -0 rm
+  find . -name ".npm*" -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm
-  find . -name ".npmignore" -print0|xargs -r -0 rm
+  find . -name ".nvmrc" -print0|xargs -r -0 rm
   find . -name ".travis.yml" -print0|xargs -r -0 rm
   find . -name ".jshintrc*" -print0|xargs -r -0 rm
-  find . -name ".eslintrc*" -print0|xargs -r -0 rm
-  find . -name ".eslintignore*" -print0|xargs -r -0 rm
-  find . -name ".nvmrc" -print0|xargs -r -0 rm
+  find . -name ".esl*" -print0|xargs -r -0 rm
   find . -name ".zuul.yml" -print0|xargs -r -0 rm
   find . -name ".doclets.yml" -print0|xargs -r -0 rm
   find . -name ".editorconfig" -print0|xargs -r -0 rm
-  find . -name ".gitattributes" -print0|xargs -r -0 rm
   find . -name ".tern-project" -print0|xargs -r -0 rm
   find . -name ".dockerignore" -print0|xargs -r -0 rm
   find . -name ".dir-locals.el" -print0|xargs -r -0 rm

@@ -54,6 +54,10 @@ export async function npm2pkgbuild(dir, out, options) {
 
   console.log(`installdir: ${installdir}`);
 
+  if(properties.install !== undefined) {
+    properties.install = join('..',properties.install);
+  }
+
   [
     "md5sums",
     "source",

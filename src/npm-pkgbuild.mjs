@@ -59,21 +59,27 @@ export async function npm2pkgbuild(dir, out, options) {
   }
 
   [
-    "md5sums",
-    "source",
-    "arch",
+    "pkgname",
     "license",
+    "source",
     "validpgpkeys",
     "noextract",
-    "replaces",
-    "conflicts",
-    "backup",
+    "md5sums",
+    "sha1sums",
+    "sha256sums",
+    "sha384sums",
+    "sha512sums",
     "groups",
-    "options",
-    "provides",
+    "arch",
+    "backup",
     "depends",
     "makedepends",
-    "optdepends"
+    "checkdepends",
+    "optdepends",
+    "conflicts",
+    "provides",
+    "replaces",
+    "options"
   ].forEach(k => {
     const v = properties[k];
     if (v !== undefined && !Array.isArray(v)) {

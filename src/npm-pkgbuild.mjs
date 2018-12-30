@@ -154,8 +154,7 @@ build() {
   find . -name "SFTPStream.md" -print0|xargs -r -0 rm
   find . -name "LIMITS.md" -print0|xargs -r -0 rm
   find . -name "GOVERNANCE.md" -print0|xargs -r -0 rm
-  find . -name ".git*" -print0|xargs -r -0 rm
-  find . -name ".npm*" -print0|xargs -r -0 rm
+  find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm
   find . -name ".nvmrc" -print0|xargs -r -0 rm
   find . -name ".travis.yml" -print0|xargs -r -0 rm

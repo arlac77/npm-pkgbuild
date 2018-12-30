@@ -54,8 +54,8 @@ export async function npm2pkgbuild(dir, out, options) {
 
   console.log(`installdir: ${installdir}`);
 
-  if(properties.install !== undefined) {
-    properties.install = join('..',properties.install);
+  if (properties.install !== undefined) {
+    properties.install = join("..", properties.install);
   }
 
   [
@@ -141,12 +141,17 @@ build() {
   find node_modules -iname "Contributors*" -print0|xargs -r -0 rm
   find node_modules -iname "CHANGES*" -print0|xargs -r -0 rm
   find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
-  find node_modules -iname "Makefile*" -print0|xargs -r -0 rm
+  find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
+  find node_modules -name "*.mk" -print0|xargs -r -0 rm
+  find node_modules -name "*.bat" -print0|xargs -r -0 rm
+  find node_modules -name "*.tmp" -print0|xargs -r -0 rm
+  find node_modules -name "*.orig" -print0|xargs -r -0 rm
   find . -name "jsdoc.json" -print0|xargs -r -0 rm
   find . -name "SECURITY.md" -print0|xargs -r -0 rm
   find . -name "SFTPStream.md" -print0|xargs -r -0 rm
   find . -name "LIMITS.md" -print0|xargs -r -0 rm
+  find . -name "GOVERNANCE.md" -print0|xargs -r -0 rm
   find . -name ".gitignore" -print0|xargs -r -0 rm
   find . -name ".gitmodules" -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm

@@ -33,6 +33,7 @@ export default [
       },
       external,
       plugins: [
+        resolve(),
         commonjs(),
         json({
           include: "package.json",

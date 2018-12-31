@@ -13,7 +13,6 @@ export async function systemd(context, stagingDir) {
       Object.keys(units).map(async unitName => {
         const unit = units[unitName];
 
-        console.log(`procesing unit ${unitName}...`);
         context.properties.unit = unitName;
 
         const destDir = join(stagingDir, "/usr/lib/systemd/system");

@@ -45,7 +45,6 @@ export async function copyTemplate(context, source, dest) {
   async function* expressionEval(expression, remainder, cb, leadIn, leadOut) {
     let replace = context.properties[expression];
     if (replace === undefined) {
-      console.log(`not found ${expression}`);
       yield leadIn + expression + leadOut;
     } else {
       yield replace;

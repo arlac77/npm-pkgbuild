@@ -1,6 +1,8 @@
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { createReadStream, createWriteStream } from "fs";
 
+export const utf8StreamOptions = { encoding: "utf8" };
+
 export function quote(v) {
   if (v === undefined) return "";
 
@@ -17,8 +19,6 @@ export function asArray(o) {
 }
 
 export async function copyTemplate(source, dest, properties) {
-  const streamOptions = { encoding: "utf8" };
-
   async function* expressionEval(expression, remainder, cb, leadIn, leadOut) {
     const replace = properties[expression];
     if (replace == undefined) {
@@ -31,10 +31,10 @@ export async function copyTemplate(source, dest, properties) {
 
   console.log(`cp ${source} ${dest}`);
 
-  const out = createWriteStream(dest, streamOptions);
+  const out = createWriteStream(dest, utf8StreamOptions);
 
   for await (const chunk of iterableStringInterceptor(
-    createReadStream(source, streamOptions),
+    createReadStream(source, utf8StreamOptions),
     expressionEval
   )) {
     out.write(chunk);

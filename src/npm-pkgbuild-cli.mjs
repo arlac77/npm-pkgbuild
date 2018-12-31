@@ -4,7 +4,8 @@ import { createWriteStream } from "fs";
 import program from "caporal";
 import { join } from "path";
 import execa from "execa";
-const { promises } = require("fs");
+import { utf8StreamOptions } from "./util";
+import fs from "fs";
 
 program
   .description("create arch linux package from npm")
@@ -14,9 +15,9 @@ program
   .action(async (args, options, logger) => {
     if (options.w !== undefined) {
       const wd = options.w;
-      await promises.mkdir(wd, { recursive: true });
+      await fs.promises.mkdir(wd, { recursive: true });
 
-      const dest = createWriteStream(join(wd, "PKGBUILD"));
+      const dest = createWriteStream(join(wd, "PKGBUILD"), utf8StreamOptions);
 
       await npm2pkgbuild(process.cwd(), wd, dest, {
         installdir: options.installdir

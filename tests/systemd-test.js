@@ -8,18 +8,16 @@ const fixturesDir = join(__dirname, "..", "tests", "fixtures");
 
 test("systemd simple", async t => {
   const context = await createContext(fixturesDir, {
-    installdir: "/services/myunit"
+    installdir: "/services/myservice"
   });
-
-  console.log(context);
 
   const tmpDir = join(__dirname, "..", "build");
   await systemd(context, tmpDir);
 
   const d = readFileSync(
-    join(tmpDir, "/usr/lib/systemd/system", "myunit.service"),
+    join(tmpDir, "/usr/lib/systemd/system", "myservice.service"),
     utf8StreamOptions
   );
 
-  t.regex(d, /ExecStart=\/services\/myunit\/bin\/myunit/);
+  t.regex(d, /ExecStart=\/services\/myservice\/bin\/myservice/);
 });

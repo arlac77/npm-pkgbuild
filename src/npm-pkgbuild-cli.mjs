@@ -16,7 +16,6 @@ program
   .argument(
     "[stages...]",
     "stages to execute",
-    //["pkgbuild", "makepkg", "systemd"],
     /pkgbuild|makepkg|systemd/,
     "pkgbuild"
   )

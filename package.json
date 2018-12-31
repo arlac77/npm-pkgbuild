@@ -24,11 +24,11 @@
   },
   "scripts": {
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
-    "test": "ava",
+    "docs": "documentation readme src/pkgbuild.mjs --section=API",
+    "lint": "documentation lint src/pkgbuild.mjs",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "docs": "documentation readme src/npm-pkgbuild.mjs --section=API",
-    "lint": "documentation lint src/npm-pkgbuild.mjs"
+    "test": "ava"
   },
   "dependencies": {
     "caporal": "^1.1.0",
@@ -38,7 +38,9 @@
   },
   "devDependencies": {
     "ava": "^1.0.1",
+    "c8": "^3.2.1",
     "documentation": "^9.1.1",
+    "esm": "^3.0.84",
     "markdown-doctest": "^0.9.1",
     "rollup": "^1.0.0",
     "rollup-plugin-cleanup": "^3.1.0",
@@ -47,9 +49,7 @@
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "semantic-release": "^15.13.2",
-    "stream-buffers": "^3.0.2",
-    "c8": "^3.2.1",
-    "esm": "^3.0.84"
+    "stream-buffers": "^3.0.2"
   },
   "engines": {
     "node": ">=10.15.0"

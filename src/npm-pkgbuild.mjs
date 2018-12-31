@@ -3,8 +3,9 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util";
 import fs from "fs";
+import { prepareSystemdUnits } from "./systemd";
 
-export async function npm2pkgbuild(dir, out, options) {
+export async function npm2pkgbuild(dir, stagingDir, out, options) {
   const pkgFile = join(dir, "package.json");
   const pkg = JSON.parse(
     await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
@@ -35,6 +36,8 @@ export async function npm2pkgbuild(dir, out, options) {
     pkg.pacman,
     options
   );
+
+  await prepareSystemdUnits(pkg, dir, stagingDir, properties);
 
   const installdir = properties.installdir;
   delete properties.installdir;

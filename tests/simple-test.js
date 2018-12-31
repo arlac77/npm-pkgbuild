@@ -4,10 +4,12 @@ import { WritableStreamBuffer } from "stream-buffers";
 
 import { npm2pkgbuild } from "../src/npm-pkgbuild";
 
+const fixturesDir = join(__dirname, "..", "tests", "fixtures");
+
 test("npm2pkgbuild simple", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
 
-  await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws, {
+  await npm2pkgbuild(fixturesDir, fixturesDir, ws, {
     installdir: "/somewhere"
   });
 
@@ -20,7 +22,7 @@ test("npm2pkgbuild simple", async t => {
 test("npm2pkgbuild systemd service", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
 
-  await npm2pkgbuild(join(__dirname, "..", "tests", "fixtures"), ws, {
+  await npm2pkgbuild(fixturesDir, fixturesDir, ws, {
     installdir: "/somewhere"
   });
 

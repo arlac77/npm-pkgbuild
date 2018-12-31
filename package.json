@@ -4,8 +4,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/npm-pkgbuild.js",
-  "module": "src/npm-pkgbuild.mjs",
+  "main": "dist/pkgbuild.js",
+  "module": "src/pkgbuild.mjs",
   "description": "create arch linux package from npm",
   "keywords": [
     "aur",

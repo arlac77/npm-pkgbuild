@@ -1,7 +1,30 @@
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { createReadStream, createWriteStream } from "fs";
+import fs from "fs";
+import { join } from "path";
 
 export const utf8StreamOptions = { encoding: "utf8" };
+
+export async function loadPackage(dir) {
+  const pkgFile = join(dir, "package.json");
+  return JSON.parse(await fs.promises.readFile(pkgFile, utf8StreamOptions));
+}
+
+export async function createContext(dir, properties) {
+  Object.keys(properties).forEach(k => {
+    if (properties[k] === undefined) {
+      delete properties[k];
+    }
+  });
+
+  const pkg = await loadPackage(dir);
+
+  return {
+    dir,
+    pkg,
+    properties: Object.assign({ installdir: "/" }, pkg.pacman, properties)
+  };
+}
 
 export function quote(v) {
   if (v === undefined) return "";
@@ -18,10 +41,10 @@ export function asArray(o) {
   return Array.isArray(o) ? o : [o];
 }
 
-export async function copyTemplate(source, dest, properties) {
+export async function copyTemplate(context, source, dest) {
   async function* expressionEval(expression, remainder, cb, leadIn, leadOut) {
-    const replace = properties[expression];
-    if (replace == undefined) {
+    let replace = context.properties[expression];
+    if (replace === undefined) {
       console.log(`not found ${expression}`);
       yield leadIn + expression + leadOut;
     } else {

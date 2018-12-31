@@ -1,26 +1,24 @@
 import test from "ava";
 import { join } from "path";
-import { prepareSystemdUnits } from "../src/systemd";
-import fs from "fs";
+import { systemd } from "../src/systemd";
+import { readFileSync } from "fs";
+import { createContext, utf8StreamOptions } from "../src/util";
 
 const fixturesDir = join(__dirname, "..", "tests", "fixtures");
 
 test("systemd simple", async t => {
-  const pkgFile = join(fixturesDir, "package.json");
-  const pkg = JSON.parse(
-    await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
-  );
-
-  const tmpDir = join(__dirname, "..", "build");
-  await prepareSystemdUnits(pkg, fixturesDir, tmpDir, {
+  const context = await createContext(fixturesDir, {
     installdir: "/services/myunit"
   });
 
-  const d = fs.readFileSync(
+  console.log(context);
+
+  const tmpDir = join(__dirname, "..", "build");
+  await systemd(context, tmpDir);
+
+  const d = readFileSync(
     join(tmpDir, "/usr/lib/systemd/system", "myunit.service"),
-    {
-      encoding: "utf8"
-    }
+    utf8StreamOptions
   );
 
   t.regex(d, /ExecStart=\/services\/myunit\/bin\/myunit/);

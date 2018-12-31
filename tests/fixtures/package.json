@@ -1,5 +1,5 @@
 {
-  "name": "pkgname",
+  "name": "myservice",
   "description": "a description",
   "version": "1.2.3",
   "contributors": [
@@ -10,12 +10,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/arlac77/npm-pkgbuild.git"
+    "url": "https://github.com/arlac77/myservice.git"
   },
   "engines": {
     "node": ">=10.5"
   },
   "pacman": {
+    "installdir": "/services/myservice",
     "groups": "webhook",
     "backup": [
       "systemd/myunit.service"
@@ -24,7 +25,7 @@
   },
   "systemd": {
     "units": {
-      "myunit": "systemd/myunit*"
+      "myunit": "systemd/myservice*"
     }
   }
 }

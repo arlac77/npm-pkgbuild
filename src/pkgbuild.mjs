@@ -3,13 +3,9 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util";
 import fs from "fs";
-import { prepareSystemdUnits } from "./systemd";
 
-export async function npm2pkgbuild(dir, stagingDir, out, options) {
-  const pkgFile = join(dir, "package.json");
-  const pkg = JSON.parse(
-    await fs.promises.readFile(pkgFile, { encoding: "utf-8" })
-  );
+export async function pkgbuild(context, stagingDir, out) {
+  const pkg = context.pkg;
 
   let repo = pkg.repository.url;
   if (!repo.startsWith("git+")) {
@@ -18,7 +14,6 @@ export async function npm2pkgbuild(dir, stagingDir, out, options) {
 
   const properties = Object.assign(
     {
-      installdir: "/",
       url: pkg.homepage,
       pkgdesc: pkg.description,
       license: pkg.license,
@@ -33,14 +28,10 @@ export async function npm2pkgbuild(dir, stagingDir, out, options) {
       source: repo,
       md5sums: "SKIP"
     },
-    pkg.pacman,
-    options
+    pkg.pacman
   );
 
-  await prepareSystemdUnits(pkg, dir, stagingDir, properties);
-
-  const installdir = properties.installdir;
-  delete properties.installdir;
+  const installdir = context.properties.installdir;
 
   console.log(`installdir: ${installdir}`);
 
@@ -81,23 +72,6 @@ export async function npm2pkgbuild(dir, stagingDir, out, options) {
     properties.backup = properties.backup.map(name =>
       join(installdir, name).substring(1)
     );
-  }
-
-  let installUnits = "";
-
-  if (pkg.systemd !== undefined && pkg.systemd.units !== undefined) {
-    const units = pkg.systemd.units;
-
-    installUnits =
-      'mkdir -p "${pkgdir}/usr/lib/systemd/system"\n' +
-      Object.keys(units)
-        .map(
-          n =>
-            "  cp " +
-            join("${srcdir}", pkg.name, units[n]) +
-            ' "${pkgdir}/usr/lib/systemd/system"'
-        )
-        .join("\n");
   }
 
   out.write(
@@ -163,7 +137,7 @@ build() {
 }
 
 package() {
-  ${installUnits}
+  npx npm-pkgbuild systemd
   mkdir -p "\${pkgdir}${installdir}"
   cd "\${pkgdir}${installdir}"
   tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz

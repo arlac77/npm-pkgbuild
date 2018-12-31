@@ -1,33 +1,53 @@
 import { version } from "../package.json";
-import { npm2pkgbuild } from "./npm-pkgbuild";
+import { pkgbuild } from "./pkgbuild";
+import { systemd } from "./systemd";
 import { createWriteStream } from "fs";
 import program from "caporal";
 import { join } from "path";
 import execa from "execa";
-import { utf8StreamOptions } from "./util";
+import { utf8StreamOptions, createContext } from "./util";
 import fs from "fs";
 
 program
   .description("create arch linux package from npm")
   .version(version)
-  .option("-i --installdir <dir>", "install directory", undefined, "/")
+  .option("-i --installdir <dir>", "install directory")
   .option("-w <dir>", "workspace directory", undefined, "build")
+  .argument(
+    "[stages...]",
+    "stages to execute",
+    //["pkgbuild", "makepkg", "systemd"],
+    /pkgbuild|makepkg|systemd/,
+    "pkgbuild"
+  )
   .action(async (args, options, logger) => {
-    if (options.w !== undefined) {
-      const wd = options.w;
-      await fs.promises.mkdir(wd, { recursive: true });
+    const stagingDir = options.w;
+    await fs.promises.mkdir(stagingDir, { recursive: true });
 
-      const dest = createWriteStream(join(wd, "PKGBUILD"), utf8StreamOptions);
+    const context = await createContext(process.cwd(), options);
 
-      await npm2pkgbuild(process.cwd(), wd, dest, {
-        installdir: options.installdir
-      });
+    for (const stage of args.stages) {
+      logger.info(`executing ${stage}...`);
+      switch (stage) {
+        case "pkgbuild":
+          await pkgbuild(
+            context,
+            stagingDir,
+            createWriteStream(join(stagingDir, "PKGBUILD"), utf8StreamOptions)
+          );
+          break;
+        case "makepkg":
+          const r = await execa("makepkg", ["-f"], { cwd: wd });
+          console.log(r.stderr);
+          console.log(r.stdout);
+          break;
+        case "systemd":
+          await systemd(context, stagingDir);
+          break;
 
-      const r = await execa("makepkg", ["-f"], { cwd: wd });
-      console.log(r.stderr);
-      console.log(r.stdout);
-    } else {
-      npm2pkgbuild(process.cwd(), process.stdout);
+        default:
+          logger.error(`unknown stage ${stage}`);
+      }
     }
   });
 

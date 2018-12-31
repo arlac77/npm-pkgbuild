@@ -18,11 +18,13 @@
   "pacman": {
     "groups": "webhook",
     "backup": [
-      "systemd/npm-template-sync-github-hook.service"
+      "systemd/myunit.service"
     ],
-    "install": "pacman.install",
-    "services": {
-      "npm-template-sync-github-hook": "systemd/npm-template-sync-github-hook*"
+    "install": "pacman/pacman.install"
+  },
+  "systemd": {
+    "units": {
+      "myunit": "systemd/myunit*"
     }
   }
 }

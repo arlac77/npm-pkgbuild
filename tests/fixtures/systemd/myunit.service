@@ -1,0 +1,13 @@
+[Unit]
+Description={{description}}
+
+[Service]
+Type=notify
+ExecStart={{installdir}}/bin/{{unit}}
+TimeoutStartSec=20
+StandardOutput=syslog
+User=nobody
+Group=nobody
+
+[Install]
+WantedBy=multi-user.target

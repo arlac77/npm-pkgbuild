@@ -1,18 +1,8 @@
 import { join } from "path";
 import { promisify } from "util";
 import { finished } from "stream";
+import { quote } from "./util";
 import fs from "fs";
-
-function quote(v) {
-  if (v === undefined) return "";
-
-  if (Array.isArray(v)) {
-    return "(" + v.map(x => quote(x)).join(" ") + ")";
-  }
-  if (typeof v === "number" || v instanceof Number) return v;
-
-  return v.match(/^\w+$/) ? v : "'" + v + "'";
-}
 
 export async function npm2pkgbuild(dir, out, options) {
   const pkgFile = join(dir, "package.json");
@@ -47,9 +37,7 @@ export async function npm2pkgbuild(dir, out, options) {
   );
 
   const installdir = properties.installdir;
-  const services = properties.services;
   delete properties.installdir;
-  delete properties.services;
 
   console.log(`installdir: ${installdir}`);
 
@@ -92,16 +80,18 @@ export async function npm2pkgbuild(dir, out, options) {
     );
   }
 
-  let installServices = "";
+  let installUnits = "";
 
-  if (services !== undefined) {
-    installServices =
+  if (pkg.systemd !== undefined && pkg.systemd.units !== undefined) {
+    const units = pkg.systemd.units;
+
+    installUnits =
       'mkdir -p "${pkgdir}/usr/lib/systemd/system"\n' +
-      Object.keys(services)
+      Object.keys(units)
         .map(
           n =>
             "  cp " +
-            join("${srcdir}", pkg.name, services[n]) +
+            join("${srcdir}", pkg.name, units[n]) +
             ' "${pkgdir}/usr/lib/systemd/system"'
         )
         .join("\n");
@@ -170,7 +160,7 @@ build() {
 }
 
 package() {
-  ${installServices}
+  ${installUnits}
   mkdir -p "\${pkgdir}${installdir}"
   cd "\${pkgdir}${installdir}"
   tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz

@@ -14,7 +14,7 @@ test("npm2pkgbuild simple", async t => {
   const c = ws.getContentsAsString("utf8");
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
-  t.regex(c, /backup=.*somewhere\/systemd\/npm-template/);
+  t.regex(c, /backup=.*somewhere\/systemd\/myunit.service/);
 });
 
 test("npm2pkgbuild systemd service", async t => {
@@ -25,8 +25,5 @@ test("npm2pkgbuild systemd service", async t => {
   });
 
   const c = ws.getContentsAsString("utf8");
-  t.true(
-    c.indexOf("cp ${srcdir}/pkgname/systemd/npm-template-sync-github-hook*") >
-      100
-  );
+  t.true(c.indexOf("cp ${srcdir}/pkgname/systemd/myunit*") > 100);
 });

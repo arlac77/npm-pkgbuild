@@ -37,8 +37,7 @@ program
           );
           break;
         case "makepkg":
-          await execa("ln", ["-s", "..", "src"], { cwd: stagingDir });
-          const r = await execa("makepkg", ["-s", "-f"], { cwd: stagingDir });
+          const r = await execa("makepkg", ["-f"], { cwd: stagingDir });
           console.log(r.stderr);
           console.log(r.stdout);
           break;

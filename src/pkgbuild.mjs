@@ -91,7 +91,7 @@ ${Object.keys(properties)
 #}
 
 build() {
-  #cd "$pkgname"
+  cd \${pkgname}
   npm install
   npm pack
   npm prune --production
@@ -139,12 +139,12 @@ build() {
 package() {
   mkdir -p \${pkgdir}${installdir}
   ( cd \${pkgdir}${installdir}
-    tar -xv --transform="s/^package\\///" -f \${srcdir}/${pkg.name}-${
-      pkg.version
-    }.tgz)
-  npx npm-pkgbuild --package \${srcdir} --output \${pkgdir} systemd
-  ( cd "\${srcdir}"
-    tar cf - node_modules)|(cd \${pkgdir}/${installdir};tar xf - )
+    tar -xv --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
+      pkg.name
+    }-${pkg.version}.tgz)
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --output \${pkgdir} systemd
+  ( cd \${srcdir}/\${pkgname}
+    tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )
 }
 `
   );

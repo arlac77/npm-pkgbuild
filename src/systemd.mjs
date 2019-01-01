@@ -9,6 +9,8 @@ export async function systemd(context, stagingDir) {
   if (pkg.systemd !== undefined && pkg.systemd.units !== undefined) {
     const units = pkg.systemd.units;
 
+    context.properties.units = units;
+
     await Promise.all(
       Object.keys(units).map(async unitName => {
         const unit = units[unitName];

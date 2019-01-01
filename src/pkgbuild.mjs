@@ -139,7 +139,7 @@ build() {
 package() {
   mkdir -p \${pkgdir}${installdir}
   ( cd \${pkgdir}${installdir}
-    tar -xv --transform="s/^package\///" -f \${srcdir}/${pkg.name}-${
+    tar -xv --transform="s/^package\\///" -f \${srcdir}/${pkg.name}-${
       pkg.version
     }.tgz)
   npx npm-pkgbuild --package \${srcdir} --output \${pkgdir} systemd

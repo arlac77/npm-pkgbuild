@@ -61,5 +61,9 @@ export async function copyTemplate(context, source, dest) {
   )) {
     out.write(chunk);
   }
-  out.end();
+
+  return new Promise((resolve, reject) => {
+    out.end();
+    out.on("finish", () => resolve());
+  });
 }

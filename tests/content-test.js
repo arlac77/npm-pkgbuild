@@ -1,22 +1,21 @@
 import test from "ava";
 import { join } from "path";
-import { systemd } from "../src/systemd";
+import { content } from "../src/content";
 import { readFileSync } from "fs";
 import { createContext, utf8StreamOptions } from "../src/util";
 
 const fixturesDir = join(__dirname, "..", "tests", "fixtures");
 
-test("systemd simple", async t => {
+test("content simple", async t => {
   const context = await createContext(fixturesDir);
 
   const tmpDir = join(__dirname, "..", "build");
-  await systemd(context, tmpDir);
+  await content(context, tmpDir);
 
   const d = readFileSync(
-    join(tmpDir, "/usr/lib/systemd/system", "myservice.service"),
+    join(tmpDir, "/usr/lib/tmpfiles.d/myservice.conf"),
     utf8StreamOptions
   );
 
-  t.regex(d, /Description=a description/);
-  t.regex(d, /ExecStart=\/services\/myservice\/bin\/myservice/);
+  t.regex(d, /\/run\/myservice/);
 });

@@ -21,7 +21,10 @@
     "backup": [
       "systemd/myunit.service"
     ],
-    "install": "pacman/pacman.install"
+    "install": "pacman/pacman.install",
+    "content": {
+      "/usr/lib/tmpfiles.d/{{name}}.conf": "pacman/tmpfiles.conf"
+    }
   },
   "systemd": {
     "units": {

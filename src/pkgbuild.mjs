@@ -37,7 +37,7 @@ export async function pkgbuild(context, stagingDir, out) {
 
   const installdir = context.properties.installdir;
 
-  console.log(`installdir: ${installdir}`);
+  delete properties.content;
 
   [
     "pkgname",

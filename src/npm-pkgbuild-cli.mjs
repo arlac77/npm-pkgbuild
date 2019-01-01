@@ -2,6 +2,7 @@ import { version } from "../package.json";
 import { pkgbuild } from "./pkgbuild";
 import { systemd } from "./systemd";
 import { pacman } from "./pacman";
+import { content } from "./content";
 import { createWriteStream } from "fs";
 import program from "caporal";
 import { join } from "path";
@@ -18,7 +19,7 @@ program
   .argument(
     "[stages...]",
     "stages to execute",
-    /pkgbuild|makepkg|systemd|pacman/,
+    /pkgbuild|makepkg|content|systemd|pacman/,
     "pkgbuild"
   )
   .action(async (args, options, logger) => {
@@ -47,6 +48,9 @@ program
           break;
         case "pacman":
           await pacman(context, stagingDir);
+          break;
+        case "content":
+          await content(context, stagingDir);
           break;
 
         default:

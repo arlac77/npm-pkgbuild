@@ -142,7 +142,7 @@ package() {
     tar -xv --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
       pkg.name
     }-${pkg.version}.tgz)
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --output \${pkgdir} systemd
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --output \${pkgdir} systemd pacman
   ( cd \${srcdir}/\${pkgname}
     tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )
 }

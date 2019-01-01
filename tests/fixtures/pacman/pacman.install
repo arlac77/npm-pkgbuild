@@ -1,5 +1,3 @@
 post_install() {
-  {{#loop units}}
-    systemctl start {{name}}
-  {{#loop}}
+  systemctl start {{name}}
 }

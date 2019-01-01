@@ -16,6 +16,7 @@ test("pkgbuild", async t => {
   await pkgbuild(context, fixturesDir, ws);
 
   const c = ws.getContentsAsString("utf8");
+  t.regex(c, /pkgver='1.2.3'/);
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
   t.regex(c, /backup=.*somewhere\/systemd\/myunit.service/);

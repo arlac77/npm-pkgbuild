@@ -18,7 +18,7 @@ export async function pkgbuild(context, stagingDir, out) {
       pkgdesc: pkg.description,
       license: pkg.license,
       pkgrel: 1,
-      pkgver: pkg.version.replace(/[\w\-]+$/, ""),
+      pkgver: pkg.version.replace(/\-.*$/, ""),
       pkgname: pkg.name,
       arch: "any",
       makedepends: "git",

@@ -137,14 +137,14 @@ build() {
 }
 
 package() {
-  mkdir -p \${pkgdir}/${installdir}
-  ( cd \${pkgdir}/${installdir}
+  mkdir -p \${pkgdir}${installdir}
+  ( cd \${pkgdir}${installdir}
     tar -xv --transform="s/^package\\///" -f \${srcdir}/${pkg.name}-${
       pkg.version
     }.tgz)
   npx npm-pkgbuild --package \${srcdir} --output \${pkgdir} systemd
   ( cd "\${srcdir}"
-    tar cf - node_modules)|(cd \${pkgdir}/${installdir};tar xf - )
+    tar cf - node_modules)|(cd \${pkgdir}/{installdir};tar xf - )
 }
 `
   );

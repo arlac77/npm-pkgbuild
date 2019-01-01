@@ -20,4 +20,5 @@ test("pkgbuild", async t => {
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
   t.regex(c, /backup=.*somewhere\/systemd\/myunit.service/);
+  t.regex(c, /install=.*myservice.install/);
 });

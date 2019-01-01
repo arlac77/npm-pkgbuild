@@ -31,13 +31,13 @@ export async function pkgbuild(context, stagingDir, out) {
     pkg.pacman
   );
 
+  if (properties.install !== undefined) {
+    properties.install = `${pkg.name}.install`;
+  }
+
   const installdir = context.properties.installdir;
 
   console.log(`installdir: ${installdir}`);
-
-  if (properties.install !== undefined) {
-    properties.install = join("..", properties.install);
-  }
 
   [
     "pkgname",
@@ -142,7 +142,7 @@ package() {
     tar -xv --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
       pkg.name
     }-${pkg.version}.tgz)
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --output \${pkgdir} systemd pacman
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --output \${pkgdir} systemd
   ( cd \${srcdir}/\${pkgname}
     tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )
 }

@@ -11,8 +11,9 @@ import fs from "fs";
 program
   .description("create arch linux package from npm")
   .version(version)
-  .option("-i --installdir <dir>", "install directory")
-  .option("-w <dir>", "workspace directory", undefined, "build")
+  .option("-p --package <dir>", "package directory", undefined, process.cwd())
+  .option("-i --installdir <dir>", "install directory package content base")
+  .option("-o --output <dir>", "output directory", undefined, "build")
   .argument(
     "[stages...]",
     "stages to execute",
@@ -20,10 +21,10 @@ program
     "pkgbuild"
   )
   .action(async (args, options, logger) => {
-    const stagingDir = options.w;
+    const stagingDir = options.output;
     await fs.promises.mkdir(stagingDir, { recursive: true });
 
-    const context = await createContext(process.cwd(), options);
+    const context = await createContext(options.package, options);
 
     for (const stage of args.stages) {
       logger.info(`executing ${stage}...`);
@@ -36,7 +37,8 @@ program
           );
           break;
         case "makepkg":
-          const r = await execa("makepkg", ["-f"], { cwd: wd });
+          await execa("ln", ["-s", "..", "src"], { cwd: stagingDir });
+          const r = await execa("makepkg", ["-s", "-f"], { cwd: stagingDir });
           console.log(r.stderr);
           console.log(r.stdout);
           break;

@@ -85,13 +85,13 @@ ${Object.keys(properties)
       .map(k => `${k}=${quote(properties[k])}`)
       .join("\n")}
 
-pkgver() {
-  cd "$pkgname"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
+#pkgver() {
+#  cd "$pkgname"
+#  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+#}
 
 build() {
-  cd "$pkgname"
+  #cd "$pkgname"
   npm install
   npm pack
   npm prune --production
@@ -137,15 +137,14 @@ build() {
 }
 
 package() {
-  npx npm-pkgbuild systemd
-  mkdir -p "\${pkgdir}${installdir}"
-  cd "\${pkgdir}${installdir}"
-  tar xf \${srcdir}/${pkg.name}/${pkg.name}-${pkg.version}.tgz
-  mv package/* .
-  rmdir package
-  (cd "\${srcdir}/${
-    pkg.name
-  }";tar cf - node_modules)|(cd "\${pkgdir}${installdir}";tar xf - )
+  mkdir -p \${pkgdir}${installdir}
+  ( cd \${pkgdir}${installdir}
+    tar -xv --transform="s/^package\///" -f \${srcdir}/${pkg.name}-${
+      pkg.version
+    }.tgz)
+  npx npm-pkgbuild --package \${srcdir} --output \${pkgdir} systemd
+  ( cd "\${srcdir}"
+    tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )
 }
 `
   );

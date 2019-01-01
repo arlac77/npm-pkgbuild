@@ -144,7 +144,7 @@ package() {
     }.tgz)
   npx npm-pkgbuild --package \${srcdir} --output \${pkgdir} systemd
   ( cd "\${srcdir}"
-    tar cf - node_modules)|(cd \${pkgdir}/{installdir};tar xf - )
+    tar cf - node_modules)|(cd \${pkgdir}/${installdir};tar xf - )
 }
 `
   );

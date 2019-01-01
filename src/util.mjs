@@ -10,7 +10,7 @@ export async function loadPackage(dir) {
   return JSON.parse(await fs.promises.readFile(pkgFile, utf8StreamOptions));
 }
 
-export async function createContext(dir, properties) {
+export async function createContext(dir, properties = {}) {
   Object.keys(properties).forEach(k => {
     if (properties[k] === undefined) {
       delete properties[k];
@@ -22,7 +22,7 @@ export async function createContext(dir, properties) {
   return {
     dir,
     pkg,
-    properties: Object.assign({ installdir: "/" }, pkg.pacman, properties)
+    properties: Object.assign({ installdir: "/" }, pkg.pacman, pkg, properties)
   };
 }
 

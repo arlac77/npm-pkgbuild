@@ -19,5 +19,6 @@ test("systemd simple", async t => {
     utf8StreamOptions
   );
 
+  t.regex(d, /Description=a description/);
   t.regex(d, /ExecStart=\/services\/myservice\/bin\/myservice/);
 });

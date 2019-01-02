@@ -73,6 +73,17 @@ export async function pkgbuild(context, stagingDir, out) {
     );
   }
 
+  let pkgver = '';
+
+  if(pkg.version === '0.0.0-semantic-release') {
+    pkgver = `
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+`;
+  }
+
   out.write(
     `# ${pkg.contributors
       .map(
@@ -84,10 +95,7 @@ ${Object.keys(properties)
       .map(k => `${k}=${quote(properties[k])}`)
       .join("\n")}
 
-#pkgver() {
-#  cd "$pkgname"
-#  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-#}
+${pkgver}
 
 build() {
   cd \${pkgname}

@@ -2,7 +2,6 @@ import { join } from "path";
 import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util";
-import fs from "fs";
 
 export async function pkgbuild(context, stagingDir, out) {
   const pkg = context.pkg;

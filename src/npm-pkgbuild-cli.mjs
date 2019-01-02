@@ -3,13 +3,12 @@ import { pkgbuild } from "./pkgbuild";
 import { systemd } from "./systemd";
 import { pacman } from "./pacman";
 import { content } from "./content";
-import { createWriteStream } from "fs";
+import fs, { createWriteStream } from "fs";
 import program from "caporal";
 import { join } from "path";
 import execa from "execa";
 import { utf8StreamOptions } from "./util";
 import { createContext } from "./context";
-import fs from "fs";
 
 program
   .description("create arch linux package from npm")

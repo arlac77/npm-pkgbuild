@@ -16,7 +16,7 @@ export async function content(context, stagingDir) {
         dest = join(
           stagingDir,
           dest.replace(
-            /\{\{([^\}]+)\}\}/,
+            /\$\{([^\}]+)\}/,
             (match, key) => context.properties[key]
           )
         );

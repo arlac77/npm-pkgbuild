@@ -7,19 +7,13 @@ export async function content(context, stagingDir) {
   const pkg = context.pkg;
 
   if (pkg.pacman !== undefined && pkg.pacman.content !== undefined) {
-    const content = pkg.pacman.content;
+    const content = context.expand(pkg.pacman.content);
 
     await Promise.all(
       Object.keys(content).map(async dest => {
         const source = content[dest];
 
-        dest = join(
-          stagingDir,
-          dest.replace(
-            /\$\{([^\}]+)\}/,
-            (match, key) => context.properties[key]
-          )
-        );
+        dest = join(stagingDir, dest);
 
         await fs.promises.mkdir(dirname(dest), { recursive: true });
 

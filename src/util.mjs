@@ -5,27 +5,6 @@ import { join } from "path";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 
-export async function loadPackage(dir) {
-  const pkgFile = join(dir, "package.json");
-  return JSON.parse(await fs.promises.readFile(pkgFile, utf8StreamOptions));
-}
-
-export async function createContext(dir, properties = {}) {
-  Object.keys(properties).forEach(k => {
-    if (properties[k] === undefined) {
-      delete properties[k];
-    }
-  });
-
-  const pkg = await loadPackage(dir);
-
-  return {
-    dir,
-    pkg,
-    properties: Object.assign({ installdir: "/" }, pkg.pacman, pkg, properties)
-  };
-}
-
 export function quote(v) {
   if (v === undefined) return "";
 
@@ -43,7 +22,7 @@ export function asArray(o) {
 
 export async function copyTemplate(context, source, dest) {
   async function* expressionEval(expression, remainder, cb, leadIn, leadOut) {
-    let replace = context.properties[expression];
+    const replace = context.evaluate(expression);
     if (replace === undefined) {
       yield leadIn + expression + leadOut;
     } else {

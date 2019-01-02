@@ -7,7 +7,8 @@ import { createWriteStream } from "fs";
 import program from "caporal";
 import { join } from "path";
 import execa from "execa";
-import { utf8StreamOptions, createContext } from "./util";
+import { utf8StreamOptions } from "./util";
+import { createContext } from "./context";
 import fs from "fs";
 
 program

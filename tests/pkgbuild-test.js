@@ -1,7 +1,8 @@
 import test from "ava";
 import { join } from "path";
 import { WritableStreamBuffer } from "stream-buffers";
-import { createContext } from "../src/util";
+import { utf8StreamOptions } from "../src/util";
+import { createContext } from "../src/context";
 import { pkgbuild } from "../src/pkgbuild";
 
 const fixturesDir = join(__dirname, "..", "tests", "fixtures");

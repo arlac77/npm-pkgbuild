@@ -2,7 +2,8 @@ import test from "ava";
 import { join } from "path";
 import { content } from "../src/content";
 import { readFileSync } from "fs";
-import { createContext, utf8StreamOptions } from "../src/util";
+import { utf8StreamOptions } from "../src/util";
+import { createContext } from "../src/context";
 
 const fixturesDir = join(__dirname, "..", "tests", "fixtures");
 

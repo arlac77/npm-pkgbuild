@@ -7,7 +7,7 @@ export async function systemd(context, stagingDir) {
   const pkg = context.pkg;
 
   if (pkg.systemd !== undefined && pkg.systemd.units !== undefined) {
-    const units = pkg.systemd.units;
+    const units = context.expand(pkg.systemd.units);
 
     context.properties.units = units;
 

@@ -28,7 +28,7 @@
   },
   "systemd": {
     "units": {
-      "myservice": "systemd/myservice*"
+      "${name}": "systemd/${name}*"
     }
   }
 }

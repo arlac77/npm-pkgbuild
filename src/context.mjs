@@ -28,7 +28,7 @@ export async function createContext(dir, properties = {}) {
 
   return {
     dir,
-    pkg,
+    pkg: eeContext.expand(pkg),
     properties,
     evaluate,
     expand: object => eeContext.expand(object)

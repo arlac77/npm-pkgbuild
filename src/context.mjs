@@ -17,14 +17,16 @@ export async function createContext(dir, properties = {}) {
 
   const pkg = await loadPackage(dir);
 
-  properties = Object.assign({ installdir: "/" }, pkg.pacman, pkg, properties);
-
   function evaluate(expression) {
     let value = properties[expression];
     return value;
   }
 
+  properties = Object.assign({ installdir: "/" }, pkg);
+
   const eeContext = ee({ evaluate });
+
+  properties = Object.assign(properties, eeContext.expand(pkg.pacman));
 
   return {
     dir,

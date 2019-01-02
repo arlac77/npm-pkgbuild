@@ -16,7 +16,7 @@
     "node": ">=10.5"
   },
   "pacman": {
-    "installdir": "/services/myservice",
+    "installdir": "/services/${name}",
     "groups": "webhook",
     "backup": [
       "systemd/myunit.service"

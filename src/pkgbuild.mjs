@@ -11,6 +11,17 @@ export async function pkgbuild(context, stagingDir, out) {
     repo = "git+" + repo;
   }
 
+  let depends = Object.assign({}, pkg.pacman.depends, pkg.engines);
+
+  depends = Object.keys(depends).reduce((a, c) => {
+    const mapping = {
+      node: "nodejs"
+    };
+
+    a.push(`${mapping[c] ? mapping[c] : c}${depends[c]}`);
+    return a;
+  }, []);
+
   const properties = Object.assign(
     {
       url: pkg.homepage,
@@ -21,13 +32,13 @@ export async function pkgbuild(context, stagingDir, out) {
       pkgname: pkg.name,
       arch: "any",
       makedepends: "git",
-      depends: `nodejs${
-        pkg.engines && pkg.engines.node ? pkg.engines.node : ""
-      }`,
       source: repo,
       md5sums: "SKIP"
     },
-    pkg.pacman
+    pkg.pacman,
+    {
+      depends
+    }
   );
 
   if (properties.install !== undefined) {
@@ -73,9 +84,9 @@ export async function pkgbuild(context, stagingDir, out) {
     );
   }
 
-  let pkgver = '';
+  let pkgver = "";
 
-  if(pkg.version === '0.0.0-semantic-release') {
+  if (pkg.version === "0.0.0-semantic-release") {
     pkgver = `
 pkgver() {
   cd "$pkgname"

@@ -21,6 +21,9 @@
     "backup": [
       "systemd/myunit.service"
     ],
+    "depends": {
+      "redis": ">=5.0.3"
+    },
     "install": "pacman/pacman.install",
     "content": {
       "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf"

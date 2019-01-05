@@ -20,6 +20,7 @@ test("pkgbuild", async t => {
   t.regex(c, /pkgver='1.2.3'/);
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
+  t.regex(c, /depends=.*redis>=5/);
   t.regex(c, /backup=.*myservice\/systemd\/myunit.service/);
   t.regex(c, /install=.*myservice.install/);
 });

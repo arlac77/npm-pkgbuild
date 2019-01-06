@@ -135,11 +135,8 @@ build() {
   find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
   find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
-  find . -name "jsdoc.json" -print0|xargs -r -0 rm
-  find . -name "SECURITY.md" -print0|xargs -r -0 rm
-  find . -name "SFTPStream.md" -print0|xargs -r -0 rm
-  find . -name "LIMITS.md" -print0|xargs -r -0 rm
-  find . -name "GOVERNANCE.md" -print0|xargs -r -0 rm
+  find . \\( -name jsdoc.json -o -name "Gruntfile.js" \\) -print0|xargs -r -0 rm
+  find . \\( -name SECURITY.md -o -name "SFTPStream.md" -o -name "LIMITS.md" -o -name "GOVERNANCE.md" \\) -print0|xargs -r -0 rm
   find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm
   find . -name ".nvmrc" -print0|xargs -r -0 rm

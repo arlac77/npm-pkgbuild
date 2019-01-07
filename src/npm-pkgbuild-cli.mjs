@@ -39,9 +39,12 @@ program
           );
           break;
         case "makepkg":
-          const r = await execa("makepkg", ["-f"], { cwd: stagingDir });
-          console.log(r.stderr);
-          console.log(r.stdout);
+          const proc = execa("makepkg", ["-f"], { cwd: stagingDir });
+
+          proc.stdout.pipe(process.stdout);
+          proc.stderr.pipe(process.stderr);
+
+          await proc;
           break;
         case "systemd":
           await systemd(context, stagingDir);

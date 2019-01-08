@@ -19,7 +19,7 @@
     "installdir": "/services/${name}",
     "groups": "webhook",
     "backup": [
-      "systemd/myunit.service"
+      "etc/${name}/${name}.json"
     ],
     "depends": {
       "redis": ">=5.0.3"

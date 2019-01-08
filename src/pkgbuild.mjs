@@ -78,11 +78,11 @@ export async function pkgbuild(context, stagingDir, out) {
     }
   });
 
-  if (properties.backup !== undefined) {
+  /*if (properties.backup !== undefined) {
     properties.backup = properties.backup.map(name =>
       join(installdir, name).substring(1)
     );
-  }
+  }*/
 
   let pkgver = "";
 

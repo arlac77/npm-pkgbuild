@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/pkgbuild.js",
+  "main": "src/pkgbuild.mjs",
   "module": "src/pkgbuild.mjs",
   "description": "create arch linux package from npm",
   "keywords": [

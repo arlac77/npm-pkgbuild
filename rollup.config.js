@@ -16,8 +16,9 @@ const external = [
   "path",
   "stream",
   "util",
-  "caporal",
-  "execa"
+  "child_process",
+
+  "caporal"
 ];
 
 export default [
@@ -44,15 +45,5 @@ export default [
         executable()
       ]
     };
-  }),
-  {
-    input: pkg.module,
-    output: {
-      file: pkg.main,
-      format: "cjs",
-      interop: false
-    },
-    external,
-    plugins: [resolve(), commonjs(), json(), cleanup()]
-  }
+  })
 ];

@@ -48,18 +48,19 @@ program
         case "makepkg":
           const proc = execa("makepkg", ["-f"], { cwd: staging });
 
-          //proc.stdout.pipe(process.stdout);
-          proc.stderr.pipe(process.stderr);
+          proc.stdout.pipe(process.stdout);
+          //proc.stderr.pipe(process.stderr);
 
           let name, version;
 
-          for await (const chunk of proc.stdout) {
+          for await (const chunk of proc.stderr) {
             const s = chunk.toString("utf8");
 
             console.log(s);
 
-            const m = s.match(/Finished making:\s+(\w+)\s+([^\s+]+)/);
+            const m = s.match(/Finished making:\s+(\w+)\s+([^\s]+)/);
             if (m) {
+              console.log("VERSION", name, version); 
               name = m[1];
               version = m[2];
             }

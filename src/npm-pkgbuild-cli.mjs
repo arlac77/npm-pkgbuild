@@ -22,7 +22,7 @@ program
     /pkgbuild|makepkg|content|systemd|pacman/,
     "pkgbuild"
   )
-  .action(async (args, options, logger) => {
+  .action(async (args, options) => {
     const stagingDir = options.output;
     await fs.promises.mkdir(stagingDir, { recursive: true });
 

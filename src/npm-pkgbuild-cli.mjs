@@ -13,9 +13,10 @@ import { createContext } from "./context";
 program
   .description(description)
   .version(version)
-  .option("-p --package <dir>", "package directory")
+  .option("-p --package <dir>", "package directory defaults to cwd")
   .option("-i --installdir <dir>", "install directory package content base")
-  .option("-o --output <dir>", "output directory")
+  .option("-s --staging <dir>", "staging directory defaults to build")
+  .option("-t --target <dir>", "target directory")
   .command(
     "[stages...]",
     "stages to execute",
@@ -28,12 +29,9 @@ program
     if (program.package === undefined) {
       program.package = process.cwd();
     }
-    if (program.output === undefined) {
-      program.output = "build";
-    }
+    const staging = program.staging === undefined ? "build" : program.staging;
 
-    const stagingDir = program.output;
-    await fs.promises.mkdir(stagingDir, { recursive: true });
+    await fs.promises.mkdir(staging, { recursive: true });
 
     const context = await createContext(program.package, program);
 
@@ -43,26 +41,45 @@ program
         case "pkgbuild":
           await pkgbuild(
             context,
-            stagingDir,
-            createWriteStream(join(stagingDir, "PKGBUILD"), utf8StreamOptions)
+            staging,
+            createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions)
           );
           break;
         case "makepkg":
-          const proc = execa("makepkg", ["-f"], { cwd: stagingDir });
+          const proc = execa("makepkg", ["-f"], { cwd: staging });
 
-          proc.stdout.pipe(process.stdout);
+          //proc.stdout.pipe(process.stdout);
           proc.stderr.pipe(process.stderr);
 
+          let name, version;
+
+          for await (const chunk of proc.stdout) {
+            console.log(chunk);
+
+            const m = chunk.match(/Finished making:\s+(\w+)\s+([^\s+]+)/);
+            if (m) {
+              name = m[1];
+              version = m[2];
+            }
+          }
+
           await proc;
+
+          if (process.target !== undefined) {
+            execa("cp", [`${name}-${version}-any.pkg.tar.xz`, process.target], {
+              cwd: staging
+            });
+          }
+
           break;
         case "systemd":
-          await systemd(context, stagingDir);
+          await systemd(context, staging);
           break;
         case "pacman":
-          await pacman(context, stagingDir);
+          await pacman(context, staging);
           break;
         case "content":
-          await content(context, stagingDir);
+          await content(context, staging);
           break;
 
         default:

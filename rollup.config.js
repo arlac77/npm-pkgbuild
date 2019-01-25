@@ -44,34 +44,30 @@ const external = [
   "util",
   "v8",
   "vm",
-  "zlib",
-
-  "caporal"
+  "zlib"
 ];
 
-export default [
-  ...Object.keys(pkg.bin || {}).map(name => {
-    return {
-      input: `src/${name}-cli.mjs`,
-      output: {
-        file: pkg.bin[name],
-        format: "cjs",
-        banner:
-          '#!/bin/sh\n":" //# comment; exec /usr/bin/env node --experimental-modules "$0" "$@"',
-        interop: false
-      },
-      external,
-      plugins: [
-        resolve(),
-        commonjs(),
-        json({
-          include: "package.json",
-          preferConst: true,
-          compact: true
-        }),
-        cleanup(),
-        executable()
-      ]
-    };
-  })
-];
+export default Object.keys(pkg.bin || {}).map(name => {
+  return {
+    input: `src/${name}-cli.mjs`,
+    output: {
+      file: pkg.bin[name],
+      format: "cjs",
+      banner:
+        '#!/bin/sh\n":" //# comment; exec /usr/bin/env node --experimental-modules "$0" "$@"',
+      interop: false
+    },
+    external,
+    plugins: [
+      resolve(),
+      commonjs(),
+      json({
+        include: "package.json",
+        preferConst: true,
+        compact: true
+      }),
+      cleanup(),
+      executable()
+    ]
+  };
+});

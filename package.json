@@ -31,7 +31,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "caporal": "^1.1.0",
+    "commander": "^2.19.0",
     "execa": "^1.0.0",
     "expression-expander": "^7.0.0",
     "globby": "^9.0.0",

@@ -1,35 +1,44 @@
-import { version } from "../package.json";
+import { version, description } from "../package.json";
 import { pkgbuild } from "./pkgbuild";
 import { systemd } from "./systemd";
 import { pacman } from "./pacman";
 import { content } from "./content";
 import fs, { createWriteStream } from "fs";
-import program from "caporal";
+import program from "commander";
 import { join } from "path";
 import execa from "execa";
 import { utf8StreamOptions } from "./util";
 import { createContext } from "./context";
 
 program
-  .description("create arch linux package from npm")
+  .description(description)
   .version(version)
-  .option("-p --package <dir>", "package directory", undefined, process.cwd())
+  .option("-p --package <dir>", "package directory")
   .option("-i --installdir <dir>", "install directory package content base")
-  .option("-o --output <dir>", "output directory", undefined, "build")
-  .argument(
+  .option("-o --output <dir>", "output directory")
+  .command(
     "[stages...]",
     "stages to execute",
     /pkgbuild|makepkg|content|systemd|pacman/,
     "pkgbuild"
   )
-  .action(async (args, options) => {
-    const stagingDir = options.output;
+  .action(async (...stages) => {
+    stages.pop();
+
+    if (program.package === undefined) {
+      program.package = process.cwd();
+    }
+    if (program.output === undefined) {
+      program.output = "build";
+    }
+
+    const stagingDir = program.output;
     await fs.promises.mkdir(stagingDir, { recursive: true });
 
-    const context = await createContext(options.package, options);
+    const context = await createContext(program.package, program);
 
-    for (const stage of args.stages) {
-      logger.info(`executing ${stage}...`);
+    for (const stage of stages) {
+      console.log(`executing ${stage}...`);
       switch (stage) {
         case "pkgbuild":
           await pkgbuild(
@@ -57,9 +66,8 @@ program
           break;
 
         default:
-          logger.error(`unknown stage ${stage}`);
+          console.error(`unknown stage ${stage}`);
       }
     }
-  });
-
-program.parse(process.argv);
+  })
+  .parse(process.argv);

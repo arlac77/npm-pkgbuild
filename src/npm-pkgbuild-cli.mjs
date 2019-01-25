@@ -54,9 +54,11 @@ program
           let name, version;
 
           for await (const chunk of proc.stdout) {
-            console.log(chunk);
+            const s = chunk.toString("utf8");
 
-            const m = chunk.match(/Finished making:\s+(\w+)\s+([^\s+]+)/);
+            console.log(s);
+
+            const m = s.match(/Finished making:\s+(\w+)\s+([^\s+]+)/);
             if (m) {
               name = m[1];
               version = m[2];

@@ -62,7 +62,7 @@ program
             if (m) {
               name = m[1];
               version = m[2];
-              console.log("VERSION", name, version);
+              console.log("VERSION", name, version, process.target);
             }
           }
 

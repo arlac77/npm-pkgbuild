@@ -60,9 +60,9 @@ program
 
             const m = s.match(/Finished making:\s+([^\s]+)\s+([^\s]+)/);
             if (m) {
-              console.log("VERSION", name, version);
               name = m[1];
               version = m[2];
+              console.log("VERSION", name, version);
             }
           }
 

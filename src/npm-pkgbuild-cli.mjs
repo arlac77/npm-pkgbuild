@@ -71,7 +71,7 @@ program
           if (process.target !== undefined) {
             console.log(`cp ${name}-${version}-any.pkg.tar.xz ${process.target}`);
 
-            execa("cp", [`${name}-${version}-any.pkg.tar.xz`, process.target], {
+            await execa("cp", [`${name}-${version}-any.pkg.tar.xz`, process.target], {
               cwd: staging
             });
           }

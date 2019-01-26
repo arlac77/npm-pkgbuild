@@ -30,6 +30,7 @@ program
       program.package = process.cwd();
     }
     const staging = program.staging === undefined ? "build" : program.staging;
+    const target  = program.target;
 
     await fs.promises.mkdir(staging, { recursive: true });
 
@@ -46,7 +47,7 @@ program
           );
           break;
         case "makepkg":
-    console.log("TARGET",program.target);
+          console.log("A makepkg TARGET",target);
           const proc = execa("makepkg", ["-f"], { cwd: staging });
 
           proc.stdout.pipe(process.stdout);
@@ -63,16 +64,17 @@ program
             if (m) {
               name = m[1];
               version = m[2];
-              console.log("VERSION", name, version, process.target);
+              console.log("VERSION", name, version, target);
             }
           }
 
           await proc;
+          console.log("B makepkg TARGET",target);
 
-          if (process.target !== undefined) {
-            console.log(`cp ${name}-${version}-any.pkg.tar.xz ${process.target}`);
+          if (target !== undefined) {
+            console.log(`cp ${name}-${version}-any.pkg.tar.xz ${target}`);
 
-            await execa("cp", [`${name}-${version}-any.pkg.tar.xz`, process.target], {
+            await execa("cp", [`${name}-${version}-any.pkg.tar.xz`, target], {
               cwd: staging
             });
           }

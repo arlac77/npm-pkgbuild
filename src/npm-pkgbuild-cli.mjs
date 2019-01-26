@@ -16,7 +16,7 @@ program
   .option("-p --package <dir>", "package directory defaults to cwd")
   .option("-i --installdir <dir>", "install directory package content base")
   .option("-s --staging <dir>", "staging directory defaults to build")
-  .option("-t --target <dir>", "target directory")
+  .option("-t --target <dir>", "target directory of the package")
   .command(
     "[stages...]",
     "stages to execute",
@@ -25,7 +25,7 @@ program
   )
   .action(async (...stages) => {
     stages.pop();
-
+    console.log("TARGET",program.target);
     if (program.package === undefined) {
       program.package = process.cwd();
     }
@@ -46,6 +46,7 @@ program
           );
           break;
         case "makepkg":
+    console.log("TARGET",program.target);
           const proc = execa("makepkg", ["-f"], { cwd: staging });
 
           proc.stdout.pipe(process.stdout);

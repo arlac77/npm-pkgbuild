@@ -25,7 +25,7 @@ program
   )
   .action(async (...stages) => {
     stages.pop();
-    console.log("TARGET",program.target);
+
     if (program.package === undefined) {
       program.package = process.cwd();
     }
@@ -47,7 +47,6 @@ program
           );
           break;
         case "makepkg":
-          console.log("A makepkg TARGET",target);
           const proc = execa("makepkg", ["-f"], { cwd: staging });
 
           proc.stdout.pipe(process.stdout);
@@ -64,12 +63,10 @@ program
             if (m) {
               name = m[1];
               version = m[2];
-              console.log("VERSION", name, version, target);
             }
           }
 
           await proc;
-          console.log("B makepkg TARGET",target);
 
           if (target !== undefined) {
             console.log(`cp ${name}-${version}-any.pkg.tar.xz ${target}`);

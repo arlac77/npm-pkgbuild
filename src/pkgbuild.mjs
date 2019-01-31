@@ -3,8 +3,16 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util";
 
-export async function pkgbuild(context, stagingDir, out) {
-  const pkg = context.pkg;
+export async function pkgbuild(context, stagingDir, out, options = {}) {
+  //const pkg = context.pkg;
+
+  const pkg = Object.assign({ contributors: [], pacman: {} }, context.pkg);
+
+  /*
+  if (pkg.contributors === undefined) {
+    pkg.contributors = [];
+  }
+*/
 
   let repo = pkg.repository.url;
   if (!repo.startsWith("git+")) {
@@ -95,9 +103,17 @@ pkgver() {
 `;
   }
 
-  if (pkg.contributors === undefined) {
-    pkg.contributors = [];
-  }
+  const npmDistPackage = options.npmDist
+    ? `( cd \${pkgdir}${installdir}
+    tar -xv --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
+      pkg.name
+    }-${pkg.version}.tgz)`
+    : "";
+
+  const npmModulesPackage = options.npmModules
+    ? `( cd \${srcdir}/\${pkgname}
+    tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )`
+    : "";
 
   out.write(
     `# ${pkg.contributors
@@ -109,9 +125,7 @@ ${Object.keys(properties)
       .filter(k => properties[k] !== undefined)
       .map(k => `${k}=${quote(properties[k])}`)
       .join("\n")}
-
 ${pkgver}
-
 build() {
   cd \${pkgname}
   npm install
@@ -157,13 +171,9 @@ build() {
 
 package() {
   mkdir -p \${pkgdir}${installdir}
-  ( cd \${pkgdir}${installdir}
-    tar -xv --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
-      pkg.name
-    }-${pkg.version}.tgz)
+  ${npmDistPackage}
   npx npm-pkgbuild --package \${srcdir}/\${pkgname} --staging \${pkgdir} content systemd
-  ( cd \${srcdir}/\${pkgname}
-    tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )
+  ${npmModulesPackage}
 }
 `
   );

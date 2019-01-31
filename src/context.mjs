@@ -22,7 +22,7 @@ export async function createContext(dir, properties = {}) {
     return value;
   }
 
-  properties = Object.assign({ installdir: "/" }, pkg);
+  properties = Object.assign({ installdir: "" }, pkg);
 
   const eeContext = ee({ evaluate });
 

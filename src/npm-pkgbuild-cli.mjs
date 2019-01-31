@@ -17,12 +17,9 @@ program
   .option("-i --installdir <dir>", "install directory package content base")
   .option("-s --staging <dir>", "staging directory defaults to build")
   .option("-t --target <dir>", "target directory of the package")
-  .command(
-    "[stages...]",
-    "stages to execute",
-    /pkgbuild|makepkg|content|systemd|pacman/,
-    "pkgbuild"
-  )
+  .option("--npm-modules", "include npm modules")
+  .option("--npm-dist", "include npm dist")
+  .command("[stages...]", "stages to execute")
   .action(async (...stages) => {
     stages.pop();
 
@@ -30,7 +27,7 @@ program
       program.package = process.cwd();
     }
     const staging = program.staging === undefined ? "build" : program.staging;
-    const target  = program.target;
+    const target = program.target;
 
     await fs.promises.mkdir(staging, { recursive: true });
 
@@ -43,7 +40,8 @@ program
           await pkgbuild(
             context,
             staging,
-            createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions)
+            createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
+            { npmDist: program.npmDist, npmModules: program.npmModules }
           );
           break;
         case "makepkg":

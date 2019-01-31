@@ -21,7 +21,7 @@ test("pkgbuild", async t => {
     installdir: "/somewhere"
   });
 
-  await pkgbuild(context, fixturesDir, ws);
+  await pkgbuild(context, fixturesDir, ws, { npmDist: true, npmModules: true });
 
   const c = ws.getContentsAsString("utf8");
   t.regex(c, /pkgver='1.2.3'/);

@@ -6,6 +6,13 @@ import { createContext } from "../src/context";
 import { pkgbuild } from "../src/pkgbuild";
 
 const fixturesDir = join(__dirname, "..", "tests", "fixtures");
+const fixturesSkeletonDir = join(
+  __dirname,
+  "..",
+  "tests",
+  "fixtures",
+  "skeleton"
+);
 
 test("pkgbuild", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
@@ -23,4 +30,19 @@ test("pkgbuild", async t => {
   t.regex(c, /depends=.*redis>=5/);
   t.regex(c, /backup=.*etc\/myservice\/myservice.json/);
   t.regex(c, /install=.*myservice.install/);
+});
+
+test.only("pkgbuild skeleton package", async t => {
+  const ws = new WritableStreamBuffer({ initialSize: 10240 });
+
+  const context = await createContext(fixturesSkeletonDir, {
+    installdir: "/somewhere"
+  });
+
+  await pkgbuild(context, fixturesSkeletonDir, ws);
+
+  const c = ws.getContentsAsString("utf8");
+  t.regex(c, /pkgver='1.2.3'/);
+  t.regex(c, /source=\('git/);
+  t.regex(c, /depends=.*nodejs>=10.5/);
 });

@@ -95,6 +95,10 @@ pkgver() {
 `;
   }
 
+  if (pkg.contributors === undefined) {
+    pkg.contributors = [];
+  }
+
   out.write(
     `# ${pkg.contributors
       .map(

@@ -19,6 +19,8 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     repo = "git+" + repo;
   }
 
+  const directory = pkg.repository.directory ? '/' + pkg.repository.directory : '';
+
   let depends = Object.assign({}, pkg.pacman.depends, pkg.engines);
 
   depends = Object.keys(depends).reduce((a, c) => {
@@ -105,13 +107,13 @@ pkgver() {
 
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
-    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}/${
+    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}\${directory}/${
       pkg.name
     }-${pkg.version}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules
-    ? `( cd \${srcdir}/\${pkgname}
+    ? `( cd \${srcdir}/\${pkgname}\${directory}
     tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )`
     : "";
 
@@ -127,7 +129,7 @@ ${Object.keys(properties)
       .join("\n")}
 ${pkgver}
 build() {
-  cd \${pkgname}
+  cd \${pkgname}\${directory}
   npm install
   npm pack
   npm prune --production
@@ -172,7 +174,7 @@ build() {
 package() {
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname} --staging \${pkgdir} content systemd
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname}\${directory} --staging \${pkgdir} content systemd
   ${npmModulesPackage}
 }
 `

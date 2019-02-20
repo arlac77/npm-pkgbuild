@@ -136,10 +136,7 @@ build() {
   | xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
-  find node_modules -iname test -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname tests -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname doc -type d -print0|xargs -r -0 rm -rf
-  find node_modules -iname docs -type d -print0|xargs -r -0 rm -rf
+  find node_modules \\( -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf
   find node_modules -iname "example*" -type d -print0|xargs -r -0 rm -rf
   find node_modules -iname "readme*" -print0|xargs -r -0 rm
   find node_modules -iname "AUTHORS*" -print0|xargs -r -0 rm

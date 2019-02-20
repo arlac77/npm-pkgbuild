@@ -1,16 +1,19 @@
 import test from "ava";
-import { join } from "path";
+import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { pacman } from "../src/pacman";
 import { utf8StreamOptions } from "../src/util";
 import { createContext } from "../src/context";
+import { fileURLToPath } from "url";
 
-const fixturesDir = join(__dirname, "..", "tests", "fixtures");
+const here = dirname(fileURLToPath(import.meta.url));
+
+const fixturesDir = join(here, "..", "tests", "fixtures");
 
 test("pacman simple", async t => {
   const context = await createContext(fixturesDir);
 
-  const tmpDir = join(__dirname, "..", "build");
+  const tmpDir = join(here, "..", "build");
   await pacman(context, tmpDir);
 
   const d = readFileSync(join(tmpDir, "myservice.install"), utf8StreamOptions);

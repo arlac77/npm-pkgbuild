@@ -17,7 +17,9 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     repo = "git+" + repo;
   }
 
-  const directory = pkg.repository.directory ? '/' + pkg.repository.directory : '';
+  const directory = pkg.repository.directory
+    ? "/" + pkg.repository.directory
+    : "";
 
   let depends = Object.assign({}, pkg.pacman.depends, pkg.engines);
 
@@ -106,8 +108,8 @@ pkgver() {
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
     tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
-      pkg.name
-    }-${pkg.version}.tgz)`
+        pkg.name
+      }-${pkg.version}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules
@@ -136,8 +138,7 @@ build() {
   | xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
-  find node_modules \\( -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf
-  find node_modules -iname "example*" -type d -print0|xargs -r -0 rm -rf
+  find node_modules \\( -iname "example*" -o -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf
   find node_modules -iname "readme*" -print0|xargs -r -0 rm
   find node_modules -iname "AUTHORS*" -print0|xargs -r -0 rm
   find node_modules -iname "NOTICE*" -print0|xargs -r -0 rm

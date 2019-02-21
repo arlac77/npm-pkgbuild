@@ -14,14 +14,23 @@ export async function content(context, stagingDir) {
         const source = content[dest];
 
         dest = join(stagingDir, dest);
+        let cwd, pattern;
 
-        for (const name of await globby(asArray(source), {
-          cwd: context.dir
+        if (typeof source === "string" || source instanceof String) {
+          cwd = context.dir;
+          pattern = source;
+        } else {
+          cwd = join(context.dir, source.base);
+          pattern = source.pattern || "**/*";
+        }
+
+        for (const name of await globby(asArray(pattern), {
+          cwd
         })) {
-          const d = dest.endsWith('/') ? join(dest,name) : dest;
+          const d = dest.endsWith("/") ? join(dest, name) : dest;
           await fs.promises.mkdir(dirname(d), { recursive: true });
 
-          await copyTemplate(context, join(context.dir, name), d);
+          await copyTemplate(context, join(cwd, name), d);
         }
       })
     );

@@ -27,7 +27,11 @@
     "install": "pacman/pacman.install",
     "content": {
       "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
-      "${installdir}/docroot/": "content/**/*"
+      "${installdir}/docroot1/": "content/**/*.txt",
+      "${installdir}/docroot2/": {
+        "base": "content",
+        "pattern": "**/*.json"
+      }
     }
   },
   "systemd": {

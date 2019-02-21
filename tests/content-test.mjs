@@ -24,9 +24,16 @@ test("content simple", async t => {
   t.regex(d, /\/run\/myservice/);
 
   const d2 = readFileSync(
-    join(tmpDir, "/services/myservice/docroot/content/file1.txt"),
+    join(tmpDir, "/services/myservice/docroot1/content/file1.txt"),
     utf8StreamOptions
   );
 
   t.regex(d2, /file1.txt/);
+
+  const d3 = readFileSync(
+    join(tmpDir, "/services/myservice/docroot2/file2.json"),
+    utf8StreamOptions
+  );
+
+  t.is(d3, "{}\n");
 });

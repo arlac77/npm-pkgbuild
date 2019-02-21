@@ -22,4 +22,11 @@ test("content simple", async t => {
   );
 
   t.regex(d, /\/run\/myservice/);
+
+  const d2 = readFileSync(
+    join(tmpDir, "/services/myservice/docroot/content/file1.txt"),
+    utf8StreamOptions
+  );
+
+  t.regex(d2, /file1.txt/);
 });

@@ -81,11 +81,17 @@ program
               }
             }
 
-            console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`);
+            context.properties["arch"] = arch;
+
+            console.log(
+              `cp ${name}-${version}-${arch}.pkg.tar.xz ${context.expand(
+                target
+              )}`
+            );
 
             await execa(
               "cp",
-              [`${name}-${version}-${arch}.pkg.tar.xz`, target],
+              [`${name}-${version}-${arch}.pkg.tar.xz`, context.expand(target)],
               {
                 cwd: staging
               }

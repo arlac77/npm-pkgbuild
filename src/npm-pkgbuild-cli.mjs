@@ -69,9 +69,12 @@ program
           if (target !== undefined) {
             let arch = "any";
 
-            for await (const chunk of createReadStream(`pkg/${name}/.PKGINFO`, {
-              encoding: "utf-8"
-            })) {
+            for await (const chunk of createReadStream(
+              join(staging, `pkg/${name}/.PKGINFO`),
+              {
+                encoding: "utf-8"
+              }
+            )) {
               const r = chunk.match(/arch\s+=\s+(\w+)/);
               if (r) {
                 arch = r[1];

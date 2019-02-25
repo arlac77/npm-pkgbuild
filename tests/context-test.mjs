@@ -13,3 +13,10 @@ test("context plain", async t => {
 
   t.is(context.properties.description, "a description");
 });
+
+
+test("context expand", async t => {
+  const context = await createContext(fixturesDir);
+
+  t.is(context.expand('a${name}b'), "amyserviceb");
+});

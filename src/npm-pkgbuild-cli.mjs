@@ -3,7 +3,7 @@ import { pkgbuild } from "./pkgbuild";
 import { systemd } from "./systemd";
 import { pacman } from "./pacman";
 import { content } from "./content";
-import fs, { createWriteStream } from "fs";
+import fs, { createReadStream, createWriteStream } from "fs";
 import program from "commander";
 import { join } from "path";
 import execa from "execa";
@@ -67,11 +67,26 @@ program
           await proc;
 
           if (target !== undefined) {
-            console.log(`cp ${name}-${version}-any.pkg.tar.xz ${target}`);
+            let arch = "any";
 
-            await execa("cp", [`${name}-${version}-any.pkg.tar.xz`, target], {
-              cwd: staging
-            });
+            for await (const chunk of createReadStream(`pkg/${name}/.PKGINFO`, {
+              encoding: "utf-8"
+            })) {
+              const r = chunk.match(/arch\s+=\s+(\w+)/);
+              if (r) {
+                arch = r[1];
+              }
+            }
+
+            console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`);
+
+            await execa(
+              "cp",
+              [`${name}-${version}-${arch}.pkg.tar.xz`, target],
+              {
+                cwd: staging
+              }
+            );
           }
 
           break;

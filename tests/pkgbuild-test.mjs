@@ -1,6 +1,6 @@
 import test from "ava";
 import { join, dirname } from "path";
-import WritableStreamBuffer  from "stream-buffers/lib/writable_streambuffer";
+import WritableStreamBuffer from "stream-buffers/lib/writable_streambuffer";
 import { utf8StreamOptions } from "../src/util";
 import { createContext } from "../src/context";
 import { pkgbuild } from "../src/pkgbuild";
@@ -9,13 +9,7 @@ import { fileURLToPath } from "url";
 const here = dirname(fileURLToPath(import.meta.url));
 
 const fixturesDir = join(here, "..", "tests", "fixtures");
-const fixturesSkeletonDir = join(
-  here,
-  "..",
-  "tests",
-  "fixtures",
-  "skeleton"
-);
+const fixturesSkeletonDir = join(here, "..", "tests", "fixtures", "skeleton");
 
 test("pkgbuild", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
@@ -33,9 +27,10 @@ test("pkgbuild", async t => {
   t.regex(c, /depends=.*redis>=5/);
   t.regex(c, /backup=.*etc\/myservice\/myservice.json/);
   t.regex(c, /install=.*myservice.install/);
+  t.regex(c, /arch=.*aarch64,armv7h/);
 });
 
-test.only("pkgbuild skeleton package", async t => {
+test("pkgbuild skeleton package", async t => {
   const ws = new WritableStreamBuffer({ initialSize: 10240 });
 
   const context = await createContext(fixturesSkeletonDir, {

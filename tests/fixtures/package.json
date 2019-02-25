@@ -16,7 +16,10 @@
     "node": ">=10.5"
   },
   "pacman": {
-    "arch": "aarch64,armv7h",
+    "arch": [
+      "aarch64",
+      "armv7h"
+    ],
     "installdir": "/services/${name}",
     "groups": "webhook",
     "backup": [

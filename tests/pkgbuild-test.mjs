@@ -27,7 +27,7 @@ test("pkgbuild", async t => {
   t.regex(c, /depends=.*redis>=5/);
   t.regex(c, /backup=.*etc\/myservice\/myservice.json/);
   t.regex(c, /install=.*myservice.install/);
-  t.regex(c, /arch=.*aarch64,armv7h/);
+  t.regex(c, /arch=.*\(aarch64 armv7h\)/);
 });
 
 test("pkgbuild skeleton package", async t => {

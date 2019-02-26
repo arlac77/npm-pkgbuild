@@ -27,7 +27,7 @@ program
       program.package = process.cwd();
     }
     const staging = program.staging === undefined ? "build" : program.staging;
-    const target = program.target;
+    let target = program.target;
 
     await fs.promises.mkdir(staging, { recursive: true });
 

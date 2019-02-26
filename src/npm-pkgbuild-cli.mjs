@@ -84,9 +84,7 @@ program
             context.properties["arch"] = arch;
 
             console.log(
-              `cp ${name}-${version}-${arch}.pkg.tar.xz ${context.expand(
-                target
-              )}`
+              `cp ${name}-${version}-${arch}.pkg.tar.xz ${context.expand(target)} (${target})`
             );
 
             await execa(

@@ -83,13 +83,15 @@ program
 
             context.properties["arch"] = arch;
 
+            target = target.replace(/\{\{(\w+)\}\}/m,  (match, key, offset, string)  => context.evaluate(key));
+
             console.log(
-              `cp ${name}-${version}-${arch}.pkg.tar.xz ${context.expand(target)} (${target})`
+              `cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`
             );
 
             await execa(
               "cp",
-              [`${name}-${version}-${arch}.pkg.tar.xz`, context.expand(target)],
+              [`${name}-${version}-${arch}.pkg.tar.xz`, target],
               {
                 cwd: staging
               }

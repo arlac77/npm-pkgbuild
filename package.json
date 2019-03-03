@@ -34,7 +34,7 @@
     "commander": "^2.19.0",
     "execa": "^1.0.0",
     "expression-expander": "^7.0.0",
-    "globby": "^9.0.0",
+    "globby": "^9.1.0",
     "iterable-string-interceptor": "^1.0.1"
   },
   "devDependencies": {

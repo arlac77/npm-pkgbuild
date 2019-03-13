@@ -88,12 +88,6 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     }
   });
 
-  /*if (properties.backup !== undefined) {
-    properties.backup = properties.backup.map(name =>
-      join(installdir, name).substring(1)
-    );
-  }*/
-
   let pkgver = "";
 
   if (pkg.version === "0.0.0-semantic-release") {
@@ -136,6 +130,7 @@ build() {
   rm -rf node_modules/.bin
   find . \\( -name "*~" -o -name "*.mk" -o -name "*.bat" -o -name "*.tmp" -o -name "*.orig" \\) -print0 \\
   | xargs -r -0 rm
+  find node_modules -name "*.d.ts" -print0|xargs -r -0 rm
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
   find node_modules \\( -iname "example*" -o -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf

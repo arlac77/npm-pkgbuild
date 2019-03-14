@@ -147,11 +147,11 @@ build() {
   find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
   find . \\( -name jsdoc.json -o -name "Gruntfile.js" \\) -print0|xargs -r -0 rm
-  find . \\( -name SECURITY.md -o -name "SFTPStream.md" -o -name "LIMITS.md" -o -name "GOVERNANCE.md" \\) -print0|xargs -r -0 rm
+  find . \\( -name SECURITY.md -o -name "SFTPStream.md" -o -name "LIMITS.md" -o -name "GOVERNANCE.md" -o -name "CODE_OF_CONDUCT.md" \\) -print0|xargs -r -0 rm
   find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm
   find . -name ".nvmrc" -print0|xargs -r -0 rm
-  find . -name ".travis.yml" -print0|xargs -r -0 rm
+  find . \\( -name ".travis.yml" -o -name "appveyor.yml" \\) -print0|xargs -r -0 rm
   find . -name ".jshintrc*" -print0|xargs -r -0 rm
   find . -name ".esl*" -print0|xargs -r -0 rm
   find . -name ".zuul.yml" -print0|xargs -r -0 rm

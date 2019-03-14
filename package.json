@@ -6,7 +6,7 @@
   },
   "main": "src/pkgbuild.mjs",
   "module": "src/pkgbuild.mjs",
-  "description": "create arch linux package from npm",
+  "description": "create arch linux packages from npm packages",
   "keywords": [
     "aur",
     "pkgbuild",

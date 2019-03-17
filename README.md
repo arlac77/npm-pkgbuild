@@ -7,7 +7,6 @@
 [![Coverage Status](https://coveralls.io/repos/arlac77/npm-pkgbuild/badge.svg)](https://coveralls.io/r/arlac77/npm-pkgbuild)
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/npm-pkgbuild/badge.svg)](https://snyk.io/test/github/arlac77/npm-pkgbuild)
 [![GitHub Issues](https://img.shields.io/github/issues/arlac77/npm-pkgbuild.svg?style=flat-square)](https://github.com/arlac77/npm-pkgbuild/issues)
-[![Stories in Ready](https://badge.waffle.io/arlac77/npm-pkgbuild.svg?label=ready&title=Ready)](http://waffle.io/arlac77/npm-pkgbuild)
 [![Dependency Status](https://david-dm.org/arlac77/npm-pkgbuild.svg)](https://david-dm.org/arlac77/npm-pkgbuild)
 [![devDependency Status](https://david-dm.org/arlac77/npm-pkgbuild/dev-status.svg)](https://david-dm.org/arlac77/npm-pkgbuild#info=devDependencies)
 [![docs](http://inch-ci.org/github/arlac77/npm-pkgbuild.svg?branch=master)](http://inch-ci.org/github/arlac77/npm-pkgbuild)

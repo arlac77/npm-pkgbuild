@@ -27,7 +27,7 @@ program
       program.package = process.cwd();
     }
     const staging = program.staging === undefined ? "build" : program.staging;
-    let target = program.target;
+    let target = program.target || process.env.PACMAN_UPLOAD;
 
     await fs.promises.mkdir(staging, { recursive: true });
 

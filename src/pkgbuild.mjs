@@ -146,7 +146,7 @@ build() {
   find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
   find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
-  find . \\( -name jsdoc.json -o -name "Gruntfile.js" \\) -print0|xargs -r -0 rm
+  find . \\( -name yarn.lock -o -name "rollup.config.*" -o -name jsdoc.json -o -name "Gruntfile.js" \\) -print0|xargs -r -0 rm
   find . \\( -name SECURITY.md -o -name "SFTPStream.md" -o -name "LIMITS.md" -o -name "GOVERNANCE.md" -o -name "CODE_OF_CONDUCT.md" \\) -print0|xargs -r -0 rm
   find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
   find . -name ".verb.md" -print0|xargs -r -0 rm

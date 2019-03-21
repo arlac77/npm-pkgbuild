@@ -28,3 +28,6 @@ jobs:
         skip_cleanup: 'true'
         script:
           - npx semantic-release
+notifications:
+  email:
+    - '-markus.felten@gmx.de'

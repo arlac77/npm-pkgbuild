@@ -1,5 +1,5 @@
 import globby from "globby";
-import { join, resolve, basename } from "path";
+import { join, basename } from "path";
 import { asArray, copyTemplate } from "./util";
 import fs from "fs";
 

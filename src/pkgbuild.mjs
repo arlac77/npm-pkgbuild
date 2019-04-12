@@ -134,32 +134,26 @@ build() {
   find node_modules -name "*.1" -print0|xargs -r -0 rm
   find node_modules -name "*.patch" -print0|xargs -r -0 rm
   find node_modules \\( -iname "example*" -o -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf
-  find node_modules -iname "readme*" -print0|xargs -r -0 rm
-  find node_modules -iname "AUTHORS*" -print0|xargs -r -0 rm
-  find node_modules -iname "NOTICE*" -print0|xargs -r -0 rm
-  find node_modules -iname "HISTORY*" -print0|xargs -r -0 rm
-  find node_modules -iname "SUMMARY.md" -print0|xargs -r -0 rm
-  find node_modules -iname "PULL_REQUEST_TEMPLATE.md" -print0|xargs -r -0 rm
+  find node_modules \\( -iname "readme*" -o -iname "AUTHORS*" -o -iname "NOTICE*" -o -iname "HISTORY*" -o -iname SUMMARY.md -o -iname PULL_REQUEST_TEMPLATE.md \\) -print0|xargs -r -0 rm
   find node_modules -iname "CONTRIBUTING*" -print0|xargs -r -0 rm
   find node_modules -iname "Contributors*" -print0|xargs -r -0 rm
   find node_modules -iname "CHANGES*" -print0|xargs -r -0 rm
   find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
   find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
   find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
-  find . \\( -name yarn.lock -o -name "rollup.config.*" -o -name jsdoc.json -o -name "Gruntfile.js" \\) -print0|xargs -r -0 rm
-  find . \\( -name MIGRATIONS.md -o -name PATTERNS.md -o -name REFERENCE.md -o -name SECURITY.md -o -name "SFTPStream.md" -o -name "LIMITS.md" -o -name "GOVERNANCE.md" -o -name "CODE_OF_CONDUCT.md" \\) -print0|xargs -r -0 rm
+  find . \\( -name yarn.lock -o -name "rollup.config.*" -o -name jsdoc.json -o -name Gruntfile.js \\) -print0|xargs -r -0 rm
+  find . \\( -name MIGRATIONS.md -o -name PATTERNS.md -o -name REFERENCE.md -o -name SECURITY.md -o -name SFTPStream.md -o -name LIMITS.md -o -name GOVERNANCE.md -o -name CODE_OF_CONDUCT.md \\) -print0|xargs -r -0 rm
   find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
-  find . -name ".verb.md" -print0|xargs -r -0 rm
-  find . -name ".nvmrc" -print0|xargs -r -0 rm
-  find . \\( -name ".travis.yml" -o -name "appveyor.yml" \\) -print0|xargs -r -0 rm
+  find . \\( -name .verb.md -o -name .nvmrc -o -name config.gypi -o -name binding.gyp \\) -print0|xargs -r -0 rm
+  find . \\( -name .travis.yml -o -name appveyor.yml \\) -print0|xargs -r -0 rm
   find . -name ".jshintrc*" -print0|xargs -r -0 rm
   find . -name ".esl*" -print0|xargs -r -0 rm
-  find . -name ".zuul.yml" -print0|xargs -r -0 rm
-  find . -name ".doclets.yml" -print0|xargs -r -0 rm
-  find . -name ".editorconfig" -print0|xargs -r -0 rm
-  find . -name ".tern-project" -print0|xargs -r -0 rm
-  find . -name ".dockerignore" -print0|xargs -r -0 rm
-  find . -name ".dir-locals.el" -print0|xargs -r -0 rm
+  find . -name .zuul.yml -print0|xargs -r -0 rm
+  find . -name .doclets.yml -print0|xargs -r -0 rm
+  find . -name .editorconfig -print0|xargs -r -0 rm
+  find . -name .tern-project -print0|xargs -r -0 rm
+  find . -name .dockerignore -print0|xargs -r -0 rm
+  find . -name .dir-locals.el -print0|xargs -r -0 rm
 }
 
 package() {

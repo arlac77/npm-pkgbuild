@@ -31,10 +31,10 @@
     "test": "ava"
   },
   "dependencies": {
-    "commander": "^2.19.0",
+    "commander": "^2.20.0",
     "execa": "^1.0.0",
-    "expression-expander": "^7.0.0",
-    "globby": "^9.1.0",
+    "expression-expander": "^7.0.1",
+    "globby": "^9.2.0",
     "iterable-string-interceptor": "^1.0.1"
   },
   "devDependencies": {

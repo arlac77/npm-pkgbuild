@@ -12,6 +12,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
   }
 */
 
+  let md5sums;
   let source;
   let directory = "";
 
@@ -20,6 +21,8 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     if (!source.startsWith("git+")) {
       source = "git+" + source;
     }
+
+    md5sums = "SKIP";
 
     directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
   }
@@ -46,7 +49,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
       arch: "any",
       makedepends: "git",
       source,
-      md5sums: "SKIP"
+      md5sums
     },
     pkg.pacman,
     {

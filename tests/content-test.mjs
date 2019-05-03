@@ -28,7 +28,11 @@ test("content simple", async t => {
     utf8StreamOptions
   );
 
-  t.regex(d2, /file1.txt/);
+  t.is(d2,`content of myservice file1.txt
+{{ unknown value }}
+`);
+
+  //t.regex(d2, /file1.txt/);
 
   const d3 = readFileSync(
     join(tmpDir, "/services/myservice/docroot2/file2.json"),

@@ -20,7 +20,7 @@ export function asArray(o) {
 }
 
 export async function copyTemplate(context, source, dest) {
-  async function* expressionEval(expression, remainder, cb, leadIn, leadOut) {
+  async function* expressionEval(expression, chunk, source, cb, leadIn, leadOut) {
     const replace = context.evaluate(expression);
     if (replace === undefined) {
       yield leadIn + expression + leadOut;

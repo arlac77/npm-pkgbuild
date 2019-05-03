@@ -1,1 +1,2 @@
-content of file1.txt
+content of {{name}} file1.txt
+{{ unknown value }}

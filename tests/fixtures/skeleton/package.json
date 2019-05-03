@@ -2,7 +2,7 @@
   "name": "myservice",
   "description": "a description",
   "version": "1.2.3-semantic-release",
-  "repository": {
+  "xrepository": {
     "type": "git",
     "url": "https://github.com/arlac77/myservice.git"
   },

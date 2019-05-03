@@ -12,14 +12,17 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
   }
 */
 
-  let repo = pkg.repository.url;
-  if (!repo.startsWith("git+")) {
-    repo = "git+" + repo;
-  }
+  let source;
+  let directory = "";
 
-  const directory = pkg.repository.directory
-    ? "/" + pkg.repository.directory
-    : "";
+  if (pkg.repository) {
+    source = pkg.repository.url;
+    if (!source.startsWith("git+")) {
+      source = "git+" + source;
+    }
+
+    directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
+  }
 
   let depends = Object.assign({}, pkg.pacman.depends, pkg.engines);
 
@@ -42,7 +45,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
       pkgname: pkg.name,
       arch: "any",
       makedepends: "git",
-      source: repo,
+      source,
       md5sums: "SKIP"
     },
     pkg.pacman,

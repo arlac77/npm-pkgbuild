@@ -1,14 +1,14 @@
 import { version, description } from "../package.json";
-import { pkgbuild } from "./pkgbuild";
-import { systemd } from "./systemd";
-import { pacman } from "./pacman";
-import { content } from "./content";
 import fs, { createReadStream, createWriteStream } from "fs";
-import program from "commander";
 import { join } from "path";
+import program from "commander";
 import execa from "execa";
-import { utf8StreamOptions } from "./util";
-import { createContext } from "./context";
+import { pkgbuild } from "./pkgbuild.mjs";
+import { systemd } from "./systemd.mjs";
+import { pacman } from "./pacman.mjs";
+import { content } from "./content.mjs";
+import { utf8StreamOptions } from "./util.mjs";
+import { createContext } from "./context.mjs";
 
 program
   .description(description)
@@ -83,11 +83,12 @@ program
 
             context.properties["arch"] = arch;
 
-            target = target.replace(/\{\{(\w+)\}\}/m,  (match, key, offset, string)  => context.evaluate(key));
-
-            console.log(
-              `cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`
+            target = target.replace(
+              /\{\{(\w+)\}\}/m,
+              (match, key, offset, string) => context.evaluate(key)
             );
+
+            console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`);
 
             await execa(
               "cp",

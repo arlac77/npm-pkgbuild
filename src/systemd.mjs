@@ -1,7 +1,7 @@
 import globby from "globby";
 import { join, basename } from "path";
-import { asArray, copyTemplate } from "./util";
 import fs from "fs";
+import { asArray, copyTemplate } from "./util.mjs";
 
 export async function systemd(context, stagingDir) {
   const pkg = context.pkg;

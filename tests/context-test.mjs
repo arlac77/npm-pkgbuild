@@ -1,8 +1,8 @@
 import test from "ava";
 import { join, dirname } from "path";
-import { utf8StreamOptions } from "../src/util";
-import { createContext } from "../src/context";
 import { fileURLToPath } from "url";
+import { utf8StreamOptions } from "../src/util.mjs";
+import { createContext } from "../src/context.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -14,9 +14,8 @@ test("context plain", async t => {
   t.is(context.properties.description, "a description");
 });
 
-
 test("context expand", async t => {
   const context = await createContext(fixturesDir);
 
-  t.is(context.expand('a${name}b'), "amyserviceb");
+  t.is(context.expand("a${name}b"), "amyserviceb");
 });

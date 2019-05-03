@@ -1,10 +1,10 @@
 import test from "ava";
 import { join, dirname } from "path";
 import { readFileSync } from "fs";
-import { pacman } from "../src/pacman";
-import { utf8StreamOptions } from "../src/util";
-import { createContext } from "../src/context";
 import { fileURLToPath } from "url";
+import { pacman } from "../src/pacman.mjs";
+import { utf8StreamOptions } from "../src/util.mjs";
+import { createContext } from "../src/context.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

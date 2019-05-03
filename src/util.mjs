@@ -1,6 +1,6 @@
-import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { createReadStream, createWriteStream } from "fs";
 import { join } from "path";
+import { iterableStringInterceptor } from "iterable-string-interceptor";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 

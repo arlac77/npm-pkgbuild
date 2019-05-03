@@ -1,7 +1,7 @@
-import globby from "globby";
 import { join, dirname } from "path";
-import { asArray, copyTemplate } from "./util";
 import fs from "fs";
+import globby from "globby";
+import { asArray, copyTemplate } from "./util.mjs";
 
 export async function content(context, stagingDir) {
   const pkg = context.pkg;

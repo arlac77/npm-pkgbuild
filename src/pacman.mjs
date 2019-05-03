@@ -1,6 +1,6 @@
 import { join } from "path";
 import fs from "fs";
-import { copyTemplate } from "./util";
+import { copyTemplate } from "./util.mjs";
 
 export async function pacman(context, stagingDir) {
   const pkg = context.pkg;

@@ -1,7 +1,7 @@
 import { join } from "path";
 import fs from "fs";
 import { createContext as ee } from "expression-expander";
-import { utf8StreamOptions } from "./util";
+import { utf8StreamOptions } from "./util.mjs";
 
 export async function loadPackage(dir) {
   const pkgFile = join(dir, "package.json");

@@ -43,8 +43,8 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
       url: pkg.homepage,
       pkgdesc: pkg.description,
       license: pkg.license,
-      pkgrel: 1,
-      pkgver: pkg.version.replace(/\-.*$/, ""),
+      pkgrel: context.properties.pkgrel,
+      pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
       pkgname: pkg.name,
       arch: "any",
       makedepends: "git",
@@ -96,7 +96,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   let pkgver = "";
 
-  if (pkg.version === "0.0.0-semantic-release") {
+  if (context.properties.pkgver === "0.0.0-semantic-release") {
     pkgver = `
 pkgver() {
   cd "$pkgname"

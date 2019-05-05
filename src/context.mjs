@@ -17,7 +17,7 @@ export async function createContext(dir, properties = {}) {
 
   const pkg = await loadPackage(dir);
 
-  properties = Object.assign({ arch: "any", installdir: "" }, pkg);
+  properties = Object.assign({ arch: "any", installdir: "", pkgver: pkg.version }, pkg, properties);
 
   function evaluate(expression) {
     let value = properties[expression];

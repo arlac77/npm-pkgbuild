@@ -10,28 +10,36 @@ import { content } from "./content.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
 
+const cwd = process.cwd();
+
 program
   .description(description)
   .version(version)
-  .option("-p --package <dir>", "package directory defaults to cwd")
+  .option("--pkgrel <number>", "package release", 1)
+  .option("--pkgver <version>", "package version")
+  .option("-p --package <dir>", "package directory", cwd)
   .option("-i --installdir <dir>", "install directory package content base")
-  .option("-s --staging <dir>", "staging directory defaults to build")
-  .option("-t --target <dir>", "target directory of the package")
+  .option("-s --staging <dir>", "staging directory", "build")
+  .option(
+    "-t --target <dir>",
+    "target directory of the package (may also be given as env: PACMAN_UPLOAD)",
+    process.env.PACMAN_UPLOAD
+  )
   .option("--npm-modules", "include npm modules")
   .option("--npm-dist", "include npm dist")
   .command("[stages...]", "stages to execute")
   .action(async (...stages) => {
     stages.pop();
 
-    if (program.package === undefined) {
-      program.package = process.cwd();
-    }
-    const staging = program.staging === undefined ? "build" : program.staging;
-    let target = program.target || process.env.PACMAN_UPLOAD;
+    const staging = program.staging;
+    let target = program.target;
 
     await fs.promises.mkdir(staging, { recursive: true });
 
-    const context = await createContext(program.package, program);
+    const context = await createContext(
+      program.package,
+      program
+    );
 
     for (const stage of stages) {
       console.log(`executing ${stage}...`);

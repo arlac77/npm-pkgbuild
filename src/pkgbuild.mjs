@@ -109,7 +109,7 @@ pkgver() {
     ? `( cd \${pkgdir}${installdir}
     tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
         pkg.name
-      }-${pkg.version}.tgz)`
+      }-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules

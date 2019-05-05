@@ -130,6 +130,7 @@ ${Object.keys(properties)
 ${pkgver}
 build() {
   cd \${pkgname}${directory}
+  sed -i 's/"version": ".*/"version": "${context.properties.pkgver}",/' package.json
   npm install
   npm pack
   npm prune --production

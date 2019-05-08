@@ -158,6 +158,12 @@ const cleanup = [
   {
     options: { filesOnly: true },
     pattern: [
+      ".git*"
+    ]
+  },
+  {
+    options: { filesOnly: true },
+    pattern: [
       "*~",
       "*.mk",
       "*.bat",
@@ -185,9 +191,8 @@ const cleanup = [
       "config.gypi",
       "binding.gyp",
       "bower.json",
-      ".git*",
-      ".npm*",
-      "*.bash_completion.*"
+      "*.bash_completion.*",
+      ".npm*"
     ]
   },
   {

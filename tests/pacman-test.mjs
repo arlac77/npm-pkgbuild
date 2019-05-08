@@ -30,5 +30,7 @@ test("makepkg simple", async t => {
     await makepkg(context, tmpDir);
   }, Error);
 
-  t.regex(error.message, /spawn/);
+  //console.log(error);
+
+  t.regex(error.message, /Command failed/);
 });

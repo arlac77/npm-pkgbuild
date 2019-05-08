@@ -30,40 +30,44 @@ program
   .action(async (...stages) => {
     stages.pop();
 
-    const staging = program.staging;
+    try {
+      const staging = program.staging;
 
-    await fs.promises.mkdir(staging, { recursive: true });
+      await fs.promises.mkdir(staging, { recursive: true });
 
-    const context = await createContext(program.package, program);
+      const context = await createContext(program.package, program);
 
-    for (const stage of stages) {
-      console.log(`executing ${stage}...`);
-      switch (stage) {
-        case "pkgbuild":
-          await pkgbuild(
-            context,
-            staging,
-            createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
-            { npmDist: program.npmDist, npmModules: program.npmModules }
-          );
-          break;
-        case "makepkg":
-          makepkg(context, staging);
+      for (const stage of stages) {
+        console.log(`executing ${stage}...`);
+        switch (stage) {
+          case "pkgbuild":
+            await pkgbuild(
+              context,
+              staging,
+              createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
+              { npmDist: program.npmDist, npmModules: program.npmModules }
+            );
+            break;
+          case "makepkg":
+            makepkg(context, staging);
+            break;
+          case "systemd":
+            await systemd(context, staging);
+            break;
+          case "pacman":
+            await pacman(context, staging);
+            break;
+          case "content":
+            await content(context, staging);
+            break;
 
-          break;
-        case "systemd":
-          await systemd(context, staging);
-          break;
-        case "pacman":
-          await pacman(context, staging);
-          break;
-        case "content":
-          await content(context, staging);
-          break;
-
-        default:
-          console.error(`unknown stage ${stage}`);
+          default:
+            console.error(`unknown stage ${stage}`);
+        }
       }
+    } catch (e) {
+      console.log(e);
+      process.exit(-1);
     }
   })
   .parse(process.argv);

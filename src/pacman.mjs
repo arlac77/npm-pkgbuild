@@ -52,7 +52,7 @@ export async function makepkg(context, stagingDir) {
     let arch = "any";
 
     for await (const chunk of createReadStream(
-      join(staging, `pkg/${name}/.PKGINFO`),
+      join(stagingDir, `pkg/${name}/.PKGINFO`),
       utf8StreamOptions
     )) {
       const r = chunk.match(/arch\s+=\s+(\w+)/);
@@ -70,7 +70,7 @@ export async function makepkg(context, stagingDir) {
     console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${publish}`);
 
     await execa("cp", [`${name}-${version}-${arch}.pkg.tar.xz`, publish], {
-      cwd: staging
+      cwd: stagingDir
     });
   }
 }

@@ -137,8 +137,8 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  ${findAndDelete(filesToRemove, ".")}
-  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true, filesOnly: true })}
+  ${findAndDelete(filesToRemove, "."), { filesOnly: true }}
+  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true })}
   ${findAndDelete(dirsToRemove, ".", { ignoreCase: true, recursive: true })}
 }
 

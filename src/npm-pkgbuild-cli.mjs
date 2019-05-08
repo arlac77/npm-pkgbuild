@@ -2,10 +2,9 @@ import { version, description } from "../package.json";
 import fs, { createReadStream, createWriteStream } from "fs";
 import { join } from "path";
 import program from "commander";
-import execa from "execa";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { systemd } from "./systemd.mjs";
-import { pacman } from "./pacman.mjs";
+import { pacman, makepkg } from "./pacman.mjs";
 import { content } from "./content.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
@@ -21,9 +20,9 @@ program
   .option("-i --installdir <dir>", "install directory package content base")
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
-    "-t --target <dir>",
-    "target directory of the package (may also be given as env: PACMAN_UPLOAD)",
-    process.env.PACMAN_UPLOAD
+    "--publish <url>",
+    "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",
+    process.env.PACMAN_PUBLISH
   )
   .option("--npm-modules", "include npm modules")
   .option("--npm-dist", "include npm dist")
@@ -32,14 +31,10 @@ program
     stages.pop();
 
     const staging = program.staging;
-    let target = program.target;
 
     await fs.promises.mkdir(staging, { recursive: true });
 
-    const context = await createContext(
-      program.package,
-      program
-    );
+    const context = await createContext(program.package, program);
 
     for (const stage of stages) {
       console.log(`executing ${stage}...`);
@@ -53,59 +48,7 @@ program
           );
           break;
         case "makepkg":
-          const proc = execa("makepkg", ["-f"], { cwd: staging });
-
-          proc.stdout.pipe(process.stdout);
-          //proc.stderr.pipe(process.stderr);
-
-          let name, version;
-
-          for await (const chunk of proc.stderr) {
-            const s = chunk.toString("utf8");
-
-            console.log(s);
-
-            const m = s.match(/Finished making:\s+([^\s]+)\s+([^\s]+)/);
-            if (m) {
-              name = m[1];
-              version = m[2];
-            }
-          }
-
-          await proc;
-
-          if (target !== undefined) {
-            let arch = "any";
-
-            for await (const chunk of createReadStream(
-              join(staging, `pkg/${name}/.PKGINFO`),
-              {
-                encoding: "utf-8"
-              }
-            )) {
-              const r = chunk.match(/arch\s+=\s+(\w+)/);
-              if (r) {
-                arch = r[1];
-              }
-            }
-
-            context.properties["arch"] = arch;
-
-            target = target.replace(
-              /\{\{(\w+)\}\}/m,
-              (match, key, offset, string) => context.evaluate(key)
-            );
-
-            console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${target}`);
-
-            await execa(
-              "cp",
-              [`${name}-${version}-${arch}.pkg.tar.xz`, target],
-              {
-                cwd: staging
-              }
-            );
-          }
+          makepkg(context, staging);
 
           break;
         case "systemd":

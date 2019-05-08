@@ -2,7 +2,7 @@ import test from "ava";
 import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
-import { pacman } from "../src/pacman.mjs";
+import { pacman, makepkg } from "../src/pacman.mjs";
 import { utf8StreamOptions } from "../src/util.mjs";
 import { createContext } from "../src/context.mjs";
 
@@ -19,4 +19,16 @@ test("pacman simple", async t => {
   const d = readFileSync(join(tmpDir, "myservice.install"), utf8StreamOptions);
 
   t.regex(d, /systemctl start myservice/);
+});
+
+test("makepkg simple", async t => {
+  const context = await createContext(fixturesDir, { publish: "/tmp/" });
+
+  const tmpDir = join(here, "..", "build");
+
+  const error = await t.throwsAsync(async () => {
+    await makepkg(context, tmpDir);
+  }, Error);
+
+  t.regex(error.message, /spawn/);
 });

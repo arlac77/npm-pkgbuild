@@ -138,7 +138,7 @@ build() {
   npm prune --production
   rm -rf node_modules/.bin
   ${findAndDelete(filesToRemove, ".")}
-  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true })}
+  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true, filesOnly: true })}
   ${findAndDelete(dirsToRemove, ".", { ignoreCase: true, recursive: true })}
 }
 
@@ -225,7 +225,8 @@ function findAndDelete(
     pattern
       .map(p => ` ${options.ignoreCase ? "-iname" : "-name"} "${p}"`)
       .join(" -o") +
+    (options.filesOnly ? " -type f" : "") +
     ` \\) -print0\\
-    | xargs -r -0 ${options.recursive ? 'rm -r' : 'rm'}`
+    | xargs -r -0 ${options.recursive ? "rm -r" : "rm"}`
   );
 }

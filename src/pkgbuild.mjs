@@ -130,38 +130,18 @@ ${Object.keys(properties)
 ${pkgver}
 build() {
   cd \${pkgname}${directory}
-  sed -i 's/"version": ".*/"version": "${context.properties.pkgver}",/' package.json
+  sed -i 's/"version": ".*/"version": "${
+    context.properties.pkgver
+  }",/' package.json
   npm install
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  find . \\( -name "*~" -o -name "*.mk" -o -name "*.bat" -o -name "*.tmp" -o -name "*.orig" \\) -print0 \\
-  | xargs -r -0 rm
-  find node_modules -name "*.d.ts" -print0|xargs -r -0 rm
-  find node_modules -name "*.1" -print0|xargs -r -0 rm
-  find node_modules -name "*.patch" -print0|xargs -r -0 rm
-  find node_modules \\( -iname "example*" -o -iname doc -o -iname docs -o -iname test -o -iname tests -type d \\) -print0|xargs -r -0 rm -rf
-  find node_modules \\( -iname "readme*" -o -iname "AUTHORS*" -o -iname "NOTICE*" -o -iname "HISTORY*" -o -iname SUMMARY.md -o -iname MIGRATION.md -o -iname PULL_REQUEST_TEMPLATE.md \\) -print0|xargs -r -0 rm
-  find node_modules -iname "CONTRIBUTING*" -print0|xargs -r -0 rm
-  find node_modules -iname "Contributors*" -print0|xargs -r -0 rm
-  find node_modules -iname "CHANGES*" -print0|xargs -r -0 rm
-  find node_modules -iname "CHANGELOG*" -print0|xargs -r -0 rm -rf
-  find node_modules -iname "*Makefile*" -print0|xargs -r -0 rm
-  find node_modules -name "*.bash_completion.*" -print0|xargs -r -0 rm
-  find . \\( -name yarn.lock -o -name "rollup.config.*" -o -name jsdoc.json -o -name Gruntfile.js \\) -print0|xargs -r -0 rm
-  find . \\( -name MIGRATIONS.md -o -name PATTERNS.md -o -name REFERENCE.md -o -name SECURITY.md -o -name SFTPStream.md -o -name LIMITS.md -o -name GOVERNANCE.md -o -name CODE_OF_CONDUCT.md \\) -print0|xargs -r -0 rm
-  find . \\( -name ".git*" -type f -o  -name ".npm*" -type f \\) -print0|xargs -r -0 rm
-  find . \\( -name .verb.md -o -name .nvmrc -o -name config.gypi -o -name binding.gyp -o -name bower.json \\) -print0|xargs -r -0 rm
-  find . \\( -name .travis.yml -o -name appveyor.yml \\) -print0|xargs -r -0 rm
-  find . -name ".jshintrc*" -print0|xargs -r -0 rm
-  find . -name ".esl*" -print0|xargs -r -0 rm
-  find . -name .zuul.yml -print0|xargs -r -0 rm
-  find . -name .doclets.yml -print0|xargs -r -0 rm
-  find . -name .editorconfig -print0|xargs -r -0 rm
-  find . -name .tern-project -print0|xargs -r -0 rm
-  find . -name .dockerignore -print0|xargs -r -0 rm
-  find . -name .dir-locals.el -print0|xargs -r -0 rm
+  ${findAndDelete(filesToRemove, ".")}
+  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true })}
+  ${findAndDelete(dirsToRemove, ".", { ignoreCase: true, recursive: true })}
 }
+
 
 package() {
   mkdir -p \${pkgdir}${installdir}
@@ -175,4 +155,77 @@ package() {
   out.end();
 
   await promisify(finished);
+}
+
+const filesToRemove = [
+  "*~",
+  "*.mk",
+  "*.bat",
+  "*.tmp",
+  "*.orig",
+  "*.d.ts",
+  "*.1",
+  "*.patch",
+  ".jshintrc*",
+  ".esl*",
+  ".zuul.yml",
+  ".doclets.yml",
+  ".editorconfig",
+  ".tern-project",
+  ".dockerignore",
+  ".dir-locals.el",
+  ".travis.yml",
+  "appveyor.yml",
+  "yarn.lock",
+  "rollup.config.*",
+  "jsdoc.json",
+  "Gruntfile.js",
+  "verb.md",
+  ".nvmrc",
+  "config.gypi",
+  "binding.gyp",
+  "bower.json",
+  ".git*",
+  ".npm*",
+  "*.bash_completion.*"
+];
+
+const filesToRemove2 = [
+  "*Makefile*",
+  "CONTRIBUTING*",
+  "Contributors*",
+  "CHANGES*",
+  "readme*",
+  "AUTHORS*",
+  "NOTICE*",
+  "HISTORY*",
+  "SUMMARY.md",
+  "MIGRATION*.md",
+  "PULL_REQUEST_TEMPLATE.md",
+  "PATTERNS.md",
+  "REFERENCE.md",
+  "SECURITY.md",
+  "SFTPStream.md",
+  "LIMITS.md",
+  "GOVERNANCE.md",
+  "CODE_OF_CONDUCT*"
+];
+
+const dirsToRemove = ["CHANGELOG*", "example*", "doc", "docs", "test", "tests"];
+
+function findAndDelete(
+  pattern,
+  dir = ".",
+  options = { ignoreCase: false, recursive: false }
+) {
+  return (
+    "find " +
+    dir +
+    " \\(" +
+    pattern
+      .map(p => ` ${options.ignoreCase ? "-iname" : "-name"} "${p}"`)
+      .join(" -o") +
+    ` \\) -print0\\
+    | xargs -r -0 ${options.recursive ? 'rm -r' : 'rm'}`
+  );
 }

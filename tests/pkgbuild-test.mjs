@@ -40,6 +40,7 @@ test("pkgbuild skeleton package", async t => {
   await pkgbuild(context, fixturesSkeletonDir, ws);
 
   const c = ws.getContentsAsString("utf8");
+
   t.regex(c, /pkgver='1.2.3'/);
   //t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);

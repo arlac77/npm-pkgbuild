@@ -1,5 +1,5 @@
 import { version, description } from "../package.json";
-import fs, { createReadStream, createWriteStream } from "fs";
+import fs, { createWriteStream } from "fs";
 import { join } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";

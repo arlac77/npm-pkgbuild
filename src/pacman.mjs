@@ -1,5 +1,5 @@
 import { join } from "path";
-import fs from "fs";
+import fs, { createReadStream } from "fs";
 import execa from "execa";
 import { copyTemplate } from "./util.mjs";
 import { utf8StreamOptions } from "./util.mjs";
@@ -44,6 +44,10 @@ export async function makepkg(context, stagingDir) {
   const p = await proc;
   console.log(p);
 
+  if (p.code !== 0) {
+    throw new Error(`unexpected exit ${p.code} from makepkg`);
+  }
+
   if (publish !== undefined) {
     let arch = "any";
 
@@ -59,19 +63,14 @@ export async function makepkg(context, stagingDir) {
 
     context.properties["arch"] = arch;
 
-    publish = publish.replace(
-      /\{\{(\w+)\}\}/m,
-      (match, key, offset, string) => context.evaluate(key)
+    publish = publish.replace(/\{\{(\w+)\}\}/m, (match, key, offset, string) =>
+      context.evaluate(key)
     );
 
     console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${publish}`);
 
-    await execa(
-      "cp",
-      [`${name}-${version}-${arch}.pkg.tar.xz`, publish],
-      {
-        cwd: staging
-      }
-    );
+    await execa("cp", [`${name}-${version}-${arch}.pkg.tar.xz`, publish], {
+      cwd: staging
+    });
   }
 }

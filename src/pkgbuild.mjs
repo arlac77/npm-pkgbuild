@@ -238,6 +238,6 @@ function findAndDelete(
       .join(" -o") +
     (options.filesOnly ? " -type f" : "") +
     ` \\) -print0\\
-    | xargs -r -0 ${options.recursive ? "rm -r" : "rm"}`
+    | xargs -r -0 ${options.recursive ? "rm -rf" : "rm"}`
   );
 }

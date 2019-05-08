@@ -137,11 +137,8 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  ${findAndDelete(filesToRemove, "."), { filesOnly: true }}
-  ${findAndDelete(filesToRemove2, ".", { ignoreCase: true })}
-  ${findAndDelete(dirsToRemove, ".", { ignoreCase: true, recursive: true })}
+  ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join('\n')}
 }
-
 
 package() {
   mkdir -p \${pkgdir}${installdir}
@@ -157,61 +154,70 @@ package() {
   await promisify(finished);
 }
 
-const filesToRemove = [
-  "*~",
-  "*.mk",
-  "*.bat",
-  "*.tmp",
-  "*.orig",
-  "*.d.ts",
-  "*.1",
-  "*.patch",
-  ".jshintrc*",
-  ".esl*",
-  ".zuul.yml",
-  ".doclets.yml",
-  ".editorconfig",
-  ".tern-project",
-  ".dockerignore",
-  ".dir-locals.el",
-  ".travis.yml",
-  "appveyor.yml",
-  "yarn.lock",
-  "rollup.config.*",
-  "jsdoc.json",
-  "Gruntfile.js",
-  "verb.md",
-  ".nvmrc",
-  "config.gypi",
-  "binding.gyp",
-  "bower.json",
-  ".git*",
-  ".npm*",
-  "*.bash_completion.*"
+const cleanup = [
+  {
+    options: { filesOnly: true },
+    pattern: [
+      "*~",
+      "*.mk",
+      "*.bat",
+      "*.tmp",
+      "*.orig",
+      "*.d.ts",
+      "*.1",
+      "*.patch",
+      ".jshintrc*",
+      ".esl*",
+      ".zuul.yml",
+      ".doclets.yml",
+      ".editorconfig",
+      ".tern-project",
+      ".dockerignore",
+      ".dir-locals.el",
+      ".travis.yml",
+      "appveyor.yml",
+      "yarn.lock",
+      "rollup.config.*",
+      "jsdoc.json",
+      "Gruntfile.js",
+      "verb.md",
+      ".nvmrc",
+      "config.gypi",
+      "binding.gyp",
+      "bower.json",
+      ".git*",
+      ".npm*",
+      "*.bash_completion.*"
+    ]
+  },
+  {
+    options: { ignoreCase: true },
+    pattern: [
+      "*Makefile*",
+      "CONTRIBUTING*",
+      "Contributors*",
+      "CHANGES*",
+      "readme*",
+      "AUTHORS*",
+      "NOTICE*",
+      "HISTORY*",
+      "SUMMARY.md",
+      "MIGRATION*.md",
+      "PULL_REQUEST_TEMPLATE.md",
+      "PATTERNS.md",
+      "REFERENCE.md",
+      "SECURITY.md",
+      "SFTPStream.md",
+      "LIMITS.md",
+      "GOVERNANCE.md",
+      "CODE_OF_CONDUCT*"
+    ]
+  },
+  {
+    options: { ignoreCase: true, recursive: true },
+    pattern: ["CHANGELOG*", "example*", "doc", "docs", "test", "tests"]
+  }
 ];
-
-const filesToRemove2 = [
-  "*Makefile*",
-  "CONTRIBUTING*",
-  "Contributors*",
-  "CHANGES*",
-  "readme*",
-  "AUTHORS*",
-  "NOTICE*",
-  "HISTORY*",
-  "SUMMARY.md",
-  "MIGRATION*.md",
-  "PULL_REQUEST_TEMPLATE.md",
-  "PATTERNS.md",
-  "REFERENCE.md",
-  "SECURITY.md",
-  "SFTPStream.md",
-  "LIMITS.md",
-  "GOVERNANCE.md",
-  "CODE_OF_CONDUCT*"
-];
-
-const dirsToRemove = ["CHANGELOG*", "example*", "doc", "docs", "test", "tests"];
 
 function findAndDelete(
   pattern,

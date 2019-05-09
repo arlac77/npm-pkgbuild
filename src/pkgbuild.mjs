@@ -215,7 +215,8 @@ const cleanup = [
       "SFTPStream.md",
       "LIMITS.md",
       "GOVERNANCE.md",
-      "CODE_OF_CONDUCT*"
+      "CODE_OF_CONDUCT*",
+      "LICENSE.DOCS*"
     ]
   },
   {

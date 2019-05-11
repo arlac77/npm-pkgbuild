@@ -137,7 +137,7 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join('\n')}
+  ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join("\n")}
 }
 
 package() {
@@ -156,10 +156,12 @@ package() {
 
 const cleanup = [
   {
+    options: { filesOnly: true, ignoreCase: true },
+    pattern: ["LICENSE*"]
+  },
+  {
     options: { filesOnly: true },
-    pattern: [
-      ".git*"
-    ]
+    pattern: [".git*"]
   },
   {
     options: { filesOnly: true },
@@ -169,9 +171,14 @@ const cleanup = [
       "*.bat",
       "*.tmp",
       "*.orig",
-      "*.d.ts",
+      "*.d.ts*",
+      "*.mjs.map",
+      "*.js.map",
+      "*.min.map",
       "*.1",
       "*.patch",
+      "*.cc",
+      "*.c",
       ".jshintrc*",
       ".esl*",
       ".zuul.yml",
@@ -184,6 +191,7 @@ const cleanup = [
       "appveyor.yml",
       "yarn.lock",
       "rollup.config.*",
+      "gulpfile.js",
       "jsdoc.json",
       "Gruntfile.js",
       "verb.md",
@@ -215,13 +223,22 @@ const cleanup = [
       "SFTPStream.md",
       "LIMITS.md",
       "GOVERNANCE.md",
+      "Porting-Buffer.md",
       "CODE_OF_CONDUCT*",
       "LICENSE.DOCS*"
     ]
   },
   {
     options: { ignoreCase: true, recursive: true },
-    pattern: ["CHANGELOG*", "example*", "doc", "docs", "test", "tests"]
+    pattern: [
+      "CHANGELOG*",
+      "example*",
+      "doc",
+      "docs",
+      "test",
+      "tests",
+      "uritemplate-test"
+    ]
   }
 ];
 

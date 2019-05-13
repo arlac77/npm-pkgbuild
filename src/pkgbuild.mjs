@@ -27,16 +27,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
   }
 
-  let depends = Object.assign({}, pkg.pacman.depends, pkg.engines);
-
-  depends = Object.keys(depends).reduce((a, c) => {
-    const mapping = {
-      node: "nodejs"
-    };
-
-    a.push(`${mapping[c] ? mapping[c] : c}${depends[c]}`);
-    return a;
-  }, []);
+  const depends = makeDepends({ ...pkg.engines });
 
   const properties = Object.assign(
     {
@@ -141,6 +132,8 @@ build() {
 }
 
 package() {
+  depends=(${makeDepends(pkg.pacman.depends)})
+
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}
   npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content systemd
@@ -258,4 +251,15 @@ function findAndDelete(
     ` \\) -print0\\
     | xargs -r -0 ${options.recursive ? "rm -rf" : "rm"}`
   );
+}
+
+function makeDepends(d) {
+  return Object.keys(d).reduce((a, c) => {
+    const mapping = {
+      node: "nodejs"
+    };
+
+    a.push(`${mapping[c] ? mapping[c] : c}${d[c]}`);
+    return a;
+  }, []);
 }

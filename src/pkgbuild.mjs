@@ -259,7 +259,7 @@ function makeDepends(d) {
       node: "nodejs"
     };
 
-    a.push(`${mapping[c] ? mapping[c] : c}${d[c]}`);
+    a.push(`${mapping[c] ? mapping[c] : c}${d[c].replace(/\-([\w\d]+)$/, "")}`);
     return a;
   }, []);
 }

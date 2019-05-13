@@ -21,10 +21,13 @@ test("pkgbuild", async t => {
   await pkgbuild(context, fixturesDir, ws, { npmDist: true, npmModules: true });
 
   const c = ws.getContentsAsString("utf8");
+
+  //console.log(c);
+
   t.regex(c, /pkgver='1.2.3'/);
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
-  t.regex(c, /depends=.*redis>=5/);
+  t.regex(c, /depends=\(redis>=5.0.3\)/);
   t.regex(c, /backup=.*etc\/myservice\/myservice.json/);
   t.regex(c, /install=.*myservice.install/);
   t.regex(c, /arch=.*\(aarch64 armv7h\)/);
@@ -45,5 +48,6 @@ test("pkgbuild skeleton package", async t => {
   t.regex(c, /pkgver='1.2.3'/);
   //t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
+  t.regex(c, /\s+depends=.*redis>=5.0.3/);
   t.regex(c, /find\s+\.\s+/);
 });

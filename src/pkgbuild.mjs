@@ -132,7 +132,7 @@ build() {
 }
 
 package() {
-  depends=(${makeDepends(pkg.pacman.depends).map(a => `"${a}"`)})
+  depends=(${makeDepends(pkg.pacman.depends).map(a => `"${a}"`).join(' ')})
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}

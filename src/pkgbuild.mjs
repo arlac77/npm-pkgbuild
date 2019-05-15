@@ -217,6 +217,7 @@ const cleanup = [
       "LIMITS.md",
       "GOVERNANCE.md",
       "Porting-Buffer.md",
+      "chains and topics.md",
       "CODE_OF_CONDUCT*",
       "LICENSE.DOCS*"
     ]

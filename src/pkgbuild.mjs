@@ -128,11 +128,14 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
+  find . -name package.json|xargs grep '"type": "module"' -l|while read f;do rm -r $(dirname $f);done
   ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join("\n")}
 }
 
 package() {
-  depends=(${makeDepends(pkg.pacman.depends).map(a => `"${a}"`).join(' ')})
+  depends=(${makeDepends(pkg.pacman.depends)
+    .map(a => `"${a}"`)
+    .join(" ")})
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}

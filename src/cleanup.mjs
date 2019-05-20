@@ -31,6 +31,7 @@ export async function cleanup(context, stagingDir) {
     delete pkg.optionalDependencies;
 
     delete pkg.private;
+    delete pkg.publishConfig;
     delete pkg.repository;
     delete pkg.license;
     delete pkg.licenses;
@@ -61,8 +62,9 @@ export async function cleanup(context, stagingDir) {
     delete pkg.lintDeps;
     delete pkg.icon;
     delete pkg.config;
+    delete pkg.release;
+    delete pkg.template;
     delete pkg['precommit.silent'];
-    
     
     for (const key of Object.keys(pkg)) {
       if (key[0] === "_") {

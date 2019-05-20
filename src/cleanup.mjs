@@ -16,6 +16,9 @@ export async function cleanup(context, stagingDir) {
 
     //console.log(pkg);
 
+
+    delete pkg.jspm;
+    delete pkg.shim;
     delete pkg.browser;
     delete pkg.files;
     delete pkg.directories;
@@ -30,6 +33,7 @@ export async function cleanup(context, stagingDir) {
     delete pkg.private;
     delete pkg.repository;
     delete pkg.license;
+    delete pkg.licenses;
     delete pkg.changelog;
     delete pkg.keywords;
     delete pkg.homepage;
@@ -56,7 +60,10 @@ export async function cleanup(context, stagingDir) {
     delete pkg.pacman;
     delete pkg.lintDeps;
     delete pkg.icon;
-
+    delete pkg.config;
+    delete pkg['precommit.silent'];
+    
+    
     for (const key of Object.keys(pkg)) {
       if (key[0] === "_") {
         delete pkg[key];

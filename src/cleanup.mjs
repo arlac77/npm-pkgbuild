@@ -16,20 +16,26 @@ export async function cleanup(context, stagingDir) {
 
     //console.log(pkg);
 
+    // unused files may also be deleted
+    await Promise.all(["unpkg","jspm","shim","browser","testling","source"].map(async key => {
+      if (pkg[key] !== undefined) {
+        const file = join(stagingDir, pkg[key]);
+        delete pkg[key];
+        return fs.promises.unlink(file);
+      }
+    }));
 
-    delete pkg.jspm;
-    delete pkg.shim;
-    delete pkg.browser;
+    delete pkg.man;
     delete pkg.files;
     delete pkg.directories;
-    delete pkg.man;
-    delete pkg.testling;
 
     delete pkg.devDependencies;
     delete pkg.bundleDependencies;
     delete pkg.peerDependencies;
     delete pkg.optionalDependencies;
 
+    delete pkg.sideEffects;
+    delete pkg.pika;
     delete pkg.private;
     delete pkg.publishConfig;
     delete pkg.repository;
@@ -64,8 +70,9 @@ export async function cleanup(context, stagingDir) {
     delete pkg.config;
     delete pkg.release;
     delete pkg.template;
-    delete pkg['precommit.silent'];
-    
+    delete pkg.spm;
+    delete pkg["precommit.silent"];
+
     for (const key of Object.keys(pkg)) {
       if (key[0] === "_") {
         delete pkg[key];

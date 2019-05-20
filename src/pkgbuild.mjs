@@ -139,7 +139,7 @@ package() {
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content systemd
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} cleanup content systemd
   ${npmModulesPackage}
 }
 `

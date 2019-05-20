@@ -6,6 +6,7 @@ import { pkgbuild } from "./pkgbuild.mjs";
 import { systemd } from "./systemd.mjs";
 import { pacman, makepkg } from "./pacman.mjs";
 import { content } from "./content.mjs";
+import { cleanup } from "./cleanup.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
 
@@ -60,7 +61,9 @@ program
           case "content":
             await content(context, staging);
             break;
-
+          case "cleanup":
+            await cleanup(context, staging);
+            break;
           default:
             console.error(`unknown stage ${stage}`);
         }

@@ -128,7 +128,7 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  find . -name package.json|xargs grep '"type": "module"' -l|while read f;do rm -r $(dirname $f);done
+  find . -name package.json|xargs grep '"type": "module"' -l|while read f;do rm -rf $(dirname $f);done
   ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join("\n")}
 }
 

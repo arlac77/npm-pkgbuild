@@ -17,13 +17,21 @@ export async function cleanup(context, stagingDir) {
     //console.log(pkg);
 
     // unused files may also be deleted
-    await Promise.all(["unpkg","jspm","shim","browser","testling","source"].map(async key => {
-      if (pkg[key] !== undefined) {
-        const file = join(stagingDir, pkg[key]);
-        delete pkg[key];
-        return fs.promises.unlink(file);
-      }
-    }));
+    await Promise.all(
+      ["unpkg", "jspm", "shim", "browser", "testling", "source"].map(
+        async key => {
+          if (pkg[key] !== undefined) {
+            const file = join(stagingDir, pkg[key]);
+            delete pkg[key];
+            try {
+              return fs.promises.unlink(file);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        }
+      )
+    );
 
     delete pkg.man;
     delete pkg.files;

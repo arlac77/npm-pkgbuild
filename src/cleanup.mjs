@@ -49,6 +49,13 @@ export async function cleanup(context, stagingDir) {
     delete pkg.remarkConfig;
     delete pkg.nyc;
     delete pkg.publishConfig;
+    delete pkg.typeScriptVersion;
+    delete pkg.typesPublisherContentHash;
+    delete pkg.typings;
+    delete pkg.systemd;
+    delete pkg.pacman;
+    delete pkg.lintDeps;
+    delete pkg.icon;
 
     for (const key of Object.keys(pkg)) {
       if (key[0] === "_") {

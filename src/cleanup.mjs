@@ -6,12 +6,10 @@ import { asArray } from "./util.mjs";
 const encodingOptions = { encoding: "utf8" };
 
 export async function cleanup(context, stagingDir) {
-  const nodeModules = join(stagingDir, "node_modules");
-
   for (const name of await globby(["**/package.json"], {
-    cwd: nodeModules
+    cwd: stagingDir
   })) {
-    const file = join(nodeModules, name);
+    const file = join(stagingDir, name);
     console.log(`cleanup ${file}`);
 
     const pkg = JSON.parse(await fs.promises.readFile(file, encodingOptions));

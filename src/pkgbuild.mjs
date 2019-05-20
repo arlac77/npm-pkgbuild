@@ -139,8 +139,8 @@ package() {
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} cleanup content systemd
   ${npmModulesPackage}
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} cleanup content systemd
 }
 `
   );

@@ -44,53 +44,55 @@ export async function cleanup(context, stagingDir) {
       )
     );
 
-    delete pkg.man;
-    delete pkg.files;
-    delete pkg.directories;
-
-    delete pkg.devDependencies;
-    delete pkg.bundleDependencies;
-    delete pkg.peerDependencies;
-    delete pkg.optionalDependencies;
-
-    delete pkg.sideEffects;
-    delete pkg.pika;
-    delete pkg.private;
-    delete pkg.publishConfig;
-    delete pkg.repository;
-    delete pkg.license;
-    delete pkg.licenses;
-    delete pkg.changelog;
-    delete pkg.keywords;
-    delete pkg.homepage;
-    delete pkg.bugs;
-    delete pkg.scripts;
-    delete pkg.types;
-    delete pkg.deprecated;
-    delete pkg.description;
-    delete pkg.engines;
-    delete pkg.author;
-    delete pkg.contributors;
-    delete pkg.maintainers;
-    delete pkg.verb;
-    delete pkg.xo;
-    delete pkg.prettier;
-    delete pkg.jest;
-    delete pkg.remarkConfig;
-    delete pkg.nyc;
-    delete pkg.publishConfig;
-    delete pkg.typeScriptVersion;
-    delete pkg.typesPublisherContentHash;
-    delete pkg.typings;
-    delete pkg.systemd;
-    delete pkg.pacman;
-    delete pkg.lintDeps;
-    delete pkg.icon;
-    delete pkg.config;
-    delete pkg.release;
-    delete pkg.template;
-    delete pkg.spm;
-    delete pkg["precommit.silent"];
+    [
+      "man",
+      "files",
+      "directories",
+      "devDependencies",
+      "bundleDependencies",
+      "peerDependencies",
+      "optionalDependencies",
+      "sideEffects",
+      "pika",
+      "private",
+      "publishConfig",
+      "repository",
+      "license",
+      "licenses",
+      "changelog",
+      "keywords",
+      "homepage",
+      "bugs",
+      "scripts",
+      "types",
+      "deprecated",
+      "description",
+      "engines",
+      "author",
+      "contributors",
+      "maintainers",
+      "verb",
+      "xo",
+      "prettier",
+      "jest",
+      "remarkConfig",
+      "nyc",
+      "publishConfig",
+      "typeScriptVersion",
+      "typesPublisherContentHash",
+      "typings",
+      "systemd",
+      "pacman",
+      "lintDeps",
+      "icon",
+      "config",
+      "release",
+      "template",
+      "spm",
+      "precommit.silent"
+    ].map(key => {
+      delete pkg[key];
+    });
 
     for (const key of Object.keys(pkg)) {
       if (key[0] === "_") {
@@ -98,6 +100,10 @@ export async function cleanup(context, stagingDir) {
       }
     }
 
-    await fs.promises.writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
+    await fs.promises.writeFile(
+      pkgFile,
+      JSON.stringify(pkg),
+      utf8StreamOptions
+    );
   }
 }

@@ -1,5 +1,5 @@
 import globby from "globby";
-import { join, basename } from "path";
+import { join, dirname } from "path";
 import fs from "fs";
 import { asArray, utf8StreamOptions } from "./util.mjs";
 
@@ -12,20 +12,19 @@ async function rm(file) {
   }
 }
 
-async function iterate(o,cb)
-{
-  switch(typeof o) {
+async function iterate(o, cb) {
+  switch (typeof o) {
     case 'string':
       return cb(o);
   }
 
-  if(Array.isArray(o)) {
-      for(const x of o) {
-        await iterate(x,cb);
-      }
+  if (Array.isArray(o)) {
+    for (const x of o) {
+      await iterate(x, cb);
+    }
   }
-  for(const k in o) {
-    await iterate(o[k],cb);
+  for (const k in o) {
+    await iterate(o[k], cb);
   }
 }
 
@@ -42,9 +41,9 @@ export async function cleanup(context, stagingDir) {
 
     // unused files may also be deleted
     await Promise.all(
-      ["unpkg", "jspm", "shim", "browser", "testling", "source"].map(
+      ["types", "unpkg", "jspm", "shim", "browser", "testling", "source"].map(
         async key => {
-          await iterate(pkg[key], async o => { rm(join(stagingDir, o)) });
+          await iterate(pkg[key], async o => { rm(join(dirname(pkgFile), o)) });
           delete pkg[key];
         }
       )
@@ -83,6 +82,7 @@ export async function cleanup(context, stagingDir) {
       "jest",
       "remarkConfig",
       "nyc",
+      "ava",
       "publishConfig",
       "typeScriptVersion",
       "typesPublisherContentHash",
@@ -95,7 +95,11 @@ export async function cleanup(context, stagingDir) {
       "release",
       "template",
       "spm",
-      "precommit.silent"
+      "precommit.silent",
+      "greenkeeper",
+      "bundlesize",
+      "standard",
+      "ignore"
     ].map(key => {
       delete pkg[key];
     });
@@ -105,6 +109,12 @@ export async function cleanup(context, stagingDir) {
         delete pkg[key];
       }
     }
+
+    if (pkg.dependencies && Object.keys(pkg.dependencies).length === 0) {
+      delete pkg.dependencies;
+    }
+
+    //console.log(pkg, pkgFile);
 
     await fs.promises.writeFile(
       pkgFile,

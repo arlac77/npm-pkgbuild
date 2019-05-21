@@ -18,11 +18,20 @@ test("cleanp", async t => {
   await fs.promises.mkdir(staging, { recursive: true });
 
   await execa("cp", ["-r", fixturesDir, staging]);
-  await cleanup(context, join(staging,'fixtures'));
+  await cleanup(context, join(staging, 'fixtures'));
 
-  const pkg = JSON.parse(
-    await fs.promises.readFile(join(staging,'fixtures','package.json'), utf8StreamOptions)
+  let pkg = JSON.parse(
+    await fs.promises.readFile(join(staging, 'fixtures', 'package.json'), utf8StreamOptions)
   );
 
   t.is(Object.keys(pkg).length, 2);
+
+
+  await execa("cp", ["-r", join(here, '..', 'node_modules', '@octokit'), join(staging, 'fixtures')]);
+
+  pkg = JSON.parse(
+    await fs.promises.readFile(join(staging, 'fixtures', '@octokit', 'endpoint', 'package.json'), utf8StreamOptions)
+  );
+
+  //t.is(Object.keys(pkg).length, 4);
 });

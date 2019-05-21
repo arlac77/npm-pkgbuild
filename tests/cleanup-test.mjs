@@ -3,7 +3,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import execa from "execa";
-
+import { utf8StreamOptions } from "../src/util.mjs";
 import { createContext } from "../src/context.mjs";
 import { cleanup } from "../src/cleanup.mjs";
 
@@ -18,12 +18,11 @@ test("cleanp", async t => {
   await fs.promises.mkdir(staging, { recursive: true });
 
   await execa("cp", ["-r", fixturesDir, staging]);
-  await cleanup(context, staging);
-
+  await cleanup(context, join(staging,'fixtures'));
 
   const pkg = JSON.parse(
-    await fs.promises.readFile(join(staging,'package.json'), utf8StreamOptions)
+    await fs.promises.readFile(join(staging,'fixtures','package.json'), utf8StreamOptions)
   );
 
-  t.is(Object.keys(pkg).length, 4);
+  t.is(Object.keys(pkg).length, 2);
 });

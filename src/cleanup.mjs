@@ -21,12 +21,17 @@ export async function cleanup(context, stagingDir) {
       ["unpkg", "jspm", "shim", "browser", "testling", "source"].map(
         async key => {
           if (pkg[key] !== undefined) {
-            const file = join(stagingDir, pkg[key]);
-            delete pkg[key];
-            try {
-              return fs.promises.unlink(file);
-            } catch (error) {
-              console.log(error);
+            if (typeof pkg[key] !== "string") {
+              console.log(file, key, "IS NO STRING");
+              delete pkg[key];
+            } else {
+              const file = join(stagingDir, pkg[key]);
+              delete pkg[key];
+              try {
+                return fs.promises.unlink(file);
+              } catch (error) {
+                console.log(error);
+              }
             }
           }
         }

@@ -7,6 +7,7 @@ const encodingOptions = { encoding: "utf8" };
 
 async function rm(file) {
   try {
+    console.log("rm", file);
     return await fs.promises.unlink(file);
   } catch (error) {
     console.log(error);

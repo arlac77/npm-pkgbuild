@@ -5,16 +5,24 @@ import { asArray } from "./util.mjs";
 
 const encodingOptions = { encoding: "utf8" };
 
+async function rm(file) {
+  try {
+    return await fs.promises.unlink(file);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function cleanup(context, stagingDir) {
   for (const name of await globby(["**/package.json"], {
     cwd: stagingDir
   })) {
-    const file = join(stagingDir, name);
-    console.log(`cleanup ${file}`);
+    const pkgFile = join(stagingDir, name);
+    console.log(`cleanup ${pkgFile}`);
 
-    const pkg = JSON.parse(await fs.promises.readFile(file, encodingOptions));
-
-    //console.log(pkg);
+    const pkg = JSON.parse(
+      await fs.promises.readFile(pkgFile, encodingOptions)
+    );
 
     // unused files may also be deleted
     await Promise.all(
@@ -22,16 +30,15 @@ export async function cleanup(context, stagingDir) {
         async key => {
           if (pkg[key] !== undefined) {
             if (typeof pkg[key] !== "string") {
-              console.log(file, key, "IS NO STRING");
+              const o = pkg[key];
+              for (const k of o) {
+                await rm(join(stagingDir, o[k]));
+              }
               delete pkg[key];
             } else {
               const file = join(stagingDir, pkg[key]);
               delete pkg[key];
-              try {
-                return fs.promises.unlink(file);
-              } catch (error) {
-                console.log(error);
-              }
+              return rm(file);
             }
           }
         }

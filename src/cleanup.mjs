@@ -1,9 +1,7 @@
 import globby from "globby";
 import { join, basename } from "path";
 import fs from "fs";
-import { asArray } from "./util.mjs";
-
-const encodingOptions = { encoding: "utf8" };
+import { asArray, utf8StreamOptions } from "./util.mjs";
 
 async function rm(file) {
   try {
@@ -22,7 +20,7 @@ export async function cleanup(context, stagingDir) {
     console.log(`cleanup ${pkgFile}`);
 
     const pkg = JSON.parse(
-      await fs.promises.readFile(pkgFile, encodingOptions)
+      await fs.promises.readFile(pkgFile, utf8StreamOptions)
     );
 
     // unused files may also be deleted
@@ -100,6 +98,6 @@ export async function cleanup(context, stagingDir) {
       }
     }
 
-    await fs.promises.writeFile(file, JSON.stringify(pkg), encodingOptions);
+    await fs.promises.writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
   }
 }

@@ -1,4 +1,3 @@
-import { join } from "path";
 import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";

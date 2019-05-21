@@ -2,7 +2,6 @@ import test from "ava";
 import { join, dirname } from "path";
 import WritableStreamBuffer from "stream-buffers/lib/writable_streambuffer";
 import { fileURLToPath } from "url";
-import { utf8StreamOptions } from "../src/util.mjs";
 import { createContext } from "../src/context.mjs";
 import { pkgbuild } from "../src/pkgbuild.mjs";
 

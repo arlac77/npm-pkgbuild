@@ -12,6 +12,23 @@ async function rm(file) {
   }
 }
 
+async function iterate(o,cb)
+{
+  switch(typeof o) {
+    case 'string':
+      return cb(o);
+  }
+
+  if(Array.isArray(o)) {
+      for(const x of o) {
+        await iterate(x,cb);
+      }
+  }
+  for(const k in o) {
+    await iterate(o[k],cb);
+  }
+}
+
 export async function cleanup(context, stagingDir) {
   for (const name of await globby(["**/package.json"], {
     cwd: stagingDir
@@ -27,19 +44,8 @@ export async function cleanup(context, stagingDir) {
     await Promise.all(
       ["unpkg", "jspm", "shim", "browser", "testling", "source"].map(
         async key => {
-          if (pkg[key] !== undefined) {
-            if (typeof pkg[key] !== "string") {
-              const o = pkg[key];
-              for (const k of o) {
-                await rm(join(stagingDir, o[k]));
-              }
-              delete pkg[key];
-            } else {
-              const file = join(stagingDir, pkg[key]);
-              delete pkg[key];
-              return rm(file);
-            }
-          }
+          await iterate(pkg[key], async o => { rm(join(stagingDir, o)) });
+          delete pkg[key];
         }
       )
     );

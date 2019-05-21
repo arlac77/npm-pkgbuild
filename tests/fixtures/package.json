@@ -43,5 +43,12 @@
     "units": {
       "${name}": "systemd/${name}*"
     }
-  }
+  },
+  "browser": {
+    "a": "src/a",
+    "b": "src/b"
+  },
+  "testling": [
+    "c"
+  ]
 }

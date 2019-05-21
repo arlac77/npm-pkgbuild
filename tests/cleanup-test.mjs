@@ -34,4 +34,8 @@ test("cleanp", async t => {
   );
 
   //t.is(Object.keys(pkg).length, 4);
+
+
+  await execa("rm", ["-r", staging]);
+
 });

@@ -41,7 +41,7 @@ export async function cleanup(context, stagingDir) {
 
     // unused files may also be deleted
     await Promise.all(
-      ["types", "unpkg", "jspm", "shim", "browser", "testling", "source"].map(
+      ["types", "unpkg", "shim", "browser", "testling", "source"].map(
         async key => {
           await iterate(pkg[key], async o => { rm(join(dirname(pkgFile), o)) });
           delete pkg[key];
@@ -50,6 +50,8 @@ export async function cleanup(context, stagingDir) {
     );
 
     [
+      "jspm",
+      "jsnext:main",
       "man",
       "files",
       "directories",
@@ -99,7 +101,9 @@ export async function cleanup(context, stagingDir) {
       "greenkeeper",
       "bundlesize",
       "standard",
-      "ignore"
+      "ignore",
+      "ender",
+      "dojoBuild"
     ].map(key => {
       delete pkg[key];
     });

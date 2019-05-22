@@ -3,6 +3,7 @@ import fs, { createWriteStream } from "fs";
 import { join } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
+import { rpmspec } from "./rpmspec.mjs";
 import { systemd } from "./systemd.mjs";
 import { pacman, makepkg } from "./pacman.mjs";
 import { content } from "./content.mjs";
@@ -41,6 +42,15 @@ program
       for (const stage of stages) {
         console.log(`executing ${stage}...`);
         switch (stage) {
+          case "rpmspec":
+            await rpmspec(
+              context,
+              staging,
+              createWriteStream(join(staging, "xxx.spec"), utf8StreamOptions),
+              { npmDist: program.npmDist, npmModules: program.npmModules }
+            );
+            break;
+
           case "pkgbuild":
             await pkgbuild(
               context,

@@ -3,13 +3,7 @@ import { finished } from "stream";
 import { quote } from "./util.mjs";
 
 export async function pkgbuild(context, stagingDir, out, options = {}) {
-  const pkg = Object.assign({ contributors: [], pacman: {} }, context.pkg);
-
-  /*
-  if (pkg.contributors === undefined) {
-    pkg.contributors = [];
-  }
-*/
+  const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
   let md5sums;
   let source;
@@ -28,24 +22,21 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   const depends = makeDepends({ ...pkg.engines });
 
-  const properties = Object.assign(
-    {
-      url: pkg.homepage,
-      pkgdesc: pkg.description,
-      license: pkg.license,
-      pkgrel: context.properties.pkgrel,
-      pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
-      pkgname: pkg.name,
-      arch: "any",
-      makedepends: "git",
-      source,
-      md5sums
-    },
-    pkg.pacman,
-    {
-      depends
-    }
-  );
+  const properties =
+  {
+    url: pkg.homepage,
+    pkgdesc: pkg.description,
+    license: pkg.license,
+    pkgrel: context.properties.pkgrel,
+    pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
+    pkgname: pkg.name,
+    arch: "any",
+    makedepends: "git",
+    source,
+    md5sums,
+    ...pkg.pacman,
+    depends
+  };
 
   if (properties.install !== undefined) {
     properties.install = `${pkg.name}.install`;
@@ -98,8 +89,8 @@ pkgver() {
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
     tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
-        pkg.name
-      }-${context.properties.pkgver}.tgz)`
+    pkg.name
+    }-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules
@@ -122,7 +113,7 @@ build() {
   cd \${pkgname}${directory}
   sed -i 's/"version": ".*/"version": "${
     context.properties.pkgver
-  }",/' package.json
+    }",/' package.json
   npm install
   npm pack
   npm prune --production
@@ -133,8 +124,8 @@ build() {
 
 package() {
   depends=(${makeDepends(pkg.pacman.depends)
-    .map(a => `"${a}"`)
-    .join(" ")})
+      .map(a => `"${a}"`)
+      .join(" ")})
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}

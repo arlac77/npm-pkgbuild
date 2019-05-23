@@ -103,7 +103,8 @@ export async function cleanup(context, stagingDir) {
       "standard",
       "ignore",
       "ender",
-      "dojoBuild"
+      "dojoBuild",
+      "component"
     ].map(key => {
       delete pkg[key];
     });

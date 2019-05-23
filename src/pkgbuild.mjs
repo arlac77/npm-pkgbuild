@@ -223,6 +223,7 @@ const cleanup = [
       "doc",
       "docs",
       "test",
+      "build",
       "tests",
       "uritemplate-test"
     ]

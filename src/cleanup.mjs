@@ -1,7 +1,7 @@
 import globby from "globby";
 import { join, dirname } from "path";
 import fs from "fs";
-import { asArray, utf8StreamOptions } from "./util.mjs";
+import { utf8StreamOptions } from "./util.mjs";
 
 async function rm(file) {
   try {

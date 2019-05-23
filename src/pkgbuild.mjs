@@ -119,7 +119,7 @@ build() {
   npm prune --production
   rm -rf node_modules/.bin
   find . -name package.json|xargs grep '"type": "module"' -l|while read f;do rm -rf $(dirname $f);done
-  ${cleanup.map(c => findAndDelete(c.pattern, ".", c.options)).join("\n")}
+  ${cleanup.map(c => findAndDelete(c.pattern, c.dir, c.options)).join("\n")}
 }
 
 package() {
@@ -226,6 +226,13 @@ const cleanup = [
       "build",
       "tests",
       "uritemplate-test"
+    ]
+  },
+  {
+    dir: "node_modules",
+    options: { ignoreCase: true, recursive: true },
+    pattern: [
+      "build"
     ]
   }
 ];

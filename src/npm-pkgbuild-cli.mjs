@@ -46,7 +46,10 @@ program
             await rpmspec(
               context,
               staging,
-              createWriteStream(join(staging, "xxx.spec"), utf8StreamOptions),
+              createWriteStream(
+                join(staging, `${context.name}.spec`),
+                utf8StreamOptions
+              ),
               { npmDist: program.npmDist, npmModules: program.npmModules }
             );
             break;

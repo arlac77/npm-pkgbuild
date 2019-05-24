@@ -8,6 +8,11 @@ export async function loadPackage(dir) {
   return JSON.parse(await fs.promises.readFile(pkgFile, utf8StreamOptions));
 }
 
+/**
+ * Used as a reference throuhout the runtime of the npm-pkgbuild
+ * @param {string} dir 
+ * @param {Object} properties 
+ */
 export async function createContext(dir, properties = {}) {
   Object.keys(properties).forEach(k => {
     if (properties[k] === undefined) {
@@ -17,10 +22,10 @@ export async function createContext(dir, properties = {}) {
 
   const pkg = await loadPackage(dir);
 
-  properties = Object.assign({ arch: "any", installdir: "", pkgver: pkg.version }, pkg, properties);
+  properties = { arch: "any", installdir: "", pkgver: pkg.version, ...pkg, ...properties };
 
   function evaluate(expression) {
-    let value = properties[expression];
+    const value = properties[expression];
     return value;
   }
 

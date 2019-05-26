@@ -50,6 +50,8 @@ export async function cleanup(context, stagingDir) {
     );
 
     [
+      "version", "name", "dependencies",
+
       "jspm",
       "jsnext:main",
       "man",

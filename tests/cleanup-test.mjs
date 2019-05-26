@@ -24,7 +24,7 @@ test("cleanp", async t => {
     await fs.promises.readFile(join(staging, 'fixtures', 'package.json'), utf8StreamOptions)
   );
 
-  t.is(Object.keys(pkg).length, 2);
+  t.is(Object.keys(pkg).length, 0);
 
 
   await execa("cp", ["-r", join(here, '..', 'node_modules', '@octokit'), join(staging, 'fixtures')]);

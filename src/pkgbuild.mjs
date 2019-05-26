@@ -187,8 +187,12 @@ const cleanup = [
       "bower.json",
       "*.bash_completion.*",
       ".coveralls.yml",
+      ".istanbul.yml",
+      ".babelrc.*",
+      ".nycrc",
       ".DS_Store",
-      ".npm*"
+      ".npm*",
+      ".env"
     ]
   },
   {

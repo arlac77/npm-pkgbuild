@@ -186,6 +186,8 @@ const cleanup = [
       "binding.gyp",
       "bower.json",
       "*.bash_completion.*",
+      ".coveralls.yml",
+      ".DS_Store",
       ".npm*"
     ]
   },
@@ -224,7 +226,8 @@ const cleanup = [
       "docs",
       "test",
       "tests",
-      "uritemplate-test"
+      "uritemplate-test",
+      ".github"
     ]
   },
   {

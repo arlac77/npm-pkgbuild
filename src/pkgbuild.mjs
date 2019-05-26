@@ -165,6 +165,7 @@ const cleanup = [
       "*.patch",
       "*.cc",
       "*.c",
+      "*.h",
       ".jshintrc*",
       ".esl*",
       ".zuul.yml",

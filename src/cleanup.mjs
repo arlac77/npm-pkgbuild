@@ -123,16 +123,23 @@ export async function cleanup(context, stagingDir) {
       }
     }
 
+/*
     if (pkg.dependencies && Object.keys(pkg.dependencies).length === 0) {
       delete pkg.dependencies;
     }
+*/
 
     //console.log(pkg, pkgFile);
 
-    await fs.promises.writeFile(
-      pkgFile,
-      JSON.stringify(pkg),
-      utf8StreamOptions
-    );
+    if(Object.keys(pkg).length === 0) {
+      await fs.promises.unlink(pkgFile);
+    }
+    else {
+      await fs.promises.writeFile(
+        pkgFile,
+        JSON.stringify(pkg),
+        utf8StreamOptions
+      );
+    }
   }
 }

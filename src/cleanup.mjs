@@ -106,7 +106,12 @@ export async function cleanup(context, stagingDir) {
       "ignore",
       "ender",
       "dojoBuild",
-      "component"
+      "component",
+      "eslintConfig",
+      "lintStaged",
+      "env",
+      "commitlint",
+      "standard-version"
     ].map(key => {
       delete pkg[key];
     });

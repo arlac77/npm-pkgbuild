@@ -111,7 +111,8 @@ export async function cleanup(context, stagingDir) {
       "lintStaged",
       "env",
       "commitlint",
-      "standard-version"
+      "standard-version",
+      "ci"
     ].map(key => {
       delete pkg[key];
     });

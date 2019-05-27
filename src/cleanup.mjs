@@ -121,7 +121,8 @@ export async function cleanup(context, stagingDir) {
       "os",
       "gypfile",
       "coordinates",
-      "tap"
+      "tap",
+      "typesVersions"
     ].map(key => {
       delete pkg[key];
     });

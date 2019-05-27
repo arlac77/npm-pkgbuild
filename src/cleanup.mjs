@@ -128,6 +128,10 @@ export async function cleanup(context, stagingDir) {
       }
     }
 
+    if(pkg.main === 'index.js') {
+       delete pkg.main;
+    }
+    
 /*
     if (pkg.dependencies && Object.keys(pkg.dependencies).length === 0) {
       delete pkg.dependencies;

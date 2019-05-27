@@ -193,7 +193,8 @@ const cleanup = [
       ".nycrc",
       ".DS_Store",
       ".npm*",
-      ".env"
+      ".env",
+      "x-package.json5"
     ]
   },
   {

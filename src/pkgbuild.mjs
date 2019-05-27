@@ -232,7 +232,8 @@ const cleanup = [
       "test",
       "tests",
       "uritemplate-test",
-      ".github"
+      ".github",
+      "demo"
     ]
   },
   {

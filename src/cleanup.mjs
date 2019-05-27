@@ -117,7 +117,9 @@ export async function cleanup(context, stagingDir) {
       "lintStaged",
       "ci",
       "husky",
-      "verbiage"
+      "verbiage",
+      "os",
+      "gypfile"
     ].map(key => {
       delete pkg[key];
     });

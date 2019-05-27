@@ -120,7 +120,8 @@ export async function cleanup(context, stagingDir) {
       "verbiage",
       "os",
       "gypfile",
-      "coordinates"
+      "coordinates",
+      "tap"
     ].map(key => {
       delete pkg[key];
     });

@@ -76,6 +76,7 @@ export async function cleanup(context, stagingDir) {
       "types",
       "deprecated",
       "description",
+      "decription",
       "engines",
       "author",
       "authors",

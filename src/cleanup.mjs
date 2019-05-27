@@ -14,7 +14,7 @@ async function rm(file) {
 
 async function iterate(o, cb) {
   switch (typeof o) {
-    case 'string':
+    case "string":
       return cb(o);
   }
 
@@ -43,14 +43,18 @@ export async function cleanup(context, stagingDir) {
     await Promise.all(
       ["types", "unpkg", "shim", "browser", "testling", "source"].map(
         async key => {
-          await iterate(pkg[key], async o => { rm(join(dirname(pkgFile), o)) });
+          await iterate(pkg[key], async o => {
+            rm(join(dirname(pkgFile), o));
+          });
           delete pkg[key];
         }
       )
     );
 
     [
-      "version", "name", "dependencies",
+      "version",
+      "name",
+      "dependencies",
 
       "jspm",
       "jsnext:main",
@@ -133,22 +137,15 @@ export async function cleanup(context, stagingDir) {
       }
     }
 
-    if(pkg.main === 'index.js') {
-       delete pkg.main;
+    switch (pkg.main) {
+      case "index.js":
+      case "":
+        delete pkg.main;
     }
-    
-/*
-    if (pkg.dependencies && Object.keys(pkg.dependencies).length === 0) {
-      delete pkg.dependencies;
-    }
-*/
 
-    //console.log(pkg, pkgFile);
-
-    if(Object.keys(pkg).length === 0) {
+    if (Object.keys(pkg).length === 0) {
       await fs.promises.unlink(pkgFile);
-    }
-    else {
+    } else {
       await fs.promises.writeFile(
         pkgFile,
         JSON.stringify(pkg),

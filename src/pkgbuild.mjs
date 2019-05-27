@@ -194,7 +194,8 @@ const cleanup = [
       ".DS_Store",
       ".npm*",
       ".env",
-      "x-package.json5"
+      "x-package.json5",
+      "component.json"
     ]
   },
   {

@@ -119,7 +119,8 @@ export async function cleanup(context, stagingDir) {
       "husky",
       "verbiage",
       "os",
-      "gypfile"
+      "gypfile",
+      "coordinates"
     ].map(key => {
       delete pkg[key];
     });

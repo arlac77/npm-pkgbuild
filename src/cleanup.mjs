@@ -130,7 +130,7 @@ export async function cleanup(context, stagingDir) {
       "node-gyp-build-optional",
       "node-gyp-build-test",
       "gitHead",
-      "hallmark
+      "hallmark"
     ].map(key => {
       delete pkg[key];
     });

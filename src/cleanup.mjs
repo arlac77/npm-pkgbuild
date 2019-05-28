@@ -142,6 +142,7 @@ export async function cleanup(context, stagingDir) {
     }
 
     switch (pkg.main) {
+      case "index":
       case "index.js":
       case "":
         delete pkg.main;

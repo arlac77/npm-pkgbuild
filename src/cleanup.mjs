@@ -126,7 +126,11 @@ export async function cleanup(context, stagingDir) {
       "gypfile",
       "coordinates",
       "tap",
-      "typesVersions"
+      "typesVersions",
+      "node-gyp-build-optional",
+      "node-gyp-build-test",
+      "gitHead",
+      "hallmark
     ].map(key => {
       delete pkg[key];
     });

@@ -9,12 +9,17 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
     Summary: pkg.description,
     License: pkg.license,
     Version: context.properties.pkgver.replace(/\-.*$/, ""),
-    Release: context.properties.pkgrel
+    Release: context.properties.pkgrel,
+    Packager: pkg.contributors
+      .map(
+        (c, i) => `${c.name} <${c.email}>`
+      )[0],
+    URL: pkg.homepage,
   };
 
   out.write(`${Object.keys(properties)
     .filter(k => properties[k] !== undefined)
-    .map(k => `${k}=${quote(properties[k])}`)
+    .map(k => `${k}: ${quote(properties[k])}`)
     .join("\n")}
 
 %description
@@ -23,6 +28,7 @@ ${pkg.description}
 %prep
 
 %build
+npm install
 
 %install
 

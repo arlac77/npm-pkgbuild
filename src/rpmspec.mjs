@@ -33,6 +33,8 @@ npm install
 %install
 
 %files
+bin/*
+node_modules/*
 `);
 
   for (const name of await globby("**/*", { cwd: stagingDir })) {

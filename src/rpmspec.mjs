@@ -56,8 +56,8 @@ ${npmModulesPackage}
 %install
 
 %files
-bin/*
-node_modules/*
+${installdir}bin/*
+${installdir}node_modules/*
 `);
 
   for (const name of await globby("**/*", { cwd: stagingDir })) {

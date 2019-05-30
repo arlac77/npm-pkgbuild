@@ -23,5 +23,5 @@ test("pkgbuild", async t => {
 
   console.log(c);
 
-  t.regex(c, /Version='1.2.3'/);
+  t.regex(c, /Version:\s*'1.2.3'/);
 });

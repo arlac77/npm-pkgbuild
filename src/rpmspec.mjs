@@ -4,6 +4,13 @@ import { quote } from "./util.mjs";
 export async function rpmspec(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
+  const installdir = context.properties.installdir;
+  let directory = "";
+
+  if (pkg.repository) {
+    directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
+  }
+
   const properties = {
     Name: pkg.name,
     Summary: pkg.description,
@@ -17,6 +24,19 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
     URL: pkg.homepage,
   };
 
+
+  const npmDistPackage = options.npmDist
+  ? `( cd %{_sourcedir}${installdir}
+  tar -x --transform="s/^package\\///" -f %{buildroot}${directory}/${
+  pkg.name
+  }-${context.properties.pkgver}.tgz)`
+  : "";
+
+const npmModulesPackage = options.npmModules
+  ? `( cd %{_sourcedir}/${directory}
+  tar cf - node_modules)|(cd %{buildroot}${installdir};tar xf - )`
+  : "";
+
   out.write(`${Object.keys(properties)
     .filter(k => properties[k] !== undefined)
     .map(k => `${k}: ${quote(properties[k])}`)
@@ -29,6 +49,9 @@ ${pkg.description}
 
 %build
 npm install
+mkdir -p %{buildroot}${installdir}
+${npmDistPackage}
+${npmModulesPackage}
 
 %install
 

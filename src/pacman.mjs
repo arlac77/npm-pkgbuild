@@ -48,9 +48,11 @@ export async function makepkg(context, stagingDir) {
     throw new Error(`unexpected exit ${p.code} from makepkg`);
   }
 
-  if (publish !== undefined) {
-    let arch = "any";
+  let arch = "any";
 
+  console.log(`#<CI>publish ${name}-${version}-${arch}.pkg.tar.xz`);
+
+  if (publish !== undefined) {  
     for await (const chunk of createReadStream(
       join(stagingDir, `pkg/${name}/.PKGINFO`),
       utf8StreamOptions

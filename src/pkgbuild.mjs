@@ -118,7 +118,7 @@ build() {
   npm pack
   npm prune --production
   rm -rf node_modules/.bin
-  find . -name "*.node"|xargs file --mime-type|grep -v "$(file -b --mime-type $(which node))"|sed 's/:.*//'|xargs rm
+  find . -name "*.node"|xargs -r file --mime-type|grep -v "$(file -b --mime-type $(which node))"|sed 's/:.*//'|xargs -r rm
   ${cleanup.map(c => findAndDelete(c.pattern, c.dir, c.options)).join("\n")}
 }
 

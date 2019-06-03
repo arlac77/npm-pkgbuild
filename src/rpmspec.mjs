@@ -39,7 +39,7 @@ const npmModulesPackage = options.npmModules
 
   out.write(`${Object.keys(properties)
     .filter(k => properties[k] !== undefined)
-    .map(k => `${k}: ${quote(properties[k])}`)
+    .map(k => `${k}: ${properties[k]}`)
     .join("\n")}
 
 %description

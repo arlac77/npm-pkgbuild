@@ -195,7 +195,8 @@ const cleanup = [
       ".npm*",
       ".env",
       "x-package.json5",
-      "component.json"
+      "component.json",
+      "tsconfig.json"
     ]
   },
   {

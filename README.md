@@ -15,7 +15,7 @@
 
 ## npm-pkgbuild
 
-create arch linux packages from npm packages
+create ArchLinux packages from npm packages
 
 # usage
 

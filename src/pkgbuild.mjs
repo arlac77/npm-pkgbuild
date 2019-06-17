@@ -182,6 +182,7 @@ const cleanup = [
       "gulpfile.js",
       "jsdoc.json",
       "Gruntfile.js",
+      "karma.conf.js",
       "verb.md",
       ".nvmrc",
       "config.gypi",

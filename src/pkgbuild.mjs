@@ -154,6 +154,7 @@ const cleanup = [
     options: { filesOnly: true },
     pattern: [
       "*~",
+      "*.bak",
       "*.mk",
       "*.bat",
       "*.tmp",

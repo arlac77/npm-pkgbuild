@@ -200,7 +200,8 @@ const cleanup = [
       "x-package.json5",
       "component.json",
       "tsconfig.json",
-      ".airtap.yml"
+      ".airtap.yml",
+      ".jscs.json"
     ]
   },
   {

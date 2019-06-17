@@ -225,6 +225,7 @@ const cleanup = [
       "Porting-Buffer.md",
       "chains and topics.md",
       "CODE_OF_CONDUCT*",
+      "CODEOWNERS",
       "LICENSE.DOCS*"
     ]
   },

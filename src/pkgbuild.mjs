@@ -144,7 +144,7 @@ package() {
 const cleanup = [
   {
     options: { filesOnly: true, ignoreCase: true },
-    pattern: ["LICENSE*"]
+    pattern: ["LICENSE*","LICENCE*"]
   },
   {
     options: { filesOnly: true },

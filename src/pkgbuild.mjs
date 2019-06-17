@@ -144,7 +144,7 @@ package() {
 const cleanup = [
   {
     options: { filesOnly: true, ignoreCase: true },
-    pattern: ["LICENSE*","LICENCE*"]
+    pattern: ["LICENSE*", "LICENCE*", 'COPYING']
   },
   {
     options: { filesOnly: true },
@@ -168,6 +168,8 @@ const cleanup = [
       "*.cc",
       "*.c",
       "*.h",
+      "*.h.in",
+      "*.cmake",
       ".jshintrc*",
       ".esl*",
       ".zuul.yml",
@@ -187,7 +189,7 @@ const cleanup = [
       "verb.md",
       ".nvmrc",
       "config.gypi",
-      "binding.gyp",
+      "*.gyp",
       "bower.json",
       "*.bash_completion.*",
       ".coveralls.yml",

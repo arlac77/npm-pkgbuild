@@ -245,7 +245,8 @@ const cleanup = [
       "tests",
       "uritemplate-test",
       ".github",
-      "demo"
+      "demo",
+      "coverage"
     ]
   },
   {

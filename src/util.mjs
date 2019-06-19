@@ -11,7 +11,8 @@ export function quote(v) {
   }
   if (typeof v === "number" || v instanceof Number) return v;
 
-  return v.match(/^\w+$/) ? v : "'" + v + "'";
+  if (typeof v === "string" || v instanceof String)
+    return v.match(/^\w+$/) ? v : "'" + v + "'";
 }
 
 export function asArray(o) {

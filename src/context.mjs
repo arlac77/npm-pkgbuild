@@ -20,7 +20,7 @@ export async function createContext(dir, properties = {}) {
     }
   });
 
-  const pkg = await loadPackage(dir);
+  const pkg = { pacman: {}, ...await loadPackage(dir)};
 
   properties = { arch: "any", installdir: "", pkgver: pkg.version, ...pkg, ...properties };
 
@@ -31,7 +31,7 @@ export async function createContext(dir, properties = {}) {
 
   const eeContext = ee({ evaluate });
 
-  properties = Object.assign(properties, eeContext.expand(pkg.pacman));
+  properties = Object.assign(properties, eeContext.expand(pkg.pacman), eeContext.expand(pkg.pacman.properties));
 
   return {
     dir,

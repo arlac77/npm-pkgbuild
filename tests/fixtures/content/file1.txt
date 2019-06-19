@@ -1,2 +1,3 @@
 content of {{name}} file1.txt
 {{ unknown value }}
+{{ serviceURL }}

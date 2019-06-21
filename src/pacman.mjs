@@ -21,7 +21,7 @@ export async function pacman(context, stagingDir) {
 }
 
 export async function makepkg(context, stagingDir) {
-  const proc = execa("makepkg", ["-f"], { cwd: stagingDir });
+  const proc = execa("makepkg", ["-f"], { cwd: stagingDir /*, env: { PKGDEST: publish }*/ });
 
   let publish = context.properties.publish;
 

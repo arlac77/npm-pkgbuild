@@ -17,7 +17,7 @@
   },
   "pacman": {
     "properties" : {
-      "serviceURL" : "/services/{{name}}"
+      "serviceURL" : "/services/${name}"
     },
     "arch": [
       "aarch64",

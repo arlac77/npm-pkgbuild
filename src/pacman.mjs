@@ -44,8 +44,8 @@ export async function makepkg(context, stagingDir) {
   const p = await proc;
   console.log(p);
 
-  if (p.code !== 0) {
-    throw new Error(`unexpected exit ${p.code} from makepkg`);
+  if (p.exitCode !== 0) {
+    throw new Error(`unexpected exit ${p.exitCode} from makepkg`);
   }
 
   let arch = "any";

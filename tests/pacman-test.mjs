@@ -32,5 +32,5 @@ test("makepkg simple", async t => {
 
   //console.log(error);
 
-  t.regex(error.message, /Command failed|ENOENT/);
+  t.regex(error.message, /Command failed|ENOENT|SIGUSR1/);
 });

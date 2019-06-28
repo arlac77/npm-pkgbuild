@@ -40,7 +40,7 @@ program
       const context = await createContext(program.package, program);
 
       for (const stage of stages) {
-        console.log(`executing ${stage}...`);
+        console.log(`Executing ${stage}...`);
         switch (stage) {
           case "rpmspec":
             await rpmspec(
@@ -78,7 +78,7 @@ program
             await cleanup(context, staging);
             break;
           default:
-            console.error(`unknown stage ${stage}`);
+            console.error(`Unknown stage ${stage}`);
         }
       }
     } catch (e) {

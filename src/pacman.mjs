@@ -25,11 +25,11 @@ export async function makepkg(context, stagingDir) {
 
   let publish = context.properties.publish;
 
-  proc.stdout.pipe(process.stdout);
+  //proc.all.pipe(process.stdout);
 
   let name, version;
 
-  for await (const chunk of proc.stderr) {
+  for await (const chunk of proc.all) {
     const s = chunk.toString("utf8");
 
     console.log(s);

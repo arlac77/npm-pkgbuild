@@ -10,8 +10,8 @@ export async function loadPackage(dir) {
 
 /**
  * Used as a reference throuhout the runtime of the npm-pkgbuild
- * @param {string} dir 
- * @param {Object} properties 
+ * @param {string} dir
+ * @param {Object} properties
  */
 export async function createContext(dir, properties = {}) {
   Object.keys(properties).forEach(k => {
@@ -20,19 +20,48 @@ export async function createContext(dir, properties = {}) {
     }
   });
 
-  const pkg = { pacman: {}, ...await loadPackage(dir)};
+  const pkg = { pacman: {}, ...(await loadPackage(dir)) };
 
-  properties = { arch: "any", installdir: "", pkgver: pkg.version, ...pkg, ...properties };
+  properties = {
+    arch: "any",
+    installdir: "",
+    pkgver: pkg.version,
+    ...pkg,
+    ...properties
+  };
 
   function evaluate(expression) {
     expression = expression.trim();
     const value = properties[expression];
+    if (value !== undefined) {
+      return value;
+    }
+
+    if (pkg.config !== undefined) {
+      let c = pkg.config;
+
+      for (const p of expression.split(/\./)) {
+        if (c[p]) {
+          c = c[p];
+        }
+        else {
+          return value;
+        }
+      }
+
+      return c;
+    }
+
     return value;
   }
 
   const eeContext = ee({ evaluate });
 
-  properties = Object.assign(properties, eeContext.expand(pkg.pacman), eeContext.expand(pkg.pacman.properties));
+  properties = Object.assign(
+    properties,
+    eeContext.expand(pkg.pacman),
+    eeContext.expand(pkg.pacman.properties)
+  );
 
   return {
     dir,

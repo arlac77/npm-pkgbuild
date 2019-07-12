@@ -1,5 +1,4 @@
 import globby from "globby";
-import { quote } from "./util.mjs";
 
 export async function rpmspec(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };

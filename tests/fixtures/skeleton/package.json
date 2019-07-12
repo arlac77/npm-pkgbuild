@@ -9,6 +9,12 @@
   "engines": {
     "node": ">=10.5"
   },
+  "config" : {
+    "port" : 8088,
+    "api" : {
+      "url" : "http://somwhere.com/prefix/api"
+    }
+  },
   "pacman": {
     "installdir": "/services/${name}",
     "groups": "webhook",

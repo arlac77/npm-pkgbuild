@@ -17,4 +17,8 @@ test("context expand", async t => {
   const context = await createContext(fixturesDir);
 
   t.is(context.expand("a${name}b"), "amyserviceb");
+  t.is(context.expand("${api.url}"), "http://somwhere.com/prefix/api");
+  t.is(context.expand("${port}"), 8088);
+  t.is(context.expand("${serviceURL}"), "/services/myservice");
+  t.is(context.expand("${notfound}"), "");
 });

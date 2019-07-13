@@ -31,6 +31,7 @@ test("content simple", async t => {
   t.is(d2,`content of myservice file1.txt
 {{ unknown value }}
 /services/myservice
+/services/myservice/api
 `);
 
   //t.regex(d2, /file1.txt/);

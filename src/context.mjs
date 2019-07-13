@@ -32,24 +32,25 @@ export async function createContext(dir, properties = {}) {
 
   function evaluate(expression) {
     expression = expression.trim();
-    const value = properties[expression];
+    let value = properties[expression];
     if (value !== undefined) {
       return value;
     }
 
     if (pkg.config !== undefined) {
-      let c = pkg.config;
+      value = pkg.config;
 
       for (const p of expression.split(/\./)) {
-        if (c[p]) {
-          c = c[p];
-        }
-        else {
-          return value;
+        value = value[p];
+
+        if (value === undefined) {
+          break;
         }
       }
+    }
 
-      return c;
+    if (typeof value === "string") {
+      return eeContext.expand(value);
     }
 
     return value;

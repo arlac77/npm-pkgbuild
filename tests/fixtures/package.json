@@ -20,7 +20,8 @@
     "api" : {
       "url" : "http://somwhere.com/prefix/api"
     },
-    "serviceURL" : "/services/${name}"
+    "serviceURL" : "/services/${name}",
+    "urlPrefix" : "/services/${name}/api"
   },
   "pacman": {
     "properties" : {

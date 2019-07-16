@@ -38,7 +38,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     depends
   };
 
-  if (properties.install !== undefined) {
+  if (properties.install !== undefined || properties.hooks !== undefined) {
     properties.install = `${pkg.name}.install`;
   }
 

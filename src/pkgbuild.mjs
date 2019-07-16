@@ -203,7 +203,8 @@ const cleanup = [
       "component.json",
       "tsconfig.json",
       ".airtap.yml",
-      ".jscs.json"
+      ".jscs.json",
+      "sauce-labs.svg"
     ]
   },
   {

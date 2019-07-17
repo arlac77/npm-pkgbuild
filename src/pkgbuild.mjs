@@ -22,8 +22,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   const depends = makeDepends({ ...pkg.engines });
 
-  const properties =
-  {
+  const properties = {
     url: pkg.homepage,
     pkgdesc: pkg.description,
     license: pkg.license,
@@ -89,8 +88,8 @@ pkgver() {
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
     tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
-    pkg.name
-    }-${context.properties.pkgver}.tgz)`
+        pkg.name
+      }-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules
@@ -105,15 +104,15 @@ pkgver() {
       )
       .join("\n# ")}
 ${Object.keys(properties)
-      .filter(k => properties[k] !== undefined)
-      .map(k => `${k}=${quote(properties[k])}`)
-      .join("\n")}
+  .filter(k => properties[k] !== undefined)
+  .map(k => `${k}=${quote(properties[k])}`)
+  .join("\n")}
 ${pkgver}
 build() {
   cd \${pkgname}${directory}
   sed -i 's/"version": ".*/"version": "${
     context.properties.pkgver
-    }",/' package.json
+  }",/' package.json
   npm install
   npm pack
   npm prune --production
@@ -125,8 +124,8 @@ build() {
 
 package() {
   depends=(${makeDepends(pkg.pacman.depends)
-      .map(a => `"${a}"`)
-      .join(" ")})
+    .map(a => `"${a}"`)
+    .join(" ")})
 
   mkdir -p \${pkgdir}${installdir}
   ${npmDistPackage}
@@ -144,11 +143,12 @@ package() {
 const cleanup = [
   {
     options: { filesOnly: true, ignoreCase: true },
-    pattern: ["LICENSE*", "LICENCE*", 'COPYING']
+    pattern: ["LICENSE*", "LICENCE*", "COPYING"]
   },
   {
     options: { filesOnly: true },
-    pattern: [".git*"]
+    dir: "node_modules",
+    pattern: [".git*", ".npm*", "rollup.config.*", ".travis.yml"]
   },
   {
     options: { filesOnly: true },
@@ -179,10 +179,8 @@ const cleanup = [
       ".tern-project",
       ".dockerignore",
       ".dir-locals.el",
-      ".travis.yml",
       "appveyor.yml",
       "yarn.lock",
-      "rollup.config.*",
       "gulpfile.js",
       "jsdoc.json",
       "Gruntfile.js",
@@ -197,17 +195,18 @@ const cleanup = [
       ".babelrc.*",
       ".nycrc",
       ".DS_Store",
-      ".npm*",
       ".env",
       "x-package.json5",
       "component.json",
       "tsconfig.json",
       ".airtap.yml",
-      ".jscs.json"
+      ".jscs.json",
+      "sauce-labs.svg"
     ]
   },
   {
     options: { ignoreCase: true },
+    dir: "node_modules",
     pattern: [
       "*Makefile*",
       "CONTRIBUTING*",
@@ -252,9 +251,7 @@ const cleanup = [
   {
     dir: "node_modules",
     options: { ignoreCase: true, recursive: true },
-    pattern: [
-      "build"
-    ]
+    pattern: ["build"]
   }
 ];
 

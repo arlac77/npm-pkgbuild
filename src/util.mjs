@@ -1,4 +1,11 @@
-import { createReadStream, createWriteStream } from "fs";
+import fs, {
+  createReadStream,
+  createWriteStream,
+  copyFileSync,
+  constants
+} from "fs";
+import { join, dirname } from "path";
+import globby from "globby";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 
 export const utf8StreamOptions = { encoding: "utf8" };
@@ -17,6 +24,18 @@ export function quote(v) {
 
 export function asArray(o) {
   return Array.isArray(o) ? o : [o];
+}
+
+export async function* copyFiles(source, dest, pattern) {
+  for await (const name of globby.stream(asArray(pattern), {
+    cwd: source
+  })) {
+    const d = join(dest, name);
+    await fs.promises.mkdir(dirname(d), { recursive: true });
+
+    copyFileSync(join(source, name), d, constants.COPYFILE_FICLONE);
+    yield d;
+  }
 }
 
 export async function copyTemplate(context, source, dest) {

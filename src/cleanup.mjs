@@ -2,11 +2,12 @@ import globby from "globby";
 import { join, dirname } from "path";
 import fs from "fs";
 import { utf8StreamOptions } from "./util.mjs";
+const { unlink, readFile, writeFile } = fs.promises;
 
 async function rm(file) {
   try {
     console.log("rm", file);
-    return await fs.promises.unlink(file);
+    return await unlink(file);
   } catch (error) {
     console.log(error);
   }
@@ -35,9 +36,7 @@ export async function cleanup(context, stagingDir) {
     const pkgFile = join(stagingDir, name);
     console.log(`cleanup ${pkgFile}`);
 
-    const pkg = JSON.parse(
-      await fs.promises.readFile(pkgFile, utf8StreamOptions)
-    );
+    const pkg = JSON.parse(await readFile(pkgFile, utf8StreamOptions));
 
     // unused files may also be deleted
     await Promise.all(
@@ -148,14 +147,10 @@ export async function cleanup(context, stagingDir) {
         delete pkg.main;
     }
 
-    if (Object.keys(pkg).length === 0 || pkg.type === 'module') {
-      await fs.promises.unlink(pkgFile);
+    if (Object.keys(pkg).length === 0 || pkg.type === "module") {
+      await unlink(pkgFile);
     } else {
-      await fs.promises.writeFile(
-        pkgFile,
-        JSON.stringify(pkg),
-        utf8StreamOptions
-      );
+      await writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
     }
   }
 }

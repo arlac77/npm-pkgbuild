@@ -12,11 +12,10 @@ export async function pacman(context, stagingDir) {
 
     let hooks;
 
-    if(pacman.install !== undefined) {
+    if (pacman.install !== undefined) {
       console.log("pacman install is DEPRECATED use hooks instead");
       hooks = pacman.install;
-    }
-    else {
+    } else {
       hooks = pacman.hooks;
     }
 
@@ -33,7 +32,15 @@ export async function pacman(context, stagingDir) {
 }
 
 export async function makepkg(context, stagingDir) {
-  const proc = execa("makepkg", ["-f"], { cwd: stagingDir /*, env: { PKGDEST: publish }*/ });
+  const pkg = context.pkg;
+
+  const srcDir = join(stagingDir, "src");
+  await fs.promises.mkdir(srcDir, { recursive: true });
+  await execa("ln", ["-s", "../..", join(srcDir, pkg.name)]);
+
+  const proc = execa("makepkg", ["-f", "-e"], {
+    cwd: stagingDir /*, env: { PKGDEST: publish }*/
+  });
 
   let publish = context.properties.publish;
 
@@ -64,7 +71,7 @@ export async function makepkg(context, stagingDir) {
 
   console.log(`#<CI>publish ${name}-${version}-${arch}.pkg.tar.xz`);
 
-  if (publish !== undefined) {  
+  if (publish !== undefined) {
     for await (const chunk of createReadStream(
       join(stagingDir, `pkg/${name}/.PKGINFO`),
       utf8StreamOptions

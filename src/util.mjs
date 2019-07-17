@@ -10,6 +10,8 @@ import { iterableStringInterceptor } from "iterable-string-interceptor";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 
+const { mkdir, copyFile } = fs.promises;
+
 export function quote(v) {
   if (v === undefined) return "";
 
@@ -31,9 +33,8 @@ export async function* copyFiles(source, dest, pattern) {
     cwd: source
   })) {
     const d = join(dest, name);
-    await fs.promises.mkdir(dirname(d), { recursive: true });
-
-    copyFileSync(join(source, name), d, constants.COPYFILE_FICLONE);
+    await mkdir(dirname(d), { recursive: true });
+    await copyFile(join(source, name), d, constants.COPYFILE_FICLONE);
     yield d;
   }
 }

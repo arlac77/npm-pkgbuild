@@ -22,6 +22,10 @@ program
   .option("-i --installdir <dir>", "install directory package content base")
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
+    "-e --noextract",
+    "staging Do not extract source files (use existing $srcdir/ dir)"
+  )
+  .option(
     "--publish <url>",
     "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",
     process.env.PACMAN_PUBLISH
@@ -63,7 +67,9 @@ program
             );
             break;
           case "makepkg":
-            makepkg(context, staging);
+            makepkg(context, staging, {
+              args: program.noextract ? ["-e"] : []
+            });
             break;
           case "systemd":
             await systemd(context, staging);

@@ -31,14 +31,20 @@ export async function pacman(context, stagingDir) {
   }
 }
 
-export async function makepkg(context, stagingDir) {
+export async function makepkg(context, stagingDir, options = {}) {
   const pkg = context.pkg;
+  let { args } = options;
+  if (args === undefined) args = [];
 
   const srcDir = join(stagingDir, "src");
   await fs.promises.mkdir(srcDir, { recursive: true });
-  await execa("ln", ["-s", "../..", join(srcDir, pkg.name)]);
 
-  const proc = execa("makepkg", ["-f", "-e"], {
+  if (args.indexOf("-f") >= 0) {
+    await execa("ln", ["-s", "../..", join(srcDir, pkg.name)]);
+  }
+
+  console.log("makepkg", args);
+  const proc = execa("makepkg", args, {
     cwd: stagingDir /*, env: { PKGDEST: publish }*/
   });
 

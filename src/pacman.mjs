@@ -48,8 +48,6 @@ export async function makepkg(context, stagingDir, options = {}) {
     cwd: stagingDir /*, env: { PKGDEST: publish }*/
   });
 
-  let publish = context.properties.publish;
-
   //proc.all.pipe(process.stdout);
 
   let name, version;
@@ -75,28 +73,32 @@ export async function makepkg(context, stagingDir, options = {}) {
 
   let arch = "any";
 
-  console.log(`#<CI>publish ${name}-${version}-${arch}.pkg.tar.xz`);
+  for await (const chunk of createReadStream(
+    join(stagingDir, `pkg/${name}/.PKGINFO`),
+    utf8StreamOptions
+  )) {
+    const r = chunk.match(/arch\s+=\s+(\w+)/);
+    if (r) {
+      arch = r[1];
+    }
+  }
+
+  const pkgName = `${name}-${version}-${arch}.pkg.tar.xz`;
+
+  console.log(`#<CI>publish ${pkgName}`);
+
+  let publish = context.properties.publish;
 
   if (publish !== undefined) {
-    for await (const chunk of createReadStream(
-      join(stagingDir, `pkg/${name}/.PKGINFO`),
-      utf8StreamOptions
-    )) {
-      const r = chunk.match(/arch\s+=\s+(\w+)/);
-      if (r) {
-        arch = r[1];
-      }
-    }
-
-    context.properties["arch"] = arch;
+    context.properties.arch = arch;
 
     publish = publish.replace(/\{\{(\w+)\}\}/m, (match, key, offset, string) =>
       context.evaluate(key)
     );
 
-    console.log(`cp ${name}-${version}-${arch}.pkg.tar.xz ${publish}`);
+    console.log(`cp ${pkgName} ${publish}`);
 
-    await execa("cp", [`${name}-${version}-${arch}.pkg.tar.xz`, publish], {
+    await execa("cp", [pkgName, publish], {
       cwd: stagingDir
     });
   }

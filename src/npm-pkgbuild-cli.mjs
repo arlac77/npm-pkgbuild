@@ -10,6 +10,7 @@ import { content } from "./content.mjs";
 import { cleanup } from "./cleanup.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
+import { copyNodeModules } from "./util.mjs";
 
 const cwd = process.cwd();
 
@@ -76,6 +77,12 @@ program
             break;
           case "pacman":
             await pacman(context, staging);
+            break;
+          
+          case "node_modules":
+            for await (const file of copyNodeModules(context.dir, staging)) {
+              console.log(file);
+            }
             break;
           case "content":
             await content(context, staging);

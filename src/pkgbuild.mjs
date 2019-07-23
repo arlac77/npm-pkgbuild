@@ -85,18 +85,6 @@ pkgver() {
 `;
   }
 
-  const npmDistPackage = options.npmDist
-    ? `( cd \${pkgdir}${installdir}
-    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
-        pkg.name
-      }-${context.properties.pkgver}.tgz)`
-    : "";
-
-  const npmModulesPackage = options.npmModules
-    ? `( cd \${srcdir}/\${pkgname}${directory}
-    tar cf - node_modules)|(cd \${pkgdir}${installdir};tar xf - )`
-    : "";
-
   out.write(
     `# ${pkg.contributors
       .map(
@@ -116,10 +104,8 @@ build() {
   npm install
   npm pack
   npm prune --production
-  rm -rf node_modules/.bin
   #arch=$(file -b  $(which node)|cut -d',' -f2)
   find . -name "*.node"|xargs -r file|grep -v ELF|sed 's/:.*//'|xargs -r rm
-  ${cleanup.map(c => findAndDelete(c.pattern, c.dir, c.options)).join("\n")}
 }
 
 package() {
@@ -128,9 +114,7 @@ package() {
     .join(" ")})
 
   mkdir -p \${pkgdir}${installdir}
-  ${npmDistPackage}
-  ${npmModulesPackage}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} cleanup content systemd
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content systemd
 }
 `
   );
@@ -140,140 +124,12 @@ package() {
   await promisify(finished);
 }
 
-const cleanup = [
-  {
-    options: { filesOnly: true, ignoreCase: true },
-    pattern: ["LICENSE*", "LICENCE*", "COPYING"]
-  },
-  {
-    options: { filesOnly: true },
-    dir: "node_modules",
-    pattern: [".git*", ".npm*", "rollup.config.*", ".travis.yml"]
-  },
-  {
-    options: { filesOnly: true },
-    pattern: [
-      "*~",
-      "*.bak",
-      "*.mk",
-      "*.bat",
-      "*.tmp",
-      "*.orig",
-      "*.d.ts*",
-      "*.mjs.map",
-      "*.js.map",
-      "*.min.map",
-      "*.1",
-      "*.patch",
-      "*.cc",
-      "*.c",
-      "*.h",
-      "*.h.in",
-      "*.cmake",
-      "*.gyp",
-      ".jshintrc*",
-      ".esl*",
-      ".zuul.yml",
-      ".doclets.yml",
-      ".editorconfig",
-      ".tern-project",
-      ".dockerignore",
-      ".dir-locals.el",
-      "appveyor.yml",
-      "yarn.lock",
-      "gulpfile.js",
-      "jsdoc.json",
-      "Gruntfile.js",
-      "karma.conf.js",
-      "verb.md",
-      ".nvmrc",
-      "config.gypi",
-      "bower.json",
-      "*.bash_completion.*",
-      ".coveralls.yml",
-      ".istanbul.yml",
-      ".babelrc.*",
-      ".nycrc",
-      ".DS_Store",
-      ".env",
-      "x-package.json5",
-      "component.json",
-      "tsconfig.json",
-      ".airtap.yml",
-      ".jscs.json",
-      "sauce-labs.svg"
-    ]
-  },
-  {
-    options: { ignoreCase: true },
-    dir: "node_modules",
-    pattern: [
-      "*Makefile*",
-      "CONTRIBUTING*",
-      "Contributors*",
-      "CHANGES*",
-      "readme*",
-      "AUTHORS*",
-      "NOTICE*",
-      "HISTORY*",
-      "SUMMARY.md",
-      "MIGRAT*.md",
-      "UPGRAD*.md",
-      "PULL_REQUEST_TEMPLATE.md",
-      "PATTERNS.md",
-      "REFERENCE.md",
-      "SECURITY.md",
-      "SFTPStream.md",
-      "LIMITS.md",
-      "GOVERNANCE.md",
-      "Porting-Buffer.md",
-      "chains and topics.md",
-      "CODE_OF_CONDUCT*",
-      "CODEOWNERS",
-      "LICENSE.DOCS*"
-    ]
-  },
-  {
-    options: { ignoreCase: true, recursive: true },
-    pattern: [
-      "CHANGELOG*",
-      "example*",
-      "doc",
-      "docs",
-      "test",
-      "tests",
-      "uritemplate-test",
-      ".github",
-      "demo",
-      "coverage"
-    ]
-  },
-  {
-    dir: "node_modules",
-    options: { ignoreCase: true, recursive: true },
-    pattern: ["build"]
-  }
-];
-
-function findAndDelete(
-  pattern,
-  dir = ".",
-  options = { ignoreCase: false, recursive: false }
-) {
-  return (
-    "find " +
-    dir +
-    " \\(" +
-    pattern
-      .map(p => ` ${options.ignoreCase ? "-iname" : "-name"} "${p}"`)
-      .join(" -o") +
-    (options.filesOnly ? " -type f" : "") +
-    ` \\) -print0\\
-    | xargs -r -0 ${options.recursive ? "rm -rf" : "rm"}`
-  );
-}
 
 function makeDepends(d) {
+  if(d === undefined) {
+    return [];
+  }
+
   return Object.keys(d).reduce((a, c) => {
     const mapping = {
       node: "nodejs"

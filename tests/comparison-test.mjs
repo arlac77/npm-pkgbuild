@@ -3,7 +3,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import fs, { constants } from "fs";
 import execa from "execa";
-import { copyModules } from "../src/util.mjs";
+import { copyNodeModules } from "../src/util.mjs";
 
 const { access, readFile, writeFile } = fs.promises;
 
@@ -31,7 +31,7 @@ test.skip("compare", async t => {
 
   const files = [];
 
-  for await (const file of copyModules(pkgDir, tmpDir)) {
+  for await (const file of copyNodeModules(pkgDir, tmpDir)) {
     files.push(file);
   }
 

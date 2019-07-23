@@ -1,6 +1,8 @@
 import fs, { createReadStream, createWriteStream, constants } from "fs";
 import { join, dirname } from "path";
 import globby from "globby";
+import packlist from 'npm-packlist';
+
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 
 export const utf8StreamOptions = { encoding: "utf8" };
@@ -224,24 +226,7 @@ const skipPattern = [
   "**/coverage/**"
 ].map(a => "!" + a);
 
-/*
-  "**readme*",
-  "**Readme*",
-  "**README*",
-
-  "license*",
-  "LICENSE*",
-  "LICENCE*",
-
-  "**CHANGELOG*",
-  "**changelog.*",
-  "**Changelog.*",
-    "HISTORY*",
-  "history*",
-  "History*",
-*/
-
-export async function* copyModules(source, dest, options = { dry: false }) {
+export async function* copyNodeModules(source, dest, options = { dry: false }) {
   for await (const name of globby.stream(["node_modules/**/package.json"], {
     cwd: source
   })) {
@@ -288,6 +273,15 @@ export async function* copyModules(source, dest, options = { dry: false }) {
       }
       yield join(pkgDir, f);
     }
+  }
+}
+
+export export async function *npmPack(context, source, dest) {
+  
+  const files = await packlist({ path: source });
+
+  for(const file of files) {
+    yield file;
   }
 }
 

@@ -36,7 +36,8 @@
     "execa": "^2.0.3",
     "expression-expander": "^7.0.2",
     "globby": "^10.0.1",
-    "iterable-string-interceptor": "^1.0.1"
+    "iterable-string-interceptor": "^1.0.1",
+    "npm-packlist": "^1.4.4"
   },
   "devDependencies": {
     "ava": "^2.2.0",

@@ -146,6 +146,21 @@ const cleanup = [
     pattern: ["LICENSE*", "LICENCE*", "COPYING"]
   },
   {
+    options: { ignoreCase: true, recursive: true },
+    pattern: [
+      "CHANGELOG*",
+      "example*",
+      "doc",
+      "docs",
+      "test",
+      "tests",
+      "uritemplate-test",
+      ".github",
+      "demo",
+      "coverage"
+    ]
+  },
+  {
     options: { filesOnly: true },
     dir: "node_modules",
     pattern: [".git*", ".npm*", "rollup.config.*", ".travis.yml"]
@@ -231,21 +246,6 @@ const cleanup = [
       "CODE_OF_CONDUCT*",
       "CODEOWNERS",
       "LICENSE.DOCS*"
-    ]
-  },
-  {
-    options: { ignoreCase: true, recursive: true },
-    pattern: [
-      "CHANGELOG*",
-      "example*",
-      "doc",
-      "docs",
-      "test",
-      "tests",
-      "uritemplate-test",
-      ".github",
-      "demo",
-      "coverage"
     ]
   },
   {

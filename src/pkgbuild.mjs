@@ -214,6 +214,7 @@ const cleanup = [
       "x-package.json5",
       "component.json",
       "tsconfig.json",
+      "cypress.json",
       ".airtap.yml",
       ".jscs.json",
       "sauce-labs.svg"

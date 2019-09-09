@@ -45,7 +45,7 @@
     "documentation": "^12.1.1",
     "esm": "^3.2.25",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^1.21.0",
+    "rollup": "^1.21.2",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-executable": "^1.5.0",

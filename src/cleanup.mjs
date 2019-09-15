@@ -29,7 +29,7 @@ async function iterate(o, cb) {
   }
 }
 
-const blacklist = new Set(["parse-client-options"]);
+const blacklist = new Set(["parse-client-options",'@octokit/rest']);
 
 export async function cleanup(context, stagingDir) {
   for (const name of await globby(["**/package.json"], {

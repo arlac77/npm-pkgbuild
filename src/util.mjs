@@ -277,7 +277,7 @@ export async function* copyNodeModules(source, dest, options = { dry: false }) {
   }
 }
 
-export export async function *npmPack(context, source, dest) {
+export async function *npmPack(context, source, dest) {
   
   const files = await packlist({ path: source });
 

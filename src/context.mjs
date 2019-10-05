@@ -9,7 +9,7 @@ export async function loadPackage(dir) {
 }
 
 /**
- * Used as a reference throuhout the runtime of the npm-pkgbuild
+ * Used as a reference througout the runtime of the npm-pkgbuild
  * @param {string} dir
  * @param {Object} properties
  */

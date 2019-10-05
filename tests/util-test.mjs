@@ -19,11 +19,11 @@ test("copy files", async t => {
     t.log(file);
   }
 
-  t.is(files.length, 7);
+  t.is(files.length, 8);
 });
 
 test("copy modules", async t => {
-  const fixturesDir = join(here, ".." /*, "tests", "fixtures"*/);
+  const fixturesDir = join(here, ".." , "tests", "fixtures");
   const tmpDir = join(here, "..", "build", "copy-test");
 
   const files = [];
@@ -32,5 +32,5 @@ test("copy modules", async t => {
     t.log(file);
   }
 
-  t.is(files.length, 7);
+  t.is(files.length, 8);
 });

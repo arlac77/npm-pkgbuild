@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "commander": "^3.0.0",
-    "execa": "^2.0.5",
+    "execa": "^2.1.0",
     "expression-expander": "^7.0.2",
     "globby": "^10.0.1",
     "iterable-string-interceptor": "^1.0.1"

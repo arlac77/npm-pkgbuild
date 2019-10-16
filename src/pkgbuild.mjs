@@ -104,8 +104,6 @@ build() {
   npm install
   npm pack
   npm prune --production
-  #arch=$(file -b  $(which node)|cut -d',' -f2)
-  find . -name "*.node"|xargs -r file|grep -v ELF|sed 's/:.*//'|xargs -r rm
 }
 
 package() {

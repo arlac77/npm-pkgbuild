@@ -21,8 +21,6 @@ test("pkgbuild", async t => {
 
   const c = ws.getContentsAsString("utf8");
 
-  //console.log(c);
-
   t.regex(c, /pkgver='1.2.3'/);
   t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
@@ -48,5 +46,4 @@ test("pkgbuild skeleton package", async t => {
   //t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
   t.regex(c, /\s+depends=.*redis>=5.0.3/);
-  t.regex(c, /find\s+\.\s+/);
 });

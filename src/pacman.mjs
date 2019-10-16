@@ -9,15 +9,7 @@ export async function pacman(context, stagingDir) {
 
   if (pkg.pacman !== undefined) {
     const pacman = pkg.pacman;
-
-    let hooks;
-
-    if (pacman.install !== undefined) {
-      console.log("pacman install is DEPRECATED use hooks instead");
-      hooks = pacman.install;
-    } else {
-      hooks = pacman.hooks;
-    }
+    const hooks = pacman.hooks;
 
     if (hooks !== undefined) {
       await fs.promises.mkdir(stagingDir, { recursive: true });

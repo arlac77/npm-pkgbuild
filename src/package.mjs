@@ -36,6 +36,7 @@ const pkgEntriesToBeRemoved = [
   "description",
   "decription",
   "engines",
+  "engine",
   "author",
   "authors",
   "contributors",

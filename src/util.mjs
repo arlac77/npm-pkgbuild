@@ -80,6 +80,7 @@ const pkgEntriesToBeRemoved = [
   "deprecated",
   "description",
   "decription",
+  "engine",
   "engines",
   "author",
   "authors",

@@ -3,7 +3,6 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import execa from "execa";
-import { utf8StreamOptions } from "../src/util.mjs";
 import { createContext } from "../src/context.mjs";
 import { cleanup } from "../src/cleanup.mjs";
 

@@ -45,7 +45,8 @@ export async function makepkg(context, stagingDir, options = {}) {
 
   console.log("makepkg", args);
   const proc = execa("makepkg", args, {
-    cwd: stagingDir /*, env: { PKGDEST: publish }*/
+    cwd: stagingDir, /*, env: { PKGDEST: publish }*/
+    all: true
   });
 
   //proc.all.pipe(process.stdout);

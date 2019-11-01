@@ -33,9 +33,7 @@ program
   .option("--npm-modules", "include npm modules")
   .option("--npm-dist", "include npm dist")
   .command("[stages...]", "stages to execute")
-  .action(async (...stages) => {
-    stages.pop();
-
+  .action(async (commander, stages) => {
     try {
       const staging = program.staging;
 

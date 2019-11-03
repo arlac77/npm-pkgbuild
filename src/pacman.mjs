@@ -84,7 +84,19 @@ export async function makepkg(context, stagingDir, options = {}) {
     }
   }
 
-  const pkgName = `${name}-${version}-${arch}.pkg.tar.xz`;
+  let ext='.pkg.tar.xz';
+
+  for await (const chunk of createReadStream(
+    '/etc/makepkg.conf',
+    utf8StreamOptions
+  )) {
+    const r = chunk.match(/PKGEXT='(.+)'/);
+    if (r) {
+      ext = r[1];
+    }
+  }
+
+  const pkgName = `${name}-${version}-${arch}${ext}`;
 
   console.log(`#<CI>publish ${pkgName}`);
 

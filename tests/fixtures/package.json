@@ -25,13 +25,12 @@
   },
   "pacman": {
     "properties" : {
-      "serviceURL" : "/services/${name}"
+      "installdir" : "/services/${name}"
     },
     "arch": [
       "aarch64",
       "armv7h"
     ],
-    "installdir": "/services/${name}",
     "groups": "webhook",
     "backup": [
       "etc/${name}/${name}.json"
@@ -42,17 +41,20 @@
     },
     "hooks": "pacman/pacman.install",
     "content": {
+      "${installdir}": {
+        "npm" : ["dist","dependencies"]
+      },
+      "/usr/lib/systemd/system/" : {
+        "base": "systemd",
+        "pattern": "**/*.json"
+      },
       "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
       "${installdir}/docroot1/": "content/**/*.txt",
       "${installdir}/docroot2/": {
         "base": "content",
         "pattern": "**/*.json"
-      }
-    }
-  },
-  "systemd": {
-    "units": {
-      "${name}": "systemd/${name}*"
+      },
+      "/etc/${name}/" : "config"
     }
   }
 }

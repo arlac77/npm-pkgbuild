@@ -31,8 +31,6 @@ program
     "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",
     process.env.PACMAN_PUBLISH
   )
-  .option("--npm-modules", "include npm modules")
-  .option("--npm-dist", "include npm dist")
   .command("[stages...]", "stages to execute")
   .action(async (...stages) => {
     stages.pop();

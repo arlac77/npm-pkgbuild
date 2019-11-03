@@ -2,6 +2,12 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";
 
+const pacmanKeys = [
+  "arch",
+  "backup",
+  "groups"
+];
+
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
@@ -29,11 +35,11 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     pkgrel: context.properties.pkgrel,
     pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
     pkgname: pkg.name,
+    install: pkg.pacman.hooks,
     arch: "any",
     makedepends: "git",
     source,
     md5sums,
-    ...pkg.pacman,
     depends
   };
 
@@ -43,9 +49,15 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   const installdir = context.properties.installdir;
 
-  delete properties.content;
+  pacmanKeys.forEach(k => {
+    const v = pkg.pacman[k];
+    if(v !== undefined) {
+      properties[k] = v;
+    }
+  });
 
-  [
+  [...pacmanKeys,
+    "depends",
     "pkgname",
     "license",
     "source",
@@ -56,10 +68,6 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     "sha256sums",
     "sha384sums",
     "sha512sums",
-    "groups",
-    "arch",
-    "backup",
-    "depends",
     "makedepends",
     "checkdepends",
     "optdepends",

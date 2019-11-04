@@ -4,7 +4,6 @@ import { join } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
-import { systemd } from "./systemd.mjs";
 import { pacman, makepkg } from "./pacman.mjs";
 import { content } from "./content.mjs";
 import { cleanup } from "./cleanup.mjs";
@@ -69,9 +68,6 @@ program
             makepkg(context, staging, {
               args: program.noextract ? ["-e"] : []
             });
-            break;
-          case "systemd":
-            await systemd(context, staging);
             break;
           case "pacman":
             await pacman(context, staging);

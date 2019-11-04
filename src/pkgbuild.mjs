@@ -2,6 +2,45 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";
 
+/**
+ * well known package properties
+ * https://www.archlinux.org/pacman/PKGBUILD.5.html
+ */
+ const arrayOptionsPKGBUILD = [
+  "pkgname",
+  "license",
+  "source",
+  "validpgpkeys",
+  "noextract",
+  "md5sums",
+  "sha1sums",
+  "sha256sums",
+  "sha384sums",
+  "sha512sums",
+  "groups",
+  "arch",
+  "backup",
+  "depends",
+  "makedepends",
+  "checkdepends",
+  "optdepends",
+  "conflicts",
+  "provides",
+  "replaces",
+  "options"
+ ];
+
+ const optionsPKGBUILD = [
+   ...arrayOptionsPKGBUILD,
+  "pkgver",
+  "pkgrel",
+  "epoch",
+  "pkgdesc",
+  "url",
+  "install",
+  "changelog"
+];
+
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
@@ -20,8 +59,6 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
   }
 
-  const depends = makeDepends({ ...pkg.engines });
-
   const properties = {
     url: pkg.homepage,
     pkgdesc: pkg.description,
@@ -32,10 +69,17 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     arch: "any",
     makedepends: "git",
     source,
-    md5sums,
-    ...pkg.pacman,
-    depends
+    md5sums
   };
+
+  optionsPKGBUILD.forEach(k => {
+    const v = pkg.pacman[k];
+    if(v !== undefined) {
+      properties[k] = v;
+    }
+  });
+
+  properties.depends = makeDepends({ ...pkg.engines });;
 
   if (properties.install !== undefined || properties.hooks !== undefined) {
     properties.install = `${pkg.name}.install`;
@@ -43,31 +87,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   const installdir = context.properties.installdir;
 
-  delete properties.content;
-
-  [
-    "pkgname",
-    "license",
-    "source",
-    "validpgpkeys",
-    "noextract",
-    "md5sums",
-    "sha1sums",
-    "sha256sums",
-    "sha384sums",
-    "sha512sums",
-    "groups",
-    "arch",
-    "backup",
-    "depends",
-    "makedepends",
-    "checkdepends",
-    "optdepends",
-    "conflicts",
-    "provides",
-    "replaces",
-    "options"
-  ].forEach(k => {
+  arrayOptionsPKGBUILD.forEach(k => {
     const v = properties[k];
     if (v !== undefined && !Array.isArray(v)) {
       properties[k] = [v];
@@ -112,7 +132,7 @@ package() {
     .join(" ")})
 
   mkdir -p \${pkgdir}${installdir}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content systemd
+  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content
 }
 `
   );

@@ -20,6 +20,10 @@ export async function content(context, stagingDir) {
           cwd = context.dir;
           pattern = source;
         } else {
+          if(source.npm) {
+            return;
+          }
+  
           cwd = join(context.dir, source.base);
           pattern = source.pattern || "**/*";
         }

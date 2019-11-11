@@ -43,10 +43,26 @@ test("pkgbuild skeleton package", async t => {
 
   const c = ws.getContentsAsString("utf8");
 
-  //console.log(c);
   t.regex(c, /pkgver='1.2.3'/);
   //t.regex(c, /source=\('git/);
   t.regex(c, /depends=.*nodejs>=10.5/);
   t.regex(c, /\s+depends=.*redis>=5.0.3/);
   t.regex(c, /find\s+\.\s+/);
+});
+
+test("pkgbuild empty package", async t => {
+  const fixturesEmptyDir = join(here, "..", "tests", "fixtures", "empty");
+
+  const ws = new WritableStreamBuffer({ initialSize: 10240 });
+
+  const context = await createContext(fixturesEmptyDir, {
+    installdir: "/somewhere"
+  });
+
+  await pkgbuild(context, fixturesEmptyDir, ws);
+
+  const c = ws.getContentsAsString("utf8");
+
+  t.regex(c, /pkgver='1.2.3'/);
+  t.regex(c, /depends=.*nodejs>=10.5/);
 });

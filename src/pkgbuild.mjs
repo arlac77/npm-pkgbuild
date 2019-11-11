@@ -11,6 +11,8 @@ const pacmanKeys = [
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
+  pkg.pacman = { depends : {}, ...pkg.pacman };
+
   let md5sums;
   let source;
   let directory = "";

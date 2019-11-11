@@ -1,0 +1,8 @@
+{
+  "name": "empty-service",
+  "description": "a description",
+  "version": "1.2.3-semantic-release",
+  "engines": {
+    "node": ">=10.5"
+  }
+}

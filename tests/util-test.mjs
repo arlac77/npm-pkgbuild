@@ -6,6 +6,9 @@ import { copyFiles, copyModules } from "../src/util.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
+
+const FILE_NUMBER = 8;
+
 test("copy files", async t => {
   const fixturesDir = join(here, "..", "tests", "fixtures");
   const tmpDir = join(here, "..", "build", "copy-test");
@@ -20,7 +23,7 @@ test("copy files", async t => {
     t.log(file);
   }
 
-  t.is(files.length, 7);
+  t.is(files.length, FILE_NUMBER);
 });
 
 test.skip("copy modules", async t => {
@@ -33,5 +36,5 @@ test.skip("copy modules", async t => {
     t.log(file);
   }
 
-  t.is(files.length, 7);
+  t.is(files.length, FILE_NUMBER);
 });

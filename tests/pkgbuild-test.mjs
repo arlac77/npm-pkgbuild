@@ -64,5 +64,5 @@ test("pkgbuild empty package", async t => {
   const c = ws.getContentsAsString("utf8");
 
   t.regex(c, /pkgver='1.2.3'/);
-  t.regex(c, /depends=.*nodejs>=10.5/);
+  t.regex(c, /depends=.*nodejs>=13.0.1/);
 });

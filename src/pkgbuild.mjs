@@ -290,7 +290,16 @@ function makeDepends(d) {
       node: "nodejs"
     };
 
-    a.push(`${mapping[c] ? mapping[c] : c}${d[c].replace(/\-([\w\d]+)$/, "")}`);
+    function normalizeExpression(e) {
+      e = e.replace(/\-([\w\d]+)$/, "");
+      if(e.match(/^\d+/)) {
+        return `>=${e}`;
+      }
+
+      return e;
+    }
+
+    a.push(`${mapping[c] ? mapping[c] : c}${normalizeExpression(d[c])}`);
     return a;
   }, []);
 }

@@ -3,6 +3,6 @@
   "description": "a description",
   "version": "1.2.3-semantic-release",
   "engines": {
-    "node": ">=10.5"
+    "node": "13.0.1"
   }
 }

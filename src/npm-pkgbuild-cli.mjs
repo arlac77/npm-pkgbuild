@@ -5,11 +5,8 @@ import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
 import { pacman, makepkg } from "./pacman.mjs";
-import { content } from "./content.mjs";
-import { cleanup } from "./cleanup.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
-import { copyNodeModules } from "./util.mjs";
 
 const cwd = process.cwd();
 
@@ -19,7 +16,6 @@ program
   .option("--pkgrel <number>", "package release", 1)
   .option("--pkgver <version>", "package version")
   .option("-p --package <dir>", "package directory", cwd)
-  .option("-i --installdir <dir>", "install directory package content base")
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
     "-e --noextract",
@@ -71,19 +67,7 @@ program
             break;
           case "pacman":
             await pacman(context, staging);
-            break;
-          
-          case "node_modules":
-            for await (const file of copyNodeModules(context.dir, staging)) {
-              console.log(file);
-            }
-            break;
-          case "content":
-            await content(context, staging);
-            break;
-          case "cleanup":
-            await cleanup(context, staging);
-            break;
+            break;          
           default:
             console.error(`Unknown stage ${stage}`);
         }

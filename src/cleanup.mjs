@@ -132,7 +132,10 @@ export async function cleanup(context, stagingDir) {
         "node-gyp-build-test",
         "gitHead",
         "hallmark",
-        "funding"
+        "funding",
+        "eslintIgnore",
+        "react-native",
+        "sharec"
       ].map(key => {
         delete pkg[key];
       });

@@ -166,6 +166,7 @@ const cleanup = [
       "tests",
       "uritemplate-test",
       ".github",
+      ".vscode",
       "demo",
       "coverage"
     ]

@@ -3,16 +3,12 @@ import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";
 
-const pacmanKeys = [
-  "arch",
-  "backup",
-  "groups"
-];
+const pacmanKeys = ["arch", "backup", "groups"];
 
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
-  pkg.pacman = { depends : {}, ...pkg.pacman };
+  pkg.pacman = { depends: {}, ...pkg.pacman };
 
   let md5sums;
   let source;
@@ -54,12 +50,13 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   pacmanKeys.forEach(k => {
     const v = pkg.pacman[k];
-    if(v !== undefined) {
+    if (v !== undefined) {
       properties[k] = v;
     }
   });
 
-  [...pacmanKeys,
+  [
+    ...pacmanKeys,
     "depends",
     "pkgname",
     "license",
@@ -100,15 +97,11 @@ pkgver() {
   try {
     const s = await fs.promises.stat("yarn.lock");
     npmOrYarn = "yarn";
-  }
-  catch(e) {
-  }
- 
+  } catch (e) {}
+
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
-    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
-        pkg.name
-      }-${context.properties.pkgver}.tgz)`
+    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${pkg.name}-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules
@@ -304,7 +297,7 @@ function makeDepends(d) {
 
     function normalizeExpression(e) {
       e = e.replace(/\-([\w\d]+)$/, "");
-      if(e.match(/^\d+/)) {
+      if (e.match(/^\d+/)) {
         return `>=${e}`;
       }
 

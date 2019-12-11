@@ -1,4 +1,5 @@
-import resolve from "rollup-plugin-node-resolve";
+import acornClassFields from 'acorn-class-fields';
+import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import executable from "rollup-plugin-executable";
 import json from "@rollup/plugin-json";

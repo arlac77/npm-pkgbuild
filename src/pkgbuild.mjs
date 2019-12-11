@@ -1,3 +1,4 @@
+import fs from "fs";
 import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";
@@ -95,6 +96,14 @@ pkgver() {
 `;
   }
 
+  let npmOrYarn = "npm";
+  try {
+    const s = await fs.promises.stat("yarn.lock");
+    npmOrYarn = "yarn";
+  }
+  catch(e) {
+  }
+ 
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
     tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${
@@ -123,7 +132,7 @@ build() {
   sed -i 's/"version": ".*/"version": "${
     context.properties.pkgver
   }",/' package.json
-  npm install
+  ${npmOrYarn} install
   npm pack
   npm prune --production
   rm -rf node_modules/.bin

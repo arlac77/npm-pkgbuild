@@ -39,6 +39,7 @@
     "iterable-string-interceptor": "^1.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "ava": "^2.4.0",
@@ -47,9 +48,8 @@
     "documentation": "^12.1.4",
     "esm": "^3.2.25",
     "markdown-doctest": "^1.0.0",
-    "rollup": "^1.27.13",
+    "rollup": "^1.27.14",
     "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-executable": "^1.5.2",
     "semantic-release": "^15.14.0",
     "stream-buffers": "^3.0.2"

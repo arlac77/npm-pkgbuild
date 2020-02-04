@@ -48,7 +48,6 @@
     "c8": "^7.0.1",
     "documentation": "^12.1.4",
     "esm": "^3.2.25",
-    "markdown-doctest": "^1.0.0",
     "rollup": "^1.31.0",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-executable": "^1.5.2",

@@ -24,11 +24,11 @@
     "npm-pkgbuild": "bin/npm-pkgbuild"
   },
   "scripts": {
-    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
+    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/pkgbuild.mjs --section=API",
     "lint": "documentation lint src/pkgbuild.mjs",
     "prepare": "rollup -c",
-    "test": "ava"
+    "test": "ava --timeout 2m"
   },
   "dependencies": {
     "commander": "^4.1.0",
@@ -39,16 +39,10 @@
     "npm-packlist": "^1.4.4"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^11.0.2",
-    "@rollup/plugin-json": "^4.0.2",
-    "@rollup/plugin-node-resolve": "^7.1.1",
     "ava": "^3.3.0",
-    "builtin-modules": "^3.1.0",
     "c8": "^7.1.0",
     "documentation": "^12.1.4",
     "rollup": "^1.31.0",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-executable": "^1.5.2",
     "semantic-release": "^17.0.2",
     "stream-buffers": "^3.0.2"
   },

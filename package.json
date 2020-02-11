@@ -24,11 +24,11 @@
     "npm-pkgbuild": "bin/npm-pkgbuild"
   },
   "scripts": {
-    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
+    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/pkgbuild.mjs --section=API",
     "lint": "documentation lint src/pkgbuild.mjs",
     "prepare": "rollup -c",
-    "test": "ava"
+    "test": "ava && ava --timeout 2m"
   },
   "dependencies": {
     "commander": "^4.1.0",

@@ -24,9 +24,9 @@
     "npm-pkgbuild": "bin/npm-pkgbuild"
   },
   "scripts": {
+    "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
     "test": "ava --node-arguments '--experimental-modules' --timeout 2m",
-    "posttest": "npm run prepare && markdown-doctest",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --node-arguments '--experimental-modules' --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/pkgbuild.mjs --section=API",
     "lint": "documentation lint src/pkgbuild.mjs"
@@ -47,7 +47,7 @@
     "builtin-modules": "^3.1.0",
     "c8": "^7.1.0",
     "documentation": "^12.1.4",
-    "rollup": "^1.31.1",
+    "rollup": "^1.32.0",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-executable": "^1.5.2",
     "semantic-release": "^17.0.4",
@@ -65,6 +65,6 @@
   },
   "homepage": "https://github.com/arlac77/npm-pkgbuild#readme",
   "template": {
-      "inheritFrom": "arlac77/template-cli-app"
-    }
+    "inheritFrom": "arlac77/template-cli-app"
+  }
 }

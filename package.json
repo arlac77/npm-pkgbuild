@@ -65,8 +65,6 @@
   },
   "homepage": "https://github.com/arlac77/npm-pkgbuild#readme",
   "template": {
-    "repository": {
-      "url": "https://github.com/arlac77/npm-package-template.git"
+      "inheritFrom": "arlac77/template-cli-app"
     }
-  }
 }

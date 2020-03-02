@@ -3,6 +3,7 @@ build
 *.log
 *.dump
 .DS_Store
+*.node
 .test
 .tmp
 bin

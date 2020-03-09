@@ -21,7 +21,7 @@ test("cleanup", async t => {
 
   const error = await t.throwsAsync(async () => {
     await fs.promises.access(join(staging, 'fixtures', 'package.json'), fs.constants.R_OK);
-  }, Error);
+  });
 
 /*
   let pkg = JSON.parse(

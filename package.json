@@ -10,6 +10,7 @@
   "keywords": [
     "aur",
     "pkgbuild",
+    "pacman",
     "arch-linux",
     "ArchLinux"
   ],
@@ -31,10 +32,10 @@
     "lint": "documentation lint src/pkgbuild.mjs"
   },
   "dependencies": {
-    "commander": "^4.1.0",
-    "execa": "^3.3.0",
-    "expression-expander": "^7.0.3",
-    "globby": "^10.0.1",
+    "commander": "^4.1.1",
+    "execa": "^4.0.0",
+    "expression-expander": "^7.0.4",
+    "globby": "^11.0.0",
     "iterable-string-interceptor": "^1.0.4",
     "npm-packlist": "^2.1.0"
   },

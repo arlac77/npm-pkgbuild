@@ -28,7 +28,7 @@ test("makepkg simple", async t => {
 
   const error = await t.throwsAsync(async () => {
     await makepkg(context, tmpDir);
-  }, Error);
+  });
 
   //console.log(error);
 

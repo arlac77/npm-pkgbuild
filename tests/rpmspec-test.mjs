@@ -1,6 +1,6 @@
 import test from "ava";
 import { join, dirname } from "path";
-import WritableStreamBuffer from "stream-buffers/lib/writable_streambuffer";
+import WritableStreamBuffer from "stream-buffers/lib/writable_streambuffer.js";
 import { fileURLToPath } from "url";
 import { createContext } from "../src/context.mjs";
 import { rpmspec } from "../src/rpmspec.mjs";

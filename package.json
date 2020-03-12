@@ -27,17 +27,18 @@
   "scripts": {
     "prepare": "rollup -c",
     "test": "ava --timeout 2m",
+    "posttest": "npm run prepare && markdown-doctest",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/pkgbuild.mjs --section=API",
     "lint": "documentation lint src/pkgbuild.mjs"
   },
   "dependencies": {
-    "commander": "^4.1.1",
+    "commander": "^4.0.1",
     "execa": "^4.0.0",
-    "expression-expander": "^7.0.4",
+    "expression-expander": "^7.0.3",
     "globby": "^11.0.0",
-    "iterable-string-interceptor": "^1.0.4",
-    "npm-packlist": "^2.1.0"
+    "iterable-string-interceptor": "^1.0.1",
+    "npm-packlist": "^2.0.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",

@@ -44,7 +44,7 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "ava": "^3.5.0",
+    "ava": "^3.5.1",
     "builtin-modules": "^3.1.0",
     "c8": "^7.1.0",
     "documentation": "^12.1.4",

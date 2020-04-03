@@ -11,7 +11,6 @@
 [![codecov.io](http://codecov.io/github/arlac77/npm-pkgbuild/coverage.svg?branch=master)](http://codecov.io/github/arlac77/npm-pkgbuild?branch=master)
 [![Coverage Status](https://coveralls.io/repos/arlac77/npm-pkgbuild/badge.svg)](https://coveralls.io/r/arlac77/npm-pkgbuild)
 
-
 ## npm-pkgbuild
 
 create ArchLinux packages from npm packages

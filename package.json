@@ -8,7 +8,6 @@
   "module": "src/pkgbuild.mjs",
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
-    "aur",
     "pkgbuild",
     "pacman",
     "arch-linux",

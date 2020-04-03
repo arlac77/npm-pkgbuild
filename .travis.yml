@@ -1,4 +1,10 @@
 language: node_js
+branches:
+  only:
+    - master
+    - /^greenkeeper/.*$/
+    - /^mkpr/.*$/
+    - /^npm-template-sync/.*$/
 jobs:
   include:
     - stage: test
@@ -22,9 +28,3 @@ jobs:
         script:
           - npx semantic-release
         cleanup: 'false'
-branches:
-  only:
-    - master
-    - /^greenkeeper/.*$/
-    - /^mkpr/.*$/
-    - /^npm-template-sync/.*$/

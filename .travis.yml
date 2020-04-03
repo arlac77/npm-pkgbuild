@@ -3,7 +3,7 @@ jobs:
   include:
     - stage: test
       node_js:
-        - 13.11.0
+        - 13.12.0
       script:
         - npm run cover
         - npx codecov
@@ -19,9 +19,9 @@ jobs:
       script: skip
       deploy:
         provider: script
-        skip_cleanup: 'true'
         script:
           - npx semantic-release
+        cleanup: 'false'
 branches:
   only:
     - master

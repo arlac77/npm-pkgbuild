@@ -8,6 +8,7 @@
   "module": "src/pkgbuild.mjs",
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
+    "aur",
     "pkgbuild",
     "pacman",
     "arch-linux",
@@ -53,7 +54,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=12.16.1"
+    "node": ">=13.12.0"
   },
   "repository": {
     "type": "git",

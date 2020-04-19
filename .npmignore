@@ -5,8 +5,7 @@ doc
 *.tmp
 .test
 .tmp
-rollup.config.mjs
+rollup.config.*
 .travis.yml
 .vscode
-rollup.config.js
 .github

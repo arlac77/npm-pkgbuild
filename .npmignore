@@ -6,6 +6,6 @@ doc
 .test
 .tmp
 .travis.yml
+rollup.config.*
 .vscode
-rollup.config.js
 .github

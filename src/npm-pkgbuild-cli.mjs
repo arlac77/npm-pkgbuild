@@ -1,6 +1,6 @@
-import { version, description } from "../package.json";
-import fs, { createWriteStream } from "fs";
-import { join } from "path";
+import fs, { readFileSync, createWriteStream } from "fs";
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
@@ -12,6 +12,13 @@ import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
 
 const cwd = process.cwd();
+
+const { version, description } = JSON.parse(
+  readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"),
+    { endoding: "utf8" }
+  )
+);
 
 program
   .description(description)

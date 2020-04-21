@@ -260,12 +260,12 @@ const cleanup = [
       "CODEOWNERS",
       "LICENSE.DOCS*"
     ]
-  },
+  }/*,
   {
     dir: "node_modules",
     options: { ignoreCase: true, recursive: true },
     pattern: ["build"]
-  }
+  }*/
 ];
 
 function findAndDelete(

@@ -155,7 +155,7 @@ export async function cleanup(context, stagingDir) {
           delete pkg.main;
       }
 
-      if (Object.keys(pkg).length === 0 || pkg.type === "module") {
+      if (Object.keys(pkg).length === 0) {
         await unlink(pkgFile);
       } else {
         await writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);

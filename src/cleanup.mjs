@@ -146,6 +146,7 @@ export async function cleanup(context, stagingDir) {
         }
       }
 
+      /*
       switch (pkg.main) {
         case "index":
         case "./index":
@@ -153,13 +154,13 @@ export async function cleanup(context, stagingDir) {
         case "./index.js":
         case "":
           delete pkg.main;
-      }
+      }*/
 
-      if (Object.keys(pkg).length === 0) {
-        await unlink(pkgFile);
-      } else {
+     // if (Object.keys(pkg).length === 0) {
+        //await unlink(pkgFile);
+     // } else {
         await writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
-      }
+     // }
     }
   }
 }

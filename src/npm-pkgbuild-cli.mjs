@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs, { readFileSync, createWriteStream } from "fs";
 import { fileURLToPath } from "url";
 import { join, dirname } from "path";

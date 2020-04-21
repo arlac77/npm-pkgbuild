@@ -45,7 +45,7 @@ export async function cleanup(context, stagingDir) {
       await Promise.all(
         ["types", "unpkg", "shim", "browser", "testling", "source"].map(
           async key => {
-            await iterate(pkg[key], async o => rm(join(dirname(pkgFile), o)));
+            //await iterate(pkg[key], async o => rm(join(dirname(pkgFile), o)));
             delete pkg[key];
           }
         )

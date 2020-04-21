@@ -10,7 +10,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 
 const fixturesDir = join(here, "..", "tests", "fixtures");
 
-test("cleanup", async t => {
+test.skip("cleanup", async t => {
   const context = await createContext(fixturesDir);
 
   const staging = join(here, "..", "build", "staging");

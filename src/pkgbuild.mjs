@@ -240,7 +240,7 @@ const cleanup = [
       "Contributors*",
       "CHANGES*",
       "PATENTS*",
-      "readme*",
+      "readme*.md",
       "AUTHORS*",
       "NOTICE*",
       "HISTORY*",

@@ -27,7 +27,6 @@
     "npm-pkgbuild": "src/npm-pkgbuild-cli.mjs"
   },
   "scripts": {
-    "prepare": "rollup -c",
     "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/pkgbuild.mjs --section=API",
@@ -49,7 +48,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=13.13.0"
+    "node": ">=14.0.0"
   },
   "repository": {
     "type": "git",

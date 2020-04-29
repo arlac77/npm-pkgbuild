@@ -7,7 +7,6 @@
   "sideEffects": false,
   "type": "module",
   "main": "src/pkgbuild.mjs",
-  "module": "src/pkgbuild.mjs",
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
     "aur",

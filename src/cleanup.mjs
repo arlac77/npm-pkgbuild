@@ -53,7 +53,7 @@ export async function cleanup(context, stagingDir) {
 
       [
         "version",
-        "name",
+       // "name",
         "dependencies",
         "sideEffects",
         "jspm",
@@ -79,7 +79,7 @@ export async function cleanup(context, stagingDir) {
         "scripts",
         "types",
         "deprecated",
-        "description",
+       // "description",
         "decription",
         "engine",
         "engines",

@@ -1,6 +1,6 @@
 import { promisify } from "util";
 import { finished } from "stream";
-import { quote } from "./util.mjs";
+import { quote } from "../util.mjs";
 
 /**
  * well known package properties

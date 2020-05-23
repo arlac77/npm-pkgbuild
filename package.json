@@ -6,9 +6,9 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "src/pkgbuild.mjs",
+  "main": "./src/pkgbuild.mjs",
   "exports": {
-    ".": "src/pkgbuild.mjs",
+    ".": "./src/pkgbuild.mjs",
     "./": "./"
   },
   "description": "create ArchLinux packages from npm packages",
@@ -32,8 +32,8 @@
   "scripts": {
     "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/pkgbuild.mjs --section=API",
-    "lint": "documentation lint src/pkgbuild.mjs"
+    "docs": "documentation readme ./src/pkgbuild.mjs --section=API",
+    "lint": "documentation lint ./src/pkgbuild.mjs"
   },
   "dependencies": {
     "commander": "^5.0.0",
@@ -51,7 +51,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.3.0"
   },
   "repository": {
     "type": "git",

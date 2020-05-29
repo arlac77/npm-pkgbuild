@@ -33,7 +33,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     license: pkg.license,
     pkgrel: context.properties.pkgrel,
     pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
-    pkgname: pkg.name,
+    pkgname: context.properties.name,
     install: pkg.pacman.hooks,
     arch: "any",
     makedepends: "git",
@@ -43,7 +43,7 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
   };
 
   if (properties.install !== undefined || properties.hooks !== undefined) {
-    properties.install = `${pkg.name}.install`;
+    properties.install = `${context.properties.name}.install`;
   }
 
   const installdir = context.properties.installdir;
@@ -101,7 +101,7 @@ pkgver() {
 
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
-    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${pkg.name}-${context.properties.pkgver}.tgz)`
+    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${context.properties.name}-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules

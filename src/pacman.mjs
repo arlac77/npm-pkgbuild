@@ -25,7 +25,7 @@ export async function pacman(context, stagingDir) {
       await copyTemplate(
         context,
         join(context.dir, hooks),
-        join(stagingDir, `${pkg.name}.install`)
+        join(stagingDir, `${context.properties.name}.install`)
       );
     }
   }
@@ -40,7 +40,7 @@ export async function makepkg(context, stagingDir, options = {}) {
   await fs.promises.mkdir(srcDir, { recursive: true });
 
   if (args.indexOf("-f") >= 0) {
-    await execa("ln", ["-s", "../..", join(srcDir, pkg.name)]);
+    await execa("ln", ["-s", "../..", join(srcDir, context.properties.name)]);
   }
 
   console.log("makepkg", args);

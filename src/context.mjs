@@ -30,6 +30,14 @@ export async function createContext(dir, properties = {}) {
     ...properties
   };
 
+  properties.fullName = properties.name;
+
+  const m = properties.name.match(/^(\@[^\/]+)\/(.*)/);
+  if (m) {
+    properties.organtization = m[0];
+    properties.name = m[1];
+  }
+
   function evaluate(expression) {
     expression = expression.trim();
     let value = properties[expression];

@@ -12,11 +12,11 @@
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
-    "aur",
-    "pkgbuild",
-    "pacman",
+    "ArchLinux",
     "arch-linux",
-    "ArchLinux"
+    "aur",
+    "pacman",
+    "pkgbuild"
   ],
   "contributors": [
     {

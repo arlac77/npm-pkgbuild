@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: doc
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version:
             - '-10'
@@ -16,10 +15,6 @@ jobs:
             - '-12'
             - '-13'
             - '-14'
-            - 14.4.0
-      - uses: actions/setup-node@v1
-        with:
-          node-version:
             - 14.4.0
       - run: npm install
       - run: npm run docs

@@ -8,7 +8,8 @@
   "type": "module",
   "main": "./src/pkgbuild.mjs",
   "exports": {
-    ".": "./src/pkgbuild.mjs"
+    ".": "./src/pkgbuild.mjs",
+    "./": "./"
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [

@@ -8,15 +8,16 @@
   "type": "module",
   "main": "./src/pkgbuild.mjs",
   "exports": {
-    ".": "./src/pkgbuild.mjs"
+    ".": "./src/pkgbuild.mjs",
+    "./": "./"
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
-    "aur",
-    "pkgbuild",
-    "pacman",
+    "ArchLinux",
     "arch-linux",
-    "ArchLinux"
+    "aur",
+    "pacman",
+    "pkgbuild"
   ],
   "contributors": [
     {
@@ -43,8 +44,8 @@
     "npm-packlist": "^2.1.1"
   },
   "devDependencies": {
-    "ava": "^3.8.2",
-    "c8": "^7.1.2",
+    "ava": "^3.9.0",
+    "c8": "^7.2.0",
     "documentation": "^13.0.1",
     "semantic-release": "^17.0.8",
     "stream-buffers": "^3.0.2"

@@ -38,7 +38,7 @@ export async function cleanup(context, stagingDir) {
     const pkgFile = join(stagingDir, name);
     const pkg = JSON.parse(await readFile(pkgFile, utf8StreamOptions));
 
-    if (!blacklist.has(pkg.name)) {
+    if (!blacklist.has(context.properties.name)) {
       console.log(`cleanup ${pkgFile}`);
 
       // unused files may also be deleted
@@ -53,7 +53,7 @@ export async function cleanup(context, stagingDir) {
 
       [
         "version",
-        "name",
+       // "name",
         "dependencies",
         "sideEffects",
         "jspm",
@@ -79,7 +79,7 @@ export async function cleanup(context, stagingDir) {
         "scripts",
         "types",
         "deprecated",
-        "description",
+       // "description",
         "decription",
         "engine",
         "engines",

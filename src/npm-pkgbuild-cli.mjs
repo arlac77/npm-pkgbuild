@@ -58,7 +58,7 @@ program
               context,
               staging,
               createWriteStream(
-                join(staging, `${context.pkg.name}.spec`),
+                join(staging, `${context.properties.name}.spec`),
                 utf8StreamOptions
               ),
               { npmDist: program.npmDist, npmModules: program.npmModules }

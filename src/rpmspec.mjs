@@ -11,7 +11,7 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
   }
 
   const properties = {
-    Name: pkg.name,
+    Name: context.properties.name,
     Summary: pkg.description,
     License: pkg.license,
     Version: context.properties.pkgver.replace(/\-.*$/, ""),
@@ -27,7 +27,7 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
   const npmDistPackage = options.npmDist
   ? `( cd %{_sourcedir}${installdir}
   tar -x --transform="s/^package\\///" -f %{buildroot}${directory}/${
-  pkg.name
+    context.properties.name
   }-${context.properties.pkgver}.tgz)`
   : "";
 

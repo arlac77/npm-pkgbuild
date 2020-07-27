@@ -36,7 +36,7 @@
     "lint": "documentation lint ./src/pkgbuild.mjs"
   },
   "dependencies": {
-    "commander": "^6.0.0",
+    "commander": "^5.0.0",
     "execa": "^4.0.0",
     "expression-expander": "^7.0.4",
     "globby": "^11.0.0",

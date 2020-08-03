@@ -36,7 +36,7 @@
     "lint": "documentation lint ./src/pkgbuild.mjs"
   },
   "dependencies": {
-    "commander": "^6.0.0",
+    "commander": "^5.0.0",
     "execa": "^4.0.0",
     "expression-expander": "^7.0.4",
     "globby": "^11.0.0",
@@ -44,8 +44,8 @@
     "npm-packlist": "^2.1.1"
   },
   "devDependencies": {
-    "ava": "^3.11.0",
-    "c8": "^7.2.1",
+    "ava": "^3.11.1",
+    "c8": "^7.3.0",
     "documentation": "^13.0.2",
     "semantic-release": "^17.1.1",
     "stream-buffers": "^3.0.2"

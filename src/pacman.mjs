@@ -91,7 +91,7 @@ export async function makepkg(context, stagingDir, options = {}) {
     utf8StreamOptions
   )) {
     console.log("MAKEPKG.CONF", chunk);
-    const r = chunk.match(/^PKGEXT='([^']+)'/);
+    const r = chunk.match(/PKGEXT='([^']+)'/);
     console.log(r);
     if (r) {
       ext = r[1];

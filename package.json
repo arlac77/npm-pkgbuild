@@ -8,7 +8,6 @@
   "type": "module",
   "main": "./src/pkgbuild.mjs",
   "exports": {
-    ".": "./src/pkgbuild.mjs",
     "./": "./"
   },
   "description": "create ArchLinux packages from npm packages",
@@ -37,9 +36,9 @@
   },
   "dependencies": {
     "commander": "^6.0.0",
-    "execa": "^4.0.0",
+    "execa": "^4.0.3",
     "expression-expander": "^7.0.4",
-    "globby": "^11.0.0",
+    "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",
     "npm-packlist": "^2.1.1"
   },
@@ -51,7 +50,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.3.0"
+    "node": ">=14.8.0"
   },
   "repository": {
     "type": "git",

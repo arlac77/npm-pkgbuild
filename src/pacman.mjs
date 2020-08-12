@@ -45,7 +45,7 @@ export async function makepkg(context, stagingDir, options = {}) {
 
   console.log("makepkg", args);
   const proc = execa("makepkg", args, {
-    cwd: stagingDir, /*, env: { PKGDEST: publish }*/
+    cwd: stagingDir /*, env: { PKGDEST: publish }*/,
     all: true
   });
 
@@ -84,13 +84,15 @@ export async function makepkg(context, stagingDir, options = {}) {
     }
   }
 
-  let ext='.pkg.tar.xz';
+  let ext = ".pkg.tar.xz";
 
   for await (const chunk of createReadStream(
-    '/etc/makepkg.conf',
+    "/etc/makepkg.conf",
     utf8StreamOptions
   )) {
+    console.log("MAKEPKG.CONF", chunk);
     const r = chunk.match(/^PKGEXT='([^']+)'/);
+    console.log(r);
     if (r) {
       ext = r[1];
     }

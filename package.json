@@ -37,10 +37,10 @@
   "dependencies": {
     "commander": "^6.0.0",
     "execa": "^4.0.3",
-    "expression-expander": "^7.0.4",
+    "expression-expander": "^7.0.5",
     "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",
-    "npm-packlist": "^2.1.1"
+    "npm-packlist": "^2.1.2"
   },
   "devDependencies": {
     "ava": "^3.11.1",

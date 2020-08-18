@@ -36,12 +36,12 @@
     "lint": "documentation lint ./src/pkgbuild.mjs"
   },
   "dependencies": {
-    "commander": "^5.0.0",
-    "execa": "^4.0.0",
-    "expression-expander": "^7.0.4",
-    "globby": "^11.0.0",
+    "commander": "^6.0.0",
+    "execa": "^4.0.3",
+    "expression-expander": "^7.0.5",
+    "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",
-    "npm-packlist": "^2.1.1"
+    "npm-packlist": "^2.1.2"
   },
   "devDependencies": {
     "ava": "^3.11.1",
@@ -51,7 +51,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.3.0"
+    "node": ">=14.8.0"
   },
   "repository": {
     "type": "git",

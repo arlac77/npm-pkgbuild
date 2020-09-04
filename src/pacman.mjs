@@ -56,7 +56,7 @@ export async function makepkg(context, stagingDir, options = {}) {
   for await (const chunk of proc.all) {
     const s = chunk.toString("utf8");
 
-    console.log(s);
+    //console.log(s);
 
     const m = s.match(/Finished making:\s+([^\s]+)\s+([^\s]+)/);
     if (m) {
@@ -66,7 +66,7 @@ export async function makepkg(context, stagingDir, options = {}) {
   }
 
   const p = await proc;
-  console.log(p);
+  //console.log(p);
 
   if (p.exitCode !== 0) {
     throw new Error(`unexpected exit ${p.exitCode} from makepkg`);

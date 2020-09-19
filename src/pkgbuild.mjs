@@ -190,6 +190,14 @@ const cleanup = [
       "*.orig",
       "*.d.ts*",
       "*.1",
+      "*.2",
+      "*.3",
+      "*.4",
+      "*.5",
+      "*.6",
+      "*.7",
+      "*.8",
+      "*.9",
       "*.patch",
       "*.cc",
       "*.c",
@@ -276,13 +284,13 @@ function findAndDelete(
   return (
     "find " +
     dir +
-    " \\(" +
+    (options.filesOnly ? " \\( \\(" : " \\(") +
     pattern
       .map(p => ` ${options.ignoreCase ? "-iname" : "-name"} "${p}"`)
       .join(" -o") +
-    (options.filesOnly ? " -type f" : "") +
+    (options.filesOnly ? "\\) -a -type f" : "") +
     ` \\) -print0\\
-    | xargs -r -0 ${options.recursive ? "rm -rf" : "rm"}`
+    | xargs -r -0 ${options.recursive ? "rm -rf" : "rm -f"}`
   );
 }
 

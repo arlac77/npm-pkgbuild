@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import fs, { readFileSync, createWriteStream } from "fs";
+import { readFileSync, createWriteStream } from "fs";
+import { mkdir } from "fs/promises";
 import { fileURLToPath } from "url";
 import { join, dirname } from "path";
 import program from "commander";
@@ -46,7 +47,7 @@ program
     try {
       const staging = program.staging;
 
-      await fs.promises.mkdir(staging, { recursive: true });
+      await mkdir(staging, { recursive: true });
 
       const context = await createContext(program.package, program);
 

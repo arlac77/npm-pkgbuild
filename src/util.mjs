@@ -1,11 +1,10 @@
-import fs, { createReadStream, createWriteStream, constants } from "fs";
+import { createReadStream, createWriteStream, constants } from "fs";
+import { mkdir, readFile, writeFile, copyFile } from "fs/promises"
 import { join, dirname } from "path";
 import globby from "globby";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 
 export const utf8StreamOptions = { encoding: "utf8" };
-
-const { mkdir, readFile, writeFile, copyFile } = fs.promises;
 
 export function quote(v) {
   if (v === undefined) return "";

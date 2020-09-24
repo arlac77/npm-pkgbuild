@@ -1,6 +1,6 @@
 import globby from "globby";
 import { join, basename } from "path";
-import fs from "fs";
+import { mkdir } from "fs/promises";
 import { asArray, copyTemplate } from "./util.mjs";
 
 export async function systemd(context, stagingDir) {
@@ -18,7 +18,7 @@ export async function systemd(context, stagingDir) {
         context.properties.unit = unitName;
 
         const destDir = join(stagingDir, "/usr/lib/systemd/system");
-        await fs.promises.mkdir(destDir, { recursive: true });
+        await mkdir(destDir, { recursive: true });
 
         for (const name of await globby(asArray(unit), {
           cwd: context.dir

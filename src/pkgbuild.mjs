@@ -1,4 +1,4 @@
-import fs from "fs";
+import { stat} from "fs/promises";
 import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "./util.mjs";
@@ -95,7 +95,7 @@ pkgver() {
 
   let npmOrYarn = "npm";
   try {
-    const s = await fs.promises.stat("yarn.lock");
+    const s = await stat("yarn.lock");
     npmOrYarn = "yarn";
   } catch (e) {}
 

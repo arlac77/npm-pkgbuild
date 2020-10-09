@@ -51,7 +51,7 @@ export async function cleanup(context, stagingDir) {
       );
 
       [
-        "version",
+       // "version",
        // "name",
         "dependencies",
         "sideEffects",

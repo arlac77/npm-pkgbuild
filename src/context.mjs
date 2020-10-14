@@ -1,11 +1,11 @@
 import { join } from "path";
-import fs from "fs";
+import { readFile } from "fs/promises";
 import { createContext as ee } from "expression-expander";
 import { utf8StreamOptions } from "./util.mjs";
 
 export async function loadPackage(dir) {
   const pkgFile = join(dir, "package.json");
-  return JSON.parse(await fs.promises.readFile(pkgFile, utf8StreamOptions));
+  return JSON.parse(await readFile(pkgFile, utf8StreamOptions));
 }
 
 /**

@@ -8,8 +8,7 @@
   "type": "module",
   "main": "./src/pkgbuild.mjs",
   "exports": {
-    ".": "./src/pkgbuild.mjs",
-    "./": "./"
+    ".": "./src/pkgbuild.mjs"
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
@@ -27,7 +26,7 @@
   ],
   "license": "BSD-2-Clause",
   "bin": {
-    "npm-pkgbuild": "src/npm-pkgbuild-cli.mjs"
+    "npm-pkgbuild": "./src/npm-pkgbuild-cli.mjs"
   },
   "scripts": {
     "test": "npm run test:ava",
@@ -53,7 +52,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.9.0"
+    "node": ">=14.13.1"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,6 @@
 import { join } from "path";
-import fs, { createReadStream } from "fs";
+import { createReadStream } from "fs";
+import { mkdir } from "fs/promises";
 import execa from "execa";
 import { copyTemplate } from "./util.mjs";
 import { utf8StreamOptions } from "./util.mjs";
@@ -12,7 +13,7 @@ export async function pacman(context, stagingDir) {
     const hooks = pacman.hooks;
 
     if (hooks !== undefined) {
-      await fs.promises.mkdir(stagingDir, { recursive: true });
+      await mkdir(stagingDir, { recursive: true });
 
       await copyTemplate(
         context,
@@ -29,7 +30,7 @@ export async function makepkg(context, stagingDir, options = {}) {
   if (args === undefined) args = [];
 
   const srcDir = join(stagingDir, "src");
-  await fs.promises.mkdir(srcDir, { recursive: true });
+  await mkdir(srcDir, { recursive: true });
 
   if (args.indexOf("-f") >= 0) {
     await execa("ln", ["-s", "../..", join(srcDir, pkg.name)]);

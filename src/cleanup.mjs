@@ -1,8 +1,7 @@
+import { unlink, readFile, writeFile } from "fs/promises";
 import globby from "globby";
 import { join, dirname } from "path";
-import fs from "fs";
 import { utf8StreamOptions } from "./util.mjs";
-const { unlink, readFile, writeFile } = fs.promises;
 
 async function rm(file) {
   try {

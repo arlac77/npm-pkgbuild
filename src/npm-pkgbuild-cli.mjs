@@ -1,6 +1,6 @@
-import fs, { readFileSync, createWriteStream } from "fs";
-import { fileURLToPath } from "url";
-import { join, dirname } from "path";
+import { readFileSync, createWriteStream } from "fs";
+import { mkdir } from "fs/promises";
+import { join } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
@@ -9,10 +9,8 @@ import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
 
 const { version, description } = JSON.parse(
-  readFileSync(
-    join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"),
-    { endoding: "utf8" }
-  )
+  readFileSync(new URL("../package.json", import.meta.url).pathname),
+  { endoding: "utf8" }
 );
 
 const cwd = process.cwd();
@@ -40,7 +38,7 @@ program
     try {
       const staging = program.staging;
 
-      await fs.promises.mkdir(staging, { recursive: true });
+      await mkdir(staging, { recursive: true });
 
       const context = await createContext(program.package, program);
 
@@ -74,7 +72,7 @@ program
             break;
           case "pacman":
             await pacman(context, staging);
-            break;          
+            break;
           default:
             console.error(`Unknown stage ${stage}`);
         }

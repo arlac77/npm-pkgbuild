@@ -1,9 +1,9 @@
-import fs, { constants } from "fs";
+import { constants } from "fs";
+import { mkdir, readFile, writeFile, copyFile }  from "fs/promises";
 import { join, dirname } from "path";
 import globby from "globby";
 import { utf8StreamOptions } from "./util.mjs";
 
-const { mkdir, readFile, writeFile, copyFile } = fs.promises;
 
 const pkgEntriesToBeRemoved = [
   "version",

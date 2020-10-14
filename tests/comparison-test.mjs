@@ -1,11 +1,11 @@
 import test from "ava";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import fs, { constants } from "fs";
+import { constants } from "fs";
+import { access, readFile, writeFile } from "fs/promises";
 import execa from "execa";
 import { copyNodeModules } from "../src/util.mjs";
 
-const { access, readFile, writeFile } = fs.promises;
 
 const here = dirname(fileURLToPath(import.meta.url));
 

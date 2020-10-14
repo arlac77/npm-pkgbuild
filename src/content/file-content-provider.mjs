@@ -1,5 +1,6 @@
 import { join, dirname } from "path";
-import fs from "fs";
+import { mkdir }  from "fs/promises";
+
 import globby from "globby";
 import { asArray, copyTemplate } from "../util.mjs";
 
@@ -26,7 +27,7 @@ export class FileContentProvider extends ContentProvider {
           cwd
         })) {
           const d = dest.endsWith("/") ? join(dest, name) : dest;
-          await fs.promises.mkdir(dirname(d), { recursive: true });
+          await mkdir(dirname(d), { recursive: true });
 
           await copyTemplate(context, join(cwd, name), d);
         }

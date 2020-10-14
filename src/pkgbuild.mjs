@@ -288,7 +288,7 @@ function findAndDelete(
     pattern
       .map(p => ` ${options.ignoreCase ? "-iname" : "-name"} "${p}"`)
       .join(" -o") +
-    (options.filesOnly ? "\\) -a -type f" : "") +
+    (options.filesOnly ? " \\) -a -type f" : "") +
     ` \\) -print0\\
     | xargs -r -0 ${options.recursive ? "rm -rf" : "rm -f"}`
   );

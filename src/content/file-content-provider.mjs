@@ -10,7 +10,7 @@ import { ContentProvider } from "./content-provider.mjs";
  * content provided form the file system
  */
 export class FileContentProvider extends ContentProvider {
-  async processContent(context) {
+  async * entries(context) {
     const content = context.expand(this.content);
 
     await Promise.all(

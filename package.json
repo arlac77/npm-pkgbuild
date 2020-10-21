@@ -42,6 +42,7 @@
     "expression-expander": "^7.0.5",
     "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",
+    "libnpmpack": "^2.0.0",
     "npm-packlist": "^2.1.2"
   },
   "devDependencies": {

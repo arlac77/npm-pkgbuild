@@ -6,6 +6,9 @@ import { asArray, copyTemplate } from "../util.mjs";
 
 import { ContentProvider } from "./content-provider.mjs";
 
+/**
+ * content provided form the file system
+ */
 export class FileContentProvider extends ContentProvider {
   async processContent(context) {
     const content = context.expand(this.content);

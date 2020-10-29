@@ -4,7 +4,10 @@ import { FileContentProvider } from "../src/content/file-content-provider.mjs";
 
 test("FileContentProvider entries", async t => {
   const context = await createContext(new URL("..", import.meta.url).pathname);
-  const content = new FileContentProvider({ dir: ""});
+  const content = new FileContentProvider({
+    base: new URL("fixtures/content", import.meta.url).pathname,
+    pattern: "**/*"
+  });
 
   const entries = [];
   for await (const entry of content.entries(context)) {

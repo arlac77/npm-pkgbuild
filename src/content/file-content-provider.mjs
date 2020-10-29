@@ -10,12 +10,18 @@ import { ContentProvider } from "./content-provider.mjs";
  * content provided form the file system
  */
 export class FileContentProvider extends ContentProvider {
+
+  constructor(definitions) {
+    super();
+
+    this.content = definitions;
+  }
+
   async *entries(context) {
     const content = context.expand(this.content);
 
-    Object.entries(content).map(async ([source, dest]) => {
+    for (const [source, dest] of Object.entries(content)) {
       let cwd, pattern;
-
       if (typeof source === "string" || source instanceof String) {
         cwd = context.dir;
         pattern = source;
@@ -29,6 +35,6 @@ export class FileContentProvider extends ContentProvider {
       })) {
         yield new FileSystemEntry(name);
       }
-    });
+    }
   }
 }

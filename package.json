@@ -26,7 +26,7 @@
   ],
   "license": "BSD-2-Clause",
   "bin": {
-    "npm-pkgbuild": "./src/npm-pkgbuild-cli.mjs"
+    "npm-pkgbuild": "src/npm-pkgbuild-cli.mjs"
   },
   "scripts": {
     "test": "npm run test:ava",
@@ -38,12 +38,15 @@
   },
   "dependencies": {
     "commander": "^6.1.0",
+    "content-entry": "^2.5.1",
+    "content-entry-filesystem": "^2.0.1",
     "execa": "^4.1.0",
     "expression-expander": "^7.0.5",
     "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",
-    "libnpmpack": "^2.0.0",
-    "npm-packlist": "^2.1.2"
+    "npm-packlist": "^2.1.2",
+    "pacote": "^11.1.11",
+    "tar-stream": "^2.1.4"
   },
   "devDependencies": {
     "ava": "^3.13.0",

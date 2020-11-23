@@ -52,7 +52,7 @@
     "ava": "^3.13.0",
     "c8": "^7.3.5",
     "documentation": "github:arlac77/documentation",
-    "semantic-release": "^17.2.3",
+    "semantic-release": "^17.3.0",
     "stream-buffers": "^3.0.2"
   },
   "engines": {
@@ -68,8 +68,8 @@
   "homepage": "https://github.com/arlac77/npm-pkgbuild#readme",
   "template": {
     "inheritFrom": [
-      "arlac77/template-esm-only",
-      "arlac77/template-arlac77-github"
+      "arlac77/template-arlac77-github",
+      "arlac77/template-esm-only"
     ]
   }
 }

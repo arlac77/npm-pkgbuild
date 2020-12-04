@@ -40,7 +40,7 @@
     "commander": "^6.1.0",
     "content-entry": "^2.6.0",
     "content-entry-filesystem": "^2.0.2",
-    "execa": "^4.1.0",
+    "execa": "^5.0.0",
     "expression-expander": "^7.0.5",
     "globby": "^11.0.1",
     "iterable-string-interceptor": "^1.0.5",

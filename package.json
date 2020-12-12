@@ -5,8 +5,6 @@
     "access": "public"
   },
   "sideEffects": false,
-  "type": "module",
-  "main": "./src/pkgbuild.mjs",
   "exports": {
     ".": "./src/pkgbuild.mjs"
   },

@@ -45,11 +45,12 @@ program
   .command("[stages...]", "stages to execute")
   .action(async (commander, stages) => {
     try {
-      const staging = program.staging;
+      const options = program.opts();
+      const staging = options.staging;
 
       await mkdir(staging, { recursive: true });
 
-      const context = await createContext(program.package, program);
+      const context = await createContext(options.package, options);
 
       for (const stage of stages) {
         console.log(`Executing ${stage}...`);
@@ -62,7 +63,7 @@ program
                 join(staging, `${context.properties.name}.spec`),
                 utf8StreamOptions
               ),
-              { npmDist: program.npmDist, npmModules: program.npmModules }
+              { npmDist: options.npmDist, npmModules: options.npmModules }
             );
             break;
 
@@ -71,12 +72,12 @@ program
               context,
               staging,
               createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
-              { npmDist: program.npmDist, npmModules: program.npmModules }
+              { npmDist: options.npmDist, npmModules: options.npmModules }
             );
             break;
           case "makepkg":
             makepkg(context, staging, {
-              args: program.noextract ? ["-e"] : []
+              args: options.noextract ? ["-e"] : []
             });
             break;
           case "systemd":

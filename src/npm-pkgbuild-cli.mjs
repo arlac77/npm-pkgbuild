@@ -42,8 +42,8 @@ program
   )
   .option("--npm-modules", "include npm modules")
   .option("--npm-dist", "include npm dist")
-  .command("[stages...]", "stages to execute")
-  .action(async (commander, stages) => {
+  .arguments("[stages...]", "stages to execute")
+  .action(async (stages) => {
     try {
       const options = program.opts();
       const staging = options.staging;

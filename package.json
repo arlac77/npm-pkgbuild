@@ -35,13 +35,13 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "commander": "^7.0.0",
-    "content-entry": "^2.6.2",
-    "content-entry-filesystem": "^2.0.4",
+    "commander": "^6.2.1",
+    "content-entry": "^2.6.1",
+    "content-entry-filesystem": "^2.0.3",
     "execa": "^5.0.0",
     "expression-expander": "^7.0.7",
     "globby": "^11.0.2",
-    "iterable-string-interceptor": "^1.0.8",
+    "iterable-string-interceptor": "^1.0.7",
     "npm-packlist": "^2.1.2",
     "pacote": "^11.1.13",
     "tar-stream": "^2.2.0"

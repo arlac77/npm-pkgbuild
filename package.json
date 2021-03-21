@@ -35,26 +35,26 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "commander": "^6.2.1",
+    "commander": "^7.1.0",
     "content-entry": "^2.6.2",
     "content-entry-filesystem": "^2.0.4",
     "execa": "^5.0.0",
-    "expression-expander": "^7.0.8",
+    "expression-expander": "^7.0.9",
     "globby": "^11.0.2",
     "iterable-string-interceptor": "^1.0.8",
     "npm-packlist": "^2.1.2",
-    "pacote": "^11.2.6",
+    "pacote": "^11.3.0",
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {
     "ava": "^3.15.0",
     "c8": "^7.6.0",
-    "documentation": "github:arlac77/documentation",
+    "documentation": "^13.2.0",
     "semantic-release": "^17.4.2",
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.15.4"
+    "node": ">=14.16.0"
   },
   "repository": {
     "type": "git",

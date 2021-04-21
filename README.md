@@ -3,7 +3,7 @@
 [![minified size](https://badgen.net/bundlephobia/min/npm-pkgbuild)](https://bundlephobia.com/result?p=npm-pkgbuild)
 [![downloads](http://img.shields.io/npm/dm/npm-pkgbuild.svg?style=flat-square)](https://npmjs.org/package/npm-pkgbuild)
 [![GitHub Issues](https://img.shields.io/github/issues/arlac77/npm-pkgbuild.svg?style=flat-square)](https://github.com/arlac77/npm-pkgbuild/issues)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Farlac77%2Fnpm-pkgbuild%2Fbadge&style=flat)](https://actions-badge.atrox.dev/arlac77/npm-pkgbuild/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Farlac77%2Fnpm-pkgbuild%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/arlac77/npm-pkgbuild/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/npm-pkgbuild/badge.svg)](https://snyk.io/test/github/arlac77/npm-pkgbuild)
@@ -30,8 +30,8 @@ The resulting pkg will contain the package dist content and all production depen
 
 ### Table of Contents
 
--   [createContext](#createcontext)
-    -   [Parameters](#parameters)
+*   [createContext](#createcontext)
+    *   [Parameters](#parameters)
 
 ## createContext
 
@@ -39,8 +39,8 @@ Used as a reference throuhout the runtime of the npm-pkgbuild
 
 ### Parameters
 
--   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
 
 # install
 

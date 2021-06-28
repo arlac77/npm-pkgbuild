@@ -35,7 +35,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "commander": "^7.1.0",
+    "commander": "^8.0.0",
     "content-entry": "^2.6.2",
     "content-entry-filesystem": "^2.0.4",
     "execa": "^5.0.0",

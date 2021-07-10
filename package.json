@@ -38,12 +38,12 @@
     "commander": "^8.0.0",
     "content-entry": "^2.6.5",
     "content-entry-filesystem": "^2.0.8",
-    "execa": "^5.0.0",
+    "execa": "^5.1.1",
     "expression-expander": "^7.0.11",
-    "globby": "^11.0.2",
+    "globby": "^11.0.4",
     "iterable-string-interceptor": "^1.0.11",
-    "npm-packlist": "^2.1.2",
-    "pacote": "^11.3.0",
+    "npm-packlist": "^2.2.2",
+    "pacote": "^11.3.5",
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {

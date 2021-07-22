@@ -40,7 +40,7 @@
     "content-entry-filesystem": "^2.0.8",
     "execa": "^5.1.1",
     "expression-expander": "^7.0.11",
-    "globby": "^11.0.4",
+    "globby": "^12.0.0",
     "iterable-string-interceptor": "^1.0.11",
     "npm-packlist": "^2.2.2",
     "pacote": "^11.3.5",

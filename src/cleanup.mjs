@@ -1,6 +1,6 @@
-import globby from "globby";
 import { join } from "path";
 import { unlink, readFile, writeFile } from "fs/promises";
+import { globby } from "globby";
 import { utf8StreamOptions } from "./util.mjs";
 
 async function rm(file) {
@@ -28,7 +28,7 @@ async function iterate(o, cb) {
   }
 }
 
-const blacklist = new Set(["parse-client-options",'@octokit/rest']);
+const blacklist = new Set(["parse-client-options", "@octokit/rest"]);
 
 export async function cleanup(context, stagingDir) {
   for (const name of await globby(["**/package.json"], {
@@ -51,8 +51,8 @@ export async function cleanup(context, stagingDir) {
       );
 
       [
-       // "version",
-       // "name",
+        // "version",
+        // "name",
         "dependencies",
         "sideEffects",
         "jspm",
@@ -78,7 +78,7 @@ export async function cleanup(context, stagingDir) {
         "scripts",
         "types",
         "deprecated",
-       // "description",
+        // "description",
         "decription",
         "engine",
         "engines",
@@ -155,11 +155,11 @@ export async function cleanup(context, stagingDir) {
           delete pkg.main;
       }*/
 
-     // if (Object.keys(pkg).length === 0) {
-        //await unlink(pkgFile);
-     // } else {
-        await writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
-     // }
+      // if (Object.keys(pkg).length === 0) {
+      //await unlink(pkgFile);
+      // } else {
+      await writeFile(pkgFile, JSON.stringify(pkg), utf8StreamOptions);
+      // }
     }
   }
 }

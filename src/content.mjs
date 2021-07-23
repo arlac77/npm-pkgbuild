@@ -1,6 +1,6 @@
 import { join, dirname } from "path";
 import { mkdir } from "fs/promises";
-import globby from "globby";
+import { globby } from "globby";
 import { asArray, copyTemplate } from "./util.mjs";
 
 export async function content(context, stagingDir) {

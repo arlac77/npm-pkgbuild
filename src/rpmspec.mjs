@@ -1,4 +1,4 @@
-import globby from "globby";
+import { globby } from "globby";
 
 export async function rpmspec(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
@@ -16,25 +16,19 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
     License: pkg.license,
     Version: context.properties.pkgver.replace(/\-.*$/, ""),
     Release: context.properties.pkgrel,
-    Packager: pkg.contributors
-      .map(
-        (c, i) => `${c.name} <${c.email}>`
-      )[0],
-    URL: pkg.homepage,
+    Packager: pkg.contributors.map((c, i) => `${c.name} <${c.email}>`)[0],
+    URL: pkg.homepage
   };
 
-
   const npmDistPackage = options.npmDist
-  ? `( cd %{_sourcedir}${installdir}
-  tar -x --transform="s/^package\\///" -f %{buildroot}${directory}/${
-    context.properties.name
-  }-${context.properties.pkgver}.tgz)`
-  : "";
+    ? `( cd %{_sourcedir}${installdir}
+  tar -x --transform="s/^package\\///" -f %{buildroot}${directory}/${context.properties.name}-${context.properties.pkgver}.tgz)`
+    : "";
 
-const npmModulesPackage = options.npmModules
-  ? `( cd %{_sourcedir}/${directory}
+  const npmModulesPackage = options.npmModules
+    ? `( cd %{_sourcedir}/${directory}
   tar cf - node_modules)|(cd %{buildroot}${installdir};tar xf - )`
-  : "";
+    : "";
 
   out.write(`${Object.keys(properties)
     .filter(k => properties[k] !== undefined)

@@ -1,6 +1,6 @@
-import globby from "globby";
 import { join, basename } from "path";
 import { mkdir } from "fs/promises";
+import { globby } from "globby";
 import { asArray, copyTemplate } from "./util.mjs";
 
 export async function systemd(context, stagingDir) {

@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "commander": "^8.0.0",
-    "content-entry": "^2.6.5",
+    "content-entry": "^2.6.6",
     "content-entry-filesystem": "^2.0.8",
     "execa": "^5.1.1",
     "expression-expander": "^7.0.11",

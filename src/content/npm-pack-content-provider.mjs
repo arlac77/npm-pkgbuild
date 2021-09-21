@@ -8,7 +8,7 @@ import { BufferContentEntry } from "content-entry";
 /**
  * content from npm pack
  */
-export class NPMPack extends ContentProvider {
+export class NPMPackContentProvider extends ContentProvider {
   async *entries(context) {
     //const m = await pacote.manifest(context.dir);
     //console.log('got it', m);

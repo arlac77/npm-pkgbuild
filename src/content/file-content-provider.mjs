@@ -1,7 +1,7 @@
 import { join } from "path";
 import { FileSystemEntry } from "content-entry-filesystem";
 
-import globby from "globby";
+import { globby } from "globby";
 import { asArray } from "../util.mjs";
 
 import { ContentProvider } from "./content-provider.mjs";
@@ -10,7 +10,6 @@ import { ContentProvider } from "./content-provider.mjs";
  * content provided form the file system
  */
 export class FileContentProvider extends ContentProvider {
-
   constructor(definitions) {
     super();
 

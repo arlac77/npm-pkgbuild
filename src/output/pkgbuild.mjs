@@ -6,7 +6,7 @@ import { quote } from "../util.mjs";
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
- const arrayOptionsPKGBUILD = [
+const arrayOptionsPKGBUILD = [
   "pkgname",
   "license",
   "source",
@@ -28,10 +28,10 @@ import { quote } from "../util.mjs";
   "provides",
   "replaces",
   "options"
- ];
+];
 
- const optionsPKGBUILD = [
-   ...arrayOptionsPKGBUILD,
+const optionsPKGBUILD = [
+  ...arrayOptionsPKGBUILD,
   "pkgver",
   "pkgrel",
   "epoch",
@@ -74,12 +74,12 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
 
   optionsPKGBUILD.forEach(k => {
     const v = pkg.pacman[k];
-    if(v !== undefined) {
+    if (v !== undefined) {
       properties[k] = v;
     }
   });
 
-  properties.depends = makeDepends({ ...pkg.engines });;
+  properties.depends = makeDepends({ ...pkg.engines });
 
   if (properties.install !== undefined || properties.hooks !== undefined) {
     properties.install = `${pkg.name}.install`;
@@ -142,9 +142,8 @@ package() {
   await promisify(finished);
 }
 
-
 function makeDepends(d) {
-  if(d === undefined) {
+  if (d === undefined) {
     return [];
   }
 

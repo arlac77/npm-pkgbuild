@@ -7,10 +7,11 @@ import { rpmspec } from "./rpmspec.mjs";
 import { pacman, makepkg } from "./pacman.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
+import { utf8StreamOptions } from "./util.mjs";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
-  { endoding: "utf8" }
+  utf8StreamOptions
 );
 
 const cwd = process.cwd();

@@ -2,19 +2,25 @@
 
 import { readFileSync, createWriteStream } from "fs";
 import { mkdir } from "fs/promises";
-import { join } from "path";
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
 import program from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
+import { systemd } from "./systemd.mjs";
+import { pacman, makepkg } from "./pacman.mjs";
+import { content } from "./content.mjs";
+import { cleanup } from "./cleanup.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 import { createContext } from "./context.mjs";
 
 const cwd = process.cwd();
 
 const { version, description } = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url).pathname, {
-    endoding: "utf8"
-  })
+  readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"),
+    { endoding: "utf8" }
+  )
 );
 
 program
@@ -37,7 +43,7 @@ program
   .option("--npm-modules", "include npm modules")
   .option("--npm-dist", "include npm dist")
   .arguments("[stages...]", "stages to execute")
-  .action(async stages => {
+  .action(async (stages) => {
     try {
       const options = program.opts();
       const staging = options.staging;
@@ -68,6 +74,23 @@ program
               createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
               { npmDist: options.npmDist, npmModules: options.npmModules }
             );
+            break;
+          case "makepkg":
+            makepkg(context, staging, {
+              args: options.noextract ? ["-e"] : []
+            });
+            break;
+          case "systemd":
+            await systemd(context, staging);
+            break;
+          case "pacman":
+            await pacman(context, staging);
+            break;
+          case "content":
+            await content(context, staging);
+            break;
+          case "cleanup":
+            await cleanup(context, staging);
             break;
           default:
             console.error(`Unknown stage ${stage}`);

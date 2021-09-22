@@ -6,7 +6,7 @@
   },
   "sideEffects": false,
   "exports": {
-    ".": "./src/pkgbuild.mjs"
+    ".": "./src/module.mjs"
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [

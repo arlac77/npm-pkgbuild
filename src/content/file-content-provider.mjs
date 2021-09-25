@@ -20,17 +20,18 @@ export class FileContentProvider extends ContentProvider {
     const content = context.expand(this.content);
 
     for (const [source, dest] of Object.entries(content)) {
-      let cwd, pattern;
-      if (typeof source === "string" || source instanceof String) {
-        cwd = context.dir;
+      let dir, pattern;
+      if (typeof dest === "string" || dest instanceof String) {
+        dir = context.dir;
         pattern = source;
       } else {
-        cwd = join(context.dir, source.base);
+        dir = join(context.dir, source.base);
         pattern = source.pattern || "**/*";
       }
 
+      console.log(dir, pattern);
       for (const name of await globby(asArray(pattern), {
-        cwd
+        cwd: dir
       })) {
         yield new FileSystemEntry(name);
       }

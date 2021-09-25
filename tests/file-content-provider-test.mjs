@@ -6,18 +6,19 @@ import { cp, readFile } from "fs/promises";
 test.only("FileContentProvider entries", async t => {
   const context = await createContext(new URL("..", import.meta.url).pathname);
   const content = new FileContentProvider({
-    base: new URL("fixtures/content", import.meta.url).pathname,
+    base: new URL("fixtures/skeleton", import.meta.url).pathname,
     pattern: "**/*"
   });
 
   const entries = [];
   for await (const entry of content.entries(context)) {
+    console.log(entry.name);
     entries.push(entry);
   }
 
   t.deepEqual(
     entries.map(e => e.name).filter((x, i) => i < 2),
-    ["LICENSE", "package.json"]
+    ["package.json"]
   );
 });
 

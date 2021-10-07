@@ -6,7 +6,7 @@
   },
   "sideEffects": false,
   "exports": {
-    ".": "./src/pkgbuild.mjs"
+    ".": "./src/module.mjs"
   },
   "description": "create ArchLinux packages from npm packages",
   "keywords": [
@@ -43,7 +43,7 @@
     "globby": "^12.0.2",
     "iterable-string-interceptor": "^1.0.8",
     "npm-packlist": "^3.0.0",
-    "pacote": "^12.0.0",
+    "pacote": "^11.3.0",
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {

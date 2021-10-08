@@ -1,7 +1,11 @@
+
+import { Packager } from "./packager.mjs";
 import { promisify } from "util";
 import { finished } from "stream";
 import { quote } from "../util.mjs";
 
+export class XXX extends Packager {
+}
 /**
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html

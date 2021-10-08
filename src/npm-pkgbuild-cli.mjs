@@ -19,14 +19,9 @@ const cwd = process.cwd();
 program
   .description(description)
   .version(version)
-  .option("--pkgrel <number>", "package release", 1)
   .option("--pkgver <version>", "package version")
   .option("-p --package <dir>", "package directory", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
-  .option(
-    "-e --noextract",
-    "staging Do not extract source files (use existing $srcdir/ dir)"
-  )
   .option(
     "--publish <url>",
     "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",

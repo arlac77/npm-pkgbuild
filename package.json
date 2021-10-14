@@ -41,7 +41,7 @@
     "commander": "^8.2.0",
     "content-entry": "^2.7.0",
     "content-entry-filesystem": "^3.0.0",
-    "execa": "^5.0.0",
+    "execa": "^5.1.1",
     "expression-expander": "^7.0.9",
     "globby": "^12.0.2",
     "iterable-string-interceptor": "^1.0.8",

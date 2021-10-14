@@ -4,7 +4,15 @@
 export class ContentProvider {
   /**
    * Delivers content entries to be packed.
-   * @param context
+   * @return {asyncIterator<ContentEntry>} all entries
    */
-  async *entries(context) {}
+  async *entries() {}
+
+  /**
+   * List all entries.
+   * @return {asyncIterator<ContentEntry>} all entries
+   */
+  async *[Symbol.asyncIterator]() {
+    return yield* this.entries();
+  }
 }

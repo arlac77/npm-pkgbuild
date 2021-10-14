@@ -5,7 +5,7 @@ async function fcpt(t, definition, list) {
   const content = new FileContentProvider(definition);
 
   const entries = [];
-  for await (const entry of content.entries()) {
+  for await (const entry of content) {
     entries.push(entry);
   }
 

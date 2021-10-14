@@ -14,15 +14,15 @@ async function fcpt(t, definition, list) {
     list
   );
 
-  const exists = await Promise.all(entries.map(e => e.getExists()));
+  const exists = await Promise.all(entries.map(e => e.isExistent));
   t.is(exists.filter(e => e).length, entries.length);
 
   //entry.getReadStream({ encoding: "utf-8" });
 }
-fcpt.title = (providedTitle = "", definition, list) =>
-  `FileContentProvider list ${providedTitle} ${JSON.stringify(
+fcpt.title = (providedTitle = "FileContentProvider list", definition, list) =>
+  ` ${providedTitle} ${JSON.stringify(
     definition
-  )} ${JSON.stringify(list)}`.trim();
+  )} -> ${JSON.stringify(list)}`.trim();
 
 
 test(

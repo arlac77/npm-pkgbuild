@@ -27,7 +27,6 @@ program
     process.env.PACMAN_PUBLISH
   )
   .action(async (options, ...args) => {
-    console.log(options);
     try {
       const sources = [options.content, options.meta]
         .filter(x => x)

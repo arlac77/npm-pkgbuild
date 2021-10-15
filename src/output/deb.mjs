@@ -8,7 +8,14 @@ import { pipeline } from "stream/promises";
 
 export class Deb extends Packager {
   async execute() {
-    const staging = await mkdtemp(join(tmpdir(), "deb-"));
+    const name = "mypkg";
+    const version = "1.0.0";
+
+    const basename = `${name}-${version}`;
+
+    const x = join(tmpdir(), "deb-");
+
+    const staging = await mkdtemp(x);
 
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
@@ -20,7 +27,7 @@ export class Deb extends Packager {
       await pipeline(await entry.getReadStream(), createWriteStream(destName));
     }
 
-    await execa("dpkg", ["-b", staging]);
+    await execa("dpkg", ["-b", staging] /*, { cwd: x}*/);
   }
 }
 

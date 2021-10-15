@@ -1,0 +1,8 @@
+Package: aName
+Version: 0.0.0
+Architecture: all
+Maintainer: YOUR NAME <EMAIL>
+Depends: nginx
+Installed-Size: 50kb
+Homepage: http://foo.com
+Description: a description

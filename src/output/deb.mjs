@@ -1,9 +1,9 @@
 import { Packager } from "./packager.mjs";
 import execa from "execa";
-import { join } from "path";
+import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
-import { mkdtemp } from "fs/promises";
+import { mkdtemp, mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 
 export class Deb extends Packager {
@@ -13,11 +13,11 @@ export class Deb extends Packager {
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
 
+      await mkdir(dirname(destName), { recursive: true });
+
       console.log(destName);
 
       await pipeline(await entry.getReadStream(), createWriteStream(destName));
-
-      console.log("DONE");
     }
 
     await execa("dpkg", ["-b", staging]);
@@ -29,11 +29,11 @@ export class Deb extends Packager {
  */
 
 const fields = {
+  Package: { mandatory: true },
+  Version: { mandatory: true },
   Source: { mandatory: true },
   Maintainer: { mandatory: true },
   Uploaders: { mandatory: false },
   Section: { recommended: true },
-  Priority: { recommended: true },
-  "Standards-Version": { mandatory: true }
+  Priority: { recommended: true }
 };
-

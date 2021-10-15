@@ -38,6 +38,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
+    "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.2.0",
     "content-entry": "^2.7.0",
     "content-entry-filesystem": "^3.0.0",

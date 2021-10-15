@@ -8,7 +8,7 @@
   "exports": {
     ".": "./src/module.mjs"
   },
-  "description": "create ArchLinux packages from npm packages",
+  "description": "create packages from npm packages",
   "keywords": [
     "ArchLinux",
     "arch-linux",

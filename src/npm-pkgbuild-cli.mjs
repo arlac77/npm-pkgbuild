@@ -1,13 +1,9 @@
-import { readFileSync, createWriteStream } from "fs";
-import { mkdir } from "fs/promises";
-import { join } from "path";
+#!/usr/bin/env node
+
+import { readFileSync } from "fs";
 import program from "commander";
-import { pkgbuild } from "./pkgbuild.mjs";
-import { rpmspec } from "./rpmspec.mjs";
-import { pacman, makepkg } from "./pacman.mjs";
 import { utf8StreamOptions } from "./util.mjs";
-import { createContext } from "./context.mjs";
-import { utf8StreamOptions } from "./util.mjs";
+import { FileContentProvider, Deb } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -20,59 +16,23 @@ program
   .description(description)
   .version(version)
   .option("--pkgver <version>", "package version")
-  .option("-p --package <dir>", "package directory", cwd)
+  .option("-p --package <dir>", "where to put the package(s)", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
+  .option("-c --content <dir>", "content directory")
   .option(
     "--publish <url>",
     "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",
     process.env.PACMAN_PUBLISH
   )
-  .command("[stages...]", "stages to execute")
-  .action(async (...stages) => {
-    stages.pop();
-
+  .action(async (options,...args) => {
+    console.log(options);
     try {
-      const staging = program.staging;
+      const source = new FileContentProvider({
+        base: options.content
+      });
+      const output = new Deb(source);
 
-      await mkdir(staging, { recursive: true });
-
-      const context = await createContext(program.package, program);
-
-      for (const stage of stages) {
-        console.log(`Executing ${stage}...`);
-        switch (stage) {
-          case "rpmspec":
-            await rpmspec(
-              context,
-              staging,
-              createWriteStream(
-                join(staging, `${context.pkg.name}.spec`),
-                utf8StreamOptions
-              ),
-              { npmDist: program.npmDist, npmModules: program.npmModules }
-            );
-            break;
-
-          case "pkgbuild":
-            await pkgbuild(
-              context,
-              staging,
-              createWriteStream(join(staging, "PKGBUILD"), utf8StreamOptions),
-              { npmDist: program.npmDist, npmModules: program.npmModules }
-            );
-            break;
-          case "makepkg":
-            makepkg(context, staging, {
-              args: program.noextract ? ["-e"] : []
-            });
-            break;
-          case "pacman":
-            await pacman(context, staging);
-            break;
-          default:
-            console.error(`Unknown stage ${stage}`);
-        }
-      }
+      await output.execute();
     } catch (e) {
       console.log(e);
       process.exit(-1);

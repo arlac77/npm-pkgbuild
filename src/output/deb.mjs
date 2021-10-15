@@ -8,10 +8,10 @@ import { pipeline } from "stream/promises";
 
 export class Deb extends Packager {
   async execute() {
-    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
+    const staging = await mkdtemp(join(tmpdir(), "deb-"));
 
     for await (const entry of this.source) {
-      const destName = join(tmp, entry.name);
+      const destName = join(staging, entry.name);
 
       console.log(destName);
 
@@ -20,6 +20,20 @@ export class Deb extends Packager {
       console.log("DONE");
     }
 
-    //await execa("dpkg", ["-b"]);
+    await execa("dpkg", ["-b", staging]);
   }
 }
+
+/**
+ * @see https://www.debian.org/doc/debian-policy/ch-controlfields.html
+ */
+
+const fields = {
+  Source: { mandatory: true },
+  Maintainer: { mandatory: true },
+  Uploaders: { mandatory: false },
+  Section: { recommended: true },
+  Priority: { recommended: true },
+  "Standards-Version": { mandatory: true }
+};
+

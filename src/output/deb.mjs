@@ -24,6 +24,10 @@ export class Deb extends Packager {
 
       console.log(destName);
 
+      if(entry.name === "DEBIAN/control") {
+
+      }
+      
       await pipeline(await entry.getReadStream(), createWriteStream(destName));
     }
 

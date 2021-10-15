@@ -19,22 +19,26 @@ program
   .option("--pkgver <version>", "package version")
   .option("-p --package <dir>", "where to put the package(s)", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
-  .option("-c --content <dir>", "content directory")
-  .option("-m --meta <dir>", "meta directory")
   .option(
-    "--publish <url>",
-    "publishing url of the package (may also be given as env: PACMAN_PUBLISH)",
-    process.env.PACMAN_PUBLISH
+    "-c --content <dir>",
+    "content directory",
+    (c, a) => a.concat([c]),
+    []
   )
-  .action(async (options, ...args) => {
+  .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
+  .addOption(
+    new program.Option("--publish <url>", "publishing url of the package").env(
+      "PACMAN_PUBLISH"
+    )
+  )
+  .action(async options => {
     try {
-      const sources = [options.content, options.meta]
+      const sources = [...options.content, ...options.meta]
         .filter(x => x)
-        .map(
-          source =>
-            new FileContentProvider({
-              base: source
-            }).entries()
+        .map(source =>
+          new FileContentProvider({
+            base: source
+          }).entries()
         );
 
       const output = new Deb(aggregateFifo(sources));

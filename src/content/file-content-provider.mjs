@@ -17,9 +17,9 @@ export class FileContentProvider extends ContentProvider {
     const definitions = this.definitions;
 
     const base = definitions.base;
-    const pattern = definitions.pattern || "**/*";
+    const pattern = asArray(definitions.pattern || "**/*");
 
-    for (const name of await globby(asArray(pattern), {
+    for (const name of await globby(pattern, {
       cwd: base
     })) {
       yield new FileSystemEntry(name, base);

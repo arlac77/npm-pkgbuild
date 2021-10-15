@@ -1,8 +1,10 @@
 
 export class Packager {
 
-	async prepare()
-	{}
+	constructor(source)
+	{
+		this.source = source;
+	}
 
 	async execute()
 	{}

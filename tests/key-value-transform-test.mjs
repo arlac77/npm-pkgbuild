@@ -21,11 +21,11 @@ test("kv", async t => {
 
   t.is(
     await collect(
-      keyValueTransformer(
-        it(["Nam", "e: x\nVersion: 0.0.0"]),
-        (k, v) => [k,properties[k]]
-      )
+      keyValueTransformer(it(["Nam", "e: x\nVersion: 0.0.0"]), (k, v) => [
+        k,
+        properties[k]
+      ])
     ),
-    "Name: aName\nVersion: 1.2.3"
+    "Name: aName\nVersion: 1.2.3\n"
   );
 });

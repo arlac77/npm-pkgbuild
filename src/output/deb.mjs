@@ -1,15 +1,18 @@
-import { Packager } from "./packager.mjs";
 import execa from "execa";
 import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
 import { mkdtemp, mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
+import { Packager } from "./packager.mjs";
+import { keyValueTransformer } from "../key-value-transformer.mjs";
 
 export class Deb extends Packager {
   async execute() {
     const name = "mypkg";
     const version = "1.0.0";
+
+    const properties = { Package: name, Version: version };
 
     const basename = `${name}-${version}`;
 
@@ -24,11 +27,20 @@ export class Deb extends Packager {
 
       console.log(destName);
 
-      if(entry.name === "DEBIAN/control") {
-
+      if (entry.name === "DEBIAN/control") {
+        await pipeline(
+          keyValueTransformer(await entry.getReadStream(), (k, v) => [
+            k,
+            properties[k]
+          ]),
+          createWriteStream(destName)
+        );
+      } else {
+        await pipeline(
+          await entry.getReadStream(),
+          createWriteStream(destName)
+        );
       }
-      
-      await pipeline(await entry.getReadStream(), createWriteStream(destName));
     }
 
     await execa("dpkg", ["-b", staging] /*, { cwd: x}*/);
@@ -46,5 +58,6 @@ const fields = {
   Maintainer: { mandatory: true },
   Uploaders: { mandatory: false },
   Section: { recommended: true },
-  Priority: { recommended: true }
+  Priority: { recommended: true },
+  "Installed-Size": {}
 };

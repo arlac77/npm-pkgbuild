@@ -13,11 +13,11 @@
     "ArchLinux",
     "arch-linux",
     "aur",
+    "debian",
     "pacman",
     "pkgbuild",
     "rpm",
-    "rpmspec",
-    "debian"
+    "rpmspec"
   ],
   "contributors": [
     {

@@ -31,7 +31,7 @@ export class Deb extends Packager {
         await pipeline(
           keyValueTransformer(await entry.getReadStream(), (k, v) => [
             k,
-            properties[k]
+            properties[k] === undefined ? v : properties[k]
           ]),
           createWriteStream(destName)
         );

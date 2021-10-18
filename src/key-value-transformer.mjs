@@ -1,8 +1,7 @@
-
 /**
  * Replaces key value pairs in a stream of lines.
- * @param source 
- * @param updates 
+ * @param source
+ * @param updates
  */
 export async function* keyValueTransformer(source, updates) {
   let buffer;
@@ -16,19 +15,26 @@ export async function* keyValueTransformer(source, updates) {
     }
 
     function match() {
-        const m = chunk.match(/^(\w+):\s+(.*)/);
-        if(m) {
-            const [k,v] = updates(m[1],m[2]);
-            return `${k}: ${v}`;
-        }
-        return chunk;
+      const m = chunk.match(/^(\w+):\s+(.*)/);
+      if (m) {
+        const [k, v] = updates(m[1], m[2]);
+        return `${k}: ${v}\n`;
+      }
     }
 
-    const i = chunk.indexOf('\n',li);
+    let i = chunk.indexOf("\n", li);
 
-    if(i >= 0) {
-        const replace = match();
+    while (i >= 0) {
+      const replace = match();
+      if(replace) {
         chunk = replace + chunk.slice(li, i + 1);
+        i = chunk.indexOf("\n", li);
+      }
+      else {
+        break;
+      }
+      yield chunk;
     }
+
   }
 }

@@ -1,12 +1,8 @@
-
 export class Packager {
+  constructor(source, properties) {
+    this.source = source;
+    this.properties = properties;
+  }
 
-	constructor(source)
-	{
-		this.source = source;
-	}
-
-	async execute()
-	{}
+  async execute() {}
 }
-

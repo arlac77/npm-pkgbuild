@@ -12,9 +12,8 @@ export class Deb extends Packager {
     const name = "mypkg";
     const version = "1.0.0";
 
-    const properties = { Package: name, Version: version };
-
-    const basename = `${name}-${version}`;
+    this.properties.Package = this.properties.name;
+    this.properties.Version = this.properties.version;
 
     const x = join(tmpdir(), "deb-");
 
@@ -31,7 +30,7 @@ export class Deb extends Packager {
         await pipeline(
           keyValueTransformer(await entry.getReadStream(), (k, v) => [
             k,
-            properties[k] === undefined ? v : properties[k]
+            this.properties[k] === undefined ? v : this.properties[k]
           ]),
           createWriteStream(destName)
         );

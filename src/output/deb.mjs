@@ -9,22 +9,20 @@ import { keyValueTransformer } from "../key-value-transformer.mjs";
 
 export class Deb extends Packager {
   async execute() {
-    const name = "mypkg";
-    const version = "1.0.0";
-
     this.properties.Package = this.properties.name;
     this.properties.Version = this.properties.version;
 
-    const x = join(tmpdir(), "deb-");
-
-    const staging = await mkdtemp(x);
+    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
+    const staging = join(tmp,`${this.properties.name}-${this.properties.version}`);
+  
+    const output = `${staging}.deb`;
 
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
 
       await mkdir(dirname(destName), { recursive: true });
 
-      console.log(destName);
+      //console.log(destName);
 
       if (entry.name === "DEBIAN/control") {
         await pipeline(
@@ -43,6 +41,8 @@ export class Deb extends Packager {
     }
 
     await execa("dpkg", ["-b", staging] /*, { cwd: x}*/);
+
+    return output;
   }
 }
 

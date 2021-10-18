@@ -48,7 +48,7 @@ program
         ["name", "version", "description"].map(key => [key, pkg[key]])
       );
 
-      console.log(properties);
+      //console.log(properties);
 
       const sources = [...options.content, ...options.meta]
         .filter(x => x)
@@ -60,7 +60,9 @@ program
 
       const output = new Deb(aggregateFifo(sources), properties);
 
-      await output.execute();
+      const fileName = await output.execute();
+
+      console.log(fileName);
     } catch (e) {
       console.log(e);
       process.exit(-1);

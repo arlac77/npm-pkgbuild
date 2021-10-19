@@ -16,6 +16,9 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
+const outputs = { debian : Deb };
+
+
 program
   .description(description)
   .version(version)
@@ -30,6 +33,7 @@ program
   )
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .option("--debian", "generate debian package")
+  .option("--rpm", "generate rpm package")
   .addOption(
     new program.Option("--publish <url>", "publishing url of the package").env(
       "PACMAN_PUBLISH"
@@ -37,6 +41,11 @@ program
   )
   .action(async options => {
     try {
+      for(const on of Object.keys(outputs).filter(on => options[on] === true)) {
+        const of = outputs[on];
+
+	    console.log(of);
+
       const pkg = JSON.parse(
         await readFile(
           join(await packageDirectory(), "package.json"),
@@ -48,8 +57,6 @@ program
         ["name", "version", "description"].map(key => [key, pkg[key]])
       );
 
-      //console.log(properties);
-
       const sources = [...options.content, ...options.meta]
         .filter(x => x)
         .map(source =>
@@ -58,11 +65,12 @@ program
           }).entries()
         );
 
-      const output = new Deb(aggregateFifo(sources), properties);
+      const output = new of(aggregateFifo(sources), properties);
 
       const fileName = await output.execute();
 
       console.log(fileName);
+      }
     } catch (e) {
       console.log(e);
       process.exit(-1);

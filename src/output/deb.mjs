@@ -6,10 +6,9 @@ import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
-import { globby } from "globby";
 
 const permissions = {
-  "**/DEBIAN/postinst": { chmod: "0775" }
+  "DEBIAN/postinst": { chmod: "0775" }
 };
 
 export class Deb extends Packager {
@@ -46,9 +45,10 @@ export class Deb extends Packager {
 
         await Promise.all(
           Object.entries(permissions).map(async ([pattern, option]) => {
-            const files = await globby(pattern);
-            console.log("CHMOD", option.chmod, pattern, ...files);
-            return Promise.all(files.map(f => chmod(f, option.chmod)));
+            if (destName.endsWith(pattern)) {
+              console.log("CHMOD", option.chmod, destName, pattern);
+              return chmod(destName, option.chmod);
+            }
           })
         );
       }

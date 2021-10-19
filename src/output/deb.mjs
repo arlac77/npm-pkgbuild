@@ -2,10 +2,15 @@ import execa from "execa";
 import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
-import { mkdtemp, mkdir } from "fs/promises";
+import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
+import { globby } from "globby";
+
+const permissions = {
+  "**/DEBIAN/postinst": { chmod: "+x" }
+};
 
 export class Deb extends Packager {
   async execute() {
@@ -13,16 +18,17 @@ export class Deb extends Packager {
     this.properties.Version = this.properties.version;
 
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
-    const staging = join(tmp,`${this.properties.name}-${this.properties.version}`);
-  
+    const staging = join(
+      tmp,
+      `${this.properties.name}-${this.properties.version}`
+    );
+
     const output = `${staging}.deb`;
 
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
 
       await mkdir(dirname(destName), { recursive: true });
-
-      //console.log(destName);
 
       if (entry.name === "DEBIAN/control") {
         await pipeline(
@@ -37,10 +43,18 @@ export class Deb extends Packager {
           await entry.getReadStream(),
           createWriteStream(destName)
         );
+
+        await Promise.all(
+          Object.entries(permissions).map(async ([pattern, option]) => {
+            const files = await globby(pattern);
+            console.log("CHMOD", option.chmod, pattern, ...files);
+            return Promise.all(files.map(f => chmod(f, option.chmod)));
+          })
+        );
       }
     }
 
-    await execa("dpkg", ["-b", staging] /*, { cwd: x}*/);
+    await execa("dpkg", ["-b", staging]);
 
     return output;
   }

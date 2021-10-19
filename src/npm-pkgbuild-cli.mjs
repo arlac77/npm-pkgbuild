@@ -16,8 +16,7 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const outputs = { debian : Deb };
-
+const outputs = { debian: Deb };
 
 program
   .description(description)
@@ -41,35 +40,37 @@ program
   )
   .action(async options => {
     try {
-      for(const on of Object.keys(outputs).filter(on => options[on] === true)) {
+      for (const on of Object.keys(outputs).filter(
+        on => options[on] === true
+      )) {
         const of = outputs[on];
 
-	    console.log(of);
+        console.log(of);
 
-      const pkg = JSON.parse(
-        await readFile(
-          join(await packageDirectory(), "package.json"),
-          utf8StreamOptions
-        )
-      );
-
-      const properties = Object.fromEntries(
-        ["name", "version", "description"].map(key => [key, pkg[key]])
-      );
-
-      const sources = [...options.content, ...options.meta]
-        .filter(x => x)
-        .map(source =>
-          new FileContentProvider({
-            base: source
-          }).entries()
+        const pkg = JSON.parse(
+          await readFile(
+            join(await packageDirectory(), "package.json"),
+            utf8StreamOptions
+          )
         );
 
-      const output = new of(aggregateFifo(sources), properties);
+        const properties = Object.fromEntries(
+          ["name", "version", "description"].map(key => [key, pkg[key]])
+        );
 
-      const fileName = await output.execute();
+        const sources = [...options.content, ...options.meta]
+          .filter(x => x)
+          .map(source =>
+            new FileContentProvider({
+              base: source
+            }).entries()
+          );
 
-      console.log(fileName);
+        const output = new of(aggregateFifo(sources), properties);
+
+        const fileName = await output.execute();
+
+        console.log(fileName);
       }
     } catch (e) {
       console.log(e);

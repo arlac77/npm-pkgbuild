@@ -9,7 +9,7 @@ import { keyValueTransformer } from "../key-value-transformer.mjs";
 import { globby } from "globby";
 
 const permissions = {
-  "**/DEBIAN/postinst": { chmod: "+x" }
+  "**/DEBIAN/postinst": { chmod: "0775" }
 };
 
 export class Deb extends Packager {

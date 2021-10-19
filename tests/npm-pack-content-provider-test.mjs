@@ -1,12 +1,11 @@
 import test from "ava";
-import { createContext, NPMPackContentProvider } from "npm-pkgbuild";
+import { NPMPackContentProvider } from "npm-pkgbuild";
 
-test("NPMPack entries", async t => {
-  const context = await createContext(new URL("..", import.meta.url).pathname);
+test.skip("NPMPack entries", async t => {
   const content = new NPMPackContentProvider();
 
   const entries = [];
-  for await (const entry of content.entries(context)) {
+  for await (const entry of content.entries()) {
     entries.push(entry);
   }
 

@@ -5,7 +5,7 @@ import { copyNodeModule } from "../src/package.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-test("copy module", async t => {
+test.skip("copy module", async t => {
   const fixturesDir = join(here, "..", "tests", "fixtures");
   const tmpDir = join(here, "..", "build", "copy-test");
 

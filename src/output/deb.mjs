@@ -1,20 +1,32 @@
-import execa from "execa";
 import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
+import execa from "execa";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
 
 const permissions = {
+  "DEBIAN/preinst": { chmod: "0775" },
   "DEBIAN/postinst": { chmod: "0775" }
 };
 
 export class Deb extends Packager {
+
+  static get name() { return "deb"; }
+
+  static get fileNameExtension() {
+    return ".deb";
+  }
+
   async execute() {
-    this.properties.Package = this.properties.name;
-    this.properties.Version = this.properties.version;
+    Object.entries(fields).forEach(([k,v])=>{
+      const e = this.properties[v.alias];
+      if(e !== undefined) {
+        this.properties[k] = e;
+      }
+    });
 
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
     const staging = join(
@@ -65,8 +77,9 @@ export class Deb extends Packager {
  */
 
 const fields = {
-  Package: { mandatory: true },
-  Version: { mandatory: true },
+  Package: { alias: "name", mandatory: true },
+  Version: { alias: "version", mandatory: true },
+  Architecture: { default: "any", mandatory: true },
   Source: { mandatory: true },
   Maintainer: { mandatory: true },
   Uploaders: { mandatory: false },

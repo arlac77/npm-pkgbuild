@@ -1,4 +1,14 @@
 import { globby } from "globby";
+import { Packager } from "./packager.mjs";
+
+
+export class RPM extends Packager {
+  static get name() { return "rpm"; }
+
+  static get fileNameExtension() {
+    return ".rpm";
+  }
+}
 
 export async function rpmspec(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };

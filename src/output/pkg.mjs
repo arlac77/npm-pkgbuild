@@ -1,11 +1,28 @@
-
-import { Packager } from "./packager.mjs";
-import { promisify } from "util";
+import { join, dirname } from "path";
+import { tmpdir } from "os";
 import { finished } from "stream";
+import { promisify } from "util";
+import { mkdtemp, mkdir, chmod } from "fs/promises";
+import execa from "execa";
+import { Packager } from "./packager.mjs";
 import { quote } from "../util.mjs";
 
-export class XXX extends Packager {
+export class PKG extends Packager {
+
+  static get name() { return "pkg"; }
+
+  static get fileNameExtension() {
+    return ".pkg.tar";
+  }
+
+  async execute() {
+
+    const tmp = await mkdtemp(join(tmpdir(), "pkg-"));
+
+    await execa("makepkg", [], { cwd: tmp });
+  }
 }
+
 /**
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html

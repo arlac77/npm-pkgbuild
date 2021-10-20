@@ -7,7 +7,7 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { packageDirectory } from "pkg-dir";
 import { utf8StreamOptions } from "./util.mjs";
-import { FileContentProvider, Deb } from "npm-pkgbuild";
+import { FileContentProvider, Deb, PKG, RPM } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -16,11 +16,15 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const outputs = { debian: Deb };
+const outputs = [Deb, PKG, RPM];
 
 program
   .description(description)
-  .version(version)
+  .version(version);
+
+outputs.forEach(o => program.option(`--${o.name}`, `generate ${o.name} package`));
+
+program
   .option("--pkgver <version>", "package version")
   .option("-p --package <dir>", "where to put the package(s)", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
@@ -31,8 +35,6 @@ program
     []
   )
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
-  .option("--debian", "generate debian package")
-  .option("--rpm", "generate rpm package")
   .addOption(
     new program.Option("--publish <url>", "publishing url of the package").env(
       "PACMAN_PUBLISH"
@@ -40,13 +42,9 @@ program
   )
   .action(async options => {
     try {
-      for (const on of Object.keys(outputs).filter(
-        on => options[on] === true
+      for (const outputFactory of outputs.filter(
+        o => options[o.name] === true
       )) {
-        const of = outputs[on];
-
-        console.log(of);
-
         const pkg = JSON.parse(
           await readFile(
             join(await packageDirectory(), "package.json"),
@@ -66,7 +64,7 @@ program
             }).entries()
           );
 
-        const output = new of(aggregateFifo(sources), properties);
+        const output = new outputFactory(aggregateFifo(sources), properties);
 
         const fileName = await output.execute();
 

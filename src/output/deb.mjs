@@ -13,17 +13,18 @@ const permissions = {
 };
 
 export class Deb extends Packager {
-
-  static get name() { return "deb"; }
+  static get name() {
+    return "deb";
+  }
 
   static get fileNameExtension() {
     return ".deb";
   }
 
   async execute() {
-    Object.entries(fields).forEach(([k,v])=>{
+    Object.entries(fields).forEach(([k, v]) => {
       const e = this.properties[v.alias];
-      if(e !== undefined) {
+      if (e !== undefined) {
         this.properties[k] = e;
       }
     });
@@ -80,6 +81,7 @@ const fields = {
   Package: { alias: "name", mandatory: true },
   Version: { alias: "version", mandatory: true },
   Architecture: { default: "any", mandatory: true },
+  Description: { alias: "description", mandatory: true },
   Homepage: { alias: "homepage" },
   Source: { mandatory: true },
   Maintainer: { mandatory: true },

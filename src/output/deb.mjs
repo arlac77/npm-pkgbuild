@@ -34,7 +34,7 @@ export class Deb extends Packager {
       `${this.properties.name}-${this.properties.version}`
     );
 
-    const output = `${staging}.deb`;
+    const output = `${staging}${this.constructor.fileNameExtension}`;
 
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
@@ -58,7 +58,7 @@ export class Deb extends Packager {
         await Promise.all(
           Object.entries(permissions).map(async ([pattern, option]) => {
             if (destName.endsWith(pattern)) {
-              console.log("CHMOD", option.chmod, destName, pattern);
+              //console.log("CHMOD", option.chmod, destName, pattern);
               return chmod(destName, option.chmod);
             }
           })
@@ -80,6 +80,7 @@ const fields = {
   Package: { alias: "name", mandatory: true },
   Version: { alias: "version", mandatory: true },
   Architecture: { default: "any", mandatory: true },
+  Homepage: { alias: "homepage" },
   Source: { mandatory: true },
   Maintainer: { mandatory: true },
   Uploaders: { mandatory: false },

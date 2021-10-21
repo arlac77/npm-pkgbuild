@@ -18,11 +18,11 @@ const cwd = process.cwd();
 
 const outputs = [Deb, PKG, RPM];
 
-program
-  .description(description)
-  .version(version);
+program.description(description).version(version);
 
-outputs.forEach(o => program.option(`--${o.name}`, `generate ${o.name} package`));
+outputs.forEach(o =>
+  program.option(`--${o.name}`, `generate ${o.name} package`)
+);
 
 program
   .option("--pkgver <version>", "package version")
@@ -53,7 +53,10 @@ program
         );
 
         const properties = Object.fromEntries(
-          ["name", "version", "description"].map(key => [key, pkg[key]])
+          ["name", "version", "description", "homepage"].map(key => [
+            key,
+            pkg[key]
+          ]).filter(([k,v]) => v !== undefined )
         );
 
         const sources = [...options.content, ...options.meta]

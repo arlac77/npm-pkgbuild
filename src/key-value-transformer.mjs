@@ -1,6 +1,6 @@
 /**
  * Replaces key value pairs in a stream of lines.
- * @param source
+ * @param {AsyncIterator<String>} source
  * @param updates
  */
 export async function* keyValueTransformer(source, updates) {
@@ -8,10 +8,12 @@ export async function* keyValueTransformer(source, updates) {
     const m = line.match(/^(\w+):\s+(.*)/);
     if (m) {
       const [k, v] = updates(m[1], m[2]);
-      line = `${k}: ${v}`;
+      if (k !== undefined) {
+        yield `${k}: ${v}\n`;
+      }
+    } else {
+      yield line + "\n";
     }
-
-    yield line + "\n";
   }
 }
 

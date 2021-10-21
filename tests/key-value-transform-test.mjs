@@ -16,16 +16,27 @@ export async function collect(a) {
   return parts.join("");
 }
 
-test("kv", async t => {
-  const properties = { Name: "aName", Version: "1.2.3" };
+async function kvtt(t, input, updates, result) {
+  t.is(await collect(keyValueTransformer(it(input), updates)), result);
+}
 
-  t.is(
-    await collect(
-      keyValueTransformer(it(["Nam", "e: x\nVersion: 0.0.0"]), (k, v) => [
-        k,
-        properties[k]
-      ])
-    ),
-    "Name: aName\nVersion: 1.2.3\n"
-  );
-});
+kvtt.title = (providedTitle = "keyValueTransformer", input, updates, result) =>
+  ` ${providedTitle} ${JSON.stringify(input)} -> ${JSON.stringify(
+    result
+  )}`.trim();
+
+const properties = { Name: "aName", Version: "1.2.3" };
+
+test(
+  kvtt,
+  ["Nam", "e: x\nVersion: 0.0.0"],
+  (k, v) => [k, properties[k]],
+  "Name: aName\nVersion: 1.2.3\n"
+);
+
+test(
+  kvtt,
+  ["Nam", "e: x\nVersion: 1.0.0"],
+  (k, v) => [k === "Version" ? k : undefined, "1.2.3"],
+  "Version: 1.2.3\n"
+);

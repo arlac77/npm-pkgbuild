@@ -5,7 +5,7 @@
  */
 export async function* keyValueTransformer(source, updates) {
   for await (let line of asLines(source)) {
-    const m = line.match(/^(\w+):\s+(.*)/);
+    const m = line.match(/^(\w+):\s*(.*)/);
     if (m) {
       const [k, v] = updates(m[1], m[2]);
       if (k !== undefined) {

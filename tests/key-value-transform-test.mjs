@@ -36,6 +36,13 @@ test(
 
 test(
   kvtt,
+  ["Nam", "e:\nVersion: 0.0.0"],
+  (k, v) => [k, properties[k]],
+  "Name: aName\nVersion: 1.2.3\n"
+);
+
+test(
+  kvtt,
   ["Nam", "e: x\nVersion: 1.0.0"],
   (k, v) => [k === "Version" ? k : undefined, "1.2.3"],
   "Version: 1.2.3\n"

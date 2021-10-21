@@ -35,6 +35,19 @@ export class Deb extends Packager {
       `${this.properties.name}-${this.properties.version}`
     );
 
+    const presentProperties = new Set();
+
+    const controlProperties = (k, v) => {
+      presentProperties.add(k);
+      return [k, this.properties[k] || v];
+    };
+
+    const mandatoryProperties = new Set(
+      Object.entries(fields)
+        .filter(([k, v]) => v.mandatory)
+        .map(([k, v]) => k)
+    );
+
     const output = `${staging}${this.constructor.fileNameExtension}`;
 
     for await (const entry of this.source) {
@@ -44,10 +57,7 @@ export class Deb extends Packager {
 
       if (entry.name === "DEBIAN/control") {
         await pipeline(
-          keyValueTransformer(await entry.getReadStream(), (k, v) => [
-            k,
-            this.properties[k] === undefined ? v : this.properties[k]
-          ]),
+          keyValueTransformer(await entry.getReadStream(), controlProperties),
           createWriteStream(destName)
         );
       } else {
@@ -66,6 +76,8 @@ export class Deb extends Packager {
         );
       }
     }
+
+    //console.log(presentProperties, mandatoryProperties);
 
     await execa("dpkg", ["-b", staging]);
 

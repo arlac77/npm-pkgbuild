@@ -4,17 +4,38 @@
  * @param updates
  */
 export async function* keyValueTransformer(source, updates) {
-  for await (let line of asLines(source)) {
+  let key, value;
+
+  function * eject() {
+    if (key !== undefined) {
+      const [k, v] = updates(key, value);
+      if (k !== undefined) {
+        yield`${k}: ${v}\n`;
+      }
+      key = value = undefined;
+    }
+  }
+
+  for await (const line of asLines(source)) {
     const m = line.match(/^(\w+):\s*(.*)/);
     if (m) {
-      const [k, v] = updates(m[1], m[2]);
-      if (k !== undefined) {
-        yield `${k}: ${v}\n`;
+      yield *eject();
+      key = m[1];
+      value = m[2];
+    } else if (key !== undefined) {
+      const m = line.match(/^\s+(.*)/);
+      if (m) {
+        value += m[1];
+      } else {
+        yield * eject();
+        yield line + "\n";
       }
     } else {
       yield line + "\n";
     }
   }
+
+  yield *eject();
 }
 
 async function* asLines(source) {

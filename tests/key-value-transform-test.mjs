@@ -29,9 +29,16 @@ const properties = { Name: "aName", Version: "1.2.3" };
 
 test(
   kvtt,
-  ["Nam", "e: x\nVersion: 0.0.0"],
-  (k, v) => [k, properties[k]],
-  "Name: aName\nVersion: 1.2.3\n"
+  ["# some content"],
+  (k, v) => [k, v],
+  "# some content\n"
+);
+
+test(
+  kvtt,
+  ["p", "1: v1\np2:  v2"],
+  (k, v) => [k, v],
+  "p1: v1\np2: v2\n"
 );
 
 test(
@@ -46,4 +53,11 @@ test(
   ["Nam", "e: x\nVersion: 1.0.0"],
   (k, v) => [k === "Version" ? k : undefined, "1.2.3"],
   "Version: 1.2.3\n"
+);
+
+test(
+  kvtt,
+  ["Nam", "e: x\nDescription: line1\n line2"],
+  (k, v) => [k, k === 'Description' ? "replaced": "a name"],
+  "Name: a name\nDescription: replaced\n"
 );

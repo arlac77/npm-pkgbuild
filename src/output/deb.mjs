@@ -96,7 +96,7 @@ const fields = {
   Description: { alias: "description", mandatory: true },
   Homepage: { alias: "homepage" },
   Source: { mandatory: true },
-  Maintainer: { mandatory: true },
+  Maintainer: { alias: "maintainer", mandatory: true },
   Uploaders: { mandatory: false },
   Section: { recommended: true },
   Priority: { recommended: true },

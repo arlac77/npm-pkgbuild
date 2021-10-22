@@ -53,11 +53,14 @@ program
         );
 
         const properties = Object.fromEntries(
-          ["name", "version", "description", "homepage"].map(key => [
-            key,
-            pkg[key]
-          ]).filter(([k,v]) => v !== undefined )
+          ["name", "version", "description", "homepage"]
+            .map(key => [key, pkg[key]])
+            .filter(([k, v]) => v !== undefined)
         );
+
+        if(pkg.contributors) {
+          properties.maintainer = pkg.contributors.map(c => `${c.name} <${c.email}>`)[0];
+        }
 
         const sources = [...options.content, ...options.meta]
           .filter(x => x)

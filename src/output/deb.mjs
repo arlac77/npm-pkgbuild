@@ -9,7 +9,9 @@ import { keyValueTransformer } from "../key-value-transformer.mjs";
 
 const permissions = {
   "DEBIAN/preinst": { chmod: "0775" },
-  "DEBIAN/postinst": { chmod: "0775" }
+  "DEBIAN/postinst": { chmod: "0775" },
+  "DEBIAN/prerm": { chmod: "0775" },
+  "DEBIAN/postrm": { chmod: "0775" }
 };
 
 export class Deb extends Packager {

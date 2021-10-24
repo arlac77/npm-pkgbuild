@@ -6,11 +6,11 @@
 export async function* keyValueTransformer(source, updates) {
   let key, value;
 
-  function * eject() {
+  function* eject() {
     if (key !== undefined) {
       const [k, v] = updates(key, value);
       if (k !== undefined) {
-        yield`${k}: ${v}\n`;
+        yield `${k}: ${v}\n`;
       }
       key = value = undefined;
     }
@@ -19,7 +19,7 @@ export async function* keyValueTransformer(source, updates) {
   for await (const line of asLines(source)) {
     const m = line.match(/^(\w+):\s*(.*)/);
     if (m) {
-      yield *eject();
+      yield* eject();
       key = m[1];
       value = m[2];
     } else if (key !== undefined) {
@@ -27,7 +27,7 @@ export async function* keyValueTransformer(source, updates) {
       if (m) {
         value += m[1];
       } else {
-        yield * eject();
+        yield* eject();
         yield line + "\n";
       }
     } else {
@@ -35,7 +35,7 @@ export async function* keyValueTransformer(source, updates) {
     }
   }
 
-  yield *eject();
+  yield* eject();
 }
 
 async function* asLines(source) {

@@ -4,12 +4,13 @@
  * @param updates
  */
 export async function* keyValueTransformer(source, updates) {
+  const presentKeys = new Set();
+
   let key, value;
 
   function* eject() {
     if (key !== undefined) {
-      const [k, v] = updates(key, value);
-      if (k !== undefined) {
+      for(const [k,v] of updates(key, value, presentKeys)) {
         yield `${k}: ${v}\n`;
       }
       key = value = undefined;
@@ -22,6 +23,7 @@ export async function* keyValueTransformer(source, updates) {
       yield* eject();
       key = m[1];
       value = m[2];
+      presentKeys.add(key);
     } else if (key !== undefined) {
       const m = line.match(/^\s+(.*)/);
       if (m) {
@@ -36,6 +38,10 @@ export async function* keyValueTransformer(source, updates) {
   }
 
   yield* eject();
+
+  for(const [k,v] of updates(undefined, undefined, presentKeys)) {
+    yield `${k}: ${v}\n`;
+  }
 }
 
 async function* asLines(source) {

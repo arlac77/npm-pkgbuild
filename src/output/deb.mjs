@@ -25,31 +25,36 @@ export class Deb extends Packager {
   }
 
   async execute() {
+    const properties = this.properties;
+
     Object.entries(fields).forEach(([k, v]) => {
-      const e = this.properties[v.alias];
+      const e = properties[v.alias];
       if (e !== undefined) {
-        this.properties[k] = e;
+        properties[k] = e;
       }
     });
 
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
-    const staging = join(
-      tmp,
-      `${this.properties.name}-${this.properties.version}`
-    );
-
-    const presentProperties = new Set();
-
-    const controlProperties = (k, v) => {
-      presentProperties.add(k);
-      return [k, this.properties[k] || v];
-    };
+    const staging = join(tmp, `${properties.name}-${properties.version}`);
 
     const mandatoryProperties = new Set(
       Object.entries(fields)
         .filter(([k, v]) => v.mandatory)
         .map(([k, v]) => k)
     );
+
+    function* controlProperties(k, v, presentKeys) {
+      if (k === undefined) {
+        for (const p of mandatoryProperties) {
+          if (!presentKeys.has(p)) {
+            const v = properties[p];
+            yield [p, v === undefined ? fields[p].default : v];
+          }
+        }
+      } else {
+        yield [k, properties[k] || v];
+      }
+    }
 
     const output = `${staging}${this.constructor.fileNameExtension}`;
 
@@ -85,7 +90,6 @@ export class Deb extends Packager {
 
     let destName = join(staging, debianControlEntry.name);
 
-    console.log("A", destName, dirname(destName));
     await mkdir(dirname(destName), { recursive: true });
 
     const x = await pipeline(
@@ -112,7 +116,7 @@ const fields = {
   Architecture: { default: "any", mandatory: true },
   Description: { alias: "description", mandatory: true },
   Homepage: { alias: "homepage" },
-  Source: { mandatory: true },
+  Source: {},
   Maintainer: { alias: "maintainer", mandatory: true },
   Uploaders: { mandatory: false },
   Section: { recommended: true },

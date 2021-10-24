@@ -27,37 +27,50 @@ kvtt.title = (providedTitle = "keyValueTransformer", input, updates, result) =>
 
 const properties = { Name: "aName", Version: "1.2.3" };
 
-test(
-  kvtt,
-  ["# some content"],
-  (k, v) => [k, v],
-  "# some content\n"
-);
+function* identity(k, v) {
+  if (k !== undefined) {
+    yield [k, v];
+  }
+}
 
-test(
-  kvtt,
-  ["p", "1: v1\np2:  v2"],
-  (k, v) => [k, v],
-  "p1: v1\np2: v2\n"
-);
+function* props(k, v) {
+  if (k !== undefined) {
+    yield [k, properties[k]];
+  }
+}
+
+function* versionOnly(k, v) {
+  if (k === "Version") {
+    yield [k, "1.2.3"];
+  }
+}
+
+function* descriptionOnly(k, v) {
+  if (k !== undefined) {
+    if (k === "Description") {
+      yield [k, "replaced"];
+    } else {
+      yield [k, "a name"];
+    }
+  }
+}
+
+test(kvtt, ["# some content"], identity, "# some content\n");
+
+test(kvtt, ["p", "1: v1\np2:  v2"], identity, "p1: v1\np2: v2\n");
 
 test(
   kvtt,
   ["Nam", "e:\nVersion: 0.0.0"],
-  (k, v) => [k, properties[k]],
+  props,
   "Name: aName\nVersion: 1.2.3\n"
 );
 
-test(
-  kvtt,
-  ["Nam", "e: x\nVersion: 1.0.0"],
-  (k, v) => [k === "Version" ? k : undefined, "1.2.3"],
-  "Version: 1.2.3\n"
-);
+test(kvtt, ["Nam", "e: x\nVersion: 1.0.0"], versionOnly, "Version: 1.2.3\n");
 
 test(
   kvtt,
   ["Nam", "e: x\nDescription: line1\n line2"],
-  (k, v) => [k, k === 'Description' ? "replaced": "a name"],
+  descriptionOnly,
   "Name: a name\nDescription: replaced\n"
 );

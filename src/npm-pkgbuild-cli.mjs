@@ -58,6 +58,8 @@ program
             .filter(([k, v]) => v !== undefined)
         );
 
+        properties.name = properties.name.replace(/^\@\w+\//,'');
+
         if(pkg.contributors) {
           properties.maintainer = pkg.contributors.map(c => `${c.name} <${c.email}>`)[0];
         }

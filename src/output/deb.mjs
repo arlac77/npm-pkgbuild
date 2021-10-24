@@ -4,6 +4,7 @@ import { createWriteStream } from "fs";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
 import execa from "execa";
+import { EmptyContentEntry } from "content-entry";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
 
@@ -52,16 +53,15 @@ export class Deb extends Packager {
 
     const output = `${staging}${this.constructor.fileNameExtension}`;
 
+    let debianControlEntry;
+
     for await (const entry of this.source) {
       const destName = join(staging, entry.name);
 
       await mkdir(dirname(destName), { recursive: true });
 
       if (entry.name === "DEBIAN/control") {
-        await pipeline(
-          keyValueTransformer(await entry.getReadStream(), controlProperties),
-          createWriteStream(destName)
-        );
+        debianControlEntry = entry;
       } else {
         await pipeline(
           await entry.getReadStream(),
@@ -79,7 +79,22 @@ export class Deb extends Packager {
       }
     }
 
-    //console.log(presentProperties, mandatoryProperties);
+    if (!debianControlEntry) {
+      debianControlEntry = new EmptyContentEntry("DEBIAN/control");
+    }
+
+    let destName = join(staging, debianControlEntry.name);
+
+    console.log("A", destName, dirname(destName));
+    await mkdir(dirname(destName), { recursive: true });
+
+    const x = await pipeline(
+      keyValueTransformer(
+        await debianControlEntry.getReadStream(),
+        controlProperties
+      ),
+      createWriteStream(destName)
+    );
 
     await execa("dpkg", ["-b", staging]);
 

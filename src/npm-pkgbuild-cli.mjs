@@ -24,7 +24,6 @@ outputs.forEach(o =>
   program.option(`--${o.name}`, `generate ${o.name} package`)
 );
 
-
 program
   .option("--pkgver <version>", "package version")
   .option("-p --package <dir>", "where to put the package(s)", cwd)
@@ -46,12 +45,14 @@ program
       for (const outputFactory of outputs.filter(
         o => options[o.name] === true
       )) {
-        const {properties, content} = extractFromPackage(JSON.parse(
-          await readFile(
-            join(await packageDirectory(), "package.json"),
-            utf8StreamOptions
+        const { properties, content } = extractFromPackage(
+          JSON.parse(
+            await readFile(
+              join(await packageDirectory(), "package.json"),
+              utf8StreamOptions
+            )
           )
-        ));
+        );
 
         const sources = [...options.content, ...options.meta]
           .filter(x => x)

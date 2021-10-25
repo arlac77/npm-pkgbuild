@@ -29,3 +29,15 @@ test(
   },
   { maintainer: "Markus Felten <markus.felten@gmx.de>" }
 );
+
+test(
+  efpt,
+  {
+    pkgbuild: {
+      content: {
+        "/opt/install": { pattern: "**/*.mjs" }
+      }
+    }
+  },
+  {}
+);

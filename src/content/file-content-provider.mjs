@@ -10,16 +10,16 @@ export class FileContentProvider extends ContentProvider {
   constructor(definitions) {
     super();
 
-    this.definitions = definitions;
+    this.definitions = { pattern: ["**/*"], ...definitions };
+    this.definitions.pattern = asArray(this.definitions.pattern);
   }
 
   async *entries() {
     const definitions = this.definitions;
 
     const base = definitions.base;
-    const pattern = asArray(definitions.pattern || "**/*");
 
-    for (const name of await globby(pattern, {
+    for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
       yield new FileSystemEntry(name, base);

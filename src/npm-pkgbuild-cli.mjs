@@ -6,7 +6,7 @@ import { join } from "path";
 import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { packageDirectory } from "pkg-dir";
-import { utf8StreamOptions } from "./util.mjs";
+import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
 import { FileContentProvider, Deb, PKG, RPM } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
@@ -23,6 +23,7 @@ program.description(description).version(version);
 outputs.forEach(o =>
   program.option(`--${o.name}`, `generate ${o.name} package`)
 );
+
 
 program
   .option("--pkgver <version>", "package version")
@@ -45,40 +46,12 @@ program
       for (const outputFactory of outputs.filter(
         o => options[o.name] === true
       )) {
-        const pkg = JSON.parse(
+        const {properties, content} = extractFromPackage(JSON.parse(
           await readFile(
             join(await packageDirectory(), "package.json"),
             utf8StreamOptions
           )
-        );
-
-        const properties = Object.fromEntries(
-          ["name", "version", "description", "homepage"]
-            .map(key => [key, pkg[key]])
-            .filter(([k, v]) => v !== undefined)
-        );
-
-        if (pkg.bugs) {
-          properties.bugs = pkg.bugs.url;
-        }
-
-        properties.name = properties.name.replace(/^\@\w+\//, "");
-
-        if (pkg.contributors) {
-          properties.maintainer = pkg.contributors.map(
-            c => `${c.name} <${c.email}>`
-          )[0];
-        }
-
-        let pkgContent = [];
-
-        if (pkg.pkgbuild) {
-          if (pkg.pkgbuild.content) {
-            for (const [name, value] of Object.entries(pkg.pkgbuild.content)) {
-              pkgContent.push(new FileContentProvider(value));
-            }
-          }
-        }
+        ));
 
         const sources = [...options.content, ...options.meta]
           .filter(x => x)

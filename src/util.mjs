@@ -1,5 +1,5 @@
-
 export const utf8StreamOptions = { encoding: "utf8" };
+import { FileContentProvider } from "npm-pkgbuild";
 
 export function quote(v) {
   if (v === undefined) return "";
@@ -15,4 +15,41 @@ export function quote(v) {
 
 export function asArray(o) {
   return Array.isArray(o) ? o : [o];
+}
+
+/**
+ * 
+ * @param {Object} pkg package.json content 
+ * @returns 
+ */
+export function extractFromPackage(pkg) {
+  const properties = Object.fromEntries(
+    ["name", "version", "description", "homepage"]
+      .map(key => [key, pkg[key]])
+      .filter(([k, v]) => v !== undefined)
+  );
+
+  if (pkg.bugs) {
+    properties.bugs = pkg.bugs.url;
+  }
+
+  properties.name = properties.name.replace(/^\@\w+\//, "");
+
+  if (pkg.contributors) {
+    properties.maintainer = pkg.contributors.map(
+      c => `${c.name} <${c.email}>`
+    )[0];
+  }
+
+  let content = [];
+
+  if (pkg.pkgbuild) {
+    if (pkg.pkgbuild.content) {
+      for (const [name, value] of Object.entries(pkg.pkgbuild.content)) {
+        content.push(new FileContentProvider(value));
+      }
+    }
+  }
+
+  return { properties, content };
 }

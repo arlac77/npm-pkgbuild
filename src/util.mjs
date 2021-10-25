@@ -18,9 +18,9 @@ export function asArray(o) {
 }
 
 /**
- * 
- * @param {Object} pkg package.json content 
- * @returns 
+ *
+ * @param {Object} pkg package.json content
+ * @returns
  */
 export function extractFromPackage(pkg) {
   const properties = Object.fromEntries(
@@ -33,7 +33,9 @@ export function extractFromPackage(pkg) {
     properties.bugs = pkg.bugs.url;
   }
 
-  properties.name = properties.name.replace(/^\@\w+\//, "");
+  if (properties.name) {
+    properties.name = properties.name.replace(/^\@\w+\//, "");
+  }
 
   if (pkg.contributors) {
     properties.maintainer = pkg.contributors.map(

@@ -16,6 +16,18 @@ test(
   { name: "n1", description: "d1", version: "1.2.3" },
   { name: "n1", description: "d1", version: "1.2.3" }
 );
+test(
+  efpt,
+  {
+    name: "n1",
+    description: "d1",
+    version: "1.2.3",
+    pkgbuild: {
+      name: "n2"
+    }
+  },
+  { name: "n2", description: "d1", version: "1.2.3" }
+);
 
 test(
   efpt,

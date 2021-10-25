@@ -58,10 +58,26 @@ program
             .filter(([k, v]) => v !== undefined)
         );
 
-        properties.name = properties.name.replace(/^\@\w+\//,'');
+        if (pkg.bugs) {
+          properties.bugs = pkg.bugs.url;
+        }
 
-        if(pkg.contributors) {
-          properties.maintainer = pkg.contributors.map(c => `${c.name} <${c.email}>`)[0];
+        properties.name = properties.name.replace(/^\@\w+\//, "");
+
+        if (pkg.contributors) {
+          properties.maintainer = pkg.contributors.map(
+            c => `${c.name} <${c.email}>`
+          )[0];
+        }
+
+        let pkgContent = [];
+
+        if (pkg.pkgbuild) {
+          if (pkg.pkgbuild.content) {
+            for (const [name, value] of Object.entries(pkg.pkgbuild.content)) {
+              pkgContent.push(new FileContentProvider(value));
+            }
+          }
         }
 
         const sources = [...options.content, ...options.meta]

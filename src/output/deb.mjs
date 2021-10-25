@@ -92,7 +92,7 @@ export class Deb extends Packager {
 
     await mkdir(dirname(destName), { recursive: true });
 
-    const x = await pipeline(
+    await pipeline(
       keyValueTransformer(
         await debianControlEntry.getReadStream(),
         controlProperties
@@ -121,7 +121,7 @@ const fields = {
   Essential: { type: "boolean" },
   Origin: { type: "string" },
   Architecture: { type: "string", default: "any", mandatory: true },
-  Homepage: { alias: "homepage", type: "string", },
+  Homepage: { alias: "homepage", type: "string" },
   Bugs: { alias: "bugs", type: "string" },
   Depends: { alias: "depends", type: "packageList" },
   Recommends: { type: "packageList" },

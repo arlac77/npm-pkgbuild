@@ -108,18 +108,29 @@ export class Deb extends Packager {
 
 /**
  * @see https://www.debian.org/doc/debian-policy/ch-controlfields.html
+ * @ https://linux.die.net/man/5/deb-control
  */
 
 const fields = {
-  Package: { alias: "name", mandatory: true },
-  Version: { alias: "version", mandatory: true },
-  Architecture: { default: "any", mandatory: true },
-  Description: { alias: "description", mandatory: true },
-  Homepage: { alias: "homepage" },
+  Package: { alias: "name", type: "string", mandatory: true },
+  Version: { alias: "version", type: "string", mandatory: true },
+  Maintainer: { alias: "maintainer", type: "string", mandatory: true },
+  Description: { alias: "description", type: "string", mandatory: true },
+  Section: { type: "string", recommended: true },
+  Priority: { type: "string", recommended: true },
+  Essential: { type: "boolean" },
+  Origin: { type: "string" },
+  Architecture: { type: "string", default: "any", mandatory: true },
+  Homepage: { alias: "homepage", type: "string", },
+  Bugs: { alias: "bugs", type: "string" },
+  Depends: { alias: "depends", type: "packageList" },
+  Recommends: { type: "packageList" },
+  Suggests: { type: "packageList" },
+  Provides: { type: "packageList" },
+  Breaks: { type: "packageList" },
+  Replaces: { type: "packageList" },
+
   Source: {},
-  Maintainer: { alias: "maintainer", mandatory: true },
   Uploaders: { mandatory: false },
-  Section: { recommended: true },
-  Priority: { recommended: true },
   "Installed-Size": {}
 };

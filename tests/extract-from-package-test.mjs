@@ -1,12 +1,22 @@
 import test from "ava";
 import { extractFromPackage } from "../src/util.mjs";
+import { FileContentProvider } from "npm-pkgbuild";
 
-async function efpt(t, pkg, expectedProperties) {
-  const { properties } = extractFromPackage(pkg);
+async function efpt(t, pkg, expectedProperties, expectedContent) {
+  const { properties, content } = extractFromPackage(pkg);
 
   t.deepEqual(properties, expectedProperties);
+
+  if (expectedContent) {
+    t.deepEqual(content, expectedContent);
+  }
 }
-efpt.title = (providedTitle = "extractFromPackage", pkg, expectedProperties) =>
+efpt.title = (
+  providedTitle = "extractFromPackage",
+  pkg,
+  expectedProperties,
+  expectedContent
+) =>
   ` ${providedTitle} ${JSON.stringify(pkg)} -> ${JSON.stringify(
     expectedProperties
   )}`.trim();
@@ -16,6 +26,7 @@ test(
   { name: "n1", description: "d1", version: "1.2.3" },
   { name: "n1", description: "d1", version: "1.2.3" }
 );
+
 test(
   efpt,
   {
@@ -47,9 +58,17 @@ test(
   {
     pkgbuild: {
       content: {
-        "/opt/install": { pattern: "**/*.mjs" }
-      }
+        "/opt/install": { pattern: "**/*.mjs" },
+        "${installdir}/": {
+          base: "build"
+        }
+      },
+      installdir: "/services/konsum/frontend"
     }
   },
-  {}
+  { installdir: "/services/konsum/frontend" },
+  [
+    new FileContentProvider({ pattern: "**/*.mjs" }),
+    new FileContentProvider({ base: "build" })
+  ]
 );

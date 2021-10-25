@@ -1,5 +1,6 @@
-export const utf8StreamOptions = { encoding: "utf8" };
 import { FileContentProvider } from "npm-pkgbuild";
+
+export const utf8StreamOptions = { encoding: "utf8" };
 
 export function quote(v) {
   if (v === undefined) return "";

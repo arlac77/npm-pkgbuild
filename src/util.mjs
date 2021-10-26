@@ -21,7 +21,7 @@ export function asArray(o) {
 /**
  *
  * @param {Object} pkg package.json content
- * @returns
+ * @returns {Object}
  */
 export function extractFromPackage(pkg) {
   const properties = Object.fromEntries(
@@ -44,20 +44,19 @@ export function extractFromPackage(pkg) {
     )[0];
   }
 
-  const content = [];
+  let sources = [];
 
   if (pkg.pkgbuild) {
     Object.entries(pkg.pkgbuild)
-    .filter(([k, v]) => typeof v === "string")
-    .forEach(([k, v]) => (properties[k] = v));
+      .filter(([k, v]) => typeof v === "string")
+      .forEach(([k, v]) => (properties[k] = v));
 
     if (pkg.pkgbuild.content) {
-      for (const [name, value] of Object.entries(pkg.pkgbuild.content)) {
-        content.push(new FileContentProvider(value));
-      }
+      sources = Object.entries(pkg.pkgbuild.content).map(
+        ([destination, value]) => [new FileContentProvider(value), destination]
+      );
     }
-
   }
 
-  return { properties, content };
+  return { properties, sources };
 }

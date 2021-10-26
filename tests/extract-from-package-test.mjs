@@ -3,12 +3,12 @@ import { extractFromPackage } from "../src/util.mjs";
 import { FileContentProvider } from "npm-pkgbuild";
 
 async function efpt(t, pkg, expectedProperties, expectedContent) {
-  const { properties, content } = extractFromPackage(pkg);
+  const { properties, sources } = extractFromPackage(pkg);
 
   t.deepEqual(properties, expectedProperties);
 
   if (expectedContent) {
-    t.deepEqual(content, expectedContent);
+    t.deepEqual(sources, expectedContent);
   }
 }
 efpt.title = (
@@ -68,7 +68,7 @@ test(
   },
   { installdir: "/services/konsum/frontend" },
   [
-    new FileContentProvider({ pattern: "**/*.mjs" }),
-    new FileContentProvider({ base: "build" })
+    [new FileContentProvider({ pattern: "**/*.mjs" }), "/opt/install"],
+    [new FileContentProvider({ base: "build" }), "${installdir}/"]
   ]
 );

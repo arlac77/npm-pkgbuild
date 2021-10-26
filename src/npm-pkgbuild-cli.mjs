@@ -45,7 +45,7 @@ program
       for (const outputFactory of outputs.filter(
         o => options[o.name] === true
       )) {
-        const { properties, content } = extractFromPackage(
+        const { properties, sources } = extractFromPackage(
           JSON.parse(
             await readFile(
               join(await packageDirectory(), "package.json"),
@@ -54,15 +54,21 @@ program
           )
         );
 
-        const sources = [...options.content, ...options.meta]
-          .filter(x => x)
-          .map(source =>
-            new FileContentProvider({
-              base: source
-            }).entries()
-          );
+        sources.push(
+          ...[...options.content, ...options.meta]
+            .filter(x => x)
+            .map(source => [
+              new FileContentProvider({
+                base: source
+              }),
+              ""
+            ])
+        );
 
-        const output = new outputFactory(aggregateFifo(sources), properties);
+        const output = new outputFactory(
+          aggregateFifo(sources.map(([c, d]) => c.entries())),
+          properties
+        );
 
         const fileName = await output.execute();
 

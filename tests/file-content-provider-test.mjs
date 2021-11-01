@@ -51,12 +51,8 @@ test(
   []
 );
 
-test.skip(
+test(
   fcpt,
   "pacman/tmpfiles.conf",
   []
 );
-
-
-
-

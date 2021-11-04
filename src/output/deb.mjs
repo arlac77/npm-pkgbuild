@@ -8,11 +8,13 @@ import { EmptyContentEntry } from "content-entry";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
 
+const executableAttributes = { chmod: "0775" };
+
 const permissions = {
-  "DEBIAN/preinst": { chmod: "0775" },
-  "DEBIAN/postinst": { chmod: "0775" },
-  "DEBIAN/prerm": { chmod: "0775" },
-  "DEBIAN/postrm": { chmod: "0775" }
+  "DEBIAN/preinst": executableAttributes,
+  "DEBIAN/postinst": executableAttributes,
+  "DEBIAN/prerm": executableAttributes,
+  "DEBIAN/postrm": executableAttributes
 };
 
 export class Deb extends Packager {
@@ -68,6 +70,7 @@ export class Deb extends Packager {
       if (entry.name === "DEBIAN/control") {
         debianControlEntry = entry;
       } else {
+        console.log("ENTRY", entry.name, entry.basename);
         await pipeline(
           await entry.getReadStream(),
           createWriteStream(destName)

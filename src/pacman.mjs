@@ -1,7 +1,7 @@
 import { join } from "path";
 import { createReadStream } from "fs";
 import { mkdir } from "fs/promises";
-import execa from "execa";
+import { execa } from "execa";
 import { copyTemplate } from "./util.mjs";
 import { utf8StreamOptions } from "./util.mjs";
 

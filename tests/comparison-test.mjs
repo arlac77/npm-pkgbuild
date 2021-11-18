@@ -3,7 +3,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { constants } from "fs";
 import { access, readFile, writeFile } from "fs/promises";
-import execa from "execa";
+import { execa } from "execa";
 import { copyModules } from "../src/util.mjs";
 
 

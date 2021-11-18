@@ -54,7 +54,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=16.9.1"
+    "node": ">=16.13.0"
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,6 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { copyFiles, copyModules } from "../src/util.mjs";
 
-
 const here = dirname(fileURLToPath(import.meta.url));
 
 

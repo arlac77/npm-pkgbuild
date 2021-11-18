@@ -2,7 +2,7 @@ import test from "ava";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { mkdir, access } from "fs/promises";
-import execa from "execa";
+import { execa } from "execa";
 import { createContext } from "../src/context.mjs";
 import { cleanup } from "../src/cleanup.mjs";
 

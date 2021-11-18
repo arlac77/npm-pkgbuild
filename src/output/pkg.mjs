@@ -3,7 +3,7 @@ import { tmpdir } from "os";
 import { finished } from "stream";
 import { promisify } from "util";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
-import execa from "execa";
+import { execa } from "execa";
 import { Packager } from "./packager.mjs";
 import { quote } from "../util.mjs";
 

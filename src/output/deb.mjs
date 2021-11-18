@@ -3,7 +3,7 @@ import { tmpdir } from "os";
 import { createWriteStream } from "fs";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
-import execa from "execa";
+import { execa } from "execa";
 import { EmptyContentEntry } from "content-entry";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";

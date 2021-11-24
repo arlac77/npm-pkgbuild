@@ -8,13 +8,16 @@
   "exports": {
     ".": "./src/module.mjs"
   },
-  "description": "create ArchLinux packages from npm packages",
+  "description": "create packages from npm packages",
   "keywords": [
     "ArchLinux",
     "arch-linux",
     "aur",
+    "debian",
     "pacman",
-    "pkgbuild"
+    "pkgbuild",
+    "rpm",
+    "rpmspec"
   ],
   "contributors": [
     {
@@ -35,6 +38,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
+    "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.3.0",
     "content-entry": "^2.9.4",
     "content-entry-filesystem": "^3.1.5",
@@ -44,6 +48,7 @@
     "iterable-string-interceptor": "^1.0.8",
     "npm-packlist": "^3.0.0",
     "pacote": "^12.0.2",
+    "pkg-dir": "^6.0.1",
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {

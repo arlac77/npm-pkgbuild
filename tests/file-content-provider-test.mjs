@@ -16,8 +16,6 @@ async function fcpt(t, definition, list) {
 
   const exists = await Promise.all(entries.map(e => e.isExistent));
   t.is(exists.filter(e => e).length, entries.length);
-
-  //entry.getReadStream({ encoding: "utf-8" });
 }
 fcpt.title = (providedTitle = "FileContentProvider list", definition, list) =>
   ` ${providedTitle} ${JSON.stringify(

@@ -72,7 +72,7 @@ export class Deb extends Packager {
       } else {
         console.log("ENTRY", entry.name, entry.basename);
         await pipeline(
-          await entry.getReadStream(),
+          await entry.readStream,
           createWriteStream(destName)
         );
 
@@ -97,7 +97,7 @@ export class Deb extends Packager {
 
     await pipeline(
       keyValueTransformer(
-        await debianControlEntry.getReadStream(),
+        await debianControlEntry.readStream,
         controlProperties
       ),
       createWriteStream(destName)

@@ -1,7 +1,7 @@
 import test from "ava";
 import { join } from "path";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { FileContentProvider, Deb } from "npm-pkgbuild";
+import { FileContentProvider, DEB } from "npm-pkgbuild";
 
 test("deb", async t => {
   const sources = ["fixtures/content", "fixtures/deb"].map(source =>
@@ -12,7 +12,7 @@ test("deb", async t => {
 
   const properties = { name: "abc", version: "1.0.0" };
 
-  const deb = new Deb(aggregateFifo(sources), properties);
+  const deb = new DEB(aggregateFifo(sources), properties);
 
   const destination = "/tmp";
   const fileName = await deb.execute({ destination });

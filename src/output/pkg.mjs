@@ -1,23 +1,34 @@
 import { join, dirname } from "path";
+import { createWriteStream } from "fs";
 import { tmpdir } from "os";
 import { finished } from "stream";
 import { promisify } from "util";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
-import { execa } from "execa";
+import { execa } from "execa";
 import { Packager } from "./packager.mjs";
 import { quote } from "../util.mjs";
 
 export class PKG extends Packager {
-
-  static get name() { return "pkg"; }
+  static get name() {
+    return "pkg";
+  }
 
   static get fileNameExtension() {
     return ".pkg.tar";
   }
 
-  async execute() {
-
+  async execute(options) {
     const tmp = await mkdtemp(join(tmpdir(), "pkg-"));
+
+    const pkgbuild = join(tmp, "PKGBUILD");
+
+    console.log(pkgbuild);
+
+    const out = createWriteStream(pkgbuild, { encoding: "utf8" });
+    out.write(`
+package() {
+}
+`);
 
     await execa("makepkg", [], { cwd: tmp });
   }

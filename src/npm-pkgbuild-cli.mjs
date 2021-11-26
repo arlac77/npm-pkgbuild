@@ -7,7 +7,7 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { packageDirectory } from "pkg-dir";
 import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
-import { FileContentProvider, Deb, PKG, RPM } from "npm-pkgbuild";
+import { FileContentProvider, DEB, PKG, RPM } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -16,7 +16,7 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const outputs = [Deb, PKG, RPM];
+const outputs = [DEB, PKG, RPM];
 
 program.description(description).version(version);
 

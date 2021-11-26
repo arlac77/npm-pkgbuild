@@ -17,7 +17,7 @@ const permissions = {
   "DEBIAN/postrm": executableAttributes
 };
 
-export class Deb extends Packager {
+export class DEB extends Packager {
   static get name() {
     return "deb";
   }

@@ -1,4 +1,5 @@
 import test from "ava";
+import { join } from "path";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, Deb } from "npm-pkgbuild";
 
@@ -13,6 +14,7 @@ test("deb", async t => {
 
   const deb = new Deb(aggregateFifo(sources), properties);
 
-  const fileName = await deb.execute();
-  t.true(fileName.endsWith("abc-1.0.0.deb"));
+  const destination = "/tmp";
+  const fileName = await deb.execute({ destination });
+  t.is(fileName, join(destination, "abc_1.0.0_any.deb"));
 });

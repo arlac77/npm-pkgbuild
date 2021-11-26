@@ -26,7 +26,7 @@ outputs.forEach(o =>
 
 program
   .option("--pkgver <version>", "package version")
-  .option("-p --package <dir>", "where to put the package(s)", cwd)
+  .option("-d --destination <dir>", "where to put the package(s)", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
     "-c --content <dir>",
@@ -70,7 +70,7 @@ program
           properties
         );
 
-        const fileName = await output.execute();
+        const fileName = await output.execute(options);
 
         console.log(fileName);
       }

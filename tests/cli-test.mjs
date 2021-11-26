@@ -13,5 +13,5 @@ test("cli", async t => {
     ]
   );
 
-  t.true(p.stdout.endsWith("npm-pkgbuild-0.0.0-semantic-release.deb"))
+  t.true(p.stdout.endsWith("npm-pkgbuild_0.0.0-semantic-release_any.deb"))
 });

@@ -3,7 +3,7 @@ import { tmpdir } from "os";
 import { createWriteStream } from "fs";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
-import { execa } from "execa";
+import { execa } from "execa";
 import { EmptyContentEntry } from "content-entry";
 import { Packager } from "./packager.mjs";
 import { keyValueTransformer } from "../key-value-transformer.mjs";
@@ -26,13 +26,22 @@ export class Deb extends Packager {
     return ".deb";
   }
 
-  async execute() {
+  get packageFileName() {
+    return `${this.properties.name}_${this.properties.version}_${this.properties.arch}${this.constructor.fileNameExtension}`;
+  }
+
+  async execute(options) {
     const properties = this.properties;
 
     Object.entries(fields).forEach(([k, v]) => {
       const e = properties[v.alias];
       if (e !== undefined) {
         properties[k] = e;
+      }
+      else {
+        if(v.default !== undefined) {
+          properties[v.alias] = v.default;
+        }
       }
     });
 
@@ -58,8 +67,6 @@ export class Deb extends Packager {
       }
     }
 
-    const output = `${staging}${this.constructor.fileNameExtension}`;
-
     let debianControlEntry;
 
     for await (const entry of this.source) {
@@ -71,10 +78,7 @@ export class Deb extends Packager {
         debianControlEntry = entry;
       } else {
         console.log("ENTRY", entry.name, entry.basename);
-        await pipeline(
-          await entry.readStream,
-          createWriteStream(destName)
-        );
+        await pipeline(await entry.readStream, createWriteStream(destName));
 
         await Promise.all(
           Object.entries(permissions).map(async ([pattern, option]) => {
@@ -103,9 +107,9 @@ export class Deb extends Packager {
       createWriteStream(destName)
     );
 
-    await execa("dpkg", ["-b", staging]);
+    await execa("dpkg", ["-b", staging, options.destination]);
 
-    return output;
+    return join(options.destination, this.packageFileName);
   }
 }
 
@@ -123,7 +127,7 @@ const fields = {
   Priority: { type: "string", recommended: true },
   Essential: { type: "boolean" },
   Origin: { type: "string" },
-  Architecture: { type: "string", default: "any", mandatory: true },
+  Architecture: { alias: "arch", type: "string", default: "any", mandatory: true },
   Homepage: { alias: "homepage", type: "string" },
   Bugs: { alias: "bugs", type: "string" },
   Depends: { alias: "depends", type: "packageList" },

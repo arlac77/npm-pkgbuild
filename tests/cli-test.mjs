@@ -10,7 +10,7 @@ test("cli", async t => {
       new URL("fixtures/content", import.meta.url).pathname,
       "-m",
       new URL("fixtures/deb", import.meta.url).pathname,
-      "--output", "/tmp"
+      "--destination", "/tmp"
     ]
   );
 

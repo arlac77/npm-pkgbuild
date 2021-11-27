@@ -27,6 +27,7 @@ export class PKG extends Packager {
     const out = createWriteStream(pkgbuild, { encoding: "utf8" });
     out.write(`
 package() {
+   cp -r $srcdir/* "$pkgdir"
 }
 `);
 

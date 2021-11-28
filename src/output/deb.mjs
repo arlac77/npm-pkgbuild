@@ -26,33 +26,19 @@ export class DEB extends Packager {
     return ".deb";
   }
 
+  static get fields() {
+    return fields;
+  }
+
   get packageFileName() {
     return `${this.properties.name}_${this.properties.version}_${this.properties.arch}${this.constructor.fileNameExtension}`;
   }
 
   async execute(options) {
     const properties = this.properties;
-
-    Object.entries(fields).forEach(([k, v]) => {
-      const e = properties[v.alias];
-      if (e !== undefined) {
-        properties[k] = e;
-      }
-      else {
-        if(v.default !== undefined) {
-          properties[v.alias] = v.default;
-        }
-      }
-    });
-
+    const mandatoryProperties = this.mandatoryProperties;
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
     const staging = join(tmp, `${properties.name}-${properties.version}`);
-
-    const mandatoryProperties = new Set(
-      Object.entries(fields)
-        .filter(([k, v]) => v.mandatory)
-        .map(([k, v]) => k)
-    );
 
     function* controlProperties(k, v, presentKeys) {
       if (k === undefined) {
@@ -127,7 +113,12 @@ const fields = {
   Priority: { type: "string", recommended: true },
   Essential: { type: "boolean" },
   Origin: { type: "string" },
-  Architecture: { alias: "arch", type: "string", default: "any", mandatory: true },
+  Architecture: {
+    alias: "arch",
+    type: "string",
+    default: "any",
+    mandatory: true
+  },
   Homepage: { alias: "homepage", type: "string" },
   Bugs: { alias: "bugs", type: "string" },
   Depends: { alias: "depends", type: "packageList" },

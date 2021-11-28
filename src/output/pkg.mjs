@@ -1,4 +1,4 @@
-import { join, dirname } from "path";
+import { join } from "path";
 import { createWriteStream } from "fs";
 import { tmpdir } from "os";
 import { finished } from "stream";
@@ -14,24 +14,33 @@ export class PKG extends Packager {
   }
 
   static get fileNameExtension() {
-    return ".pkg.tar";
+    return ".pkg.tar.zst";
+  }
+
+  static get fields() {
+    return fields;
   }
 
   async execute(options) {
     const tmp = await mkdtemp(join(tmpdir(), "pkg-"));
 
-    const pkgbuild = join(tmp, "PKGBUILD");
+    const pkgbuildFileName = join(tmp, "PKGBUILD");
 
-    console.log(pkgbuild);
+    this.writePkbuild(pkgbuildFileName);
 
-    const out = createWriteStream(pkgbuild, { encoding: "utf8" });
+    await execa("makepkg", [], { cwd: tmp });
+  }
+
+  writePkbuild(pkgbuildFileName) {
+    const out = createWriteStream(pkgbuildFileName, { encoding: "utf8" });
+
     out.write(`
 package() {
    cp -r $srcdir/* "$pkgdir"
 }
 `);
 
-    await execa("makepkg", [], { cwd: tmp });
+    out.end();
   }
 }
 
@@ -39,41 +48,39 @@ package() {
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
-const arrayOptionsPKGBUILD = [
-  "pkgname",
-  "license",
-  "source",
-  "validpgpkeys",
-  "noextract",
-  "md5sums",
-  "sha1sums",
-  "sha256sums",
-  "sha384sums",
-  "sha512sums",
-  "groups",
-  "arch",
-  "backup",
-  "depends",
-  "makedepends",
-  "checkdepends",
-  "optdepends",
-  "conflicts",
-  "provides",
-  "replaces",
-  "options"
-];
+const fields = {
+  pkgname: { alias: "name", type: "string[]" },
+  license: { type: "string[]" },
+  source: { type: "string[]" },
+  validpgpkeys: { type: "string[]" },
+  noextract: { type: "string[]" },
+  md5sums: { type: "string[]" },
+  sha1sums: { type: "string[]" },
+  sha256sums: { type: "string[]" },
+  sha384sums: { type: "string[]" },
+  sha512sums: { type: "string[]" },
+  groups: { type: "string[]" },
+  arch: { type: "string[]" },
+  backup: { type: "string[]" },
+  depends: { type: "string[]" },
+  makedepends: { type: "string[]" },
+  checkdepends: { type: "string[]" },
+  optdepends: { type: "string[]" },
+  conflicts: { type: "string[]" },
+  provides: { type: "string[]" },
+  replaces: { type: "string[]" },
+  options: { type: "string[]" },
 
-const optionsPKGBUILD = [
-  ...arrayOptionsPKGBUILD,
-  "pkgver",
-  "pkgrel",
-  "epoch",
-  "pkgdesc",
-  "url",
-  "install",
-  "changelog"
-];
+  pkgver: {},
+  pkgrel: {},
+  epoch: {},
+  pkgdesc: {},
+  url: {},
+  install: {},
+  changelog: {}
+};
 
+/*
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
@@ -151,7 +158,7 @@ ${Object.keys(properties)
 ${pkgver}
 build() {
   cd \${pkgname}${directory}
-  sed -i 's/"version": ".*/"version": "${
+  sed -i 's/"version": ".* /"version": "${
     context.properties.pkgver
   }",/' package.json
   npm install
@@ -170,8 +177,6 @@ package() {
 `
   );
 
-  out.end();
-
   await promisify(finished);
 }
 
@@ -189,3 +194,4 @@ function makeDepends(d) {
     return a;
   }, []);
 }
+*/

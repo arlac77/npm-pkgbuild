@@ -8,7 +8,26 @@ export class RPM extends Packager {
   static get fileNameExtension() {
     return ".rpm";
   }
+
+  static get fields() {
+    return fields;
+  }
+
+  async execute(options) {
+    const properties = this.properties;
+    const mandatoryProperties = this.mandatoryProperties;
+  }
 }
+
+const fields = {
+  Name: { alias: "name",type: "string" },
+  Summary: { alias: "description", type: "string" },
+  License: { alias: "license", type: "string" },
+  Version: { alias: "version", type: "string" },
+  Release: { type: "integer" },
+  Packager: { type: "string" },
+  URL: { alias: "homepage", type: "string" }
+};
 
 export async function rpmspec(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
@@ -19,16 +38,6 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
   if (pkg.repository) {
     directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
   }
-
-  const properties = {
-    Name: pkg.name,
-    Summary: pkg.description,
-    License: pkg.license,
-    Version: context.properties.pkgver.replace(/\-.*$/, ""),
-    Release: context.properties.pkgrel,
-    Packager: pkg.contributors.map((c, i) => `${c.name} <${c.email}>`)[0],
-    URL: pkg.homepage
-  };
 
   const npmDistPackage = options.npmDist
     ? `( cd %{_sourcedir}${installdir}

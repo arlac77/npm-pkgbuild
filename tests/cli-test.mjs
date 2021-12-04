@@ -1,7 +1,7 @@
 import test from "ava";
 import { execa } from "execa";
 
-test("cli", async t => {
+test("cli --deb", async t => {
   const p = await execa(
     new URL("../src/npm-pkgbuild-cli.mjs", import.meta.url).pathname,
     [

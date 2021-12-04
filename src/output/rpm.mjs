@@ -1,9 +1,10 @@
 import { globby } from "globby";
 import { Packager } from "./packager.mjs";
 
-
 export class RPM extends Packager {
-  static get name() { return "rpm"; }
+  static get name() {
+    return "rpm";
+  }
 
   static get fileNameExtension() {
     return ".rpm";
@@ -16,17 +17,35 @@ export class RPM extends Packager {
   async execute(options) {
     const properties = this.properties;
     const mandatoryProperties = this.mandatoryProperties;
+
+    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
+    const staging = join(tmp, `${properties.name}-${properties.version}`);
+
+    let specFileName = ".spec";
+
+    //if (entry.name === ".spec")
+
+    await execa("rpmbuild", ["-ba", specFileName]);
   }
 }
 
 const fields = {
-  Name: { alias: "name",type: "string" },
+  Name: { alias: "name", type: "string" },
   Summary: { alias: "description", type: "string" },
   License: { alias: "license", type: "string" },
   Version: { alias: "version", type: "string" },
-  Release: { type: "integer" },
+  Release: { type: "integer", default: 0 },
   Packager: { type: "string" },
   URL: { alias: "homepage", type: "string" }
+};
+
+const sections = {
+  description: {},
+  prep: {},
+  build: {},
+  install: {},
+  files: {},
+  changelog: {}
 };
 
 export async function rpmspec(context, stagingDir, out, options = {}) {
@@ -34,10 +53,6 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
 
   const installdir = context.properties.installdir;
   let directory = "";
-
-  if (pkg.repository) {
-    directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
-  }
 
   const npmDistPackage = options.npmDist
     ? `( cd %{_sourcedir}${installdir}
@@ -56,8 +71,6 @@ export async function rpmspec(context, stagingDir, out, options = {}) {
 
 %description
 ${pkg.description}
-
-%prep
 
 %build
 npm install

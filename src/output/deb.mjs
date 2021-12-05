@@ -69,7 +69,6 @@ export class DEB extends Packager {
         await Promise.all(
           Object.entries(permissions).map(async ([pattern, option]) => {
             if (destName.endsWith(pattern)) {
-              //console.log("CHMOD", option.chmod, destName, pattern);
               return chmod(destName, option.chmod);
             }
           })

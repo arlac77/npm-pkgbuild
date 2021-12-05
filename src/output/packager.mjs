@@ -1,3 +1,14 @@
+/**
+ * @typedef {Object} Field
+ * @property {string} alias interchangeable field name
+ * @property {string} type
+ * @property {any} default
+ * @property {boolean} mandatory 
+ */
+ 
+/**
+ * @param {Object} properties
+ */
 export class Packager {
   static get fields() {
     return {};
@@ -29,15 +40,21 @@ export class Packager {
     return properties;
   }
 
-  get mandatoryProperties() {
-    const mandatoryProperties = new Set(
+  /**
+   * @return {Set<string,Field>} mandatory fields
+   */
+  get mandatoryFields() {
+    const mandatoryFields = new Set(
       Object.entries(this.fields)
         .filter(([k, v]) => v.mandatory)
         .map(([k, v]) => k)
     );
 
-    return mandatoryProperties;
+    return mandatoryFields;
   }
 
+  /**
+   * Execute package generation
+   */
   async execute() {}
 }

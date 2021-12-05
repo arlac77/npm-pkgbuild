@@ -36,13 +36,13 @@ export class DEB extends Packager {
 
   async execute(options) {
     const properties = this.properties;
-    const mandatoryProperties = this.mandatoryProperties;
+    const mandatoryFields = this.mandatoryFields;
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
     const staging = join(tmp, `${properties.name}-${properties.version}`);
 
     function* controlProperties(k, v, presentKeys) {
       if (k === undefined) {
-        for (const p of mandatoryProperties) {
+        for (const p of mandatoryFields) {
           if (!presentKeys.has(p)) {
             const v = properties[p];
             yield [p, v === undefined ? fields[p].default : v];

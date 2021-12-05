@@ -16,7 +16,7 @@ export class RPM extends Packager {
 
   async execute(options) {
     const properties = this.properties;
-    const mandatoryProperties = this.mandatoryProperties;
+    const mandatoryFields = this.mandatoryFields;
 
     const tmp = await mkdtemp(join(tmpdir(), "deb-"));
     const staging = join(tmp, `${properties.name}-${properties.version}`);

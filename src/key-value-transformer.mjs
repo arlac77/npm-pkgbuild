@@ -10,7 +10,7 @@ export async function* keyValueTransformer(source, updates) {
 
   function* eject() {
     if (key !== undefined) {
-      for(const [k,v] of updates(key, value, presentKeys)) {
+      for (const [k, v] of updates(key, value, presentKeys)) {
         yield `${k}: ${v}\n`;
       }
       key = value = undefined;
@@ -39,7 +39,7 @@ export async function* keyValueTransformer(source, updates) {
 
   yield* eject();
 
-  for(const [k,v] of updates(undefined, undefined, presentKeys)) {
+  for (const [k, v] of updates(undefined, undefined, presentKeys)) {
     yield `${k}: ${v}\n`;
   }
 }

@@ -1,7 +1,16 @@
+
+
+/**
+ * @typedef {Function} KeyValueUpdates
+ * @param {string} key 
+ * @param {string} value
+ * @param {Set<string>} presentKeys
+ */
+
 /**
  * Replaces key value pairs in a stream of lines.
  * @param {AsyncIterator<String>} source
- * @param updates
+ * @param {KeyValueUpdates} updates
  */
 export async function* keyValueTransformer(source, updates) {
   const presentKeys = new Set();

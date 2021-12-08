@@ -5,8 +5,8 @@ import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry } from "content-entry";
+import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { keyValueTransformer } from "../key-value-transformer.mjs";
 
 const executableAttributes = { chmod: "0775" };
 
@@ -53,6 +53,16 @@ export class DEB extends Packager {
       }
     }
 
+    const debianControlName = "DEBIAN/control";
+    const transformers = [
+      {
+        match: entry => entry.name === debianControlName,
+        transform: async entry =>
+          keyValueTransformer(await entry.readStream, controlProperties),
+        createEntryWhenMissing: new EmptyContentEntry(debianControlName)
+        }
+    ];
+
     let debianControlEntry;
 
     for await (const entry of this.source) {
@@ -60,7 +70,7 @@ export class DEB extends Packager {
 
       await mkdir(dirname(destName), { recursive: true });
 
-      if (entry.name === "DEBIAN/control") {
+      if (entry.name === debianControlName) {
         debianControlEntry = entry;
       } else {
         console.log("ENTRY", entry.name, entry.basename);
@@ -77,7 +87,7 @@ export class DEB extends Packager {
     }
 
     if (!debianControlEntry) {
-      debianControlEntry = new EmptyContentEntry("DEBIAN/control");
+      debianControlEntry = new EmptyContentEntry(debianControlName);
     }
 
     let destName = join(staging, debianControlEntry.name);

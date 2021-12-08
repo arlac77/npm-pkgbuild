@@ -60,3 +60,30 @@ export function extractFromPackage(pkg) {
 
   return { properties, sources };
 }
+
+/**
+ * Copy content from source into destinationDirectory
+ * @param {AsyncIterator<ContentEntry>} source 
+ * @param {string} destinationDirectory 
+ */
+async function copyEntries(source, destinationDirectory, transformers) {
+  for await (const entry of source) {
+    const destName = join(destinationDirectory, entry.name);
+
+    await mkdir(dirname(destName), { recursive: true });
+
+    for(const t of transformers) {
+      if(t.match(entry)) {
+        t.transform(entry);
+
+        break;
+      }
+    }
+
+    if (entry.name === "DEBIAN/control") {
+      debianControlEntry = entry;
+    } else {
+      await pipeline(await entry.readStream, createWriteStream(destName));
+    }
+  }
+}

@@ -1,3 +1,8 @@
+import { join, dirname } from "path";
+import { mkdir } from "fs/promises";
+import { pipeline } from "stream/promises";
+import { createWriteStream } from "fs";
+
 import { FileContentProvider } from "npm-pkgbuild";
 
 export const utf8StreamOptions = { encoding: "utf8" };
@@ -68,15 +73,14 @@ export function extractFromPackage(pkg) {
  * @param {Transformer[]} transformers
  */
 export async function copyEntries(source, destinationDirectory, transformers) {
-  for await (const entry of source) {
+  for await (let entry of source) {
     const destName = join(destinationDirectory, entry.name);
 
     await mkdir(dirname(destName), { recursive: true });
 
     for (const t of transformers) {
       if (t.match(entry)) {
-        t.transform(entry);
-
+        entry = await t.transform(entry);
         break;
       }
     }

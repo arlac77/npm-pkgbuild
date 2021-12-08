@@ -4,7 +4,7 @@ import { createWriteStream } from "fs";
 import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
-import { EmptyContentEntry } from "content-entry";
+import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 
@@ -58,9 +58,12 @@ export class DEB extends Packager {
       {
         match: entry => entry.name === debianControlName,
         transform: async entry =>
-          keyValueTransformer(await entry.readStream, controlProperties),
+          new ReadableStreamContentEntry(
+            entry.name,
+            keyValueTransformer(await entry.readStream, controlProperties)
+          ),
         createEntryWhenMissing: new EmptyContentEntry(debianControlName)
-        }
+      }
     ];
 
     let debianControlEntry;

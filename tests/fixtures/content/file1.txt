@@ -2,3 +2,4 @@ content of {{name}} file1.txt
 {{ unknown value }}
 {{ serviceURL }}
 {{urlPrefix}}
+key1: value1

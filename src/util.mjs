@@ -75,13 +75,11 @@ export function extractFromPackage(pkg) {
 export async function copyEntries(source, destinationDirectory, transformers) {
   for await (let entry of source) {
     const destName = join(destinationDirectory, entry.name);
-
     await mkdir(dirname(destName), { recursive: true });
 
     for (const t of transformers) {
       if (t.match(entry)) {
         entry = await t.transform(entry);
-        break;
       }
     }
 

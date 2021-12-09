@@ -101,6 +101,6 @@ export async function copyEntries(source, destinationDirectory) {
   for await (let entry of source) {
     const destName = join(destinationDirectory, entry.name);
     await mkdir(dirname(destName), { recursive: true });
-    await pipeline(await entry.readStream, createWriteStream(destName, { mode: entry.unixMode }));
+    await pipeline(await entry.readStream, createWriteStream(destName, { mode: entry.mode }));
   }
 }

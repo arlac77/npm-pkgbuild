@@ -17,13 +17,18 @@ export class RPM extends Packager {
   async execute(options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
-
-    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
+    const tmp = await mkdtemp(join(tmpdir(), "rpm-"));
     const staging = join(tmp, `${properties.name}-${properties.version}`);
 
-    let specFileName = ".spec";
+    let specFileName = `${properties.name}.spec`;
 
-    //if (entry.name === ".spec")
+
+    const transformers = [];
+
+    await copyEntries(
+      transform(this.source, transformers),
+      staging
+    );
 
     await execa("rpmbuild", ["-ba", specFileName]);
   }

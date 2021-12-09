@@ -97,10 +97,26 @@ export async function* transform(source, transformers) {
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
  */
-export async function copyEntries(source, destinationDirectory) {
+export async function copyEntries(
+  source,
+  destinationDirectory,
+  attributes = []
+) {
   for await (let entry of source) {
     const destName = join(destinationDirectory, entry.name);
     await mkdir(dirname(destName), { recursive: true });
-    await pipeline(await entry.readStream, createWriteStream(destName, { mode: entry.mode }));
+
+    const options = { mode: entry.mode };
+
+    for (const a of attributes) {
+      if (entry.name.match(a.pattern)) {
+        options.mode = a.mode;
+      }
+    }
+
+    await pipeline(
+      await entry.readStream,
+      createWriteStream(destName, options)
+    );
   }
 }

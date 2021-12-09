@@ -7,14 +7,9 @@ import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 
-const executableAttributes = { mode: 0o775 };
-
-const permissions = {
-  "DEBIAN/preinst": executableAttributes,
-  "DEBIAN/postinst": executableAttributes,
-  "DEBIAN/prerm": executableAttributes,
-  "DEBIAN/postrm": executableAttributes
-};
+const attributes = [
+  { pattern: /DEBIAN\/.*(inst|rm)/, mode: 0o775 }
+];
 
 export class DEB extends Packager {
   static get name() {
@@ -65,7 +60,11 @@ export class DEB extends Packager {
       }
     ];
 
-    await copyEntries(transform(this.source, transformers), staging);
+    await copyEntries(
+      transform(this.source, transformers),
+      staging,
+      attributes
+    );
 
     await execa("dpkg", ["-b", staging, options.destination]);
 
@@ -75,7 +74,7 @@ export class DEB extends Packager {
 
 /**
  * @see https://www.debian.org/doc/debian-policy/ch-controlfields.html
- * @ https://linux.die.net/man/5/deb-control
+ * @see https://linux.die.net/man/5/deb-control
  */
 
 const fields = {

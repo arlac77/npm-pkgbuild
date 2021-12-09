@@ -67,21 +67,41 @@ export function extractFromPackage(pkg) {
 }
 
 /**
- * Copy content from source into destinationDirectory
+ * Apply transformers
  * @param {AsyncIterator<ContentEntry>} source
- * @param {string} destinationDirectory
  * @param {Transformer[]} transformers
  */
-export async function copyEntries(source, destinationDirectory, transformers) {
-  for await (let entry of source) {
-    const destName = join(destinationDirectory, entry.name);
-    await mkdir(dirname(destName), { recursive: true });
+export async function* transform(source, transformers) {
 
+  const usedTransformers = new Set();
+
+  for await (let entry of source) {
     for (const t of transformers) {
       if (t.match(entry)) {
         entry = await t.transform(entry);
+        usedTransformers.add(t);
       }
     }
+
+    yield entry;
+  }
+
+  for(const t of transformers) {
+    if(!usedTransformers.has(t) && t.createEntryWhenMissing !== undefined) {
+      yield t.createEntryWhenMissing();
+    }
+  }
+}
+
+/**
+ * Copy content from source into destinationDirectory
+ * @param {AsyncIterator<ContentEntry>} source
+ * @param {string} destinationDirectory
+ */
+export async function copyEntries(source, destinationDirectory) {
+  for await (let entry of source) {
+    const destName = join(destinationDirectory, entry.name);
+    await mkdir(dirname(destName), { recursive: true });
 
     await pipeline(await entry.readStream, createWriteStream(destName));
   }

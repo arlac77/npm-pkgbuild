@@ -62,7 +62,7 @@ export class DEB extends Packager {
             entry.name,
             keyValueTransformer(await entry.readStream, controlProperties)
           ),
-        createEntryWhenMissing: new EmptyContentEntry(debianControlName)
+        createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
       }
     ];
 

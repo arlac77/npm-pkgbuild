@@ -1,6 +1,8 @@
 import test from "ava";
-import { access } from "fs/promises";
+import { access, mkdtemp } from "fs/promises";
 import { constants } from "fs";
+import { join } from "path";
+import { tmpdir } from "os";
 import { ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { FileContentProvider, copyEntries, transform } from "npm-pkgbuild";
@@ -10,9 +12,11 @@ test("copyEntries plain", async t => {
     base: new URL("fixtures/content", import.meta.url).pathname
   });
 
-  await copyEntries(files, "/tmp", []);
+  const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
-  await access("/tmp/file1.txt", constants.F_OK);
+  await copyEntries(files, tmp, []);
+
+  await access(join(tmp, "file1.txt"), constants.F_OK);
 
   t.true(true);
 });
@@ -28,6 +32,8 @@ test.only("copyEntries with transform", async t => {
     }
   }
 
+  const tmp = await mkdtemp(join(tmpdir(), "copy-transform-"));
+
   await copyEntries(
     transform(files, [
       {
@@ -39,10 +45,10 @@ test.only("copyEntries with transform", async t => {
           )
       }
     ]),
-    "/tmp"
+    tmp
   );
 
-  await access("/tmp/file1.txt", constants.F_OK);
+  await access(join(tmp, "file1.txt"), constants.F_OK);
 
   t.true(true);
 });

@@ -7,7 +7,7 @@ import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 
-const executableAttributes = { mode: o0775 };
+const executableAttributes = { mode: 0o775 };
 
 const permissions = {
   "DEBIAN/preinst": executableAttributes,

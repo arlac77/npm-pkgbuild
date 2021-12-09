@@ -72,7 +72,6 @@ export function extractFromPackage(pkg) {
  * @param {Transformer[]} transformers
  */
 export async function* transform(source, transformers) {
-
   const usedTransformers = new Set();
 
   for await (let entry of source) {
@@ -86,9 +85,9 @@ export async function* transform(source, transformers) {
     yield entry;
   }
 
-  for(const t of transformers) {
-    if(!usedTransformers.has(t) && t.createEntryWhenMissing !== undefined) {
-      yield t.createEntryWhenMissing();
+  for (const t of transformers) {
+    if (!usedTransformers.has(t) && t.createEntryWhenMissing !== undefined) {
+      yield t.transform(await t.createEntryWhenMissing());
     }
   }
 }
@@ -102,7 +101,6 @@ export async function copyEntries(source, destinationDirectory) {
   for await (let entry of source) {
     const destName = join(destinationDirectory, entry.name);
     await mkdir(dirname(destName), { recursive: true });
-
-    await pipeline(await entry.readStream, createWriteStream(destName));
+    await pipeline(await entry.readStream, createWriteStream(destName, { mode: entry.unixMode }));
   }
 }

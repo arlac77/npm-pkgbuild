@@ -1,14 +1,13 @@
 import { join, dirname } from "path";
 import { tmpdir } from "os";
-import { createWriteStream } from "fs";
-import { mkdtemp, mkdir, chmod } from "fs/promises";
-import { pipeline } from "stream/promises";
+import { mkdtemp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
+import { copyEntries, transform } from "../util.mjs";
 
-const executableAttributes = { chmod: "0775" };
+const executableAttributes = { mode: o0775 };
 
 const permissions = {
   "DEBIAN/preinst": executableAttributes,
@@ -66,44 +65,7 @@ export class DEB extends Packager {
       }
     ];
 
-    let debianControlEntry;
-
-    for await (const entry of this.source) {
-      const destName = join(staging, entry.name);
-
-      await mkdir(dirname(destName), { recursive: true });
-
-      if (entry.name === debianControlName) {
-        debianControlEntry = entry;
-      } else {
-        console.log("ENTRY", entry.name, entry.basename);
-        await pipeline(await entry.readStream, createWriteStream(destName));
-
-        await Promise.all(
-          Object.entries(permissions).map(async ([pattern, option]) => {
-            if (destName.endsWith(pattern)) {
-              return chmod(destName, option.chmod);
-            }
-          })
-        );
-      }
-    }
-
-    if (!debianControlEntry) {
-      debianControlEntry = new EmptyContentEntry(debianControlName);
-    }
-
-    let destName = join(staging, debianControlEntry.name);
-
-    await mkdir(dirname(destName), { recursive: true });
-
-    await pipeline(
-      keyValueTransformer(
-        await debianControlEntry.readStream,
-        controlProperties
-      ),
-      createWriteStream(destName)
-    );
+    await copyEntries(transform(this.source, transformers), staging);
 
     await execa("dpkg", ["-b", staging, options.destination]);
 

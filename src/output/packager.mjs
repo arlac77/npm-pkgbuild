@@ -59,7 +59,7 @@ export class Packager {
 
   /**
    * Create tmp directory.
-   * @return {Promise<string>} dircetory path
+   * @return {Promise<string>} directory path
    */
   get tmpdir()
   {

@@ -14,19 +14,17 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(options) {
+  async execute(sources,options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
-    const tmp = await mkdtemp(join(tmpdir(), "rpm-"));
-    const staging = join(tmp, `${properties.name}-${properties.version}`);
+    const staging = await this.tmpdir;
 
     let specFileName = `${properties.name}.spec`;
-
 
     const transformers = [];
 
     await copyEntries(
-      transform(this.source, transformers),
+      transform(sources, transformers),
       staging
     );
 

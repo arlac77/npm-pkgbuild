@@ -21,12 +21,10 @@ export class PKG extends Packager {
     return fields;
   }
 
-  async execute(options) {
+  async execute(sources,options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
-    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
-    const staging = join(tmp, `${properties.name}-${properties.version}`);
-
+    const staging = await this.tmpdir;
 
     const pkgbuildFileName = join(tmp, "PKGBUILD");
 
@@ -34,7 +32,7 @@ export class PKG extends Packager {
 
     const transformers = [];
 
-    await copyEntries(transform(this.source, transformers), staging);
+    await copyEntries(transform(sources, transformers), staging);
 
     await execa("makepkg", [], { cwd: tmp });
   }

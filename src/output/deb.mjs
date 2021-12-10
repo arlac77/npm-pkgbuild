@@ -1,15 +1,11 @@
-import { join, dirname } from "path";
-import { tmpdir } from "os";
-import { mkdtemp } from "fs/promises";
+import { join } from "path";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 
-const attributes = [
-  { pattern: /DEBIAN\/.*(inst|rm)/, mode: 0o775 }
-];
+const attributes = [{ pattern: /DEBIAN\/.*(inst|rm)/, mode: 0o775 }];
 
 export class DEB extends Packager {
   static get name() {
@@ -28,11 +24,10 @@ export class DEB extends Packager {
     return `${this.properties.name}_${this.properties.version}_${this.properties.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(options) {
+  async execute(sources, options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
-    const tmp = await mkdtemp(join(tmpdir(), "deb-"));
-    const staging = join(tmp, `${properties.name}-${properties.version}`);
+    const staging = await this.tmpdir;
 
     function* controlProperties(k, v, presentKeys) {
       if (k === undefined) {
@@ -60,11 +55,7 @@ export class DEB extends Packager {
       }
     ];
 
-    await copyEntries(
-      transform(this.source, transformers),
-      staging,
-      attributes
-    );
+    await copyEntries(transform(sources, transformers), staging, attributes);
 
     await execa("dpkg", ["-b", staging, options.destination]);
 

@@ -12,9 +12,9 @@ test("deb", async t => {
 
   const properties = { name: "abc", version: "1.0.0" };
 
-  const deb = new DEB(aggregateFifo(sources), properties);
+  const deb = new DEB(properties);
 
   const destination = "/tmp";
-  const fileName = await deb.execute({ destination });
+  const fileName = await deb.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc_1.0.0_any.deb"));
 });

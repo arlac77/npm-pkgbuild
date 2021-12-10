@@ -1,3 +1,8 @@
+import { join } from "path";
+import { tmpdir } from "os";
+import { mkdtemp } from "fs/promises";
+
+
 /**
  * @typedef {Object} Field
  * @property {string} alias interchangeable field name
@@ -14,8 +19,7 @@ export class Packager {
     return {};
   }
 
-  constructor(source, properties) {
-    this.source = source;
+  constructor(properties) {
     this._properties = properties;
   }
 
@@ -54,7 +58,16 @@ export class Packager {
   }
 
   /**
+   * Create tmp directory.
+   * @return {Promise<string>} dircetory path
+   */
+  get tmpdir()
+  {
+    return mkdtemp(join(tmpdir(), this.constructor.name));
+  }
+
+  /**
    * Execute package generation
    */
-  async execute() {}
+  async execute(sources,options) {}
 }

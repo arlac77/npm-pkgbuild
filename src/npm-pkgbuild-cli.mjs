@@ -65,12 +65,9 @@ program
             ])
         );
 
-        const output = new outputFactory(
-          aggregateFifo(sources.map(([c, d]) => c.entries())),
-          properties
-        );
+        const output = new outputFactory(properties);
 
-        const fileName = await output.execute(options);
+        const fileName = await output.execute(aggregateFifo(sources.map(([c, d]) => c.entries())), options);
 
         console.log(fileName);
       }

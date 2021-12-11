@@ -7,7 +7,7 @@ test("deb", async t => {
   const sources = ["fixtures/content", "fixtures/deb"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
-    }).entries()
+    })[Symbol.asyncIterator]()
   );
 
   const properties = { name: "abc", version: "1.0.0" };

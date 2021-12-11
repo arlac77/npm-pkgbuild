@@ -9,7 +9,7 @@ import { BufferContentEntry } from "content-entry";
  * content from npm pack
  */
 export class NPMPackContentProvider extends ContentProvider {
-  async *entries(context) {
+  async *[Symbol.asyncIterator]() {
     //const m = await pacote.manifest(context.dir);
     //console.log('got it', m);
 

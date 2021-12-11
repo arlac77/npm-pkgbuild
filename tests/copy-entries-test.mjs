@@ -5,6 +5,7 @@ import { join } from "path";
 import { tmpdir } from "os";
 import { ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
+import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, copyEntries, transform } from "npm-pkgbuild";
 
 test("copyEntries plain", async t => {
@@ -35,7 +36,7 @@ test.only("copyEntries with transform", async t => {
   const tmp = await mkdtemp(join(tmpdir(), "copy-transform-"));
 
   await copyEntries(
-    transform(files, [
+    transform(aggregateFifo([files[Symbol.asyncIterator]()]), [
       {
         match: entry => entry.name === "file1.txt",
         transform: async entry =>

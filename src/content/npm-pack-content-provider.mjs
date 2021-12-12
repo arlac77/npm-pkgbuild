@@ -6,7 +6,7 @@ import { ContentProvider } from "./content-provider.mjs";
 import { BufferContentEntry } from "content-entry";
 
 /**
- * content from npm pack
+ * Content from npm pack.
  */
 export class NPMPackContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {

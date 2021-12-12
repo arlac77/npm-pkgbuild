@@ -1,7 +1,7 @@
 import { ContentProvider } from "./content-provider.mjs";
 
 /**
- * content from node_modules
+ * Content from node_modules
  */
 export class NodeModulesContentProvider extends ContentProvider {
 }

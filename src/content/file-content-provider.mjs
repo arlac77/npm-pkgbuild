@@ -6,6 +6,9 @@ import { ContentProvider } from "./content-provider.mjs";
 
 /**
  * Content provided form the file system.
+ * @param {Object|string} definitions
+ * @param {string|string[]} definitions.pattern
+ * @param {string} definitions.base base directory where to find the files
  */
 export class FileContentProvider extends ContentProvider {
   constructor(definitions) {

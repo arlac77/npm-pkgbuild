@@ -24,7 +24,7 @@ export function asArray(o) {
 }
 
 /**
- *
+ * Extract package definition from package.json.
  * @param {Object} pkg package.json content
  * @returns {Object}
  */

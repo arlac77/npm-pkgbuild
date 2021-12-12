@@ -15,17 +15,17 @@
       "url" : "http://somwhere.com/prefix/api"
     }
   },
-  "pacman": {
+  "pkgbuild": {
     "installdir": "/services/${name}",
     "groups": "webhook",
     "depends": {
       "redis": ">=5.0.3"
     },
-    "hooks": "pacman/pacman.install",
+    "hooks": "pkgbuild/pacman.install",
     "includeNpmPack" : true,
     "includeNodeModules" : true,
     "content": {
-      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf"
+      "/usr/lib/tmpfiles.d/${name}.conf": "pkgbuild/tmpfiles.conf"
     }
   }
 }

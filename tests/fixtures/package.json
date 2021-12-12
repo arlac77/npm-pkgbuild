@@ -23,7 +23,7 @@
     "serviceURL" : "/services/${name}",
     "urlPrefix" : "/services/${name}/api"
   },
-  "pacman": {
+  "pkgbuild": {
     "properties" : {
       "installdir" : "/services/${name}"
     },
@@ -39,22 +39,22 @@
       "redis": ">=5.0.3-7",
       "systemd": ">=241"
     },
-    "hooks": "pacman/pacman.install",
+    "hooks": "pkgbuild/pacman.install",
     "content": {
       "${installdir}": {
         "npm" : ["dist","dependencies"]
       },
-      "/usr/lib/systemd/system/" : {
+      "/usr/lib/systemd/system" : {
         "base": "systemd",
         "pattern": "**/*.json"
       },
       "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
-      "${installdir}/docroot1/": "content/**/*.txt",
-      "${installdir}/docroot2/": {
+      "${installdir}/docroot1": "content/**/*.txt",
+      "${installdir}/docroot2": {
         "base": "content",
         "pattern": "**/*.json"
       },
-      "/etc/${name}/" : "config"
+      "/etc/${name}" : "config"
     }
   }
 }

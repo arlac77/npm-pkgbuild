@@ -56,19 +56,34 @@ test(
 test(
   efpt,
   {
+    name: "konsum-frontend",
     pkgbuild: {
       content: {
-        "/opt/install": { pattern: "**/*.mjs" },
-        "${installdir}/": {
+        "${installdir}": {
           base: "build"
-        }
+        },
+        "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf"
       },
+      depends: {
+        "nginx-mainline": ">=1.21.1",
+        konsum: ">=4.1.0"
+      },
+      groups: "home automation",
+      hooks: "pkgbuild/hooks.sh",
       installdir: "/services/konsum/frontend"
     }
   },
-  { installdir: "/services/konsum/frontend" },
+  {
+    groups: "home automation",
+    hooks: "pkgbuild/hooks.sh",
+    installdir: "/services/konsum/frontend",
+    name: "konsum-frontend"
+  },
   [
-    [new FileContentProvider({ pattern: "**/*.mjs" }), "/opt/install"],
-    [new FileContentProvider({ base: "build" }), "${installdir}/"]
+    [new FileContentProvider({ base: "build" }), "${installdir}"],
+    [
+      new FileContentProvider({ base: "pkgbuild", pattern: ["nginx.conf"] }),
+      "/etc/nginx/sites/common/${name}.conf"
+    ]
   ]
 );

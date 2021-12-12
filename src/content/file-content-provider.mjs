@@ -18,7 +18,7 @@ export class FileContentProvider extends ContentProvider {
       const base = dirname(definitions);
       this.definitions = {
         base,
-        pattern: [definitions.substring(base.length)]
+        pattern: [definitions.substring(base.length + 1)]
       };
     } else {
       this.definitions = { pattern: ["**/*"], ...definitions };

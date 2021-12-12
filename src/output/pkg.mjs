@@ -21,7 +21,7 @@ export class PKG extends Packager {
     return fields;
   }
 
-  async execute(sources,options) {
+  async execute(sources, options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
@@ -34,7 +34,7 @@ export class PKG extends Packager {
 
     await copyEntries(transform(sources, transformers), staging);
 
-    await execa("makepkg", [], { cwd: tmp });
+    await execa("makepkg", [], { cwd: staging });
   }
 
   writePkbuild(pkgbuildFileName) {

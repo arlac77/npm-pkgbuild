@@ -1,7 +1,10 @@
 import { createWriteStream } from "fs";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
-import { keyValueTransformer } from "key-value-transformer";
+import {
+  keyValueTransformer,
+  equalSeparatedKeyValuePairOptions
+} from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 import { quote } from "../util.mjs";
@@ -37,7 +40,7 @@ export class PKG extends Packager {
       }
     }
 
-//    this.writePkbuild(pkgbuildFileName);
+    //    this.writePkbuild(pkgbuildFileName);
 
     const transformers = [
       {
@@ -45,7 +48,11 @@ export class PKG extends Packager {
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, controlProperties)
+            keyValueTransformer(
+              await entry.readStream,
+              controlProperties,
+              equalSeparatedKeyValuePairOptions
+            )
           ),
         createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
       }
@@ -74,18 +81,18 @@ package() {
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
 const fields = {
-  pkgname: { alias: "name", type: "string[]" },
-  license: { type: "string[]" },
+  pkgname: { alias: "name", type: "string[]", mandatory: true },
+  license: { type: "string[]", mandatory: true },
   source: { type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
-  md5sums: { default: "skip", type: "string[]" },
+  md5sums: { default: "skip", type: "string[]", mandatory: true },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },
   sha512sums: { type: "string[]" },
   groups: { type: "string[]" },
-  arch: { default: "any", type: "string[]" },
+  arch: { default: "any", type: "string[]", mandatory: true },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
   makedepends: { type: "string[]" },
@@ -99,8 +106,8 @@ const fields = {
   pkgver: {},
   pkgrel: {},
   epoch: {},
-  pkgdesc: {},
-  url: { alias: "homepage", type: "string"},
+  pkgdesc: { alias: "description", type: "string", mandatory: true },
+  url: { alias: "homepage", type: "string" },
   install: {},
   changelog: {}
 };

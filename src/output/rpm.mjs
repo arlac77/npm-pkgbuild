@@ -2,7 +2,10 @@ import { join } from "path";
 import { mkdir } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
-import { keyValueTransformer } from "key-value-transformer";
+import {
+  keyValueTransformer,
+  colonSeparatedKeyValuePairOptions
+} from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 
@@ -13,6 +16,11 @@ export class RPM extends Packager {
 
   static get fileNameExtension() {
     return ".rpm";
+  }
+
+  get packageFileName() {
+    const p = this.properties;
+    return `${p.name}-${p.version}-${p.release}.${p.arch}${this.constructor.fileNameExtension}`;
   }
 
   static get fields() {
@@ -47,13 +55,22 @@ export class RPM extends Packager {
 
     const specFileName = `${properties.name}.spec`;
 
+    async function* trailingLines() {
+      for (const [name, options] of Object.entries(sections)) {
+        yield `%${name}\n\n`;
+      }
+    }
+
     const transformers = [
       {
         match: entry => entry.name === specFileName,
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, controlProperties)
+            keyValueTransformer(await entry.readStream, controlProperties, {
+              ...colonSeparatedKeyValuePairOptions,
+              trailingLines
+            })
           ),
         createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
       }
@@ -63,12 +80,14 @@ export class RPM extends Packager {
 
     await execa("rpmbuild", [
       "--define",
-      `_topdir ${staging}`,
+      `_topdir ${tmp}`,
       "-vv",
       "-bb",
       //  `--target=${properties.arch}`,
       join(staging, specFileName)
     ]);
+
+    return join(options.destination, this.packageFileName);
   }
 }
 

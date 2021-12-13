@@ -16,5 +16,5 @@ test("pkg", async t => {
 
   const destination = "/tmp";
   const fileName = await pkg.execute(aggregateFifo(sources), { destination });
-  t.is(fileName, join(destination, "abc-1.0.0-0.any.rpm"));
+  t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 });

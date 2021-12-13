@@ -1,11 +1,9 @@
-import { join } from "path";
 import { createWriteStream } from "fs";
-import { tmpdir } from "os";
-import { finished } from "stream";
-import { promisify } from "util";
-import { mkdtemp, mkdir, chmod } from "fs/promises";
 import { execa } from "execa";
+import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
+import { copyEntries, transform } from "../util.mjs";
 import { quote } from "../util.mjs";
 
 export class PKG extends Packager {
@@ -26,11 +24,32 @@ export class PKG extends Packager {
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
-    const pkgbuildFileName = join(tmp, "PKGBUILD");
+    function* controlProperties(k, v, presentKeys) {
+      if (k === undefined) {
+        for (const p of mandatoryFields) {
+          if (!presentKeys.has(p)) {
+            const v = properties[p];
+            yield [p, v === undefined ? fields[p].default : v];
+          }
+        }
+      } else {
+        yield [k, properties[k] || v];
+      }
+    }
 
-    this.writePkbuild(pkgbuildFileName);
+//    this.writePkbuild(pkgbuildFileName);
 
-    const transformers = [];
+    const transformers = [
+      {
+        match: entry => entry.name === "PKGBUILD",
+        transform: async entry =>
+          new ReadableStreamContentEntry(
+            entry.name,
+            keyValueTransformer(await entry.readStream, controlProperties)
+          ),
+        createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
+      }
+    ];
 
     await copyEntries(transform(sources, transformers), staging);
 
@@ -60,13 +79,13 @@ const fields = {
   source: { type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
-  md5sums: { type: "string[]" },
+  md5sums: { default: "skip", type: "string[]" },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },
   sha512sums: { type: "string[]" },
   groups: { type: "string[]" },
-  arch: { type: "string[]" },
+  arch: { default: "any", type: "string[]" },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
   makedepends: { type: "string[]" },
@@ -81,7 +100,7 @@ const fields = {
   pkgrel: {},
   epoch: {},
   pkgdesc: {},
-  url: {},
+  url: { alias: "homepage", type: "string"},
   install: {},
   changelog: {}
 };
@@ -90,7 +109,6 @@ const fields = {
 export async function pkgbuild(context, stagingDir, out, options = {}) {
   const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
-  let md5sums;
   let source;
   let directory = "";
 
@@ -100,22 +118,15 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
       source = "git+" + source;
     }
 
-    md5sums = "SKIP";
-
     directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
   }
 
   const properties = {
-    url: pkg.homepage,
     pkgdesc: pkg.description,
-    license: pkg.license,
     pkgrel: context.properties.pkgrel,
     pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
     pkgname: pkg.name,
-    arch: "any",
-    makedepends: "git",
-    source,
-    md5sums
+    makedepends: "git"
   };
 
   optionsPKGBUILD.forEach(k => {

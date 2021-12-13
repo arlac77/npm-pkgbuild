@@ -54,7 +54,13 @@ export class PKG extends Packager {
       }
     }
 
-    //    this.writePkbuild(pkgbuildFileName);
+    async function* trailingLines() {
+      yield `
+package() {
+  cp -r $srcdir/* "$pkgdir"
+}
+`;
+    }
 
     const transformers = [
       {
@@ -62,11 +68,10 @@ export class PKG extends Packager {
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(
-              await entry.readStream,
-              controlProperties,
-              pkgKeyValuePairOptions
-            )
+            keyValueTransformer(await entry.readStream, controlProperties, {
+              ...pkgKeyValuePairOptions,
+              trailingLines
+            })
           ),
         createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
       }
@@ -75,18 +80,6 @@ export class PKG extends Packager {
     await copyEntries(transform(sources, transformers), staging);
 
     await execa("makepkg", [], { cwd: staging });
-  }
-
-  writePkbuild(pkgbuildFileName) {
-    const out = createWriteStream(pkgbuildFileName, { encoding: "utf8" });
-
-    out.write(`
-package() {
-   cp -r $srcdir/* "$pkgdir"
-}
-`);
-
-    out.end();
   }
 }
 
@@ -128,11 +121,6 @@ const fields = {
 };
 
 /*
-export async function pkgbuild(context, stagingDir, out, options = {}) {
-
-  let source;
-  let directory = "";
-
   if (pkg.repository) {
     source = pkg.repository.url;
     if (!source.startsWith("git+")) {
@@ -143,36 +131,10 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
   }
 
   const properties = {
-    pkgdesc: pkg.description,
-    pkgrel: context.properties.pkgrel,
-    pkgver: context.properties.pkgver.replace(/\-.*$/, ""),
-    pkgname: pkg.name,
     makedepends: "git"
   };
 
   properties.depends = makeDepends({ ...pkg.engines });
-
-  if (properties.install !== undefined || properties.hooks !== undefined) {
-    properties.install = `${pkg.name}.install`;
-  }
-
-  arrayOptionsPKGBUILD.forEach(k => {
-    const v = properties[k];
-    if (v !== undefined && !Array.isArray(v)) {
-      properties[k] = [v];
-    }
-  });
-
-  let pkgver = "";
-
-  if (context.properties.pkgver === "0.0.0-semantic-release") {
-    pkgver = `
-pkgver() {
-  cd "$pkgname"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
-`;
-  }
 
   out.write(
     `# ${pkg.contributors
@@ -205,9 +167,6 @@ package() {
 }
 `
   );
-
-  await promisify(finished);
-}
 
 function makeDepends(d) {
   if (d === undefined) {

@@ -66,19 +66,32 @@ export class RPM extends Packager {
       `_topdir ${staging}`,
       "-vv",
       "-bb",
+      //  `--target=${properties.arch}`,
       join(staging, specFileName)
     ]);
   }
 }
 
+/**
+ * @see https://rpm-packaging-guide.github.io
+ */
 const fields = {
   Name: { alias: "name", type: "string", mandatory: true },
   Summary: { alias: "description", type: "string", mandatory: true },
   License: { alias: "license", type: "string", mandatory: true },
   Version: { alias: "version", type: "string", mandatory: true },
-  Release: { alias: "release", type: "integer", default: 0, mandatory: true },
+  Release: { alias: "release", type: "integer", default: 1, mandatory: true },
+  Source0: { type: "string" },
+  Group: { alias: "group", type: "string" },
   Packager: { type: "string" },
-  URL: { alias: "homepage", type: "string" }
+  BuildArch: {
+    alias: "arch",
+    default: "noarch",
+    type: "string",
+    mandatory: true
+  },
+  URL: { alias: "homepage", type: "string" },
+  Requires: { type: "string[]" }
 };
 
 const sections = {
@@ -86,6 +99,7 @@ const sections = {
   prep: {},
   build: {},
   install: {},
+  check: {},
   files: {},
   changelog: {}
 };

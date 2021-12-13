@@ -129,7 +129,6 @@ const fields = {
 
 /*
 export async function pkgbuild(context, stagingDir, out, options = {}) {
-  const pkg = { contributors: [], pacman: {}, ...context.pkg };
 
   let source;
   let directory = "";

@@ -115,6 +115,7 @@ export async function copyEntries(
       }
     }
 
+    console.log(destName);
     await pipeline(
       await entry.readStream,
       createWriteStream(destName, options)

@@ -9,6 +9,20 @@ import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
 import { quote } from "../util.mjs";
 
+/**
+ * @type KeyValueTransformOptions
+ * Options to describe key value pair separated by an equal sign '='
+ */
+export const pkgKeyValuePairOptions = {
+  ...equalSeparatedKeyValuePairOptions,
+  keyValueLine: (key, value, lineEnding) =>
+    `${key}=${
+      Array.isArray(value)
+        ? "(" + value.map(v => quote(v)).join(",") + ")"
+        : quote(value)
+    }${lineEnding}`
+};
+
 export class PKG extends Packager {
   static get name() {
     return "pkg";
@@ -51,7 +65,7 @@ export class PKG extends Packager {
             keyValueTransformer(
               await entry.readStream,
               controlProperties,
-              equalSeparatedKeyValuePairOptions
+              pkgKeyValuePairOptions
             )
           ),
         createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
@@ -82,17 +96,21 @@ package() {
  */
 const fields = {
   pkgname: { alias: "name", type: "string[]", mandatory: true },
+  pkgver: { alias: "version", type: "string", mandatory: true },
+  pkgrel: { alias: "release", type: "integer", default: 0, mandatory: true },
+  pkgdesc: { alias: "description", type: "string", mandatory: true },
+  arch: { default: ["any"], type: "string[]", mandatory: true },
+
   license: { type: "string[]", mandatory: true },
   source: { type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
-  md5sums: { default: "skip", type: "string[]", mandatory: true },
+  md5sums: { default: ["SKIP"], type: "string[]", mandatory: true },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },
   sha512sums: { type: "string[]" },
   groups: { type: "string[]" },
-  arch: { default: "any", type: "string[]", mandatory: true },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
   makedepends: { type: "string[]" },
@@ -103,10 +121,7 @@ const fields = {
   replaces: { type: "string[]" },
   options: { type: "string[]" },
 
-  pkgver: {},
-  pkgrel: {},
   epoch: {},
-  pkgdesc: { alias: "description", type: "string", mandatory: true },
   url: { alias: "homepage", type: "string" },
   install: {},
   changelog: {}
@@ -136,20 +151,11 @@ export async function pkgbuild(context, stagingDir, out, options = {}) {
     makedepends: "git"
   };
 
-  optionsPKGBUILD.forEach(k => {
-    const v = pkg.pacman[k];
-    if (v !== undefined) {
-      properties[k] = v;
-    }
-  });
-
   properties.depends = makeDepends({ ...pkg.engines });
 
   if (properties.install !== undefined || properties.hooks !== undefined) {
     properties.install = `${pkg.name}.install`;
   }
-
-  const installdir = context.properties.installdir;
 
   arrayOptionsPKGBUILD.forEach(k => {
     const v = properties[k];

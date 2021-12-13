@@ -33,11 +33,11 @@ export class RPM extends Packager {
 }
 
 const fields = {
-  Name: { alias: "name", type: "string" },
+  Name: { alias: "name", type: "string", mandatory: true },
   Summary: { alias: "description", type: "string" },
   License: { alias: "license", type: "string" },
-  Version: { alias: "version", type: "string" },
-  Release: { type: "integer", default: 0 },
+  Version: { alias: "version", type: "string", mandatory: true },
+  Release: { alias: "release", type: "integer", default: 0, mandatory: true },
   Packager: { type: "string" },
   URL: { alias: "homepage", type: "string" }
 };

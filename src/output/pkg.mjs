@@ -41,6 +41,7 @@ export class PKG extends Packager {
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
+    
     function* controlProperties(k, v, presentKeys) {
       if (k === undefined) {
         for (const p of mandatoryFields) {

@@ -36,7 +36,7 @@ export class Packager {
         properties[k] = e;
       } else {
         if (v.default !== undefined) {
-          properties[v.alias] = v.default;
+          properties[v.alias || k] = v.default;
         }
       }
     });

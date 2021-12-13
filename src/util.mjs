@@ -52,12 +52,13 @@ export function extractFromPackage(pkg) {
   let sources = [];
 
   if (pkg.pkgbuild) {
-    Object.entries(pkg.pkgbuild)
+    const pkgbuild = pkg.pkgbuild
+    Object.entries(pkgbuild)
       .filter(([k, v]) => typeof v === "string")
       .forEach(([k, v]) => (properties[k] = v));
 
-    if (pkg.pkgbuild.content) {
-      sources = Object.entries(pkg.pkgbuild.content).map(
+    if (pkgbuild.content) {
+      sources = Object.entries(pkgbuild.content).map(
         ([destination, value]) => [new FileContentProvider(value), destination]
       );
     }

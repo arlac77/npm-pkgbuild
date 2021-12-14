@@ -77,7 +77,7 @@ export function extractFromPackage(pkg) {
  * @param {AsyncIterator<ContentEntry>} source
  * @param {Transformer[]} transformers
  */
-export async function* transform(source, transformers) {
+export async function* transform(source, transformers=[], onlyMatching) {
   const usedTransformers = new Set();
 
   for await (let entry of source) {
@@ -85,10 +85,16 @@ export async function* transform(source, transformers) {
       if (t.match(entry)) {
         entry = await t.transform(entry);
         usedTransformers.add(t);
+
+        if(onlyMatching) {
+          yield entry;
+        }
       }
     }
 
-    yield entry;
+    if(!onlyMatching) {
+      yield entry;
+    }
   }
 
   for (const t of transformers) {

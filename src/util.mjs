@@ -53,6 +53,7 @@ export function extractFromPackage(pkg) {
     properties.source = pkg.repository.url;
   }
 
+  let dependencies = { ...pkg.engines };
   let sources = [];
 
   if (pkg.pkgbuild) {
@@ -67,9 +68,11 @@ export function extractFromPackage(pkg) {
         destination
       ]);
     }
+
+    Object.assign(dependencies,pkgbuild.depends)
   }
 
-  return { properties, sources };
+  return { properties, sources, dependencies};
 }
 
 /**

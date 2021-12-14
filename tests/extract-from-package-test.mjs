@@ -2,13 +2,23 @@ import test from "ava";
 import { extractFromPackage } from "../src/util.mjs";
 import { FileContentProvider } from "npm-pkgbuild";
 
-async function efpt(t, pkg, expectedProperties, expectedContent) {
-  const { properties, sources } = extractFromPackage(pkg);
+async function efpt(
+  t,
+  pkg,
+  expectedProperties,
+  expectedContent,
+  expectedDependencies
+) {
+  const { properties, sources, dependencies } = extractFromPackage(pkg);
 
-  t.deepEqual(properties, expectedProperties);
+  t.deepEqual(properties, expectedProperties, "properties");
 
   if (expectedContent) {
-    t.deepEqual(sources, expectedContent);
+    t.deepEqual(sources, expectedContent, "content");
+  }
+
+  if (expectedDependencies) {
+    t.deepEqual(dependencies, expectedDependencies, "dependencies");
   }
 }
 efpt.title = (
@@ -85,5 +95,9 @@ test(
       new FileContentProvider({ base: "pkgbuild", pattern: ["nginx.conf"] }),
       "/etc/nginx/sites/common/${name}.conf"
     ]
-  ]
+  ],
+  {
+    "nginx-mainline": ">=1.21.1",
+    konsum: ">=4.1.0"
+  }
 );

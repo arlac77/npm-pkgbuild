@@ -50,6 +50,9 @@ export class PKG extends Packager {
 
   async execute(sources, options) {
     const properties = this.properties;
+
+    //properties.depends = makeDepends({ ...pkg.engines });
+
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
@@ -137,12 +140,6 @@ const fields = {
 };
 
 /*
-  const properties = {
-    makedepends: "git"
-  };
-
-  properties.depends = makeDepends({ ...pkg.engines });
-
   out.write(
     `# ${pkg.contributors
       .map(
@@ -174,19 +171,8 @@ package() {
 }
 `
   );
-
-function makeDepends(d) {
-  if (d === undefined) {
-    return [];
-  }
-
-  return Object.keys(d).reduce((a, c) => {
-    const mapping = {
-      node: "nodejs"
-    };
-
-    a.push(`${mapping[c] ? mapping[c] : c}${d[c].replace(/\-([\w\d]+)$/, "")}`);
-    return a;
-  }, []);
-}
 */
+
+const mapping = {
+  node: "nodejs"
+};

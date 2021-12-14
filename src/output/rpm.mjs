@@ -83,7 +83,6 @@ export class RPM extends Packager {
       `_topdir ${tmp}`,
       "-vv",
       "-bb",
-      //  `--target=${properties.arch}`,
       join(staging, specFileName)
     ]);
 

@@ -21,7 +21,8 @@ export class DEB extends Packager {
   }
 
   get packageFileName() {
-    return `${this.properties.name}_${this.properties.version}_${this.properties.arch}${this.constructor.fileNameExtension}`;
+    const p = this.properties;
+    return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
   async execute(sources, options) {

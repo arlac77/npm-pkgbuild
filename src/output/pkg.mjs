@@ -42,6 +42,11 @@ export class PKG extends Packager {
     return fields;
   }
 
+  get packageFileName() {
+    const p = this.properties;
+    return `${p.name}-${p.version}-${p.release}.${p.arch}${this.constructor.fileNameExtension}`;
+  }
+
   async execute(sources, options) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
@@ -82,6 +87,8 @@ package() {
         createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
       }
     ];
+
+    const [meta,content] = split(transform(sources, transformers),);
 
     await copyEntries(transform(sources, transformers), staging);
 
@@ -127,15 +134,6 @@ const fields = {
 };
 
 /*
-  if (pkg.repository) {
-    source = pkg.repository.url;
-    if (!source.startsWith("git+")) {
-      source = "git+" + source;
-    }
-
-    directory = pkg.repository.directory ? "/" + pkg.repository.directory : "";
-  }
-
   const properties = {
     makedepends: "git"
   };

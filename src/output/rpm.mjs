@@ -100,7 +100,7 @@ const fields = {
   License: { alias: "license", type: "string", mandatory: true },
   Version: { alias: "version", type: "string", mandatory: true },
   Release: { alias: "release", type: "integer", default: 1, mandatory: true },
-  Source0: { type: "string" },
+  Source0: { alias: "source", type: "string" },
   Group: { alias: "group", type: "string" },
   Packager: { type: "string" },
   BuildArch: {

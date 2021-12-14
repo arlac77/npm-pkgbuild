@@ -49,18 +49,23 @@ export function extractFromPackage(pkg) {
     )[0];
   }
 
+  if (pkg.repository) {
+    properties.source = pkg.repository.url;
+  }
+
   let sources = [];
 
   if (pkg.pkgbuild) {
-    const pkgbuild = pkg.pkgbuild
+    const pkgbuild = pkg.pkgbuild;
     Object.entries(pkgbuild)
       .filter(([k, v]) => typeof v === "string")
       .forEach(([k, v]) => (properties[k] = v));
 
     if (pkgbuild.content) {
-      sources = Object.entries(pkgbuild.content).map(
-        ([destination, value]) => [new FileContentProvider(value), destination]
-      );
+      sources = Object.entries(pkgbuild.content).map(([destination, value]) => [
+        new FileContentProvider(value),
+        destination
+      ]);
     }
   }
 

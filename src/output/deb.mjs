@@ -92,7 +92,7 @@ const fields = {
   Breaks: { type: "packageList" },
   Replaces: { type: "packageList" },
 
-  Source: {},
+  Source: { alias: "source", type: "string" },
   Uploaders: { mandatory: false },
   "Installed-Size": {}
 };

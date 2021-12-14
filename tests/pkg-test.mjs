@@ -3,7 +3,7 @@ import { join } from "path";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, PKG } from "npm-pkgbuild";
 
-test("pkg", async t => {
+test.skip("pkg", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname

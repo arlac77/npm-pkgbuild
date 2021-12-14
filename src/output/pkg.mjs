@@ -1,4 +1,3 @@
-import { createWriteStream } from "fs";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
@@ -15,6 +14,13 @@ import { quote } from "../util.mjs";
  */
 export const pkgKeyValuePairOptions = {
   ...equalSeparatedKeyValuePairOptions,
+
+  extractKeyValue: line => {
+    const m = line.match(/^(\w+)=\s*\((.*)\)|(.*)/);
+    if (m) {
+      return [m[1], m[2] ? [m[2]] : m[3]];
+    }
+  },
   keyValueLine: (key, value, lineEnding) =>
     `${key}=${
       Array.isArray(value)
@@ -41,7 +47,6 @@ export class PKG extends Packager {
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
-    
     function* controlProperties(k, v, presentKeys) {
       if (k === undefined) {
         for (const p of mandatoryFields) {
@@ -80,7 +85,7 @@ package() {
 
     await copyEntries(transform(sources, transformers), staging);
 
-    await execa("makepkg", [], { cwd: staging });
+    await execa("makepkg", ["-f"], { cwd: staging });
   }
 }
 
@@ -96,10 +101,10 @@ const fields = {
   arch: { default: ["any"], type: "string[]", mandatory: true },
 
   license: { type: "string[]", mandatory: true },
-  source: { type: "string[]" },
+  source: { default: [], type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
-  md5sums: { default: ["SKIP"], type: "string[]", mandatory: true },
+  md5sums: { /*default: ["SKIP"],*/ type: "string[]" },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },

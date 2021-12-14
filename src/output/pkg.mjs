@@ -1,3 +1,4 @@
+import { join } from "path";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
@@ -73,7 +74,9 @@ package() {
 `;
     }
 
-    const transformers = [
+    await copyEntries(transform(sources, []), join(staging, "src"));
+
+    const metaTransformers = [
       {
         match: entry => entry.name === "PKGBUILD",
         transform: async entry =>
@@ -88,11 +91,11 @@ package() {
       }
     ];
 
-    const [meta,content] = split(transform(sources, transformers),);
-
-    await copyEntries(transform(sources, transformers), staging);
+    await copyEntries(transform(sources, metaTransformers, true), staging);
 
     await execa("makepkg", ["-f"], { cwd: staging });
+
+    return join(options.destination, this.packageFileName);
   }
 }
 
@@ -107,7 +110,7 @@ const fields = {
   pkgdesc: { alias: "description", type: "string", mandatory: true },
   arch: { default: ["any"], type: "string[]", mandatory: true },
 
-  license: { type: "string[]", mandatory: true },
+  license: { default: [], type: "string[]", mandatory: true },
   source: { default: [], type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },

@@ -63,16 +63,16 @@ export function extractFromPackage(pkg) {
       .forEach(([k, v]) => (properties[k] = v));
 
     if (pkgbuild.content) {
-      sources = Object.entries(pkgbuild.content).map(([destination, value]) => [
-        new FileContentProvider(value),
-        destination
-      ]);
+      sources = Object.entries(pkgbuild.content).map(
+        ([destination, value]) =>
+          new FileContentProvider(value, { destination })
+      );
     }
 
-    Object.assign(dependencies,pkgbuild.depends)
+    Object.assign(dependencies, pkgbuild.depends);
   }
 
-  return { properties, sources, dependencies};
+  return { properties, sources, dependencies };
 }
 
 /**
@@ -80,7 +80,7 @@ export function extractFromPackage(pkg) {
  * @param {AsyncIterator<ContentEntry>} source
  * @param {Transformer[]} transformers
  */
-export async function* transform(source, transformers=[], onlyMatching) {
+export async function* transform(source, transformers = [], onlyMatching) {
   const usedTransformers = new Set();
 
   for await (let entry of source) {
@@ -89,13 +89,13 @@ export async function* transform(source, transformers=[], onlyMatching) {
         entry = await t.transform(entry);
         usedTransformers.add(t);
 
-        if(onlyMatching) {
+        if (onlyMatching) {
           yield entry;
         }
       }
     }
 
-    if(!onlyMatching) {
+    if (!onlyMatching) {
       yield entry;
     }
   }
@@ -118,7 +118,7 @@ export async function copyEntries(
   attributes = []
 ) {
   for await (let entry of source) {
-    const destName = join(destinationDirectory, entry.name);
+    const destName = entry.destination === undefined ? join(destinationDirectory, entry.name) : join(destinationDirectory, entry.destination, entry.name);
     await mkdir(dirname(destName), { recursive: true });
 
     const options = { mode: entry.mode };

@@ -57,17 +57,20 @@ program
         sources.push(
           ...[...options.content, ...options.meta]
             .filter(x => x)
-            .map(source => [
-              new FileContentProvider({
-                base: source
-              }),
-              ""
-            ])
+            .map(
+              source =>
+                new FileContentProvider({
+                  base: source
+                })
+            )
         );
 
         const output = new outputFactory(properties);
 
-        const fileName = await output.execute(aggregateFifo(sources.map(([c, d]) => c[Symbol.asyncIterator]() )), options);
+        const fileName = await output.execute(
+          aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
+          options
+        );
 
         console.log(fileName);
       }

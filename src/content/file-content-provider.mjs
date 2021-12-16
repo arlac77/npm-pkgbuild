@@ -11,7 +11,7 @@ import { ContentProvider } from "./content-provider.mjs";
  * @param {string} definitions.base base directory where to find the files
  */
 export class FileContentProvider extends ContentProvider {
-  constructor(definitions) {
+  constructor(definitions, entryProperties) {
     super();
 
     if (typeof definitions === "string") {
@@ -24,6 +24,8 @@ export class FileContentProvider extends ContentProvider {
       this.definitions = { pattern: ["**/*"], ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
     }
+
+    this.entryProperties = entryProperties;
   }
 
   async *[Symbol.asyncIterator]() {
@@ -33,7 +35,9 @@ export class FileContentProvider extends ContentProvider {
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
-      yield new FileSystemEntry(name, base);
+      const entry = new FileSystemEntry(name, base);
+      Object.assign(entry, this.entryProperties);
+      yield entry;
     }
   }
 }

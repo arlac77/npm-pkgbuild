@@ -90,11 +90,14 @@ test(
     name: "konsum-frontend"
   },
   [
-    [new FileContentProvider({ base: "build" }), "${installdir}"],
-    [
-      new FileContentProvider({ base: "pkgbuild", pattern: ["nginx.conf"] }),
-      "/etc/nginx/sites/common/${name}.conf"
-    ]
+    new FileContentProvider(
+      { base: "build" },
+      { destination: "${installdir}" }
+    ),
+    new FileContentProvider(
+      { base: "pkgbuild", pattern: ["nginx.conf"] },
+      { destination: "/etc/nginx/sites/common/${name}.conf" }
+    )
   ],
   {
     "nginx-mainline": ">=1.21.1",

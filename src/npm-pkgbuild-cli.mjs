@@ -26,7 +26,10 @@ outputs.forEach(o =>
 );
 
 program
-  .option("--pkgver <version>", "package version")
+  .option("-D --define <a=b>", "define property", str => {
+    const kv = str.split(/=/);
+    return Object.fromEntries([kv]);
+  })
   .option("-d --destination <dir>", "where to put the package(s)", cwd)
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
@@ -54,6 +57,8 @@ program
             )
           )
         );
+
+        Object.assign(properties, options.define);
 
         sources.push(
           ...[...options.content, ...options.meta]

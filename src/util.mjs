@@ -117,11 +117,17 @@ export async function* transform(source, transformers = [], onlyMatching) {
 export async function copyEntries(
   source,
   destinationDirectory,
-  expander = (v) => v,
+  expander = v => v,
   attributes = []
 ) {
   for await (let entry of source) {
-    const destName = expander(entry.destination === undefined ? join(destinationDirectory, entry.name) : join(destinationDirectory, entry.destination, entry.name));
+    const destName = expander(
+      entry.destination === undefined
+        ? join(destinationDirectory, entry.name)
+        : entry.destination.endsWith("/")
+        ? join(destinationDirectory, entry.destination, entry.name)
+        : join(destinationDirectory, entry.destination)
+    );
     await mkdir(dirname(destName), { recursive: true });
 
     const options = { mode: entry.mode };

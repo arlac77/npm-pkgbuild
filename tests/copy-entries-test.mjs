@@ -15,14 +15,14 @@ test("copyEntries plain", async t => {
 
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
-  await copyEntries(files, tmp, []);
+  await copyEntries(files, tmp);
 
   await access(join(tmp, "file1.txt"), constants.F_OK);
 
   t.true(true);
 });
 
-test.only("copyEntries with transform", async t => {
+test("copyEntries with transform", async t => {
   const files = new FileContentProvider({
     base: new URL("fixtures/content", import.meta.url).pathname
   });

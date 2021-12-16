@@ -25,7 +25,7 @@ export class DEB extends Packager {
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, options) {
+  async execute(sources, options, expander) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
@@ -56,7 +56,7 @@ export class DEB extends Packager {
       }
     ];
 
-    await copyEntries(transform(sources, transformers), staging, attributes);
+    await copyEntries(transform(sources, transformers), staging, expander, attributes);
 
     await execa("dpkg", ["-b", staging, options.destination]);
 

@@ -27,7 +27,7 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(sources, options) {
+  async execute(sources, options, expander) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
     const tmp = await this.tmpdir;
@@ -76,7 +76,7 @@ export class RPM extends Packager {
       }
     ];
 
-    await copyEntries(transform(sources, transformers), staging);
+    await copyEntries(transform(sources, transformers), staging, expander);
 
     await execa("rpmbuild", [
       "--define",

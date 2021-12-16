@@ -5,6 +5,7 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
+import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
 import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
 import { FileContentProvider, DEB, PKG, RPM } from "npm-pkgbuild";
@@ -65,11 +66,15 @@ program
             )
         );
 
+        const context = createContext();
+        context.properties = properties;
+
         const output = new outputFactory(properties);
 
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
-          options
+          options,
+          (object) => context.expand(object)
         );
 
         console.log(fileName);

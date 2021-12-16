@@ -108,17 +108,20 @@ export async function* transform(source, transformers = [], onlyMatching) {
 }
 
 /**
- * Copy content from source into destinationDirectory
+ * Copy content from source into destinationDirectory.
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
+ * @param {Function} expander
+ * @param {ContentEntryAttribute[]} attributes
  */
 export async function copyEntries(
   source,
   destinationDirectory,
+  expander = (v) => v,
   attributes = []
 ) {
   for await (let entry of source) {
-    const destName = entry.destination === undefined ? join(destinationDirectory, entry.name) : join(destinationDirectory, entry.destination, entry.name);
+    const destName = expander(entry.destination === undefined ? join(destinationDirectory, entry.name) : join(destinationDirectory, entry.destination, entry.name));
     await mkdir(dirname(destName), { recursive: true });
 
     const options = { mode: entry.mode };

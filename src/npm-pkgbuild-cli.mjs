@@ -66,15 +66,13 @@ program
             )
         );
 
-        const context = createContext();
-        context.properties = properties;
-
+        const context = createContext({ properties });
         const output = new outputFactory(properties);
 
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
           options,
-          (object) => context.expand(object)
+          object => context.expand(object)
         );
 
         console.log(fileName);

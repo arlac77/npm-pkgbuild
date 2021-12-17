@@ -48,7 +48,7 @@ export class PKG extends Packager {
     return `${p.name}-${p.version}-${p.release}.${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, options,expander) {
+  async execute(sources, options, expander) {
     const properties = this.properties;
 
     //properties.depends = makeDepends({ ...pkg.engines });
@@ -94,7 +94,11 @@ package() {
       }
     ];
 
-    await copyEntries(transform(sources, metaTransformers, true), staging, expander);
+    await copyEntries(
+      transform(sources, metaTransformers, true),
+      staging,
+      expander
+    );
 
     await execa("makepkg", ["-f"], { cwd: staging });
 

@@ -2,7 +2,6 @@ import { join, dirname } from "path";
 import { mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
-
 import { FileContentProvider } from "npm-pkgbuild";
 
 export const utf8StreamOptions = { encoding: "utf8" };
@@ -76,9 +75,10 @@ export function extractFromPackage(pkg) {
 }
 
 /**
- * Apply transformers
+ * Apply transformers.
  * @param {AsyncIterator<ContentEntry>} source
  * @param {Transformer[]} transformers
+ * @param {Boolean]} onlyMatching filter out all none matching entries
  */
 export async function* transform(source, transformers = [], onlyMatching) {
   const usedTransformers = new Set();

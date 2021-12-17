@@ -2,6 +2,7 @@ import { join, dirname } from "path";
 import { mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
+import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { FileContentProvider } from "npm-pkgbuild";
 
 export const utf8StreamOptions = { encoding: "utf8" };
@@ -72,6 +73,22 @@ export function extractFromPackage(pkg) {
   }
 
   return { properties, sources, dependencies };
+}
+
+export function createPropertyTransformer(properties) {
+  async function* transformer(expression, remainder, source, cb) {
+    console.log("EXPRESSION", expression);
+    yield properties[expression];
+  }
+
+  return {
+    match: entry => true, //entry.name.match(/(conf|json)$/),
+    transform: async entry =>
+      new ReadableStreamContentEntry(
+        entry.name,
+        iterableStringInterceptor(transformer)
+      )
+  };
 }
 
 /**

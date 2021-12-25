@@ -1,4 +1,5 @@
 import test from "ava";
+import { dirname } from "path";
 import { extractFromPackage } from "../src/util.mjs";
 import { FileContentProvider } from "npm-pkgbuild";
 
@@ -9,7 +10,7 @@ async function efpt(
   expectedContent,
   expectedDependencies
 ) {
-  const { properties, sources, dependencies } = extractFromPackage(pkg);
+  const { properties, sources, dependencies } = await extractFromPackage(pkg, dirname(new URL('',import.meta.url).pathname));
 
   t.deepEqual(properties, expectedProperties, "properties");
 

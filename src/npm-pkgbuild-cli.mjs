@@ -49,13 +49,15 @@ program
       for (const outputFactory of outputs.filter(
         o => options[o.name] === true
       )) {
-        const { properties, sources } = extractFromPackage(
+        const pkgDir = await packageDirectory();
+        const { properties, sources } = await extractFromPackage(
           JSON.parse(
             await readFile(
-              join(await packageDirectory(), "package.json"),
+              join(pkgDir, "package.json"),
               utf8StreamOptions
             )
-          )
+          ),
+          pkgDir
         );
 
         Object.assign(properties, options.define);

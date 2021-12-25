@@ -4,6 +4,7 @@ import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { FileContentProvider } from "npm-pkgbuild";
+import { packageWalker } from "npm-package-walker";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 
@@ -26,9 +27,10 @@ export function asArray(o) {
 /**
  * Extract package definition from package.json.
  * @param {Object} pkg package.json content
+ * @param {string} dir
  * @returns {Object}
  */
-export function extractFromPackage(pkg) {
+export async function extractFromPackage(pkg,dir) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage"]
       .map(key => [key, pkg[key]])
@@ -56,6 +58,13 @@ export function extractFromPackage(pkg) {
   let dependencies = { ...pkg.engines };
   let sources = [];
 
+  await packageWalker(
+    async (pkg, base, modulePath) => {
+      if(pkg.pkgbuild) {
+        console.log(modulePath);	
+      }
+      return true; }, dir );
+ 
   if (pkg.pkgbuild) {
     const pkgbuild = pkg.pkgbuild;
     Object.entries(pkgbuild)

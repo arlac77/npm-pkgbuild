@@ -1,5 +1,5 @@
 import test from "ava";
-import { access, mkdtemp } from "fs/promises";
+import { access, mkdtemp, readFile } from "fs/promises";
 import { constants } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
@@ -22,7 +22,7 @@ test("copyEntries plain", async t => {
   t.true(true);
 });
 
-test("copyEntries with transform", async t => {
+test.only("copyEntries with transform", async t => {
   const files = new FileContentProvider({
     base: new URL("fixtures/content", import.meta.url).pathname
   });
@@ -49,7 +49,6 @@ test("copyEntries with transform", async t => {
     tmp
   );
 
-  await access(join(tmp, "file1.txt"), constants.F_OK);
-
-  t.true(true);
+  const content = await readFile(join(tmp, "file1.txt"), { encoding: "utf8" });
+  t.truthy(content.match(/value1value1/));
 });

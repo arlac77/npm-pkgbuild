@@ -30,7 +30,7 @@ export function asArray(o) {
  * @param {string} dir
  * @returns {Object}
  */
-export async function extractFromPackage(pkg,dir) {
+export async function extractFromPackage(pkg, dir) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage"]
       .map(key => [key, pkg[key]])
@@ -58,28 +58,30 @@ export async function extractFromPackage(pkg,dir) {
   let dependencies = { ...pkg.engines };
   let sources = [];
 
-  await packageWalker(
-    async (pkg, base, modulePath) => {
-      if(pkg.pkgbuild) {
-        console.log(modulePath);	
+  const processPkg = pkg => {
+    if (pkg.pkgbuild) {
+      const pkgbuild = pkg.pkgbuild;
+      Object.entries(pkgbuild)
+        .filter(([k, v]) => typeof v === "string")
+        .forEach(([k, v]) => (properties[k] = v));
+
+      if (pkgbuild.content) {
+        sources = Object.entries(pkgbuild.content).map(
+          ([destination, value]) =>
+            new FileContentProvider(value, { destination })
+        );
       }
-      return true; }, dir );
- 
-  if (pkg.pkgbuild) {
-    const pkgbuild = pkg.pkgbuild;
-    Object.entries(pkgbuild)
-      .filter(([k, v]) => typeof v === "string")
-      .forEach(([k, v]) => (properties[k] = v));
 
-    if (pkgbuild.content) {
-      sources = Object.entries(pkgbuild.content).map(
-        ([destination, value]) =>
-          new FileContentProvider(value, { destination })
-      );
+      Object.assign(dependencies, pkgbuild.depends);
     }
+  };
 
-    Object.assign(dependencies, pkgbuild.depends);
-  }
+  await packageWalker(async (pkg, base, modulePath) => {
+    processPkg(pkg)
+    return true;
+  }, dir);
+
+  processPkg(pkg);
 
   return { properties, sources, dependencies };
 }

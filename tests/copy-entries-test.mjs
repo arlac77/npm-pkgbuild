@@ -22,7 +22,7 @@ test("copyEntries plain", async t => {
   t.true(true);
 });
 
-test.only("copyEntries with transform", async t => {
+test("copyEntries with transform", async t => {
   const files = new FileContentProvider({
     base: new URL("fixtures/content", import.meta.url).pathname
   });

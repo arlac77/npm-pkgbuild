@@ -6,9 +6,12 @@ class MyPackager extends Packager {
     return { a: { mandatory: true } };
   }
 }
-
-test("packager", t => {
+test("packager fields", t => {
   const p = new MyPackager();
+  t.truthy(p.fields.a);
+});
 
+test("packager mandatoryFields", t => {
+  const p = new MyPackager();
   t.true(p.mandatoryFields.has("a"));
 });

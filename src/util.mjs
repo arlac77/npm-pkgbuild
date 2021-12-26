@@ -57,10 +57,14 @@ export async function extractFromPackage(pkg, dir) {
 
   let dependencies = { ...pkg.engines };
   let sources = [];
-
+  let output = {};
+  
   const processPkg = pkg => {
     if (pkg.pkgbuild) {
       const pkgbuild = pkg.pkgbuild;
+
+      Object.assign(output, pkgbuild.output);
+      
       Object.entries(pkgbuild)
         .filter(([k, v]) => typeof v === "string")
         .forEach(([k, v]) => (properties[k] = v));
@@ -83,7 +87,7 @@ export async function extractFromPackage(pkg, dir) {
 
   processPkg(pkg);
 
-  return { properties, sources, dependencies };
+  return { properties, sources, dependencies, output };
 }
 
 export function createPropertyTransformer(properties) {

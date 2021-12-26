@@ -31,7 +31,8 @@ efpt.title = (
   providedTitle = "extractFromPackage",
   pkg,
   expectedProperties,
-  expectedContent
+  expectedContent,
+  expectedOutput
 ) =>
   ` ${providedTitle} ${JSON.stringify(pkg)} -> ${JSON.stringify(
     expectedProperties
@@ -52,10 +53,11 @@ test(
     pkgbuild: {
       name: "n2",
       other: "o1",
-      output: { "dep" : {}}
+      output: { dep : {}}
     }
   },
   { name: "n2", description: "d1", version: "1.2.3", other: "o1" },
+  undefined,
   undefined,
   { dep: {}}
 );

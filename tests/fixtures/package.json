@@ -15,17 +15,17 @@
   "engines": {
     "node": ">=10.5"
   },
-  "config" : {
-    "port" : 8088,
-    "api" : {
-      "url" : "http://somwhere.com/prefix/api"
+  "config": {
+    "port": 8088,
+    "api": {
+      "url": "http://somwhere.com/prefix/api"
     },
-    "serviceURL" : "/services/${name}",
-    "urlPrefix" : "/services/${name}/api"
+    "serviceURL": "/services/${name}",
+    "urlPrefix": "/services/${name}/api"
   },
   "pkgbuild": {
-    "properties" : {
-      "installdir" : "/services/${name}"
+    "properties": {
+      "installdir": "/services/${name}"
     },
     "arch": [
       "aarch64",
@@ -42,9 +42,12 @@
     "hooks": "pkgbuild/pacman.install",
     "content": {
       "${installdir}": {
-        "npm" : ["dist","dependencies"]
+        "npm": [
+          "dist",
+          "dependencies"
+        ]
       },
-      "/usr/lib/systemd/system" : {
+      "/usr/lib/systemd/system": {
         "base": "systemd",
         "pattern": "**/*.json"
       },
@@ -54,7 +57,10 @@
         "base": "content",
         "pattern": "**/*.json"
       },
-      "/etc/${name}" : "config"
+      "/etc/${name}": "config"
     }
+  },
+  "dependencies": {
+    "mf-hosting": "github:arlac77/mf-hosting"
   }
 }

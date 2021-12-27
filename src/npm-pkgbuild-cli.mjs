@@ -17,11 +17,11 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const outputs = [DEB, PKG, RPM];
+const allOutputs = [DEB, PKG, RPM];
 
 program.description(description).version(version);
 
-outputs.forEach(o =>
+allOutputs.forEach(o =>
   program.option(`--${o.name}`, `generate ${o.name} package`)
 );
 
@@ -46,20 +46,21 @@ program
   )
   .action(async options => {
     try {
-      for (const outputFactory of outputs.filter(
-        o => options[o.name] === true
-      )) {
-        const pkgDir = await packageDirectory();
-        const { properties, sources } = await extractFromPackage(
-          JSON.parse(
-            await readFile(
-              join(pkgDir, "package.json"),
-              utf8StreamOptions
-            )
-          ),
-          pkgDir
-        );
+      const pkgDir = await packageDirectory();
 
+      const { properties, sources, output } = await extractFromPackage(
+        JSON.parse(
+          await readFile(
+            join(pkgDir, "package.json"),
+            utf8StreamOptions
+          )
+        ),
+        pkgDir
+      );
+
+      for (const outputFactory of allOutputs.filter(
+        o => options[o.name] === true || output[o.name] !== undefined
+      )) {
         Object.assign(properties, options.define);
 
         sources.push(

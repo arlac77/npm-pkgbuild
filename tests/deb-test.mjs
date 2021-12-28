@@ -1,5 +1,6 @@
 import test from "ava";
 import { join } from "path";
+import { stat } from "fs/promises";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, DEB } from "npm-pkgbuild";
 
@@ -17,4 +18,9 @@ test("deb", async t => {
   const destination = "/tmp";
   const fileName = await deb.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc_1.0.0_any.deb"));
+
+  /*
+  const s = await stat(fileName);
+  t.true(s.size > 200, "package file size");
+  */
 });

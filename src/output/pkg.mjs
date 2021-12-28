@@ -45,7 +45,7 @@ export class PKG extends Packager {
 
   get packageFileName() {
     const p = this.properties;
-    return `${p.name}-${p.version}-${p.release}.${p.arch}${this.constructor.fileNameExtension}`;
+    return `${p.name}-${p.version}-${p.release}-${p.arch}${this.constructor.fileNameExtension}`;
   }
 
   async execute(sources, options, expander) {
@@ -101,7 +101,10 @@ package() {
       expander
     );
 
-    await execa("makepkg", ["-f"], { cwd: staging });
+    await execa("makepkg", ["-f"], {
+      cwd: staging,
+      env: { PKGDEST: options.destination }
+    });
 
     return join(options.destination, this.packageFileName);
   }

@@ -1,5 +1,6 @@
 import test from "ava";
 import { join } from "path";
+import { stat } from "fs/promises";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, PKG } from "npm-pkgbuild";
 
@@ -16,5 +17,8 @@ test("pkg", async t => {
 
   const destination = "/tmp";
   const fileName = await pkg.execute(aggregateFifo(sources), { destination });
-  t.is(fileName, join(destination, "abc-1.0.0-0.any.pkg.tar.zst"));
+  t.is(fileName, join(destination, "abc-1.0.0-0-any.pkg.tar.zst"));
+
+  const s = await stat(fileName);
+  t.true(s.size >= 7440, `package file size ${s.size}`);
 });

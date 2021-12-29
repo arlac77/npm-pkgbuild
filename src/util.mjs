@@ -91,7 +91,10 @@ export async function extractFromPackage(pkg, dir) {
   return { properties, sources, dependencies, output };
 }
 
-export function createExpressionTransformer(properties) {
+export function createExpressionTransformer(
+  properties,
+  match = entry => entry.name.match(/\.(conf|json)$/)
+) {
   async function* transformer(expression, remainder, source, cb) {
     const value = properties[expression];
     console.log("EXPRESSION", expression, value);
@@ -99,7 +102,7 @@ export function createExpressionTransformer(properties) {
   }
 
   return {
-    match: entry => true, //entry.name.match(/(conf|json)$/),
+    match,
     transform: async entry =>
       new ReadableStreamContentEntry(
         entry.name,

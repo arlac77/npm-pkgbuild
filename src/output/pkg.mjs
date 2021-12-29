@@ -77,10 +77,9 @@ package() {
 `;
     }
 
-    await copyEntries(transform(sources, []), join(staging, "src"), expander);
+    await copyEntries(transform(sources, [createExpressionTransformer(properties)]), join(staging, "src"), expander);
 
     const metaTransformers = [
-      createExpressionTransformer(properties),
       {
         match: entry => entry.name === "PKGBUILD",
         transform: async entry =>

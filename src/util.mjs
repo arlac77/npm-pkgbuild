@@ -31,6 +31,9 @@ export function fieldProvider(properties, fields, mandatoryFields) {
       for (const p of mandatoryFields) {
         if (!presentKeys.has(p)) {
           const v = properties[p];
+          if (v === undefined && fields[p].default === undefined) {
+            console.log(`Missing value for mandatory field ${p}`);
+          }
           yield [p, v === undefined ? fields[p].default : v];
         }
       }
@@ -193,7 +196,6 @@ export async function copyEntries(
       }
     }
 
-    console.log(destName);
     await pipeline(
       await entry.readStream,
       createWriteStream(destName, options)

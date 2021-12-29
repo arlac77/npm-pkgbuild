@@ -48,7 +48,6 @@ export class DEB extends Packager {
     await copyEntries(transform(sources, transformers), staging, expander, attributes);
 
     const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
-    //console.log(dpkg.stdout);
 
     return join(options.destination, this.packageFileName);
   }

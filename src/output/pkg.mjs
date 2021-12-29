@@ -6,7 +6,7 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform } from "../util.mjs";
+import { copyEntries, transform, fieldProvider } from "../util.mjs";
 import { quote, createExpressionTransformer } from "../util.mjs";
 
 /**
@@ -56,19 +56,6 @@ export class PKG extends Packager {
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
-    function* controlProperties(k, v, presentKeys) {
-      if (k === undefined) {
-        for (const p of mandatoryFields) {
-          if (!presentKeys.has(p)) {
-            const v = properties[p];
-            yield [p, v === undefined ? fields[p].default : v];
-          }
-        }
-      } else {
-        yield [k, properties[k] || v];
-      }
-    }
-
     async function* trailingLines() {
       yield `
 package() {
@@ -79,13 +66,15 @@ package() {
 
     await copyEntries(transform(sources, [createExpressionTransformer(properties)]), join(staging, "src"), expander);
 
+    const fp = fieldProvider(properties, fields, mandatoryFields);
+
     const metaTransformers = [
       {
         match: entry => entry.name === "PKGBUILD",
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, controlProperties, {
+            keyValueTransformer(await entry.readStream, fp, {
               ...pkgKeyValuePairOptions,
               trailingLines
             })

@@ -25,6 +25,21 @@ export function asArray(o) {
   return Array.isArray(o) ? o : [o];
 }
 
+export function fieldProvider(properties, fields, mandatoryFields) {
+  return function* controlProperties(k, v, presentKeys) {
+    if (k === undefined) {
+      for (const p of mandatoryFields) {
+        if (!presentKeys.has(p)) {
+          const v = properties[p];
+          yield [p, v === undefined ? fields[p].default : v];
+        }
+      }
+    } else {
+      yield [k, properties[k] || v];
+    }
+  };
+}
+
 /**
  * Extract package definition from package.json.
  * @param {Object} pkg package.json content

@@ -7,7 +7,7 @@ import {
   colonSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform } from "../util.mjs";
+import { copyEntries, transform, fieldProvider } from "../util.mjs";
 
 export class RPM extends Packager {
   static get name() {
@@ -40,18 +40,7 @@ export class RPM extends Packager {
 
     const staging = join(tmp, "staging");
 
-    function* controlProperties(k, v, presentKeys) {
-      if (k === undefined) {
-        for (const p of mandatoryFields) {
-          if (!presentKeys.has(p)) {
-            const v = properties[p];
-            yield [p, v === undefined ? fields[p].default : v];
-          }
-        }
-      } else {
-        yield [k, properties[k] || v];
-      }
-    }
+    const fp = fieldProvider(properties, fields, mandatoryFields);
 
     const specFileName = `${properties.name}.spec`;
 
@@ -67,7 +56,7 @@ export class RPM extends Packager {
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, controlProperties, {
+            keyValueTransformer(await entry.readStream, fp, {
               ...colonSeparatedKeyValuePairOptions,
               trailingLines
             })
@@ -89,7 +78,7 @@ export class RPM extends Packager {
     await cp(
       join(tmp, "RPMS", properties.arch, this.packageFileName),
       join(options.destination, this.packageFileName),
-      {preserveTimestamps :true }
+      { preserveTimestamps: true }
     );
     return join(options.destination, this.packageFileName);
   }

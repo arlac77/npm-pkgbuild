@@ -3,7 +3,7 @@ import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform } from "../util.mjs";
+import { copyEntries, transform, fieldProvider } from "../util.mjs";
 
 const attributes = [{ pattern: /DEBIAN\/.*(inst|rm)/, mode: 0o775 }];
 
@@ -30,18 +30,7 @@ export class DEB extends Packager {
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
-    function* controlProperties(k, v, presentKeys) {
-      if (k === undefined) {
-        for (const p of mandatoryFields) {
-          if (!presentKeys.has(p)) {
-            const v = properties[p];
-            yield [p, v === undefined ? fields[p].default : v];
-          }
-        }
-      } else {
-        yield [k, properties[k] || v];
-      }
-    }
+    const fp = fieldProvider(properties, fields, mandatoryFields);
 
     const debianControlName = "DEBIAN/control";
     const transformers = [
@@ -50,7 +39,7 @@ export class DEB extends Packager {
         transform: async entry =>
           new ReadableStreamContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, controlProperties)
+            keyValueTransformer(await entry.readStream, fp)
           ),
         createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
       }

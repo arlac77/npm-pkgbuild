@@ -1,5 +1,5 @@
 import { join } from "path";
-import { mkdir } from "fs/promises";
+import { mkdir, cp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
@@ -78,7 +78,7 @@ export class RPM extends Packager {
 
     await copyEntries(transform(sources, transformers), staging, expander);
 
-    await execa("rpmbuild", [
+    const rpmbuild = await execa("rpmbuild", [
       "--define",
       `_topdir ${tmp}`,
       "-vv",
@@ -86,6 +86,11 @@ export class RPM extends Packager {
       join(staging, specFileName)
     ]);
 
+    await cp(
+      join(tmp, "RPMS", properties.arch, this.packageFileName),
+      join(options.destination, this.packageFileName),
+      {preserveTimestamps :true }
+    );
     return join(options.destination, this.packageFileName);
   }
 }

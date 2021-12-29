@@ -14,10 +14,10 @@ test("deb", async t => {
 
   const properties = { name: "abc", version: "1.0.0" };
 
-  const deb = new DEB(properties);
+  const out = new DEB(properties);
 
-  const destination = await mkdtemp(join(tmpdir(), deb.constructor.name));
-  const fileName = await deb.execute(aggregateFifo(sources), { destination });
+  const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
+  const fileName = await out.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
   const s = await stat(fileName);

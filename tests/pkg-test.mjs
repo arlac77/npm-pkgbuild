@@ -15,10 +15,10 @@ test("pkg", async t => {
 
   const properties = { name: "abc", version: "1.0.0" };
 
-  const pkg = new PKG(properties);
+  const out = new PKG(properties);
 
-  const destination = await mkdtemp(join(tmpdir(), pkg.constructor.name));
-  const fileName = await pkg.execute(aggregateFifo(sources), { destination });
+  const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
+  const fileName = await out.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc-1.0.0-0-any.pkg.tar.zst"));
 
   const s = await stat(fileName);

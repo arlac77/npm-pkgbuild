@@ -1,9 +1,11 @@
 import test from "ava";
 import { join } from "path";
+import { stat, mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, RPM } from "npm-pkgbuild";
 
-test("pkg", async t => {
+test("rpm", async t => {
   const sources = ["fixtures/content", "fixtures/rpm"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -12,9 +14,12 @@ test("pkg", async t => {
 
   const properties = { name: "abc", version: "1.0.0" };
 
-  const pkg = new RPM(properties);
+  const out = new RPM(properties);
 
-  const destination = "/tmp";
-  const fileName = await pkg.execute(aggregateFifo(sources), { destination });
+  const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
+  const fileName = await out.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
+
+  const s = await stat(fileName);
+  t.true(s.size > 900, "package file size");
 });

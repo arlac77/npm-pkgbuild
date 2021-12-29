@@ -31,6 +31,7 @@ program
     return Object.fromEntries([kv]);
   })
   .option("-d --destination <dir>", "where to put the package(s)", cwd)
+  .option("--verbose", "be more verbose", false)
   .option("-s --staging <dir>", "staging directory", "build")
   .option(
     "-c --content <dir>",
@@ -77,13 +78,15 @@ program
         const context = createContext({ properties });
         const output = new outputFactory(properties);
 
+        if(options.verbose) {
+          console.log(output.properties);
+        }
+      
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
           options,
           object => context.expand(object)
         );
-
-        console.log(fileName);
       }
     } catch (e) {
       console.log(e);

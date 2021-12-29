@@ -21,5 +21,5 @@ test("deb", async t => {
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
   const s = await stat(fileName);
-  t.true(s.size > 900, "package file size");
+  t.true(s.size >= 900, `package file size ${s.size}`);
 });

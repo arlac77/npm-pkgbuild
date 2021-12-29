@@ -21,5 +21,5 @@ test("rpm", async t => {
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 
   const s = await stat(fileName);
-  t.true(s.size > 5500, "package file size");
+  t.true(s.size >= 5000, `package file size ${s.size}`);
 });

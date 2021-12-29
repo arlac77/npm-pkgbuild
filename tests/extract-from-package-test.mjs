@@ -11,7 +11,11 @@ async function efpt(
   expectedDependencies,
   expectedOutput
 ) {
-  const { properties, sources, dependencies, output } = await extractFromPackage(pkg, dirname(new URL('',import.meta.url).pathname));
+  const { properties, sources, dependencies, output } =
+    await extractFromPackage(
+      pkg,
+      dirname(new URL("", import.meta.url).pathname)
+    );
 
   t.deepEqual(properties, expectedProperties, "properties");
 
@@ -23,8 +27,8 @@ async function efpt(
     t.deepEqual(dependencies, expectedDependencies, "dependencies");
   }
 
-  if(expectedOutput) {
-    t.deepEqual(output, expectedOutput, "output");	
+  if (expectedOutput) {
+    t.deepEqual(output, expectedOutput, "output");
   }
 }
 efpt.title = (
@@ -50,16 +54,23 @@ test(
     name: "n1",
     description: "d1",
     version: "1.2.3",
+    license: "BSD",
     pkgbuild: {
       name: "n2",
       other: "o1",
-      output: { dep : {}}
+      output: { dep: {} }
     }
   },
-  { name: "n2", description: "d1", version: "1.2.3", other: "o1" },
+  {
+    name: "n2",
+    description: "d1",
+    version: "1.2.3",
+    other: "o1",
+    license: "BSD"
+  },
   undefined,
   undefined,
-  { dep: {}}
+  { dep: {} }
 );
 
 test(

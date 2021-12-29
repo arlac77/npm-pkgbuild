@@ -33,7 +33,7 @@ export function asArray(o) {
  */
 export async function extractFromPackage(pkg, dir) {
   const properties = Object.fromEntries(
-    ["name", "version", "description", "homepage"]
+    ["name", "version", "description", "homepage", "license"]
       .map(key => [key, pkg[key]])
       .filter(([k, v]) => v !== undefined)
   );

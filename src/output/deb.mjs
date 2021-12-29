@@ -58,7 +58,8 @@ export class DEB extends Packager {
 
     await copyEntries(transform(sources, transformers), staging, expander, attributes);
 
-    await execa("dpkg", ["-b", staging, options.destination]);
+    const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
+    //console.log(dpkg.stdout);
 
     return join(options.destination, this.packageFileName);
   }
@@ -81,7 +82,7 @@ const fields = {
   Architecture: {
     alias: "arch",
     type: "string",
-    default: "any",
+    default: "all",
     mandatory: true
   },
   Homepage: { alias: "homepage", type: "string" },

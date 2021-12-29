@@ -17,10 +17,8 @@ test("deb", async t => {
 
   const destination = "/tmp";
   const fileName = await deb.execute(aggregateFifo(sources), { destination });
-  t.is(fileName, join(destination, "abc_1.0.0_any.deb"));
+  t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
-  /*
   const s = await stat(fileName);
-  t.true(s.size > 200, "package file size");
-  */
+  t.true(s.size > 900, "package file size");
 });

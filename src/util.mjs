@@ -90,7 +90,7 @@ export async function extractFromPackage(pkg, dir) {
   return { properties, sources, dependencies, output };
 }
 
-export function createPropertyTransformer(properties) {
+export function createExpressionTransformer(properties) {
   async function* transformer(expression, remainder, source, cb) {
     console.log("EXPRESSION", expression);
     yield properties[expression];

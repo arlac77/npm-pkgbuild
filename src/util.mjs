@@ -3,6 +3,7 @@ import { mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
+import { ReadableStreamContentEntry } from "content-entry";
 import { FileContentProvider } from "npm-pkgbuild";
 import { packageWalker } from "npm-package-walker";
 
@@ -58,13 +59,13 @@ export async function extractFromPackage(pkg, dir) {
   let dependencies = { ...pkg.engines };
   let sources = [];
   let output = {};
-  
+
   const processPkg = pkg => {
     if (pkg.pkgbuild) {
       const pkgbuild = pkg.pkgbuild;
 
       Object.assign(output, pkgbuild.output);
-      
+
       Object.entries(pkgbuild)
         .filter(([k, v]) => typeof v === "string")
         .forEach(([k, v]) => (properties[k] = v));
@@ -81,7 +82,7 @@ export async function extractFromPackage(pkg, dir) {
   };
 
   await packageWalker(async (pkg, base, modulePath) => {
-    processPkg(pkg)
+    processPkg(pkg);
     return true;
   }, dir);
 
@@ -92,8 +93,9 @@ export async function extractFromPackage(pkg, dir) {
 
 export function createExpressionTransformer(properties) {
   async function* transformer(expression, remainder, source, cb) {
-    console.log("EXPRESSION", expression);
-    yield properties[expression];
+    const value = properties[expression];
+    console.log("EXPRESSION", expression, value);
+    yield value === undefined ? "" : value;
   }
 
   return {
@@ -101,7 +103,10 @@ export function createExpressionTransformer(properties) {
     transform: async entry =>
       new ReadableStreamContentEntry(
         entry.name,
-        iterableStringInterceptor(transformer)
+        iterableStringInterceptor(
+          await entry.getReadStream(utf8StreamOptions),
+          transformer
+        )
       )
   };
 }

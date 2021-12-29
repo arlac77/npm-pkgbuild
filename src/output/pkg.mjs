@@ -7,7 +7,7 @@ import {
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform } from "../util.mjs";
-import { quote, createPropertyTransformer } from "../util.mjs";
+import { quote, createExpressionTransformer } from "../util.mjs";
 
 /**
  * @type KeyValueTransformOptions
@@ -80,7 +80,7 @@ package() {
     await copyEntries(transform(sources, []), join(staging, "src"), expander);
 
     const metaTransformers = [
-      createPropertyTransformer(properties),
+      createExpressionTransformer(properties),
       {
         match: entry => entry.name === "PKGBUILD",
         transform: async entry =>

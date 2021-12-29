@@ -1,6 +1,7 @@
 import test from "ava";
 import { join } from "path";
-import { stat } from "fs/promises";
+import { stat, mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, DEB } from "npm-pkgbuild";
 
@@ -15,7 +16,7 @@ test("deb", async t => {
 
   const deb = new DEB(properties);
 
-  const destination = "/tmp";
+  const destination = await mkdtemp(join(tmpdir(), deb.constructor.name));
   const fileName = await deb.execute(aggregateFifo(sources), { destination });
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 

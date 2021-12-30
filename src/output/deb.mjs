@@ -3,9 +3,7 @@ import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform, fieldProvider } from "../util.mjs";
-
-const attributes = [{ pattern: /DEBIAN\/.*(inst|rm)/, mode: 0o775 }];
+import { copyEntries, transform, fieldProvider, createModeTransformer } from "../util.mjs";
 
 export class DEB extends Packager {
   static get name() {
@@ -32,7 +30,8 @@ export class DEB extends Packager {
 
     const fp = fieldProvider(properties, fields, mandatoryFields);
     const debianControlName = "DEBIAN/control";
-
+    
+    transformer.push(createModeTransformer(0o775, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/)));
     transformer.push(
       {
         match: entry => entry.name === debianControlName,
@@ -43,9 +42,8 @@ export class DEB extends Packager {
           ),
         createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
       });
-   
-
-    await copyEntries(transform(sources, transformer), staging, expander, attributes);
+ 
+    await copyEntries(transform(sources, transformer), staging, expander);
 
     const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
 

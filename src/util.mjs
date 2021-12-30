@@ -111,13 +111,20 @@ export async function extractFromPackage(pkg, dir) {
   return { properties, sources, dependencies, output };
 }
 
+export function createModeTransformer(mode, match)
+{
+   return {
+   	 match,
+   	 transform: async entry => Object.create(entry,{ mode: { value: mode }})
+   };
+}
+
 export function createExpressionTransformer(
   properties,
-  match = entry => entry.name.match(/\.(conf|json)$/)
+  match = entry => entry.name.match(/\.(conf|json|html|txt)$/)
 ) {
   async function* transformer(expression, remainder, source, cb) {
     const value = properties[expression];
-    console.log("EXPRESSION", expression, value);
     yield value === undefined ? "" : value;
   }
 
@@ -183,8 +190,7 @@ export async function* transform(source, transformers = [], onlyMatching) {
 export async function copyEntries(
   source,
   destinationDirectory,
-  expander = v => v,
-  attributes = []
+  expander = v => v
 ) {
   for await (let entry of source) {
     const destination = expander(
@@ -197,12 +203,6 @@ export async function copyEntries(
     await mkdir(dirname(destination), { recursive: true });
 
     const options = { mode: entry.mode };
-
-    for (const a of attributes) {
-      if (entry.name.match(a.pattern)) {
-        options.mode = a.mode;
-      }
-    }
 
     await pipeline(
       await entry.readStream,

@@ -7,7 +7,7 @@ import {
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform, fieldProvider } from "../util.mjs";
-import { quote, createExpressionTransformer } from "../util.mjs";
+import { quote } from "../util.mjs";
 
 /**
  * @type KeyValueTransformOptions
@@ -64,7 +64,7 @@ package() {
 `;
     }
 
-    await copyEntries(transform(sources, [createExpressionTransformer(properties)]), join(staging, "src"), expander);
+    await copyEntries(transform(sources, transformer), join(staging, "src"), expander);
 
     const fp = fieldProvider(properties, fields, mandatoryFields);
 

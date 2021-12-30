@@ -9,6 +9,7 @@ import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
 import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
 import { FileContentProvider, DEB, PKG, RPM } from "npm-pkgbuild";
+import { createExpressionTransformer } from "./util.mjs";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -74,7 +75,7 @@ program
 
         const context = createContext({ properties });
         const output = new outputFactory(properties);
-        const transformer = [];
+        const transformer = [createExpressionTransformer(properties)];
  
         if (options.verbose) {
           console.log(output.properties);

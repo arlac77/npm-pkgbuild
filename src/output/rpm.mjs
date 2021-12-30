@@ -74,6 +74,10 @@ export class RPM extends Packager {
       join(staging, specFileName)
     ]);
 
+    if(options.verbose) {
+      console.log(rpmbuild.stdout);
+    }
+
     await cp(
       join(tmp, "RPMS", properties.arch, this.packageFileName),
       join(options.destination, this.packageFileName),

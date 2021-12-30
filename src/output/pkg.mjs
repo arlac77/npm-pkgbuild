@@ -88,10 +88,18 @@ package() {
       expander
     );
 
-    await execa("makepkg", ["-f"], {
+    if(options.verbose) {
+      console.log(staging);
+    }
+
+    const makepkg = await execa("makepkg", ["-f"], {
       cwd: staging,
       env: { PKGDEST: options.destination }
     });
+
+    if(options.verbose) {
+      console.log(makepkg.stdout);
+    }
 
     return join(options.destination, this.packageFileName);
   }
@@ -107,7 +115,7 @@ const fields = {
   pkgrel: { alias: "release", type: "integer", default: 0, mandatory: true },
   pkgdesc: { alias: "description", type: "string", mandatory: true },
   arch: { default: ["any"], type: "string[]", mandatory: true },
-
+  install: { alias: "hooks", type: "string" },
   license: { default: [], type: "string[]", mandatory: true },
   source: { default: [], type: "string[]" },
   validpgpkeys: { type: "string[]" },
@@ -141,12 +149,8 @@ const fields = {
         (c, i) => `${i ? "Contributor" : "Maintainer"}: ${c.name} <${c.email}>`
       )
       .join("\n# ")}
-${Object.keys(properties)
-  .filter(k => properties[k] !== undefined)
-  .map(k => `${k}=${quote(properties[k])}`)
-  .join("\n")}
-${pkgver}
-build() {
+
+      build() {
   cd \${pkgname}${directory}
   sed -i 's/"version": ".* /"version": "${
     context.properties.pkgver

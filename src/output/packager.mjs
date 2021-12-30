@@ -19,7 +19,7 @@ export class Packager {
   }
 
   constructor(properties) {
-    this._properties = properties;
+    this._properties = { ...properties };
   }
 
   get fields() {

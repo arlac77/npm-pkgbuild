@@ -14,7 +14,7 @@ test("cli --deb", async t => {
       "-c",
       new URL("fixtures/content", import.meta.url).pathname,
       "-m",
-      new URL("fixtures/deb", import.meta.url).pathname,
+      new URL("fixtures/pkg", import.meta.url).pathname,
       "--destination", destination
     ]
   );

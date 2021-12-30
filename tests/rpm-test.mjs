@@ -6,7 +6,7 @@ import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, RPM } from "npm-pkgbuild";
 
 test("rpm", async t => {
-  const sources = ["fixtures/content", "fixtures/rpm"].map(source =>
+  const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
     })[Symbol.asyncIterator]()

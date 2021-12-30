@@ -33,12 +33,12 @@ export class RPM extends Packager {
     const tmp = await this.tmpdir;
 
     await Promise.all(
-      ["staging", "RPMS", "SRPMS", "SOURCES", "SPECS"].map(d =>
+      ["BUILDROOT", "RPMS", "SRPMS", "SOURCES", "SPECS"].map(d =>
         mkdir(join(tmp, d))
       )
     );
 
-    const staging = join(tmp, "staging");
+    const staging = join(tmp, "BUILDROOT");
 
     const fp = fieldProvider(properties, fields, mandatoryFields);
 
@@ -46,7 +46,9 @@ export class RPM extends Packager {
 
     async function* trailingLines() {
       for (const [name, options] of Object.entries(sections)) {
-        yield `%${name}\n\n`;
+        if(options.mandatory) {
+          yield `%${name}\n\n`;
+        }
       }
     }
 
@@ -69,6 +71,7 @@ export class RPM extends Packager {
     const rpmbuild = await execa("rpmbuild", [
       "--define",
       `_topdir ${tmp}`,
+//      "--buildroot", staging,
       "-vv",
       "-bb",
       join(staging, specFileName)
@@ -110,11 +113,11 @@ const fields = {
 };
 
 const sections = {
-  description: {},
-  prep: {},
-  build: {},
-  install: {},
-  check: {},
-  files: {},
-  changelog: {}
+  description: { mandatory: true },
+  prep: { mandatory: false },
+  build: { mandatory: false },
+  install: { mandatory: false },
+  check: { mandatory: false },
+  files: { mandatory: true },
+  changelog: { mandatory: false }
 };

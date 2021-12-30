@@ -6,8 +6,9 @@
       "type": "git",
       "url": "https://github.com/arlac77/myservice.git"
     },
+    "license": "MIT",
     "engines": {
-      "node": ">=10.5"
+      "node": ">=16.13.1"
     },
     "config" : {
       "port" : 8088,

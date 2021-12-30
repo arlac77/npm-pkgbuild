@@ -166,10 +166,16 @@ export async function* transform(source, transformers = [], onlyMatching) {
 }
 
 /**
+ * @typedef {Function} Expander
+ * @param {string} path 
+ * @return {string}
+ */
+
+/**
  * Copy content from source into destinationDirectory.
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
- * @param {Function} expander
+ * @param {Expander} expander
  * @param {ContentEntryAttribute[]} attributes
  */
 export async function copyEntries(

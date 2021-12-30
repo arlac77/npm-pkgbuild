@@ -51,10 +51,7 @@ program
 
       const { properties, sources, output } = await extractFromPackage(
         JSON.parse(
-          await readFile(
-            join(pkgDir, "package.json"),
-            utf8StreamOptions
-          )
+          await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
         ),
         pkgDir
       );
@@ -78,14 +75,14 @@ program
         const context = createContext({ properties });
         const output = new outputFactory(properties);
 
-        if(options.verbose) {
+        if (options.verbose) {
           console.log(output.properties);
         }
-      
+
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
           options,
-          object => context.expand(object)
+          path => context.expand(path)
         );
       }
     } catch (e) {

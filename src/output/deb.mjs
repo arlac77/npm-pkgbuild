@@ -63,8 +63,8 @@ const fields = {
   Version: { alias: "version", type: "string", mandatory: true },
   Maintainer: { alias: "maintainer", type: "string", mandatory: true },
   Description: { alias: "description", type: "string", mandatory: true },
-  Section: { type: "string", recommended: true },
-  Priority: { type: "string", recommended: true },
+  Section: { type: "string" },
+  Priority: { type: "string" },
   Essential: { type: "boolean" },
   Origin: { type: "string" },
   Architecture: {

@@ -54,7 +54,6 @@ export class PKG extends Packager {
 
     //properties.depends = makeDepends({ ...pkg.engines });
 
-    const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
     async function* trailingLines() {
@@ -71,7 +70,7 @@ package() {
       expander
     );
 
-    const fp = fieldProvider(properties, fields, mandatoryFields);
+    const fp = fieldProvider(properties, fields, this.mandatoryFields);
 
     transformer.push({
       match: entry => entry.name === "PKGBUILD",
@@ -99,7 +98,7 @@ package() {
     await copyEntries(transform(sources, transformer, true), staging, expander);
 
     if (options.verbose) {
-      console.log(staging);
+      console.log(`stagingDir: ${staging}`);
     }
 
     const makepkg = await execa("makepkg", ["-f"], {
@@ -131,10 +130,9 @@ const fields = {
   changelog: { type: "string" },
   source: { default: [], type: "string[]" },
   validpgpkeys: { type: "string[]" },
-  validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
   cksums: { type: "string[]" },
-  md5sums: { /*default: ["SKIP"],*/ type: "string[]" },
+  md5sums: { type: "string[]" },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },

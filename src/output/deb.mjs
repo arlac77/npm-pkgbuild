@@ -25,10 +25,9 @@ export class DEB extends Packager {
 
   async execute(sources, transformer, options, expander) {
     const properties = this.properties;
-    const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
-    const fp = fieldProvider(properties, fields, mandatoryFields);
+    const fp = fieldProvider(properties, fields, this.mandatoryFields);
     const debianControlName = "DEBIAN/control";
     
     transformer.push(createModeTransformer(0o775, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/)));

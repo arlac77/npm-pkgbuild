@@ -29,7 +29,6 @@ export class RPM extends Packager {
 
   async execute(sources, transformer, options, expander) {
     const properties = this.properties;
-    const mandatoryFields = this.mandatoryFields;
     const tmp = await this.tmpdir;
 
     await Promise.all(
@@ -40,11 +39,14 @@ export class RPM extends Packager {
 
     const staging = join(tmp, "BUILDROOT");
 
-    const fp = fieldProvider(properties, fields, mandatoryFields);
+    const fp = fieldProvider(properties, fields, this.mandatoryFields);
 
     const specFileName = `${properties.name}.spec`;
 
     async function* trailingLines() {
+
+      yield "%define _unpackaged_files_terminate_build 0\n";
+      
       for (const [name, options] of Object.entries(sections)) {
         if(options.mandatory) {
           yield `%${name}\n\n`;
@@ -71,7 +73,7 @@ export class RPM extends Packager {
     const rpmbuild = await execa("rpmbuild", [
       "--define",
       `_topdir ${tmp}`,
-//      "--buildroot", staging,
+      "--buildroot", staging,
       "-vv",
       "-bb",
       join(staging, specFileName)

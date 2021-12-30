@@ -187,14 +187,14 @@ export async function copyEntries(
   attributes = []
 ) {
   for await (let entry of source) {
-    const destName = expander(
+    const destination = expander(
       entry.destination === undefined
         ? join(destinationDirectory, entry.name)
         : entry.destination.endsWith("/")
         ? join(destinationDirectory, entry.destination, entry.name)
         : join(destinationDirectory, entry.destination)
     );
-    await mkdir(dirname(destName), { recursive: true });
+    await mkdir(dirname(destination), { recursive: true });
 
     const options = { mode: entry.mode };
 
@@ -206,7 +206,7 @@ export async function copyEntries(
 
     await pipeline(
       await entry.readStream,
-      createWriteStream(destName, options)
+      createWriteStream(destination, options)
     );
   }
 }

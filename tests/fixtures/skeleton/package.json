@@ -22,8 +22,6 @@
       "redis": ">=5.0.3"
     },
     "hooks": "pkgbuild/pacman.install",
-    "includeNpmPack" : true,
-    "includeNodeModules" : true,
     "content": {
       "/usr/lib/tmpfiles.d/${name}.conf": "pkgbuild/tmpfiles.conf"
     }

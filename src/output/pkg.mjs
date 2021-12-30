@@ -1,4 +1,5 @@
 import { join } from "path";
+import { cp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
@@ -64,31 +65,40 @@ package() {
 `;
     }
 
-    await copyEntries(transform(sources, transformer), join(staging, "src"), expander);
-
-    const fp = fieldProvider(properties, fields, mandatoryFields);
-
-    transformer.push(
-      {
-        match: entry => entry.name === "PKGBUILD",
-        transform: async entry =>
-          new ReadableStreamContentEntry(
-            entry.name,
-            keyValueTransformer(await entry.readStream, fp, {
-              ...pkgKeyValuePairOptions,
-              trailingLines
-            })
-          ),
-        createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
-      });
-
     await copyEntries(
-      transform(sources, transformer, true),
-      staging,
+      transform(sources, transformer),
+      join(staging, "src"),
       expander
     );
 
-    if(options.verbose) {
+    const fp = fieldProvider(properties, fields, mandatoryFields);
+
+    transformer.push({
+      match: entry => entry.name === "PKGBUILD",
+      transform: async entry =>
+        new ReadableStreamContentEntry(
+          entry.name,
+          keyValueTransformer(await entry.readStream, fp, {
+            ...pkgKeyValuePairOptions,
+            trailingLines
+          })
+        ),
+      createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
+    });
+
+    if (properties.hooks) {
+      await cp(
+        join(options.pkgdir, properties.hooks),
+        join(staging, `${properties.name}.install`),
+        {
+          preserveTimestamps: true
+        }
+      );
+    }
+
+    await copyEntries(transform(sources, transformer, true), staging, expander);
+
+    if (options.verbose) {
       console.log(staging);
     }
 
@@ -97,7 +107,7 @@ package() {
       env: { PKGDEST: options.destination }
     });
 
-    if(options.verbose) {
+    if (options.verbose) {
       console.log(makepkg.stdout);
     }
 
@@ -113,19 +123,24 @@ const fields = {
   pkgname: { alias: "name", type: "string[]", mandatory: true },
   pkgver: { alias: "version", type: "string", mandatory: true },
   pkgrel: { alias: "release", type: "integer", default: 0, mandatory: true },
+  epoch: { type: "integer", default: 0 },
   pkgdesc: { alias: "description", type: "string", mandatory: true },
-  arch: { default: ["any"], type: "string[]", mandatory: true },
-  install: { alias: "hooks", type: "string" },
+  url: { alias: "homepage", type: "string" },
   license: { default: [], type: "string[]", mandatory: true },
+  install: { alias: "hooks", type: "string" },
+  changelog: { type: "string" },
   source: { default: [], type: "string[]" },
   validpgpkeys: { type: "string[]" },
+  validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
+  cksums: { type: "string[]" },
   md5sums: { /*default: ["SKIP"],*/ type: "string[]" },
   sha1sums: { type: "string[]" },
   sha256sums: { type: "string[]" },
   sha384sums: { type: "string[]" },
   sha512sums: { type: "string[]" },
   groups: { type: "string[]" },
+  arch: { default: ["any"], type: "string[]", mandatory: true },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
   makedepends: { type: "string[]" },
@@ -134,12 +149,7 @@ const fields = {
   conflicts: { type: "string[]" },
   provides: { type: "string[]" },
   replaces: { type: "string[]" },
-  options: { type: "string[]" },
-
-  epoch: {},
-  url: { alias: "homepage", type: "string" },
-  install: {},
-  changelog: {}
+  options: { type: "string[]" }
 };
 
 /*

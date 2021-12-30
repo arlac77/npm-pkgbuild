@@ -1,0 +1,30 @@
+{
+    "name": "myservice",
+    "description": "a description",
+    "version": "1.2.3",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/arlac77/myservice.git"
+    },
+    "engines": {
+      "node": ">=10.5"
+    },
+    "config" : {
+      "port" : 8088,
+      "api" : {
+        "url" : "http://somwhere.com/prefix/api"
+      }
+    },
+    "pkgbuild": {
+      "installdir": "/services/${name}",
+      "groups": "webhook",
+      "depends": {
+        "redis": ">=5.0.3"
+      },
+      "hooks": "pacman.install",
+      "content": {
+        "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"
+      }
+    }
+  }
+  

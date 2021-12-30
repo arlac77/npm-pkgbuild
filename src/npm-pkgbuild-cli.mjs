@@ -33,7 +33,7 @@ program
   })
   .option("-d --destination <dir>", "where to put the package(s)", cwd)
   .option("--verbose", "be more verbose", false)
-  .option("-s --staging <dir>", "staging directory", "build")
+  .option("-p --pkgdir <dir>", "which package to use", process.cwd())
   .option(
     "-c --content <dir>",
     "content directory",
@@ -48,7 +48,11 @@ program
   )
   .action(async options => {
     try {
-      const pkgDir = await packageDirectory();
+      const pkgDir = await packageDirectory({ cwd: options.pkgdir});
+
+      if (options.verbose) {
+        console.log(`pkgdir: ${pkgDir}`);
+      }
 
       const { properties, sources, output } = await extractFromPackage(
         JSON.parse(
@@ -87,6 +91,8 @@ program
           options,
           path => context.expand(path)
         );
+
+        //console.log(`#<CI>publish ${fileName}`);
       }
     } catch (e) {
       console.log(e);

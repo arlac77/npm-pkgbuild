@@ -25,15 +25,15 @@ export class DEB extends Packager {
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, options, expander) {
+  async execute(sources, transformer, options, expander) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
     const staging = await this.tmpdir;
 
     const fp = fieldProvider(properties, fields, mandatoryFields);
-
     const debianControlName = "DEBIAN/control";
-    const transformers = [
+
+    transformer.push(
       {
         match: entry => entry.name === debianControlName,
         transform: async entry =>
@@ -42,10 +42,10 @@ export class DEB extends Packager {
             keyValueTransformer(await entry.readStream, fp)
           ),
         createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
-      }
-    ];
+      });
+   
 
-    await copyEntries(transform(sources, transformers), staging, expander, attributes);
+    await copyEntries(transform(sources, transformer), staging, expander, attributes);
 
     const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
 

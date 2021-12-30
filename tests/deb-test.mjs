@@ -16,8 +16,9 @@ test("deb", async t => {
 
   const out = new DEB(properties);
 
+  const transformer = [];
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.execute(aggregateFifo(sources), { destination });
+  const fileName = await out.execute(aggregateFifo(sources), transformer, { destination });
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
   const s = await stat(fileName);

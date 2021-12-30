@@ -27,7 +27,7 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(sources, options, expander) {
+  async execute(sources, transformer, options, expander) {
     const properties = this.properties;
     const mandatoryFields = this.mandatoryFields;
     const tmp = await this.tmpdir;
@@ -50,7 +50,7 @@ export class RPM extends Packager {
       }
     }
 
-    const transformers = [
+    transformer.push(
       {
         match: entry => entry.name === specFileName,
         transform: async entry =>
@@ -62,10 +62,9 @@ export class RPM extends Packager {
             })
           ),
         createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
-      }
-    ];
+      });
 
-    await copyEntries(transform(sources, transformers), staging, expander);
+    await copyEntries(transform(sources, transformer), staging, expander);
 
     const rpmbuild = await execa("rpmbuild", [
       "--define",

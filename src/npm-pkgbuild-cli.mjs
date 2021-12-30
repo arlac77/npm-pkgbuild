@@ -74,13 +74,15 @@ program
 
         const context = createContext({ properties });
         const output = new outputFactory(properties);
-
+        const transformer = [];
+ 
         if (options.verbose) {
           console.log(output.properties);
         }
 
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
+          transformer,
           options,
           path => context.expand(path)
         );

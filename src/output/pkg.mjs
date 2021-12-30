@@ -48,7 +48,7 @@ export class PKG extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, options, expander) {
+  async execute(sources, transformer, options, expander) {
     const properties = this.properties;
 
     //properties.depends = makeDepends({ ...pkg.engines });
@@ -68,7 +68,7 @@ package() {
 
     const fp = fieldProvider(properties, fields, mandatoryFields);
 
-    const metaTransformers = [
+    transformer.push(
       {
         match: entry => entry.name === "PKGBUILD",
         transform: async entry =>
@@ -80,11 +80,10 @@ package() {
             })
           ),
         createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
-      }
-    ];
+      });
 
     await copyEntries(
-      transform(sources, metaTransformers, true),
+      transform(sources, transformer, true),
       staging,
       expander
     );

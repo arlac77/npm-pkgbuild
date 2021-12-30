@@ -130,14 +130,15 @@ export function createExpressionTransformer(
 
   return {
     match,
-    transform: async entry =>
-      new ReadableStreamContentEntry(
+    transform: async entry => {
+      const ne = new ReadableStreamContentEntry(
         entry.name,
         iterableStringInterceptor(
           await entry.getReadStream(utf8StreamOptions),
           transformer
-        )
-      )
+        ));
+	  ne.destination = entry.destination; // TODO all the other attributes ? 
+      return ne; }
   };
 }
 

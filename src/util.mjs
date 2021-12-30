@@ -60,6 +60,8 @@ export async function extractFromPackage(pkg, dir) {
     properties.bugs = pkg.bugs.url;
   }
 
+  Object.assign(properties, pkg.config);
+  
   if (properties.name) {
     properties.name = properties.name.replace(/^\@\w+\//, "");
   }

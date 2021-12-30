@@ -55,6 +55,7 @@ test(
     description: "d1",
     version: "1.2.3",
     license: "BSD",
+    config: { c1: "v1"},
     pkgbuild: {
       name: "n2",
       other: "o1",
@@ -66,7 +67,8 @@ test(
     description: "d1",
     version: "1.2.3",
     other: "o1",
-    license: "BSD"
+    license: "BSD",
+    c1: "v1"
   },
   undefined,
   undefined,

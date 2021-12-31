@@ -38,48 +38,46 @@ export class RPM extends Packager {
     );
 
     const staging = join(tmp, "BUILDROOT");
-
-    const fp = fieldProvider(properties, fields, this.mandatoryFields);
-
     const specFileName = `${properties.name}.spec`;
 
     async function* trailingLines() {
-
       yield "%define _unpackaged_files_terminate_build 0\n";
-      
+
       for (const [name, options] of Object.entries(sections)) {
-        if(options.mandatory) {
+        if (options.mandatory) {
           yield `%${name}\n\n`;
         }
       }
     }
 
-    transformer.push(
-      {
-        match: entry => entry.name === specFileName,
-        transform: async entry =>
-          new ReadableStreamContentEntry(
-            entry.name,
-            keyValueTransformer(await entry.readStream, fp, {
-              ...colonSeparatedKeyValuePairOptions,
-              trailingLines
-            })
-          ),
-        createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
-      });
+    const fp = fieldProvider(properties, fields, this.mandatoryFields);
+
+    transformer.push({
+      match: entry => entry.name === specFileName,
+      transform: async entry =>
+        new ReadableStreamContentEntry(
+          entry.name,
+          keyValueTransformer(await entry.readStream, fp, {
+            ...colonSeparatedKeyValuePairOptions,
+            trailingLines
+          })
+        ),
+      createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
+    });
 
     await copyEntries(transform(sources, transformer), staging, expander);
 
     const rpmbuild = await execa("rpmbuild", [
       "--define",
       `_topdir ${tmp}`,
-      "--buildroot", staging,
+      "--buildroot",
+      staging,
       "-vv",
       "-bb",
       join(staging, specFileName)
     ]);
 
-    if(options.verbose) {
+    if (options.verbose) {
       console.log(rpmbuild.stdout);
     }
 

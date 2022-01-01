@@ -12,7 +12,7 @@ test("rpm", async t => {
     })[Symbol.asyncIterator]()
   );
 
-  const properties = { name: "abc", version: "1.0.0" };
+  const properties = { name: "abc", version: "1.0.0", description: "a description", license: "MIT" };
 
   const out = new RPM(properties);
 

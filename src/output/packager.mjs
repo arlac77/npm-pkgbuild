@@ -44,19 +44,6 @@ export class Packager {
   }
 
   /**
-   * @return {Set<string,Field>} mandatory fields
-   */
-  get mandatoryFields() {
-    const mandatoryFields = new Set(
-      Object.entries(this.fields)
-        .filter(([k, v]) => v.mandatory)
-        .map(([k, v]) => k)
-    );
-
-    return mandatoryFields;
-  }
-
-  /**
    * Create tmp directory.
    * @return {Promise<string>} directory path
    */

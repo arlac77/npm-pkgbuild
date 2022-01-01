@@ -70,7 +70,7 @@ package() {
       expander
     );
 
-    const fp = fieldProvider(properties, fields, this.mandatoryFields);
+    const fp = fieldProvider(properties, fields);
 
     transformer.push({
       match: entry => entry.name === "PKGBUILD",
@@ -125,7 +125,7 @@ const fields = {
   epoch: { type: "integer", default: 0 },
   pkgdesc: { alias: "description", type: "string", mandatory: true },
   url: { alias: "homepage", type: "string" },
-  license: { default: [], type: "string[]", mandatory: true },
+  license: { type: "string[]", mandatory: true },
   install: { alias: "hooks", type: "string" },
   changelog: { type: "string" },
   source: { default: [], type: "string[]" },

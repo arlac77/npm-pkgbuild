@@ -50,7 +50,7 @@ export class RPM extends Packager {
       }
     }
 
-    const fp = fieldProvider(properties, fields, this.mandatoryFields);
+    const fp = fieldProvider(properties, fields);
 
     transformer.push({
       match: entry => entry.name === specFileName,

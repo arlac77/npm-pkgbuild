@@ -29,7 +29,7 @@ export class DEB extends Packager {
 
     transformer.push(createModeTransformer(0o775, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/)));
 
-    const fp = fieldProvider(properties, fields, this.mandatoryFields);
+    const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
     
     transformer.push(

@@ -25,16 +25,34 @@ export function asArray(o) {
   return Array.isArray(o) ? o : [o];
 }
 
-export function fieldProvider(properties, fields, mandatoryFields) {
+/**
+ *
+ * @param {Object} properties
+ * @param {Object} fields
+ * @returns {Function}
+ */
+export function fieldProvider(properties, fields) {
   return function* controlProperties(k, v, presentKeys) {
     if (k === undefined) {
-      for (const p of mandatoryFields) {
-        if (!presentKeys.has(p)) {
-          const v = properties[p];
-          if (v === undefined && fields[p].default === undefined) {
-            console.log(`Missing value for mandatory field ${p}`);
+      for (const [name, field] of Object.entries(fields)) {
+        if (!presentKeys.has(name)) {
+          const value = properties[field.alias || name];
+          if (value === undefined) {
+            if (field.default === undefined) {
+              if (field.mandatory) {
+                console.log(`Missing value for mandatory field ${name}`);
+              }
+            } else {
+              yield [name, field.default];
+            }
+          } else {
+            yield [
+              name,
+              field.type.endsWith("]") && !Array.isArray(value)
+                ? [value]
+                : value
+            ];
           }
-          yield [p, v === undefined ? fields[p].default : v];
         }
       }
     } else {
@@ -61,7 +79,7 @@ export async function extractFromPackage(pkg, dir) {
   }
 
   Object.assign(properties, pkg.config);
-  
+
   if (properties.name) {
     properties.name = properties.name.replace(/^\@\w+\//, "");
   }
@@ -111,12 +129,11 @@ export async function extractFromPackage(pkg, dir) {
   return { properties, sources, dependencies, output };
 }
 
-export function createModeTransformer(mode, match)
-{
-   return {
-   	 match,
-   	 transform: async entry => Object.create(entry,{ mode: { value: mode }})
-   };
+export function createModeTransformer(mode, match) {
+  return {
+    match,
+    transform: async entry => Object.create(entry, { mode: { value: mode } })
+  };
 }
 
 export function createExpressionTransformer(
@@ -136,9 +153,11 @@ export function createExpressionTransformer(
         iterableStringInterceptor(
           await entry.getReadStream(utf8StreamOptions),
           transformer
-        ));
-	  ne.destination = entry.destination; // TODO all the other attributes ? 
-      return ne; }
+        )
+      );
+      ne.destination = entry.destination; // TODO all the other attributes ?
+      return ne;
+    }
   };
 }
 
@@ -177,7 +196,7 @@ export async function* transform(source, transformers = [], onlyMatching) {
 
 /**
  * @typedef {Function} Expander
- * @param {string} path 
+ * @param {string} path
  * @return {string}
  */
 

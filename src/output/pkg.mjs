@@ -88,7 +88,7 @@ package() {
     if (properties.hooks) {
       await cp(
         join(options.pkgdir, properties.hooks),
-        join(staging, `${properties.name}.install`),
+        join(staging, properties.hooks),
         {
           preserveTimestamps: true
         }
@@ -176,8 +176,6 @@ package() {
   mkdir -p \${pkgdir}${installdir}
   npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content
 }
-`
-  );
 */
 
 const mapping = {

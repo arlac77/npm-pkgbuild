@@ -52,6 +52,10 @@ export class PKG extends Packager {
   async execute(sources, transformer, options, expander) {
     const properties = this.properties;
 
+    if(properties.source) {
+      properties.md5sums = ["SKIP"];
+    }
+
     //properties.depends = makeDepends({ ...pkg.engines });
 
     const staging = await this.tmpdir;
@@ -128,7 +132,7 @@ const fields = {
   license: { type: "string[]", mandatory: true },
   install: { alias: "hooks", type: "string" },
   changelog: { type: "string" },
-  source: { default: [], type: "string[]" },
+  source: { type: "string[]" },
   validpgpkeys: { type: "string[]" },
   noextract: { type: "string[]" },
   cksums: { type: "string[]" },

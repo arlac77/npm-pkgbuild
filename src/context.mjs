@@ -40,7 +40,6 @@ export async function createContext(dir, properties = {}) {
   }
   if(properties.pacman && properties.pacman.name) {
     properties.name = properties.pacman.name;
-    properties.fullName = properties.name;
   }
 
   //console.log(properties);

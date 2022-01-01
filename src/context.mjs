@@ -36,9 +36,11 @@ export async function createContext(dir, properties = {}) {
   if (m) {
     properties.organtization = m[1];
     properties.name = m[2];
+    properties.fullName = `${m[1]}-${m[2]}`;
   }
   if(properties.pacman && properties.pacman.name) {
     properties.name = properties.pacman.name;
+    properties.fullName = properties.name;
   }
 
   //console.log(properties);

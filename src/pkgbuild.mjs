@@ -101,7 +101,7 @@ pkgver() {
 
   const npmDistPackage = options.npmDist
     ? `( cd \${pkgdir}${installdir}
-    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${context.properties.name}-${context.properties.pkgver}.tgz)`
+    tar -x --transform="s/^package\\///" -f \${srcdir}/\${pkgname}${directory}/${context.properties.fullName}-${context.properties.pkgver}.tgz)`
     : "";
 
   const npmModulesPackage = options.npmModules

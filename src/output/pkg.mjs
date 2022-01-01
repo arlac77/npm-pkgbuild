@@ -1,14 +1,17 @@
-import { join } from "path";
-import { cp } from "fs/promises";
+import { join, dirname } from "path";
+import { createReadStream, createWriteStream } from "fs";
+import { mkdir } from "fs/promises";
+import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { iterableStringInterceptor } from "iterable-string-interceptor";
 import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform, fieldProvider } from "../util.mjs";
-import { quote } from "../util.mjs";
+import { quote, utf8StreamOptions } from "../util.mjs";
 
 /**
  * @type KeyValueTransformOptions
@@ -52,7 +55,7 @@ export class PKG extends Packager {
   async execute(sources, transformer, options, expander) {
     const properties = this.properties;
 
-    if(properties.source) {
+    if (properties.source) {
       properties.md5sums = ["SKIP"];
     }
 
@@ -90,6 +93,27 @@ package() {
     });
 
     if (properties.hooks) {
+      async function* transformer(expression, remainder, source, cb) {
+        const value = properties[expression];
+        yield value === undefined ? "" : value;
+      }
+
+      const destination = join(staging, properties.hooks);
+
+      await mkdir(dirname(destination), { recursive: true });
+
+      await pipeline(
+        iterableStringInterceptor(
+          createReadStream(
+            join(options.pkgdir, properties.hooks),
+            utf8StreamOptions
+          ),
+          transformer
+        ),
+        createWriteStream(destination, utf8StreamOptions)
+      );
+
+      /*
       await cp(
         join(options.pkgdir, properties.hooks),
         join(staging, properties.hooks),
@@ -97,6 +121,7 @@ package() {
           preserveTimestamps: true
         }
       );
+      */
     }
 
     await copyEntries(transform(sources, transformer, true), staging, expander);

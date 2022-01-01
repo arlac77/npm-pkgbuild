@@ -150,7 +150,7 @@ package() {
 const fields = {
   pkgname: { alias: "name", type: "string[]", mandatory: true },
   pkgver: { alias: "version", type: "string", mandatory: true },
-  pkgrel: { alias: "release", type: "integer", default: 0, mandatory: true },
+  pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
   epoch: { type: "integer", default: 0 },
   pkgdesc: { alias: "description", type: "string", mandatory: true },
   url: { alias: "homepage", type: "string" },

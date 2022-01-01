@@ -112,16 +112,6 @@ package() {
         ),
         createWriteStream(destination, utf8StreamOptions)
       );
-
-      /*
-      await cp(
-        join(options.pkgdir, properties.hooks),
-        join(staging, properties.hooks),
-        {
-          preserveTimestamps: true
-        }
-      );
-      */
     }
 
     await copyEntries(transform(sources, transformer, true), staging, expander);
@@ -130,7 +120,7 @@ package() {
       console.log(`stagingDir: ${staging}`);
     }
 
-    const makepkg = await execa("makepkg", ["-f"], {
+    const makepkg = await execa("makepkg", ["-f", "-e"], {
       cwd: staging,
       env: { PKGDEST: options.destination }
     });

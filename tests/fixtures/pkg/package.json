@@ -16,7 +16,7 @@
         "url" : "http://somwhere.com/prefix/api"
       }
     },
-    "pkgbuild": {
+    "pkg": {
       "installdir": "/services/${name}",
       "groups": "webhook",
       "depends": {

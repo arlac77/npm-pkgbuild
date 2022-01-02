@@ -8,7 +8,7 @@ import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
 import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
-import { FileContentProvider, DEB, PKG, RPM } from "npm-pkgbuild";
+import { FileContentProvider, DEB, ARCH, RPM } from "npm-pkgbuild";
 import { createExpressionTransformer } from "./util.mjs";
 
 const { version, description } = JSON.parse(
@@ -18,7 +18,7 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const allOutputs = [DEB, PKG, RPM];
+const allOutputs = [DEB, ARCH, RPM];
 
 program.description(description).version(version);
 
@@ -32,7 +32,11 @@ program
     const kv = str.split(/=/);
     return Object.fromEntries([kv]);
   })
-  .option("-d --destination <dir>", "where to put the package(s)", join(cwd,'dist'))
+  .option(
+    "-d --destination <dir>",
+    "where to put the package(s)",
+    join(cwd, "dist")
+  )
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
   .option(
     "-c --content <dir>",
@@ -48,18 +52,19 @@ program
   )
   .action(async options => {
     try {
-      const pkgDir = await packageDirectory({ cwd: options.pkgdir});
+      const pkgDir = await packageDirectory({ cwd: options.pkgdir });
 
       if (options.verbose) {
         console.log(`pkgdir: ${pkgDir}`);
       }
 
-      const { properties, sources, output, dependencies } = await extractFromPackage(
-        JSON.parse(
-          await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
-        ),
-        pkgDir
-      );
+      const { properties, sources, output, dependencies } =
+        await extractFromPackage(
+          JSON.parse(
+            await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
+          ),
+          pkgDir
+        );
 
       for (const outputFactory of allOutputs.filter(
         o => options[o.name] === true || output[o.name] !== undefined
@@ -80,7 +85,7 @@ program
         const context = createContext({ properties });
         const output = new outputFactory(properties);
         const transformer = [createExpressionTransformer(properties)];
- 
+
         if (options.verbose) {
           console.log(output.properties);
         }
@@ -93,7 +98,16 @@ program
           path => context.expand(path)
         );
 
-        //console.log(`#<CI>publish ${fileName}`);
+        /*
+        console.log(`#<CI>publish ${fileName}`);
+
+        if (publish !== undefined) {
+          context.properties.arch = arch;
+      
+          publish = publish.replace(/\{\{(\w+)\}\}/m, (match, key, offset, string) =>
+            context.evaluate(key)
+          );
+      */
       }
     } catch (e) {
       console.log(e);

@@ -56,7 +56,7 @@ test(
     version: "1.2.3",
     license: "BSD",
     config: { c1: "v1"},
-    pkgbuild: {
+    pkg: {
       name: "n2",
       other: "o1",
       output: { dep: {} }
@@ -92,7 +92,7 @@ test(
   efpt,
   {
     name: "konsum-frontend",
-    pkgbuild: {
+    pkg: {
       content: {
         "${installdir}": {
           base: "build"

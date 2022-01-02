@@ -99,8 +99,8 @@ export async function extractFromPackage(pkg, dir) {
   let output = {};
 
   const processPkg = pkg => {
-    if (pkg.pkgbuild) {
-      const pkgbuild = pkg.pkgbuild;
+    if (pkg.pkg) {
+      const pkgbuild = pkg.pkg;
 
       Object.assign(output, pkgbuild.output);
 

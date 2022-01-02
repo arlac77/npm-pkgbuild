@@ -34,9 +34,9 @@ export const pkgKeyValuePairOptions = {
     }${lineEnding}`
 };
 
-export class PKG extends Packager {
+export class ARCH extends Packager {
   static get name() {
-    return "pkg";
+    return "arch";
   }
 
   static get fileNameExtension() {

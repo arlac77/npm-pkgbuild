@@ -4,7 +4,7 @@ import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 
 import { aggregateFifo } from "aggregate-async-iterator";
-import { FileContentProvider, PKG } from "npm-pkgbuild";
+import { FileContentProvider, ARCH } from "npm-pkgbuild";
 
 test("pkg", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
@@ -20,7 +20,7 @@ test("pkg", async t => {
     license: "MIT"
   };
 
-  const out = new PKG(properties);
+  const out = new ARCH(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];

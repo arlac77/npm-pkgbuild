@@ -8,7 +8,7 @@
   "exports": {
     ".": "./src/module.mjs"
   },
-  "description": "create ArchLinux, RPM and debian packages from npm packages",
+  "description": "create ArchLinux, RPM and Debian packages from npm packages",
   "keywords": [
     "ArchLinux",
     "arch-linux",

@@ -11,14 +11,14 @@
 
 ## npm-pkgbuild
 
-create ArchLinux, RPM and debian packages from npm packages.
+create ArchLinux, RPM and Debian packages from npm packages.
 
 # usage
 
 In a package directory execute
 
 ```shell
-npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg
+npm-pkgbuild --pkg
 ```
 
 This will create a PKGBUILD file and execute it

@@ -27,12 +27,12 @@ allOutputs.forEach(o =>
 );
 
 program
+  .option("--verbose", "be more verbose", false)
   .option("-D --define <a=b>", "define property", str => {
     const kv = str.split(/=/);
     return Object.fromEntries([kv]);
   })
-  .option("-d --destination <dir>", "where to put the package(s)", cwd)
-  .option("--verbose", "be more verbose", false)
+  .option("-d --destination <dir>", "where to put the package(s)", join(cwd,'dist'))
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
   .option(
     "-c --content <dir>",

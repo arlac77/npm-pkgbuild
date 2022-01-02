@@ -13,14 +13,27 @@ test("pkg", async t => {
     })[Symbol.asyncIterator]()
   );
 
-  const properties = { name: "abc", version: "1.0.0", description: "a description", license: "MIT" };
+  const properties = {
+    name: "abc",
+    version: "1.0.0",
+    description: "a description",
+    license: "MIT"
+  };
 
   const out = new PKG(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = {};
-  const fileName = await out.execute(aggregateFifo(sources), transformer, dependencies, { destination });
+  const dependencies = {
+    "nginx-mainline": ">=1.21.4",
+    konsum: ">=4.3.8"
+  };
+  const fileName = await out.execute(
+    aggregateFifo(sources),
+    transformer,
+    dependencies,
+    { destination }
+  );
   t.is(fileName, join(destination, "abc-1.0.0-1-any.pkg.tar.zst"));
 
   const s = await stat(fileName);

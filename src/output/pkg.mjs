@@ -59,13 +59,14 @@ export class PKG extends Packager {
       properties.md5sums = ["SKIP"];
     }
 
-    //properties.depends = makeDepends({ ...pkg.engines });
+    //properties.depends = makeDepends(dependencies);
 
     const staging = await this.tmpdir;
 
     async function* trailingLines() {
       yield `
 package() {
+  depends=(${makeDepends(dependencies).map(v=>quote(v)).join(',')})
   cp -r $srcdir/* "$pkgdir"
 }
 `;
@@ -169,24 +170,21 @@ const fields = {
   options: { type: "string[]" }
 };
 
-/*
-  out.write(
-    `# ${pkg.contributors
-      .map(
-        (c, i) => `${i ? "Contributor" : "Maintainer"}: ${c.name} <${c.email}>`
-      )
-      .join("\n# ")}
-
-package() {
-  depends=(${makeDepends(pkg.pacman.depends)
-    .map(a => `"${a}"`)
-    .join(" ")})
-
-  mkdir -p \${pkgdir}${installdir}
-  npx npm-pkgbuild --package \${srcdir}/\${pkgname}${directory} --staging \${pkgdir} content
-}
-*/
-
 const mapping = {
   node: "nodejs"
 };
+
+function normalizeExpression(e) {
+  e = e.replace(/\-([\w\d]+)$/, "");
+  if (e.match(/^\d+/)) {
+    return `>=${e}`;
+  }
+
+  return e;
+}
+
+function makeDepends(dependencies) {
+  return Object.entries(dependencies).map(
+    ([name, version]) => `${name}${normalizeExpression(version)}`
+  );
+}

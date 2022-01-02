@@ -17,7 +17,10 @@ test("deb", async t => {
   const out = new DEB(properties);
 
   const transformer = [];
-  const dependencies = {};
+  const dependencies = {
+    "nginx-mainline": ">=1.21.4",
+    konsum: ">=4.3.8"
+  };
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const fileName = await out.execute(aggregateFifo(sources), transformer, dependencies, { destination });
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));

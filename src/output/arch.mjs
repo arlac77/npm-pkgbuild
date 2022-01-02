@@ -159,7 +159,7 @@ const fields = {
   arch: { default: ["any"], type: "string[]", mandatory: true },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
-  makedepends: { default: ["nodejs>=16.13.1"], type: "string[]" },
+  makedepends: { /*default: ["nodejs>=16.13.1"],*/ type: "string[]" },
   checkdepends: { type: "string[]" },
   optdepends: { type: "string[]" },
   conflicts: { type: "string[]" },

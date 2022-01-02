@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "fs";
-import { readFile } from "fs/promises";
-import { join } from "path";
+import { readFile, mkdir } from "fs/promises";
+import { dirname, join } from "path";
 import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
@@ -62,6 +62,8 @@ program
           ),
           pkgDir
         );
+
+      await mkdir(dirname(options.destination), { recursive: true });
 
       for (const outputFactory of allOutputs.filter(
         o => options[o.name] === true || output[o.name] !== undefined

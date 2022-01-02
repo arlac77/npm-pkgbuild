@@ -54,5 +54,5 @@ export class Packager {
   /**
    * Execute package generation
    */
-  async execute(sources, options) {}
+  async execute(sources, transformer, dependencies, options, expander) {}
 }

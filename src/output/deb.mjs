@@ -23,7 +23,7 @@ export class DEB extends Packager {
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, transformer, options, expander) {
+  async execute(sources, transformer, dependencies, options, expander) {
     const properties = this.properties;
     const staging = await this.tmpdir;
 

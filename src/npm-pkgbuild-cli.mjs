@@ -54,7 +54,7 @@ program
         console.log(`pkgdir: ${pkgDir}`);
       }
 
-      const { properties, sources, output } = await extractFromPackage(
+      const { properties, sources, output, dependencies } = await extractFromPackage(
         JSON.parse(
           await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
         ),
@@ -88,6 +88,7 @@ program
         const fileName = await output.execute(
           aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
           transformer,
+          dependencies,
           options,
           path => context.expand(path)
         );

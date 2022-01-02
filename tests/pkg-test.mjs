@@ -19,7 +19,8 @@ test("pkg", async t => {
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const fileName = await out.execute(aggregateFifo(sources), transformer, { destination });
+  const dependencies = {};
+  const fileName = await out.execute(aggregateFifo(sources), transformer, dependencies, { destination });
   t.is(fileName, join(destination, "abc-1.0.0-1-any.pkg.tar.zst"));
 
   const s = await stat(fileName);

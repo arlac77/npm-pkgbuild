@@ -27,7 +27,7 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(sources, transformer, options, expander) {
+  async execute(sources, transformer, dependencies, options, expander) {
     const properties = this.properties;
     const tmp = await this.tmpdir;
 

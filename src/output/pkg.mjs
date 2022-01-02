@@ -52,7 +52,7 @@ export class PKG extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, transformer, options, expander) {
+  async execute(sources, transformer, dependencies, options, expander) {
     const properties = this.properties;
 
     if (properties.source) {
@@ -176,16 +176,6 @@ const fields = {
         (c, i) => `${i ? "Contributor" : "Maintainer"}: ${c.name} <${c.email}>`
       )
       .join("\n# ")}
-
-      build() {
-  cd \${pkgname}${directory}
-  sed -i 's/"version": ".* /"version": "${
-    context.properties.pkgver
-  }",/' package.json
-  npm install
-  npm pack
-  npm prune --production
-}
 
 package() {
   depends=(${makeDepends(pkg.pacman.depends)

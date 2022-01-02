@@ -28,10 +28,7 @@ allOutputs.forEach(o =>
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("-D --define <a=b>", "define property", str => {
-    const kv = str.split(/=/);
-    return Object.fromEntries([kv]);
-  })
+  .option("-D --define <a=b>", "define property", str => Object.fromEntries([str.split(/=/)]))
   .option(
     "-d --destination <dir>",
     "where to put the package(s)",

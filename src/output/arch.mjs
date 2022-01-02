@@ -59,8 +59,6 @@ export class ARCH extends Packager {
       properties.md5sums = ["SKIP"];
     }
 
-    //properties.depends = makeDepends(dependencies);
-
     const staging = await this.tmpdir;
 
     async function* trailingLines() {
@@ -161,7 +159,7 @@ const fields = {
   arch: { default: ["any"], type: "string[]", mandatory: true },
   backup: { type: "string[]" },
   depends: { type: "string[]" },
-  makedepends: { type: "string[]" },
+  makedepends: { default: ["nodejs>=16.13.1"], type: "string[]" },
   checkdepends: { type: "string[]" },
   optdepends: { type: "string[]" },
   conflicts: { type: "string[]" },

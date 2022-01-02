@@ -138,7 +138,7 @@ export function createModeTransformer(mode, match) {
 
 export function createExpressionTransformer(
   properties,
-  match = entry => entry.name.match(/\.(conf|json|html|txt)$/)
+  match = entry => entry.name.match(/\.(conf|json|html|txt|service|socket)$/)
 ) {
   async function* transformer(expression, remainder, source, cb) {
     const value = properties[expression];

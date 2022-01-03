@@ -75,7 +75,9 @@ export async function extractFromPackage(pkg, dir) {
   );
 
   if (pkg.bugs) {
-    properties.bugs = pkg.bugs.url;
+    if (pkg.bugs.url) {
+      properties.bugs = pkg.bugs.url;
+    }
   }
 
   Object.assign(properties, pkg.config);

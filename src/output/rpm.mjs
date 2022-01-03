@@ -41,7 +41,7 @@ export class RPM extends Packager {
     const specFileName = `${properties.name}.spec`;
 
     async function* trailingLines() {
-      yield "%define _unpackaged_files_terminate_build 0\n";
+     // yield "%define _unpackaged_files_terminate_build 0\n";
 
       for (const [name, options] of Object.entries(sections)) {
         if (options.mandatory) {

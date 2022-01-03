@@ -102,6 +102,7 @@ const fields = {
   Source0: { alias: "source", type: "string" },
   Group: { alias: "group", type: "string" },
   Packager: { type: "string" },
+  Vendor: { alias: "vendor", type: "string" },
   BuildArch: {
     alias: "arch",
     default: "noarch",

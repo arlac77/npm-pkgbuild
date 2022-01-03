@@ -12,6 +12,7 @@ import {
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform, fieldProvider } from "../util.mjs";
 import { quote, utf8StreamOptions } from "../util.mjs";
+import { constants } from "buffer";
 
 /**
  * @type KeyValueTransformOptions
@@ -21,9 +22,9 @@ export const pkgKeyValuePairOptions = {
   ...equalSeparatedKeyValuePairOptions,
 
   extractKeyValue: line => {
-    const m = line.match(/^(\w+)=\s*\((.*)\)|(.*)/);
+    const m = line.match(/^(#\s*)?(\w+)=\s*\((.*)\)|(.*)/);
     if (m) {
-      return [m[1], m[2] ? [m[2].split(/\s*,\s*/)] : m[3]];
+      return [m[2], m[3] ? [m[3].split(/\s*,\s*/)] : m[4]];
     }
   },
   keyValueLine: (key, value, lineEnding) =>
@@ -137,6 +138,8 @@ package() {
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
 const fields = {
+  Maintainer: { alias: "maintainer", type: "string" },
+
   pkgname: { alias: "name", type: "string[]", mandatory: true },
   pkgver: { alias: "version", type: "string", mandatory: true },
   pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
@@ -165,7 +168,7 @@ const fields = {
   conflicts: { type: "string[]" },
   provides: { type: "string[]" },
   replaces: { type: "string[]" },
-  options: { type: "string[]" }
+  options: { type: "string[]" },
 };
 
 const mapping = {

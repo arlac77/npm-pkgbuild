@@ -1,6 +1,5 @@
 node_modules
 build
-dist
 *.log
 *.dump
 .DS_Store

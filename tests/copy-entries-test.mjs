@@ -15,7 +15,9 @@ test("copyEntries plain", async t => {
 
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
-  await copyEntries(files, tmp);
+  for await (const entry of copyEntries(files, tmp)) {
+    console.log(entry.name, entry.destination);
+  }
 
   await access(join(tmp, "file1.txt"), constants.F_OK);
 
@@ -35,7 +37,7 @@ test("copyEntries with transform", async t => {
 
   const tmp = await mkdtemp(join(tmpdir(), "copy-transform-"));
 
-  await copyEntries(
+  for await (const file of copyEntries(
     transform(aggregateFifo([files[Symbol.asyncIterator]()]), [
       {
         match: entry => entry.name === "file1.txt",
@@ -47,7 +49,8 @@ test("copyEntries with transform", async t => {
       }
     ]),
     tmp
-  );
+  )) {
+  }
 
   const content = await readFile(join(tmp, "file1.txt"), { encoding: "utf8" });
   t.truthy(content.match(/value1value1/));

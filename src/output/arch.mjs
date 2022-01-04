@@ -12,7 +12,6 @@ import {
 import { Packager } from "./packager.mjs";
 import { copyEntries, transform, fieldProvider } from "../util.mjs";
 import { quote, utf8StreamOptions } from "../util.mjs";
-import { constants } from "buffer";
 
 /**
  * @type KeyValueTransformOptions
@@ -24,7 +23,7 @@ export const pkgKeyValuePairOptions = {
   extractKeyValue: line => {
     const m = line.match(/^(#\s*)?(\w+)=\s*\((.*)\)|(.*)/);
     if (m) {
-      return [m[2], m[3] ? [m[3].split(/\s*,\s*/)] : m[4]];
+      return [m[2], m[3] ? m[3].split(/\s*,\s*/) : m[4]];
     }
   },
   keyValueLine: (key, value, lineEnding) =>
@@ -65,17 +64,17 @@ export class ARCH extends Packager {
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${makeDepends(dependencies).map(v=>quote(v)).join(',')})
-  cp -r $srcdir/* "$pkgdir"
+  depends=(${makeDepends(dependencies)
+    .map(v => quote(v))
+    .join(",")})
+
+  if [ "$(ls -A $srcdir)" ]
+  then
+    cp -rp $srcdir/* "$pkgdir"
+  fi
 }
 `;
     }
-
-    await copyEntries(
-      transform(sources, transformer),
-      join(staging, "src"),
-      expander
-    );
 
     const fp = fieldProvider(properties, fields);
 
@@ -114,7 +113,15 @@ package() {
       );
     }
 
-    await copyEntries(transform(sources, transformer, true), staging, expander);
+    for await (const file of copyEntries(
+      transform(sources, transformer, true),
+      staging,
+      expander
+    )) {
+      if (options.verbose) {
+        console.log(file.destination);
+      }
+    }
 
     if (options.verbose) {
       console.log(`stagingDir: ${staging}`);
@@ -168,7 +175,7 @@ const fields = {
   conflicts: { type: "string[]" },
   provides: { type: "string[]" },
   replaces: { type: "string[]" },
-  options: { type: "string[]" },
+  options: { type: "string[]" }
 };
 
 const mapping = {

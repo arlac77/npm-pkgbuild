@@ -32,6 +32,10 @@ export function asArray(o) {
  * @returns {Function}
  */
 export function fieldProvider(properties, fields) {
+  function av(field, value) {
+    return field.type.endsWith("]") ? asArray(value) : value;
+  }
+
   return function* controlProperties(k, v, presentKeys) {
     if (k === undefined) {
       for (const [name, field] of Object.entries(fields)) {
@@ -46,17 +50,12 @@ export function fieldProvider(properties, fields) {
               yield [name, field.default];
             }
           } else {
-            yield [
-              name,
-              field.type.endsWith("]") && !Array.isArray(value)
-                ? [value]
-                : value
-            ];
+            yield [name, av(field, value)];
           }
         }
       }
     } else {
-      yield [k, properties[k] || v];
+      yield [k, av(fields[k], properties[k] || v)];
     }
   };
 }
@@ -209,19 +208,22 @@ export async function* transform(source, transformers = [], onlyMatching) {
  * @param {Expander} expander
  * @param {ContentEntryAttribute[]} attributes
  */
-export async function copyEntries(
+export async function* copyEntries(
   source,
   destinationDirectory,
   expander = v => v
 ) {
   for await (let entry of source) {
-    const destination = expander(
+    const name = expander(
       entry.destination === undefined
-        ? join(destinationDirectory, entry.name)
+        ? entry.name
         : entry.destination.endsWith("/")
-        ? join(destinationDirectory, entry.destination, entry.name)
-        : join(destinationDirectory, entry.destination)
+        ? join(entry.destination, entry.name)
+        : entry.destination
     );
+
+    entry.destination = name;
+    const destination = join(destinationDirectory, name);
     await mkdir(dirname(destination), { recursive: true });
 
     const options = { mode: entry.mode };
@@ -230,5 +232,7 @@ export async function copyEntries(
       await entry.readStream,
       createWriteStream(destination, options)
     );
+
+    yield entry;
   }
 }

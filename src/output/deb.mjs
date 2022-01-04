@@ -43,8 +43,16 @@ export class DEB extends Packager {
         createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
       });
  
-    await copyEntries(transform(sources, transformer), staging, expander);
-
+      for await (const file of copyEntries(
+        transform(sources, transformer, true),
+        staging,
+        expander
+      )) {
+        if (options.verbose) {
+          console.log(file.destination);
+        }
+      }
+  
     const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
 
     if(options.verbose) {

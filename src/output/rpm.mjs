@@ -27,7 +27,13 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(sources, transformer, dependencies, options, expander) {
+  async execute(
+    sources,
+    transformer,
+    dependencies,
+    options,
+    expander
+  ) {
     const properties = this.properties;
     const tmp = await this.tmpdir;
 
@@ -41,31 +47,46 @@ export class RPM extends Packager {
     const specFileName = `${properties.name}.spec`;
 
     async function* trailingLines() {
-     // yield "%define _unpackaged_files_terminate_build 0\n";
+       yield "%define _unpackaged_files_terminate_build 0\n";
 
       for (const [name, options] of Object.entries(sections)) {
         if (options.mandatory) {
           yield `%${name}\n\n`;
+
+          if (name === "files") {
+            for await (const file of copyEntries(
+              transform(sources, transformer),
+              staging,
+              expander
+            )) {
+              yield file.destination + "\n";
+            }
+          }
         }
       }
     }
 
     const fp = fieldProvider(properties, fields);
 
-    transformer.push({
-      match: entry => entry.name === specFileName,
-      transform: async entry =>
-        new ReadableStreamContentEntry(
-          entry.name,
-          keyValueTransformer(await entry.readStream, fp, {
-            ...colonSeparatedKeyValuePairOptions,
-            trailingLines
-          })
-        ),
-      createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
-    });
-
-    await copyEntries(transform(sources, transformer), staging, expander);
+    for await (const file of copyEntries(
+      transform(sources, [
+        {
+          match: entry => entry.name === specFileName,
+          transform: async entry =>
+            new ReadableStreamContentEntry(
+              entry.name,
+              keyValueTransformer(await entry.readStream, fp, {
+                ...colonSeparatedKeyValuePairOptions,
+                trailingLines
+              })
+            ),
+          createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
+        }
+      ]),
+      staging,
+      expander
+    )) {
+    }
 
     const rpmbuild = await execa("rpmbuild", [
       "--define",

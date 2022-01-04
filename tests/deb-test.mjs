@@ -12,7 +12,12 @@ test("deb", async t => {
     })[Symbol.asyncIterator]()
   );
 
-  const properties = { name: "abc", version: "1.0.0", description: "a description", license: "MIT" };
+  const properties = {
+    name: "abc",
+    version: "1.0.0",
+    description: "a description",
+    license: "MIT"
+  };
 
   const out = new DEB(properties);
 
@@ -22,9 +27,14 @@ test("deb", async t => {
     konsum: ">=4.3.8"
   };
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.execute(aggregateFifo(sources), transformer, dependencies, { destination });
+  const fileName = await out.execute(
+    aggregateFifo(sources),
+    transformer,
+    dependencies,
+    { destination }
+  );
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
   const s = await stat(fileName);
-  t.true(s.size >= 800, `package file size ${s.size}`);
+  t.true(s.size >= 700, `package file size ${s.size}`);
 });

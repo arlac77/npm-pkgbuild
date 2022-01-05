@@ -46,6 +46,8 @@ export class RPM extends Packager {
     const staging = join(tmp, "BUILDROOT");
     const specFileName = `${properties.name}.spec`;
 
+    const files = [];
+
     async function* trailingLines() {
       yield "%define _unpackaged_files_terminate_build 0\n";
 
@@ -53,9 +55,11 @@ export class RPM extends Packager {
         if (options.mandatory) {
           yield `%${name}\n\n`;
 
-          console.log("SECTION", name);
-
           if (name === "files") {
+            for (const file of files) {
+              yield "/" + file + "\n";
+            }
+
             for await (const file of copyEntries(
               transform(sources, transformer),
               staging,
@@ -91,6 +95,7 @@ export class RPM extends Packager {
       staging,
       expander
     )) {
+      files.push(file.destination);
     }
 
     const rpmbuild = await execa("rpmbuild", [

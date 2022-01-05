@@ -37,5 +37,5 @@ test("pkg", async t => {
   t.is(fileName, join(destination, "abc-1.0.0-1-any.pkg.tar.zst"));
 
   const s = await stat(fileName);
-  t.true(s.size >= 1000, `package file size ${s.size}`);
+  t.true(s.size >= 800, `package file size ${s.size}`);
 });

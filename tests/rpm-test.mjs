@@ -12,7 +12,12 @@ test("rpm", async t => {
     })[Symbol.asyncIterator]()
   );
 
-  const properties = { name: "abc", version: "1.0.0", description: "a description", license: "MIT" };
+  const properties = {
+    name: "abc",
+    version: "1.0.0",
+    description: "a description",
+    license: "MIT"
+  };
 
   const out = new RPM(properties);
 
@@ -22,7 +27,12 @@ test("rpm", async t => {
     "nginx-mainline": ">=1.21.4",
     konsum: ">=4.3.8"
   };
-  const fileName = await out.execute(aggregateFifo(sources), transformer, dependencies, { destination });
+  const fileName = await out.execute(
+    aggregateFifo(sources),
+    transformer,
+    dependencies,
+    { destination, verbose: true }
+  );
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 
   const s = await stat(fileName);

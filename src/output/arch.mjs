@@ -58,6 +58,9 @@ export class ARCH extends Packager {
     if (properties.source) {
       properties.md5sums = ["SKIP"];
     }
+    if (properties.hooks) {
+      properties.install = `${properties.name}.install`;
+    }
 
     const staging = await this.tmpdir;
 
@@ -76,30 +79,11 @@ package() {
 `;
     }
 
-    const fp = fieldProvider(properties, fields);
-
-    transformer.push({
-      match: entry => entry.name === "PKGBUILD",
-      transform: async entry =>
-        new ReadableStreamContentEntry(
-          entry.name,
-          keyValueTransformer(await entry.readStream, fp, {
-            ...pkgKeyValuePairOptions,
-            trailingLines
-          })
-        ),
-      createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
-    });
-
     if (properties.hooks) {
       async function* transformer(expression, remainder, source, cb) {
         const value = properties[expression];
         yield value === undefined ? "" : value;
       }
-
-      const destination = join(staging, properties.hooks);
-
-      await mkdir(dirname(destination), { recursive: true });
 
       await pipeline(
         iterableStringInterceptor(
@@ -109,13 +93,28 @@ package() {
           ),
           transformer
         ),
-        createWriteStream(destination, utf8StreamOptions)
+        createWriteStream(join(staging, properties.install), utf8StreamOptions)
       );
     }
 
+    const fp = fieldProvider(properties, fields);
+
+    transformer.push({
+      match: entry => entry.name === "PKGBUILD",
+      transform: async entry =>
+        new ReadableStreamContentEntry(
+          "../" + entry.name,
+          keyValueTransformer(await entry.readStream, fp, {
+            ...pkgKeyValuePairOptions,
+            trailingLines
+          })
+        ),
+      createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
+    });
+
     for await (const file of copyEntries(
       transform(sources, transformer, true),
-      staging,
+      join(staging,'src'),
       expander
     )) {
       if (options.verbose) {
@@ -154,7 +153,7 @@ const fields = {
   pkgdesc: { alias: "description", type: "string", mandatory: true },
   url: { alias: "homepage", type: "string" },
   license: { type: "string[]", mandatory: true },
-  install: { alias: "hooks", type: "string" },
+  install: { type: "string" },
   changelog: { type: "string" },
   source: { type: "string[]" },
   validpgpkeys: { type: "string[]" },

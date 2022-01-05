@@ -44,7 +44,7 @@ export class DEB extends Packager {
       });
  
       for await (const file of copyEntries(
-        transform(sources, transformer, true),
+        transform(sources, transformer),
         staging,
         expander
       )) {

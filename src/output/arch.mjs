@@ -1,6 +1,5 @@
-import { join, dirname } from "path";
+import { join } from "path";
 import { createReadStream, createWriteStream } from "fs";
-import { mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
@@ -27,12 +26,17 @@ export const pkgKeyValuePairOptions = {
     }
   },
   keyValueLine: (key, value, lineEnding) =>
-    `${key}=${
+    `${keyPrefix(key)}=${
       Array.isArray(value)
         ? "(" + value.map(v => quote(v)).join(",") + ")"
         : quote(value)
     }${lineEnding}`
 };
+
+function keyPrefix(key) {
+  const f = fields[key];
+  return f && f.prefix ? f.prefix + key : key;
+}
 
 export class ARCH extends Packager {
   static get name() {
@@ -113,8 +117,8 @@ package() {
     });
 
     for await (const file of copyEntries(
-      transform(sources, transformer, true),
-      join(staging,'src'),
+      transform(sources, transformer),
+      join(staging, "src"),
       expander
     )) {
       if (options.verbose) {
@@ -144,7 +148,7 @@ package() {
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
 const fields = {
-  Maintainer: { alias: "maintainer", type: "string" },
+  Maintainer: { alias: "maintainer", type: "string", prefix: "# " },
 
   pkgname: { alias: "name", type: "string[]", mandatory: true },
   pkgver: { alias: "version", type: "string", mandatory: true },

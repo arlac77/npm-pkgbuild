@@ -213,7 +213,7 @@ export async function* copyEntries(
   destinationDirectory,
   expander = v => v
 ) {
-  for await (let entry of source) {
+  for await (const entry of source) {
     const name = expander(
       entry.destination === undefined
         ? entry.name

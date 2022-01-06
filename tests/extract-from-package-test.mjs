@@ -94,9 +94,11 @@ test(
     name: "konsum-frontend",
     pkg: {
       content: {
-        "${installdir}": {
+        "${installdir}": [{
           base: "build"
-        },
+        },{
+          base: "dist"
+        }],
         "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf"
       },
       depends: {
@@ -119,6 +121,11 @@ test(
       { base: "build" },
       { destination: "${installdir}" }
     ),
+    new FileContentProvider(
+      { base: "dist" },
+      { destination: "${installdir}" }
+    ),
+
     new FileContentProvider(
       { base: "pkgbuild", pattern: ["nginx.conf"] },
       { destination: "/etc/nginx/sites/common/${name}.conf" }

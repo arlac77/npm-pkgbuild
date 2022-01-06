@@ -92,7 +92,7 @@ export async function extractFromPackage(pkg, dir) {
   }
 
   if (pkg.repository) {
-    if(pkg.repository.url) {
+    if (pkg.repository.url) {
       properties.source = pkg.repository.url;
     }
   }
@@ -112,9 +112,12 @@ export async function extractFromPackage(pkg, dir) {
         .forEach(([k, v]) => (properties[k] = v));
 
       if (pkgbuild.content) {
-        sources = Object.entries(pkgbuild.content).map(
-          ([destination, value]) =>
-            new FileContentProvider(value, { destination })
+        Object.entries(pkgbuild.content).forEach(
+          ([destination, definitions]) => {
+            for (const d of asArray(definitions)) {
+              sources.push(new FileContentProvider(d, { destination }));
+            }
+          }
         );
       }
 

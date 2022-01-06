@@ -7,9 +7,8 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
-import { utf8StreamOptions, extractFromPackage } from "./util.mjs";
-import { FileContentProvider, DEB, ARCH, RPM } from "npm-pkgbuild";
-import { createExpressionTransformer } from "./util.mjs";
+import { utf8StreamOptions, extractFromPackage, createExpressionTransformer } from "./util.mjs";
+import { FileContentProvider, DEB, ARCH, RPM, NPMPackContentProvider, NodeModulesContentProvider } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -18,6 +17,7 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
+const allInputs  = [NPMPackContentProvider, NodeModulesContentProvider];
 const allOutputs = [DEB, ARCH, RPM];
 
 program.description(description).version(version);
@@ -25,6 +25,9 @@ program.description(description).version(version);
 allOutputs.forEach(o =>
   program.option(`--${o.name}`, `generate ${o.name} package`)
 );
+
+allInputs.forEach(i =>
+  program.option(`--${i.name}`, `input from ${i.name}`));
 
 program
   .option("--verbose", "be more verbose", false)

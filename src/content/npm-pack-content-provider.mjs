@@ -9,6 +9,15 @@ import { BufferContentEntry } from "content-entry";
  * Content from npm pack.
  */
 export class NPMPackContentProvider extends ContentProvider {
+
+  /**
+   * @return {string} name of the content provider
+   */
+  static get name()
+  {
+  	return "npm-pack";	
+  }
+  
   async *[Symbol.asyncIterator]() {
     //const m = await pacote.manifest(context.dir);
     //console.log('got it', m);

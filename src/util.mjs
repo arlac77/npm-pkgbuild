@@ -92,7 +92,9 @@ export async function extractFromPackage(pkg, dir) {
   }
 
   if (pkg.repository) {
-    properties.source = pkg.repository.url;
+    if(pkg.repository.url) {
+      properties.source = pkg.repository.url;
+    }
   }
 
   let dependencies = { ...pkg.engines };

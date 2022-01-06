@@ -23,9 +23,11 @@
         "redis": ">=5.0.3"
       },
       "hooks": "pacman.install",
-      "content": {
+      "content":
+       {
+        "${installdir}" : ["npm-pack","node_modules"],
         "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"
-      }
+      }]
     }
   }
   

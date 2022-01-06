@@ -31,7 +31,7 @@ test("rpm", async t => {
     aggregateFifo(sources),
     transformer,
     dependencies,
-    { destination, verbose: true }
+    { destination, verbose: false }
   );
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 

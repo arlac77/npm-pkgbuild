@@ -43,6 +43,11 @@ export class ARCH extends Packager {
     return "arch";
   }
 
+  static get description()
+  {
+    return "generate Arch-Linux package";
+  }
+
   static get fileNameExtension() {
     return ".pkg.tar.zst";
   }

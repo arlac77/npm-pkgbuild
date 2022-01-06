@@ -14,6 +14,11 @@ export class RPM extends Packager {
     return "rpm";
   }
 
+  static get description()
+  {
+    return "generate RPM package";
+  }
+
   static get fileNameExtension() {
     return ".rpm";
   }

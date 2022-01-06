@@ -10,6 +10,11 @@ export class DEB extends Packager {
     return "deb";
   }
 
+  static get description()
+  {
+    return "generate Debian package";
+  }
+
   static get fileNameExtension() {
     return ".deb";
   }

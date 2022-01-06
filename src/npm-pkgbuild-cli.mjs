@@ -7,8 +7,19 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
-import { utf8StreamOptions, extractFromPackage, createExpressionTransformer } from "./util.mjs";
-import { FileContentProvider, DEB, ARCH, RPM, NPMPackContentProvider, NodeModulesContentProvider } from "npm-pkgbuild";
+import {
+  utf8StreamOptions,
+  extractFromPackage,
+  createExpressionTransformer
+} from "./util.mjs";
+import {
+  FileContentProvider,
+  DEB,
+  ARCH,
+  RPM,
+  NPMPackContentProvider,
+  NodeModulesContentProvider
+} from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url).pathname),
@@ -17,21 +28,20 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const allInputs  = [NPMPackContentProvider, NodeModulesContentProvider];
+const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 const allOutputs = [DEB, ARCH, RPM];
 
 program.description(description).version(version);
 
-allOutputs.forEach(o =>
-  program.option(`--${o.name}`, `generate ${o.name} package`)
-);
+allOutputs.forEach(o => program.option(`--${o.name}`, o.description));
 
-allInputs.forEach(i =>
-  program.option(`--${i.name}`, `input from ${i.name}`));
+allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("-D --define <a=b>", "define property", str => Object.fromEntries([str.split(/=/)]))
+  .option("-D --define <a=b>", "define property", str =>
+    Object.fromEntries([str.split(/=/)])
+  )
   .option(
     "-d --destination <dir>",
     "where to put the package(s)",
@@ -65,6 +75,13 @@ program
           ),
           pkgDir
         );
+
+      for (const inputFactory of allInputs.filter(
+        inputFactory => options[inputFactory.name] === true
+      )) {
+        console.log("ADD", inputFactory);
+        sources.push(new inputFactory());
+      }
 
       await mkdir(dirname(options.destination), { recursive: true });
 

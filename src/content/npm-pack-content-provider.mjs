@@ -9,15 +9,18 @@ import { BufferContentEntry } from "content-entry";
  * Content from npm pack.
  */
 export class NPMPackContentProvider extends ContentProvider {
-
   /**
    * @return {string} name of the content provider
    */
-  static get name()
-  {
-  	return "npm-pack";	
+  static get name() {
+    return "npm-pack";
   }
-  
+
+  static get description()
+  {
+    return "use npm pack as source";
+  }
+
   async *[Symbol.asyncIterator]() {
     //const m = await pacote.manifest(context.dir);
     //console.log('got it', m);
@@ -28,7 +31,7 @@ export class NPMPackContentProvider extends ContentProvider {
       const extract = tar.extract();
 
       extract.on("entry", async (header, stream, next) => {
-       // console.log(header);
+        // console.log(header);
         stream.on("end", () => next());
 
         const chunks = [];
@@ -36,7 +39,14 @@ export class NPMPackContentProvider extends ContentProvider {
           chunks.push(chunk);
         }
 
-        entries.push(new BufferContentEntry(header.name.substring(8), Buffer.concat(chunks)));
+        console.log(header.name.substring);
+
+        entries.push(
+          new BufferContentEntry(
+            header.name.substring(8),
+            Buffer.concat(chunks)
+          )
+        );
 
         stream.resume();
       });

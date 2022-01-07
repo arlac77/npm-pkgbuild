@@ -78,7 +78,7 @@ export class ARCH extends Packager {
 package() {
   depends=(${makeDepends(dependencies)
     .map(v => quote(v))
-    .join(",")})
+    .join(" ")})
 
   if [ "$(ls -A $srcdir)" ]
   then

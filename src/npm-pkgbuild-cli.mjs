@@ -94,7 +94,7 @@ program
         );
 
         const context = createContext({ properties });
-        const output = new outputFactory(properties);
+        const output = new outputFactory(context.expand(properties));
         const transformer = [createExpressionTransformer(properties)];
 
         if (options.verbose) {

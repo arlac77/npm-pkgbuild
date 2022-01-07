@@ -4,8 +4,6 @@ import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import { ReadableStreamContentEntry } from "content-entry";
-import { FileContentProvider } from "npm-pkgbuild";
-import { packageWalker } from "npm-package-walker";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 
@@ -60,80 +58,6 @@ export function fieldProvider(properties, fields) {
   };
 }
 
-/**
- * Extract package definition from package.json.
- * @param {Object} pkg package.json content
- * @param {string} dir
- * @returns {Object}
- */
-export async function extractFromPackage(pkg, dir) {
-  const properties = Object.fromEntries(
-    ["name", "version", "description", "homepage", "license"]
-      .map(key => [key, pkg[key]])
-      .filter(([k, v]) => v !== undefined)
-  );
-
-  if (pkg.bugs) {
-    if (pkg.bugs.url) {
-      properties.bugs = pkg.bugs.url;
-    }
-  }
-
-  Object.assign(properties, pkg.config);
-
-  if (properties.name) {
-    properties.name = properties.name.replace(/^\@\w+\//, "");
-  }
-
-  if (pkg.contributors) {
-    properties.maintainer = pkg.contributors.map(
-      c => `${c.name} <${c.email}>`
-    )[0];
-  }
-
-  if (pkg.repository) {
-    if (pkg.repository.url) {
-      properties.source = pkg.repository.url;
-    }
-  }
-
-  let dependencies = { ...pkg.engines };
-  let sources = [];
-  let output = {};
-
-  const processPkg = pkg => {
-    if (pkg.pkg) {
-      const pkgbuild = pkg.pkg;
-
-      Object.assign(output, pkgbuild.output);
-
-      Object.entries(pkgbuild)
-        .filter(([k, v]) => typeof v === "string")
-        .forEach(([k, v]) => (properties[k] = v));
-
-      if (pkgbuild.content) {
-        Object.entries(pkgbuild.content).forEach(
-          ([destination, definitions]) => {
-            for (const d of asArray(definitions)) {
-              sources.push(new FileContentProvider(d, { destination }));
-            }
-          }
-        );
-      }
-
-      Object.assign(dependencies, pkgbuild.depends);
-    }
-  };
-
-  await packageWalker(async (pkg, base, modulePath) => {
-    processPkg(pkg);
-    return true;
-  }, dir);
-
-  processPkg(pkg);
-
-  return { properties, sources, dependencies, output };
-}
 
 export function createModeTransformer(mode, match) {
   return {

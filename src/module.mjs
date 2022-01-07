@@ -1,5 +1,6 @@
 
 export * from "./util.mjs";
+export * from "./extract-from-package.mjs";
 export * from "./content/content-provider.mjs";
 export * from "./content/file-content-provider.mjs";
 export * from "./content/node-modules-content-provider.mjs";

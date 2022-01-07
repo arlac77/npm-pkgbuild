@@ -5,7 +5,7 @@ test.skip("NPMPack entries", async t => {
   const content = new NPMPackContentProvider();
 
   const entries = [];
-  for await (const entry of content.entries()) {
+  for await (const entry of content) {
     entries.push(entry);
   }
 

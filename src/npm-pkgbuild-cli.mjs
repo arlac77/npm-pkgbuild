@@ -9,16 +9,13 @@ import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
 import {
   utf8StreamOptions,
-  extractFromPackage,
   createExpressionTransformer
 } from "./util.mjs";
 import {
   FileContentProvider,
-  DEB,
-  ARCH,
-  RPM,
-  NPMPackContentProvider,
-  NodeModulesContentProvider
+  allInputs,
+  allOutputs,
+  extractFromPackage
 } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
@@ -28,13 +25,9 @@ const { version, description } = JSON.parse(
 
 const cwd = process.cwd();
 
-const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
-const allOutputs = [DEB, ARCH, RPM];
-
 program.description(description).version(version);
 
 allOutputs.forEach(o => program.option(`--${o.name}`, o.description));
-
 allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program

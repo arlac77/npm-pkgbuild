@@ -16,18 +16,21 @@ export class NPMPackContentProvider extends ContentProvider {
     return "npm-pack";
   }
 
-  static get description()
-  {
+  static get description() {
     return "use npm pack as source";
   }
 
+  constructor(definitions) {
+    super();
+    Object.assign(this, definitions);
+  }
+
   async *[Symbol.asyncIterator]() {
-    //const m = await pacote.manifest(context.dir);
-    //console.log('got it', m);
+    console.log("pacote", this.dir);
 
     const entries = [];
 
-    await pacote.tarball.stream(context.dir, async stream => {
+    await pacote.tarball.stream(this.dir, async stream => {
       const extract = tar.extract();
 
       extract.on("entry", async (header, stream, next) => {

@@ -1,7 +1,6 @@
 import test from "ava";
 import { dirname } from "path";
-import { extractFromPackage } from "../src/util.mjs";
-import { FileContentProvider } from "npm-pkgbuild";
+import { FileContentProvider, NPMPackContentProvider, extractFromPackage } from "npm-pkgbuild";
 
 async function efpt(
   t,
@@ -14,7 +13,7 @@ async function efpt(
   const { properties, sources, dependencies, output } =
     await extractFromPackage(
       pkg,
-      dirname(new URL("", import.meta.url).pathname)
+      dirname(new URL(import.meta.url).pathname)
     );
 
   t.deepEqual(properties, expectedProperties, "properties");
@@ -55,7 +54,7 @@ test(
     description: "d1",
     version: "1.2.3",
     license: "BSD",
-    config: { c1: "v1"},
+    config: { c1: "v1" },
     pkg: {
       name: "n2",
       other: "o1",
@@ -94,11 +93,17 @@ test(
     name: "konsum-frontend",
     pkg: {
       content: {
-        "${installdir}": [{
-          base: "build"
-        },{
-          base: "dist"
-        }],
+        "${installdir}": [
+          {
+            "type": "npm-pack"
+          },
+          {
+            base: "build"
+          },
+          {
+            base: "dist"
+          }
+        ],
         "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf"
       },
       depends: {
@@ -117,14 +122,12 @@ test(
     name: "konsum-frontend"
   },
   [
+    new NPMPackContentProvider({ dir: dirname(new URL(import.meta.url).pathname)}),
     new FileContentProvider(
       { base: "build" },
       { destination: "${installdir}" }
     ),
-    new FileContentProvider(
-      { base: "dist" },
-      { destination: "${installdir}" }
-    ),
+    new FileContentProvider({ base: "dist" }, { destination: "${installdir}" }),
 
     new FileContentProvider(
       { base: "pkgbuild", pattern: ["nginx.conf"] },

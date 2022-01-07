@@ -75,7 +75,7 @@ export async function extractFromPackage(pkg, dir) {
                     new type({ ...definition, dir }, entryProperties)
                   );
                 } else {
-                  console.error("Unknown type '${type}'");
+                  console.error(`Unknown type '${type}'`);
                 }
               } else {
                 sources.push(

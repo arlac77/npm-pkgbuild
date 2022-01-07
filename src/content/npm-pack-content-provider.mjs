@@ -27,23 +27,19 @@ export class NPMPackContentProvider extends ContentProvider {
   }
 
   async *[Symbol.asyncIterator]() {
-    console.log("pacote", this.dir);
-
     const entries = [];
 
     await pacote.tarball.stream(this.dir, async stream => {
       const extract = tar.extract();
 
       extract.on("entry", async (header, stream, next) => {
-        // console.log(header);
+        console.log(header.name);
         stream.on("end", () => next());
 
         const chunks = [];
         for await (const chunk of await stream) {
           chunks.push(chunk);
         }
-
-        console.log(header.name.substring);
 
         entries.push(
           Object.assign(

@@ -1,7 +1,7 @@
 import test from "ava";
 import { NodeModulesContentProvider } from "npm-pkgbuild";
 
-test.skip("NodeModules entries", async t => {
+test("NodeModules entries", async t => {
   const content = new NodeModulesContentProvider({
     dir: new URL("fixtures/pkg", import.meta.url).pathname
   });

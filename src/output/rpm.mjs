@@ -42,6 +42,8 @@ export class RPM extends Packager {
     const properties = this.properties;
     const tmp = await this.tmpdir;
 
+    properties.Requires = Object.entries(dependencies).map(([n,e]) => `${n}${e}`).join(' ');
+    
     await Promise.all(
       ["BUILDROOT", "RPMS", "SRPMS", "SOURCES", "SPECS"].map(d =>
         mkdir(join(tmp, d))
@@ -71,7 +73,7 @@ export class RPM extends Packager {
               expander
             )) {
               if (options.verbose) {
-                console.log(file);
+                console.log(file.destination);
               }
               yield file.destination + "\n";
             }

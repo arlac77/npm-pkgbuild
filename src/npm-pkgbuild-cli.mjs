@@ -72,7 +72,6 @@ program
       for (const inputFactory of allInputs.filter(
         inputFactory => options[inputFactory.name] === true
       )) {
-        console.log("ADD", inputFactory);
         sources.push(new inputFactory());
       }
 

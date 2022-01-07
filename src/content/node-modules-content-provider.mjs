@@ -18,9 +18,10 @@ export class NodeModulesContentProvider extends ContentProvider {
     return "use node_modules as source";
   }
 
-  constructor(definitions) {
+  constructor(definitions, entryProperties) {
     super();
     Object.assign(this, definitions);
+    this.entryProperties = entryProperties;
   }
 
   async *[Symbol.asyncIterator]() {
@@ -28,8 +29,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     for (const name of await globby("node_modules/**/*", {
       cwd
     })) {
-      const entry = new FileSystemEntry(name, cwd);
-      yield entry;
+      yield Object.assign(new FileSystemEntry(name, cwd),this.entryProperties);
     }
   }
 }

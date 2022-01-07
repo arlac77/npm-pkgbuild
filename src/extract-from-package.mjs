@@ -51,7 +51,7 @@ export async function extractFromPackage(pkg, dir) {
   let sources = [];
   let output = {};
 
-  const processPkg = (pkg,dir) => {
+  const processPkg = (pkg, dir) => {
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 
@@ -65,19 +65,23 @@ export async function extractFromPackage(pkg, dir) {
         Object.entries(pkgbuild.content).forEach(
           ([destination, definitions]) => {
             for (const definition of asArray(definitions)) {
-                if(definition.type) {
-                    const type = allInputs.find(i => i.name === definition.type);
-                    if(type) {
-                        delete definition.type;
-                        sources.push(new type({ ...definition, dir}, { destination }));
-                    }
-                    else {
-                        console.error("Unknown type '${type}'");
-                    }
+              const entryProperties = { destination };
+
+              if (definition.type) {
+                const type = allInputs.find(i => i.name === definition.type);
+                if (type) {
+                  delete definition.type;
+                  sources.push(
+                    new type({ ...definition, dir }, entryProperties)
+                  );
+                } else {
+                  console.error("Unknown type '${type}'");
                 }
-                else {
-                    sources.push(new FileContentProvider(definition, { destination }));
-                }
+              } else {
+                sources.push(
+                  new FileContentProvider(definition, entryProperties)
+                );
+              }
             }
           }
         );
@@ -88,7 +92,7 @@ export async function extractFromPackage(pkg, dir) {
   };
 
   await packageWalker(async (pkg, base, modulePath) => {
-    processPkg(pkg,base);
+    processPkg(pkg, base);
     return true;
   }, dir);
 

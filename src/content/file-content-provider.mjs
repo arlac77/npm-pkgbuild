@@ -35,9 +35,7 @@ export class FileContentProvider extends ContentProvider {
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
-      const entry = new FileSystemEntry(name, base);
-      Object.assign(entry, this.entryProperties);
-      yield entry;
+      yield Object.assign(new FileSystemEntry(name, base), this.entryProperties);
     }
   }
 }

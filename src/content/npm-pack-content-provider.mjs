@@ -20,9 +20,10 @@ export class NPMPackContentProvider extends ContentProvider {
     return "use npm pack as source";
   }
 
-  constructor(definitions) {
+  constructor(definitions, entryProperties) {
     super();
     Object.assign(this, definitions);
+    this.entryProperties = entryProperties;
   }
 
   async *[Symbol.asyncIterator]() {
@@ -45,9 +46,12 @@ export class NPMPackContentProvider extends ContentProvider {
         console.log(header.name.substring);
 
         entries.push(
-          new BufferContentEntry(
-            header.name.substring(8),
-            Buffer.concat(chunks)
+          Object.assign(
+            new BufferContentEntry(
+              header.name.substring(8),
+              Buffer.concat(chunks)
+            ),
+            this.entryProperties
           )
         );
 

@@ -1,6 +1,10 @@
 import test from "ava";
 import { dirname } from "path";
-import { FileContentProvider, NPMPackContentProvider, extractFromPackage } from "npm-pkgbuild";
+import {
+  FileContentProvider,
+  NPMPackContentProvider,
+  extractFromPackage
+} from "npm-pkgbuild";
 
 async function efpt(
   t,
@@ -11,10 +15,7 @@ async function efpt(
   expectedOutput
 ) {
   const { properties, sources, dependencies, output } =
-    await extractFromPackage(
-      pkg,
-      dirname(new URL(import.meta.url).pathname)
-    );
+    await extractFromPackage(pkg, dirname(new URL(import.meta.url).pathname));
 
   t.deepEqual(properties, expectedProperties, "properties");
 
@@ -95,7 +96,7 @@ test(
       content: {
         "${installdir}": [
           {
-            "type": "npm-pack"
+            type: "npm-pack"
           },
           {
             base: "build"
@@ -122,7 +123,10 @@ test(
     name: "konsum-frontend"
   },
   [
-    new NPMPackContentProvider({ dir: dirname(new URL(import.meta.url).pathname)}),
+    new NPMPackContentProvider(
+      { dir: dirname(new URL(import.meta.url).pathname) },
+      { destination: "${installdir}" }
+    ),
     new FileContentProvider(
       { base: "build" },
       { destination: "${installdir}" }

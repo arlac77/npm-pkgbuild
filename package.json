@@ -8,7 +8,7 @@
   "exports": {
     ".": "./src/module.mjs"
   },
-  "description": "create packages from npm packages",
+  "description": "create ArchLinux, RPM and Debian packages from npm packages",
   "keywords": [
     "ArchLinux",
     "arch-linux",
@@ -40,12 +40,14 @@
   "dependencies": {
     "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.3.0",
-    "content-entry": "^3.0.2",
+    "content-entry": "^3.0.1",
     "content-entry-filesystem": "^3.1.14",
     "execa": "^6.0.0",
     "expression-expander": "^7.0.9",
     "globby": "^12.0.2",
     "iterable-string-interceptor": "^1.0.8",
+    "key-value-transformer": "^2.0.0",
+    "npm-package-walker": "^5.0.3",
     "npm-packlist": "^3.0.0",
     "pacote": "^12.0.2",
     "pkg-dir": "^6.0.1",

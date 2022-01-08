@@ -10,6 +10,12 @@ import { RPM } from "./output/rpm.mjs";
 export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 export const allOutputs = [DEB, ARCH, RPM];
 
+const npmArchMapping = {
+	"arm64" : "aarch64",
+	"armv7h": "armv7h",
+	"x86" : "a86_64"
+};
+
 /**
  * Extract package definition from package.json.
  * @param {Object} pkg package.json content
@@ -54,11 +60,11 @@ export async function extractFromPackage(pkg, dir) {
   
   const processPkg = (pkg, dir) => {
 
-   if(pkg.cpu) {
-     for(const a of asArray(pkg.cpu)) {
-       arch.add(a);
-     }
-   } 
+    if(pkg.cpu) {
+      for(const a of asArray(pkg.cpu)) {
+        arch.add(npmArchMapping[a]);
+      }
+    } 
 
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;

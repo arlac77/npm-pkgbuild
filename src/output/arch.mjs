@@ -28,7 +28,7 @@ export const pkgKeyValuePairOptions = {
   keyValueLine: (key, value, lineEnding) =>
     `${keyPrefix(key)}=${
       Array.isArray(value)
-        ? "(" + value.map(v => quote(v)).join(",") + ")"
+        ? "(" + value.map(v => quote(v)).join(" ") + ")"
         : quote(value)
     }${lineEnding}`
 };

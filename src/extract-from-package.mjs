@@ -53,6 +53,13 @@ export async function extractFromPackage(pkg, dir) {
   let arch = new Set();
   
   const processPkg = (pkg, dir) => {
+
+   if(pkg.cpu) {
+     for(const a of asArray(pkg.cpu)) {
+       arch.add(a);
+     }
+   } 
+
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 

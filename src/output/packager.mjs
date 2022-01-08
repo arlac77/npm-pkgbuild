@@ -34,8 +34,9 @@ export class Packager {
       if (e !== undefined) {
         properties[k] = e;
       } else {
-        if (v.default !== undefined) {
-          properties[v.alias || k] = v.default;
+        const vak = v.alias || k;
+        if (properties[vak] === undefined && v.default !== undefined) {
+          properties[vak] = v.default;
         }
       }
     });

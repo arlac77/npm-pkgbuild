@@ -33,7 +33,6 @@ export class NPMPackContentProvider extends ContentProvider {
       const extract = tar.extract();
 
       extract.on("entry", async (header, stream, next) => {
-        console.log(header.name);
         stream.on("end", () => next());
 
         const chunks = [];

@@ -57,6 +57,7 @@ test(
     license: "BSD",
     config: { c1: "v1" },
     pkg: {
+      arch: ["aarch64","x86_64"],
       name: "n2",
       other: "o1",
       output: { dep: {} }
@@ -68,6 +69,7 @@ test(
     version: "1.2.3",
     other: "o1",
     license: "BSD",
+    arch: ["aarch64","x86_64"],
     c1: "v1"
   },
   undefined,

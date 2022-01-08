@@ -50,11 +50,18 @@ export async function extractFromPackage(pkg, dir) {
   let dependencies = { ...pkg.engines };
   let sources = [];
   let output = {};
-
+  let arch = new Set();
+  
   const processPkg = (pkg, dir) => {
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 
+      if(pkgbuild.arch) {
+        for(const a of asArray(pkgbuild.arch)) {
+          arch.add(a);
+        }
+      }
+      
       Object.assign(output, pkgbuild.output);
 
       Object.entries(pkgbuild)
@@ -98,5 +105,9 @@ export async function extractFromPackage(pkg, dir) {
 
   processPkg(pkg, dir);
 
+  if(arch.size > 0) {
+    properties.arch = [...arch];
+  }
+  
   return { properties, sources, dependencies, output };
 }

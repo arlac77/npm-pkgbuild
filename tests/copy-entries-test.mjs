@@ -4,9 +4,10 @@ import { constants } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 import { ReadableStreamContentEntry } from "content-entry";
+import { transform } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { FileContentProvider, copyEntries, transform } from "npm-pkgbuild";
+import { FileContentProvider, copyEntries } from "npm-pkgbuild";
 
 test("copyEntries plain", async t => {
   const files = new FileContentProvider({

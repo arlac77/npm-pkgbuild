@@ -1,9 +1,10 @@
 import { join } from "path";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { transform, createPropertiesTransformer } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform, fieldProvider, createModeTransformer } from "../util.mjs";
+import { copyEntries, fieldProvider } from "../util.mjs";
 
 export class DEB extends Packager {
   static get name() {
@@ -32,7 +33,7 @@ export class DEB extends Packager {
     const properties = this.properties;
     const staging = await this.tmpdir;
 
-    transformer.push(createModeTransformer(0o775, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true: false));
+    transformer.push(createPropertiesTransformer({ mode: { value: 0o775 }}, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true: false), "mode");
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";

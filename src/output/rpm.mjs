@@ -2,12 +2,13 @@ import { join } from "path";
 import { mkdir, cp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
   colonSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform, fieldProvider } from "../util.mjs";
+import { copyEntries, fieldProvider } from "../util.mjs";
 
 export class RPM extends Packager {
   static get name() {

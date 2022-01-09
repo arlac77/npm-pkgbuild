@@ -3,6 +3,7 @@ import { createReadStream, createWriteStream } from "fs";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { transform } from "content-entry-transform";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import {
   keyValueTransformer,
@@ -11,7 +12,6 @@ import {
 import { Packager } from "./packager.mjs";
 import {
   copyEntries,
-  transform,
   fieldProvider,
   createPropertiesInterceptor,
   quote,

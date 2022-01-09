@@ -61,6 +61,7 @@ export function fieldProvider(properties, fields) {
 
 export function createModeTransformer(mode, match) {
   return {
+    name: "mode",
     match,
     transform: async entry => Object.create(entry, { mode: { value: mode } })
   };
@@ -68,7 +69,7 @@ export function createModeTransformer(mode, match) {
 
 export function createExpressionTransformer(
   properties,
-  match = entry => entry.name.match(/\.(conf|json|html|txt|service|socket)$/)
+  match = entry => entry.name.match(/\.(conf|json|html|txt|service|socket)$/) ? true : false
 ) {
   async function* transformer(expression, remainder, source, cb) {
     const value = properties[expression];
@@ -76,8 +77,10 @@ export function createExpressionTransformer(
   }
 
   return {
+    name: "expression",
     match,
     transform: async entry => {
+      //console.log("TRANSFORM",entry.name);
       const ne = new ReadableStreamContentEntry(
         entry.name,
         iterableStringInterceptor(
@@ -87,6 +90,7 @@ export function createExpressionTransformer(
       );
       ne.destination = entry.destination; // TODO all the other attributes ?
       return ne;
+      //return Object.assign(entry,ne);
     }
   };
 }
@@ -101,18 +105,17 @@ export async function* transform(source, transformers = [], onlyMatching) {
   const usedTransformers = new Set();
 
   for await (let entry of source) {
+    let didMatch = false;
     for (const t of transformers) {
+      //console.log(t.name,entry.name,t.match(entry));
       if (t.match(entry)) {
+        didMatch = true;
         entry = await t.transform(entry);
         usedTransformers.add(t);
-
-        if (onlyMatching) {
-          yield entry;
-        }
       }
     }
 
-    if (!onlyMatching) {
+    if ((onlyMatching && didMatch) || !onlyMatching) {
       yield entry;
     }
   }

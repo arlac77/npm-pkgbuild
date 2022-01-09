@@ -109,6 +109,7 @@ package() {
     const fp = fieldProvider(properties, fields);
 
     transformer.push({
+      name: "PKGBUILD",
       match: entry => entry.name === "PKGBUILD",
       transform: async entry =>
         new ReadableStreamContentEntry(

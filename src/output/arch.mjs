@@ -9,8 +9,14 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, transform, fieldProvider } from "../util.mjs";
-import { quote, utf8StreamOptions } from "../util.mjs";
+import {
+  copyEntries,
+  transform,
+  fieldProvider,
+  createPropertiesInterceptor,
+  quote,
+  utf8StreamOptions
+} from "../util.mjs";
 
 /**
  * @type KeyValueTransformOptions
@@ -43,8 +49,7 @@ export class ARCH extends Packager {
     return "arch";
   }
 
-  static get description()
-  {
+  static get description() {
     return "generate Arch-Linux package";
   }
 
@@ -89,18 +94,13 @@ package() {
     }
 
     if (properties.hooks) {
-      async function* transformer(expression, remainder, source, cb) {
-        const value = properties[expression];
-        yield value === undefined ? "" : value;
-      }
-
       await pipeline(
         iterableStringInterceptor(
           createReadStream(
             join(options.pkgdir, properties.hooks),
             utf8StreamOptions
           ),
-          transformer
+          createPropertiesInterceptor(properties)
         ),
         createWriteStream(join(staging, properties.install), utf8StreamOptions)
       );

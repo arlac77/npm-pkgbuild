@@ -16,7 +16,7 @@ test("copyEntries plain", async t => {
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
   for await (const entry of copyEntries(files, tmp)) {
-    console.log(entry.name, entry.destination);
+    //console.log(entry.name, entry.destination);
   }
 
   await access(join(tmp, "file1.txt"), constants.F_OK);

@@ -2,7 +2,6 @@ import test from "ava";
 import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, ARCH } from "npm-pkgbuild";
 

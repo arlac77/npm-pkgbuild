@@ -1,7 +1,10 @@
 import { join } from "path";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
-import { transform, createPropertiesTransformer } from "content-entry-transform";
+import {
+  transform,
+  createPropertiesTransformer
+} from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, fieldProvider } from "../util.mjs";
@@ -11,8 +14,7 @@ export class DEB extends Packager {
     return "deb";
   }
 
-  static get description()
-  {
+  static get description() {
     return "generate Debian package";
   }
 
@@ -33,35 +35,40 @@ export class DEB extends Packager {
     const properties = this.properties;
     const staging = await this.tmpdir;
 
-    transformer.push(createPropertiesTransformer({ mode: { value: 0o775 }}, entry => entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true: false), "mode");
+    transformer.push(
+      createPropertiesTransformer(
+        entry => (entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true : false),
+        { mode: { value: 0o775 } },
+        "mode"
+      )
+    );
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
-    
-    transformer.push(
-      {
-        match: entry => entry.name === debianControlName,
-        transform: async entry =>
-          new ReadableStreamContentEntry(
-            entry.name,
-            keyValueTransformer(await entry.readStream, fp)
-          ),
-        createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
-      });
- 
-      for await (const file of copyEntries(
-        transform(sources, transformer),
-        staging,
-        expander
-      )) {
-        if (options.verbose) {
-          console.log(file.destination);
-        }
+
+    transformer.push({
+      match: entry => entry.name === debianControlName,
+      transform: async entry =>
+        new ReadableStreamContentEntry(
+          entry.name,
+          keyValueTransformer(await entry.readStream, fp)
+        ),
+      createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
+    });
+
+    for await (const file of copyEntries(
+      transform(sources, transformer),
+      staging,
+      expander
+    )) {
+      if (options.verbose) {
+        console.log(file.destination);
       }
-  
+    }
+
     const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
 
-    if(options.verbose) {
+    if (options.verbose) {
       console.log(dpkg.stdout);
     }
 

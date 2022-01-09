@@ -2,7 +2,7 @@ import test from "ava";
 import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { execa } from "execa";
+import { execa } from "execa";
 
 test("cli --deb", async t => {
   const destination = await mkdtemp(join(tmpdir(), "cli-deb"));

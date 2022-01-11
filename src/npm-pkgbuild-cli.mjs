@@ -7,9 +7,9 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
+import { createExpressionTransformer } from "content-entry-transform";
 import {
   utf8StreamOptions,
-  createExpressionTransformer
 } from "./util.mjs";
 import {
   FileContentProvider,

@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream } from "fs";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
-import { transform } from "content-entry-transform";
+import { transform, createPropertiesInterceptor } from "content-entry-transform";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import {
   keyValueTransformer,
@@ -13,7 +13,6 @@ import { Packager } from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
-  createPropertiesInterceptor,
   quote,
   utf8StreamOptions
 } from "../util.mjs";

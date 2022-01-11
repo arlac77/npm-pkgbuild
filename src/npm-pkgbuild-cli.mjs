@@ -7,10 +7,11 @@ import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";
-import { createExpressionTransformer } from "content-entry-transform";
 import {
-  utf8StreamOptions,
-} from "./util.mjs";
+  createExpressionTransformer,
+  nameExtensionMatcher
+} from "content-entry-transform";
+import { utf8StreamOptions } from "./util.mjs";
 import {
   FileContentProvider,
   allInputs,
@@ -95,7 +96,19 @@ program
 
         const context = createContext({ properties });
         const output = new outputFactory(context.expand(properties));
-        const transformer = [createExpressionTransformer(properties)];
+        const transformer = [
+          createExpressionTransformer(
+            nameExtensionMatcher([
+              ".conf",
+              ".json",
+              ".html",
+              ".txt",
+              ".service",
+              ".socket"
+            ]),
+            properties
+          )
+        ];
 
         if (options.verbose) {
           console.log(output.properties);

@@ -1,3 +1,7 @@
 post_install() {
   systemctl start {{name}}
 }
+
+pre_remove() {
+  systemctl stop {{name}}
+}

@@ -2,10 +2,55 @@ import { join, dirname } from "path";
 import { mkdir } from "fs/promises";
 import { pipeline } from "stream/promises";
 import { createWriteStream } from "fs";
-import { iterableStringInterceptor } from "iterable-string-interceptor";
-import { ReadableStreamContentEntry } from "content-entry";
 
 export const utf8StreamOptions = { encoding: "utf8" };
+
+/**
+ * Extract shell functions from a given text
+ * @param {AsyncIterator<string>} source
+ * @return {AsyncIterator<FunctionDecl>}
+ */
+export async function* extractFunctions(source) {
+  let name;
+  let body = [];
+
+  for await (const line of asLines(source)) {
+    let m;
+
+    if ((m = line.match(/^\s*(function\s*)?([\w_]+)\s*\(\s*\)/))) {
+      name = m[2];
+      continue;
+    }
+
+    if (name) {
+      if (line.match(/^}$/)) {
+        yield { name, body: body.join("\n")};
+        name = undefined;
+        body.length = 0;
+      }
+      else {
+        body.push(line);
+      }
+    }
+  }
+}
+
+async function* asLines(source) {
+  let buffer = "";
+
+  for await (let chunk of source) {
+    buffer += chunk.toString();
+    const lines = buffer.split(/\n\r?/);
+    buffer = lines.pop();
+    for (const line of lines) {
+      yield line;
+    }
+  }
+
+  if (buffer.length > 0) {
+    yield buffer;
+  }
+}
 
 export function quote(v) {
   if (v === undefined) return "";

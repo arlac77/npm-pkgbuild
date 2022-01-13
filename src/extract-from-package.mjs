@@ -11,9 +11,9 @@ export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 export const allOutputs = [DEB, ARCH, RPM];
 
 const npmArchMapping = {
-	"arm64" : "aarch64",
-	"arm": "armv7h",
-	"x86" : "x86_64"
+  arm64: "aarch64",
+  arm: "armv7h",
+  x86: "x86_64"
 };
 
 /**
@@ -48,10 +48,9 @@ export async function extractFromPackage(pkg, dir) {
   }
 
   if (pkg.repository) {
-    if(typeof(pkg.repository) === 'string') {
+    if (typeof pkg.repository === "string") {
       properties.source = pkg.repository;
-    }
-    else {
+    } else {
       if (pkg.repository.url) {
         properties.source = pkg.repository.url;
       }
@@ -62,24 +61,23 @@ export async function extractFromPackage(pkg, dir) {
   let sources = [];
   let output = {};
   let arch = new Set();
-  
-  const processPkg = (pkg, dir) => {
 
-    if(pkg.cpu) {
-      for(const a of asArray(pkg.cpu)) {
+  const processPkg = (pkg, dir) => {
+    if (pkg.cpu) {
+      for (const a of asArray(pkg.cpu)) {
         arch.add(npmArchMapping[a]);
       }
-    } 
+    }
 
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 
-      if(pkgbuild.arch) {
-        for(const a of asArray(pkgbuild.arch)) {
+      if (pkgbuild.arch) {
+        for (const a of asArray(pkgbuild.arch)) {
           arch.add(a);
         }
       }
-      
+
       Object.assign(output, pkgbuild.output);
 
       Object.entries(pkgbuild)
@@ -123,9 +121,9 @@ export async function extractFromPackage(pkg, dir) {
 
   processPkg(pkg, dir);
 
-  if(arch.size > 0) {
+  if (arch.size > 0) {
     properties.arch = [...arch];
   }
-  
+
   return { properties, sources, dependencies, output };
 }

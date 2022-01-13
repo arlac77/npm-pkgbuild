@@ -48,8 +48,13 @@ export async function extractFromPackage(pkg, dir) {
   }
 
   if (pkg.repository) {
-    if (pkg.repository.url) {
-      properties.source = pkg.repository.url;
+    if(typeof(pkg.repository) === 'string') {
+      properties.source = pkg.repository;
+    }
+    else {
+      if (pkg.repository.url) {
+        properties.source = pkg.repository.url;
+      }
     }
   }
 

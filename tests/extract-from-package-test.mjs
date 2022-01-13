@@ -56,6 +56,7 @@ test(
     version: "1.2.3",
     license: "BSD",
     config: { c1: "v1" },
+    repository: "github:/arlac77/npm-pkgbuild",
     pkg: {
       arch: ["aarch64","x86_64"],
       name: "n2",
@@ -70,7 +71,8 @@ test(
     other: "o1",
     license: "BSD",
     arch: ["aarch64","x86_64"],
-    c1: "v1"
+    c1: "v1",
+    source: "github:/arlac77/npm-pkgbuild"
   },
   undefined,
   undefined,

@@ -82,7 +82,13 @@ program
         o => options[o.name] === true || output[o.name] !== undefined
       )) {
         Object.assign(properties, options.define);
-
+        
+        for(const [k,v] of Object.entries(properties)) {
+          if(typeof(v) === 'string') {
+            properties[k] = v.replace(/\$\{([^\}]+)\}/m,(m,k) => properties[k]);
+          }
+        }
+        
         sources.push(
           ...[...options.content, ...options.meta]
             .filter(x => x)

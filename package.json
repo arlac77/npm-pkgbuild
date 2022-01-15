@@ -44,7 +44,7 @@
     "content-entry-filesystem": "^4.0.2",
     "execa": "^6.0.0",
     "expression-expander": "^7.0.9",
-    "globby": "^12.0.2",
+    "globby": "^12.1.0",
     "iterable-string-interceptor": "^1.0.8",
     "key-value-transformer": "^2.0.0",
     "npm-package-walker": "^5.0.3",

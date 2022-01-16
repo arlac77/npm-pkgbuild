@@ -40,8 +40,8 @@
   "dependencies": {
     "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.3.0",
-    "content-entry": "^4.1.1",
-    "content-entry-filesystem": "^4.0.2",
+    "content-entry": "^4.1.2",
+    "content-entry-filesystem": "^4.0.3",
     "execa": "^6.0.0",
     "expression-expander": "^7.0.9",
     "globby": "^12.1.0",

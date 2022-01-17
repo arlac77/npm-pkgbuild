@@ -29,7 +29,7 @@ export async function publish(fileName, destination, properties) {
     }
 
     const response = await fetch(destination, {
-      method: "POST",
+      method: "PUT",
       headers,
       body: createReadStream(fileName)
     });

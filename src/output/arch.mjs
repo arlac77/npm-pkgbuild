@@ -43,6 +43,9 @@ function keyPrefix(key) {
   return f && f.prefix ? f.prefix + key : key;
 }
 
+
+const PKGBUILD = "PKGBUILD";
+
 export class ARCH extends Packager {
   static get name() {
     return "arch";
@@ -108,8 +111,8 @@ package() {
     const fp = fieldProvider(properties, fields);
 
     transformer.push({
-      name: "PKGBUILD",
-      match: entry => entry.name === "PKGBUILD",
+      name: PKGBUILD,
+      match: entry => entry.name === PKGBUILD,
       transform: async entry =>
         new ReadableStreamContentEntry(
           "../" + entry.name,
@@ -118,7 +121,7 @@ package() {
             trailingLines
           })
         ),
-      createEntryWhenMissing: () => new EmptyContentEntry("PKGBUILD")
+      createEntryWhenMissing: () => new EmptyContentEntry(PKGBUILD)
     });
 
     for await (const file of copyEntries(

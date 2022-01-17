@@ -16,7 +16,8 @@ import {
   FileContentProvider,
   allInputs,
   allOutputs,
-  extractFromPackage
+  extractFromPackage,
+  publish
 } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
@@ -33,8 +34,8 @@ allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("-D --define <a=b>", "define property", str =>
-    Object.fromEntries([str.split(/=/)])
+  .option("-D --define <a=b>", "define property", (str, former={}) =>
+    Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option(
     "-d --destination <dir>",
@@ -55,6 +56,7 @@ program
     )
   )
   .action(async options => {
+    console.log(options);
     try {
       const pkgDir = await packageDirectory({ cwd: options.pkgdir });
 
@@ -131,16 +133,7 @@ program
           path => context.expand(path)
         );
 
-        /*
-        console.log(`#<CI>publish ${fileName}`);
-
-        if (publish !== undefined) {
-          context.properties.arch = arch;
-      
-          publish = publish.replace(/\{\{(\w+)\}\}/m, (match, key, offset, string) =>
-            context.evaluate(key)
-          );
-      */
+        await publish(fileName, options.publish, properties);
       }
     } catch (e) {
       console.log(e);

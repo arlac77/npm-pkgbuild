@@ -34,7 +34,7 @@ allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("-D --define <a=b>", "define property", (str, former={}) =>
+  .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option(
@@ -56,7 +56,6 @@ program
     )
   )
   .action(async options => {
-    console.log(options);
     try {
       const pkgDir = await packageDirectory({ cwd: options.pkgdir });
 

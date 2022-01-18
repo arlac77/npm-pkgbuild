@@ -1,4 +1,4 @@
-import { basename,join } from "path";
+import { basename } from "path";
 import { createReadStream } from "fs";
 import fetch from "node-fetch";
 
@@ -9,7 +9,6 @@ export async function publish(fileName, destination, properties) {
   );
 
   destination = destination + basename(fileName);
-
 
   console.log(destination);
 
@@ -25,7 +24,7 @@ export async function publish(fileName, destination, properties) {
           "base64"
         );
 
-        console.log(headers.authorization);
+      console.log(headers.authorization);
     }
 
     const response = await fetch(destination, {

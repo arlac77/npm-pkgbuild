@@ -38,6 +38,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
+    "@npmcli/arborist": "^4.2.0",
     "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.3.0",
     "content-entry": "^4.1.2",

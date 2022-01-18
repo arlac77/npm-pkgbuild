@@ -1,5 +1,5 @@
-import { join } from "path";
 import { globby } from "globby";
+import Arborist from "@npmcli/arborist";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
 
@@ -26,10 +26,15 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   async *[Symbol.asyncIterator]() {
     const cwd = this.dir;
+
+    const arb = new Arborist({ path: cwd });
+    await arb.buildIdealTree({ saveType: "prod" });
+    await arb.reify({ save: true });
+
     for (const name of await globby("node_modules/**/*", {
       cwd
     })) {
-      yield Object.assign(new FileSystemEntry(name, cwd),this.entryProperties);
+      yield Object.assign(new FileSystemEntry(name, cwd), this.entryProperties);
     }
   }
 }

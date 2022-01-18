@@ -8,11 +8,12 @@ test("NodeModules entries", async t => {
 
   const entries = [];
   for await (const entry of content) {
+    console.log(entry.name);
     entries.push(entry);
   }
 
   t.deepEqual(
     entries.map(e => e.name).filter((x, i) => i < 1),
-    ["node_modules/a/file1.js"]
+    ["node_modules/uti/LICENSE"]
   );
 });

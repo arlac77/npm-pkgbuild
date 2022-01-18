@@ -1,33 +1,37 @@
 {
-    "name": "myservice",
-    "description": "a description",
-    "version": "1.2.3",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/arlac77/myservice.git"
+  "name": "myservice",
+  "description": "a description",
+  "version": "1.2.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arlac77/myservice.git"
+  },
+  "dependencies": {
+    "uti": "6.6.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.13.2"
+  },
+  "config": {
+    "port": 8088,
+    "api": {
+      "url": "http://somwhere.com/prefix/api"
+    }
+  },
+  "pkg": {
+    "installdir": "/services/${name}",
+    "groups": "webhook",
+    "depends": {
+      "redis": ">=5.0.3"
     },
-    "license": "MIT",
-    "engines": {
-      "node": ">=16.13.1"
-    },
-    "config" : {
-      "port" : 8088,
-      "api" : {
-        "url" : "http://somwhere.com/prefix/api"
-      }
-    },
-    "pkg": {
-      "installdir": "/services/${name}",
-      "groups": "webhook",
-      "depends": {
-        "redis": ">=5.0.3"
-      },
-      "hooks": "pacman.install",
-      "content":
-       {
-        "${installdir}" : ["npm-pack", "node_modules"],
-        "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"
-      }
+    "hooks": "pacman.install",
+    "content": {
+      "${installdir}": [
+        "npm-pack",
+        "node_modules"
+      ],
+      "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"
     }
   }
-  
+}

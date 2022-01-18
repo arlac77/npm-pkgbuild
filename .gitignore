@@ -1,3 +1,5 @@
+node_modules
+tests/fixtures/pkg/package-lock.json
 /node_modules/**
 build
 *.log

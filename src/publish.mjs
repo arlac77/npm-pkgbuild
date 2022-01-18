@@ -3,6 +3,11 @@ import { createReadStream } from "fs";
 import fetch from "node-fetch";
 
 export async function publish(fileName, destination, properties) {
+
+  if(!destination) {
+    return;
+  }
+
   destination = destination.replace(
     /\{\{(\w+)\}\}/m,
     (match, key, offset, string) => properties[key]

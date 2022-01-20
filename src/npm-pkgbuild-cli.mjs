@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "fs";
-import { readFile, mkdir } from "fs/promises";
-import { dirname, join } from "path";
+import { readFile } from "fs/promises";
+import { join } from "path";
 import program from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
@@ -36,11 +36,6 @@ program
   .option("--verbose", "be more verbose", false)
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
-  )
-  .option(
-    "-d --destination <dir>",
-    "where to put the package(s)",
-    join(cwd, "dist")
   )
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
   .option(
@@ -76,8 +71,6 @@ program
       )) {
         sources.push(new inputFactory());
       }
-
-      await mkdir(dirname(options.destination), { recursive: true });
 
       for (const outputFactory of allOutputs.filter(
         o => options[o.name] === true || output[o.name] !== undefined

@@ -1,4 +1,4 @@
-import { join } from "path";
+import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { mkdtemp, mkdir } from "fs/promises";
 
@@ -83,6 +83,11 @@ export class Packager {
       if (m) {
         out.destination = m[1] === "file" ? m[2] : tmpdir;
       }
+      else {
+        out.destination = options.publish;
+      }
+
+      await mkdir(dirname(out.destination), { recursive: true });
     }
 
     return out;

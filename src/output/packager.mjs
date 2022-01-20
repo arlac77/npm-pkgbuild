@@ -1,6 +1,6 @@
 import { join } from "path";
 import { tmpdir } from "os";
-import { mkdtemp } from "fs/promises";
+import { mkdtemp, mkdir } from "fs/promises";
 
 /**
  * @typedef {Object} Field
@@ -16,6 +16,15 @@ import { mkdtemp } from "fs/promises";
 export class Packager {
   static get fields() {
     return {};
+  }
+
+  static get workspaceLayout() {
+    return {
+      named: {
+        staging: ""
+      },
+      others: []
+    };
   }
 
   constructor(properties) {
@@ -44,9 +53,39 @@ export class Packager {
     return properties;
   }
 
-  async prepareExecute() {
+  async prepareExecute(options) {
     const tmpdir = await this.tmpdir;
-    return { properties: this.properties, tmpdir, staging: tmpdir };
+
+    const out = {
+      properties: this.properties,
+      destination: options.destination || tmpdir,
+      tmpdir
+    };
+
+    const l = this.constructor.workspaceLayout;
+
+    const mdo = { recursive: true };
+
+    await Promise.all(l.others.map(d => mkdir(join(tmpdir, d), mdo)));
+
+    for (const nd of Object.entries(l.named).map(([name, d]) => [
+      name,
+      join(tmpdir, d),
+      mkdir(join(tmpdir, d), mdo)
+    ])) {
+      await nd[2];
+      out[nd[0]] = nd[1]; 
+    }
+
+    if (options.publish) {
+      const m = options.publish.match(/^([\w_\+]+):\/\/(.*)/);
+
+      if (m) {
+        out.destination = m[1] === "file" ? m[2] : tmpdir;
+      }
+    }
+
+    return out;
   }
 
   /**

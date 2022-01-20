@@ -71,7 +71,7 @@ export class ARCH extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, staging } = await this.prepareExecute(options);
+    const { properties, staging, destination } = await this.prepareExecute(options);
 
     if (properties.source) {
       properties.md5sums = ["SKIP"];
@@ -136,14 +136,14 @@ package() {
 
     const makepkg = await execa("makepkg", ["-f", "-e"], {
       cwd: staging,
-      env: { PKGDEST: options.destination }
+      env: { PKGDEST: destination }
     });
 
     if (options.verbose) {
       console.log(makepkg.stdout);
     }
 
-    return join(options.destination, this.packageFileName);
+    return join(destination, this.packageFileName);
   }
 }
 

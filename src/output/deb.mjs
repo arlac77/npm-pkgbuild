@@ -32,7 +32,7 @@ export class DEB extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, staging } = await this.prepareExecute(options);
+    const { properties, staging, destination } = await this.prepareExecute(options);
 
     transformer.push(
       createPropertiesTransformer(
@@ -65,13 +65,13 @@ export class DEB extends Packager {
       }
     }
 
-    const dpkg = await execa("dpkg", ["-b", staging, options.destination]);
+    const dpkg = await execa("dpkg", ["-b", staging, destination]);
 
     if (options.verbose) {
       console.log(dpkg.stdout);
     }
 
-    return join(options.destination, this.packageFileName);
+    return join(destination, this.packageFileName);
   }
 }
 

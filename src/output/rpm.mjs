@@ -1,5 +1,5 @@
 import { join } from "path";
-import { mkdir, cp } from "fs/promises";
+import { cp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
@@ -32,23 +32,21 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async prepareExecute(options) {
-    const cfg = await super.prepareExecute(options);
-    return { ...cfg, staging: join(cfg.tmpdir, "BUILDROOT") };
+  static get workspaceLayout() {
+    return {
+      named: {
+        staging: "BUILDROOT"
+      },
+      others: ["RPMS", "SRPMS", "SOURCES", "SPECS"],
+    };
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, tmpdir, staging } = await this.prepareExecute(options);
+    const { properties, tmpdir, staging, destination } = await this.prepareExecute(options);
 
     properties.Requires = Object.entries(dependencies)
       .map(([n, e]) => `${n}${e}`)
       .join(" ");
-
-    await Promise.all(
-      ["BUILDROOT", "RPMS", "SRPMS", "SOURCES", "SPECS"].map(d =>
-        mkdir(join(tmpdir, d))
-      )
-    );
 
     const specFileName = `${properties.name}.spec`;
 
@@ -120,10 +118,10 @@ export class RPM extends Packager {
 
     await cp(
       join(tmpdir, "RPMS", properties.arch, this.packageFileName),
-      join(options.destination, this.packageFileName),
+      join(destination, this.packageFileName),
       { preserveTimestamps: true }
     );
-    return join(options.destination, this.packageFileName);
+    return join(destination, this.packageFileName);
   }
 }
 

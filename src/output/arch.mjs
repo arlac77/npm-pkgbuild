@@ -3,7 +3,10 @@ import { createReadStream, createWriteStream } from "fs";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
-import { transform, createPropertiesInterceptor } from "content-entry-transform";
+import {
+  transform,
+  createPropertiesInterceptor
+} from "content-entry-transform";
 import { iterableStringInterceptor } from "iterable-string-interceptor";
 import {
   keyValueTransformer,
@@ -43,7 +46,6 @@ function keyPrefix(key) {
   return f && f.prefix ? f.prefix + key : key;
 }
 
-
 const PKGBUILD = "PKGBUILD";
 
 export class ARCH extends Packager {
@@ -69,7 +71,7 @@ export class ARCH extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const properties = this.properties;
+    const { properties, staging } = await this.prepareExecute(options);
 
     if (properties.source) {
       properties.md5sums = ["SKIP"];
@@ -77,8 +79,6 @@ export class ARCH extends Packager {
     if (properties.hooks) {
       properties.install = `${properties.name}.install`;
     }
-
-    const staging = await this.tmpdir;
 
     async function* trailingLines() {
       yield `
@@ -132,10 +132,6 @@ package() {
       if (options.verbose) {
         console.log(file.destination);
       }
-    }
-
-    if (options.verbose) {
-      console.log(`stagingDir: ${staging}`);
     }
 
     const makepkg = await execa("makepkg", ["-f", "-e"], {

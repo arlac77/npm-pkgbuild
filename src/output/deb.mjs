@@ -32,8 +32,7 @@ export class DEB extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const properties = this.properties;
-    const staging = await this.tmpdir;
+    const { properties, staging } = await this.prepareExecute(options);
 
     transformer.push(
       createPropertiesTransformer(

@@ -44,6 +44,11 @@ export class Packager {
     return properties;
   }
 
+  async prepareExecute() {
+    const tmpdir = await this.tmpdir;
+    return { properties: this.properties, tmpdir, staging: tmpdir };
+  }
+
   /**
    * Create tmp directory.
    * @return {Promise<string>} directory path

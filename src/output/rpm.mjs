@@ -15,8 +15,7 @@ export class RPM extends Packager {
     return "rpm";
   }
 
-  static get description()
-  {
+  static get description() {
     return "generate RPM package";
   }
 
@@ -33,25 +32,24 @@ export class RPM extends Packager {
     return fields;
   }
 
-  async execute(
-    sources,
-    transformer,
-    dependencies,
-    options,
-    expander
-  ) {
-    const properties = this.properties;
-    const tmp = await this.tmpdir;
+  async prepareExecute(options) {
+    const cfg = await super.prepareExecute(options);
+    return { ...cfg, staging: join(cfg.tmpdir, "BUILDROOT") };
+  }
 
-    properties.Requires = Object.entries(dependencies).map(([n,e]) => `${n}${e}`).join(' ');
-    
+  async execute(sources, transformer, dependencies, options, expander) {
+    const { properties, tmpdir, staging } = await this.prepareExecute(options);
+
+    properties.Requires = Object.entries(dependencies)
+      .map(([n, e]) => `${n}${e}`)
+      .join(" ");
+
     await Promise.all(
       ["BUILDROOT", "RPMS", "SRPMS", "SOURCES", "SPECS"].map(d =>
-        mkdir(join(tmp, d))
+        mkdir(join(tmpdir, d))
       )
     );
 
-    const staging = join(tmp, "BUILDROOT");
     const specFileName = `${properties.name}.spec`;
 
     const files = [];
@@ -108,7 +106,7 @@ export class RPM extends Packager {
 
     const rpmbuild = await execa("rpmbuild", [
       "--define",
-      `_topdir ${tmp}`,
+      `_topdir ${tmpdir}`,
       "--buildroot",
       staging,
       "-vv",
@@ -121,7 +119,7 @@ export class RPM extends Packager {
     }
 
     await cp(
-      join(tmp, "RPMS", properties.arch, this.packageFileName),
+      join(tmpdir, "RPMS", properties.arch, this.packageFileName),
       join(options.destination, this.packageFileName),
       { preserveTimestamps: true }
     );

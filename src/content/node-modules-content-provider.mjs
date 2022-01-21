@@ -1,6 +1,6 @@
 import { tmpdir } from "os";
 import { join } from "path";
-import { cp, mkdtemp } from "fs/promises";
+import { cp, mkdtemp, readFile, writeFile } from "fs/promises";
 import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
 import { FileSystemEntry } from "content-entry-filesystem";
@@ -36,8 +36,14 @@ export class NodeModulesContentProvider extends ContentProvider {
       )
     );
 
+    const json = JSON.parse(await readFile(join(this.dir, "package.json"),{encoding:"utf8"}));
+    delete json.devDependencies;
+    await writeFile(join(tmp,"package.json"),JSON.stringify(json),{encoding:"utf8"});
+
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
+    await arb.prune({ saveType: "prod" });
+
     await arb.reify({ save: true });
 
     for (const name of await globby("node_modules/**/*", {

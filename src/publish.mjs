@@ -13,7 +13,7 @@ export async function publish(fileName, destination, properties) {
     (match, key, offset, string) => properties[key]
   );
 
-  destination = destination + basename(fileName);
+  destination = destination + '/' + basename(fileName);
 
   console.log(destination);
 

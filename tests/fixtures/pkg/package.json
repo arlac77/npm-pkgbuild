@@ -7,7 +7,7 @@
     "url": "https://github.com/arlac77/myservice.git"
   },
   "dependencies": {
-    "uti": "6.6.1"
+    "uti": "^6.6.1"
   },
   "license": "MIT",
   "engines": {

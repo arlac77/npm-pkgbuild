@@ -27,11 +27,9 @@ export class NodeModulesContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {
     const cwd = this.dir;
 
-    /*
     const arb = new Arborist({ path: cwd });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
     await arb.reify({ save: true });
-*/
 
     for (const name of await globby("node_modules/**/*", {
       cwd

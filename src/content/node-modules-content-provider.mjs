@@ -1,3 +1,6 @@
+import { tmpdir } from "os";
+import { join } from "path";
+import { cp, mkdtemp } from "fs/promises";
 import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
 import { FileSystemEntry } from "content-entry-filesystem";
@@ -25,16 +28,22 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   async *[Symbol.asyncIterator]() {
-    const cwd = this.dir;
+    const tmp = await mkdtemp(join(tmpdir(), "node-modules"));
 
-    const arb = new Arborist({ path: cwd });
+    await Promise.all(
+      ["package.json", "package-lock.json"].map(n =>
+        cp(join(this.dir, n), join(tmp, n))
+      )
+    );
+
+    const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
     await arb.reify({ save: true });
 
     for (const name of await globby("node_modules/**/*", {
-      cwd
+      cwd: tmp
     })) {
-      yield Object.assign(new FileSystemEntry(name, cwd), this.entryProperties);
+      yield Object.assign(new FileSystemEntry(name, tmp), this.entryProperties);
     }
   }
 }

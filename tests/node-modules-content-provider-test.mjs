@@ -8,12 +8,10 @@ test("NodeModules entries", async t => {
 
   const entries = [];
   for await (const entry of content) {
-    console.log(entry.name);
-    entries.push(entry);
+    entries[entry.name] = entry;
   }
 
-  t.deepEqual(
-    entries.map(e => e.name).filter((x, i) => i < 1),
-    ["node_modules/uti/LICENSE"]
-  );
+  t.truthy(entries["node_modules/uti/LICENSE"]);
+
+  t.is(Object.entries(entries).length, 5);
 });

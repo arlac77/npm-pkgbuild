@@ -38,7 +38,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^4.2.0",
+    "@npmcli/arborist": "^4.2.1",
     "aggregate-async-iterator": "^1.1.7",
     "commander": "^8.3.0",
     "content-entry": "^4.1.2",
@@ -49,7 +49,7 @@
     "globby": "^12.2.0",
     "iterable-string-interceptor": "^1.0.8",
     "key-value-transformer": "^2.0.0",
-    "node-fetch": "^3.1.1",
+    "node-fetch": "^3.2.0",
     "npm-package-walker": "^5.0.3",
     "npm-packlist": "^3.0.0",
     "pacote": "^12.0.2",

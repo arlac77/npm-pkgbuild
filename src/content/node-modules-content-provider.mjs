@@ -28,8 +28,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     this.entryProperties = entryProperties;
   }
 
-  toString()
-  {
+  toString() {
     return `${this.constructor.name}: ${this.dir}`;
   }
 
@@ -40,7 +39,11 @@ export class NodeModulesContentProvider extends ContentProvider {
       await readFile(join(this.dir, "package.json"), utf8StreamOptions)
     );
     delete json.devDependencies;
-    await writeFile(join(tmp, "package.json"), JSON.stringify(json), utf8StreamOptions);
+    await writeFile(
+      join(tmp, "package.json"),
+      JSON.stringify(json),
+      utf8StreamOptions
+    );
 
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
@@ -50,7 +53,16 @@ export class NodeModulesContentProvider extends ContentProvider {
     for (const name of await globby("node_modules/**/*", {
       cwd: tmp
     })) {
-      yield Object.assign(new FileSystemEntry(name, tmp), this.entryProperties);
+      if (
+        !name.match(
+          /(~|\.log|\.tmp|\.bak|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|readme.*\.md)$/i
+        )
+      ) {
+        yield Object.assign(
+          new FileSystemEntry(name, tmp),
+          this.entryProperties
+        );
+      }
     }
   }
 }
@@ -58,17 +70,9 @@ export class NodeModulesContentProvider extends ContentProvider {
 const toBeIgnored = [
   {
     options: { filesOnly: true },
-    pattern: [".git*", ".npm*", "rollup.config.*", ".travis.yml"]
-  },
-  {
-    options: { filesOnly: true },
     pattern: [
-      "*~",
-      "*.bak",
       "*.mk",
       "*.bat",
-      "*.tmp",
-      "*.log",
       "*.orig",
       "*.d.ts*",
       "*.1",
@@ -110,7 +114,6 @@ const toBeIgnored = [
       ".istanbul.yml",
       ".babelrc.*",
       ".nycrc",
-      ".DS_Store",
       ".env",
       "x-package.json5",
       "component.json",
@@ -129,7 +132,6 @@ const toBeIgnored = [
       "Contributors*",
       "CHANGES*",
       "PATENTS*",
-      "readme*.md",
       "AUTHORS*",
       "NOTICE*",
       "HISTORY*",

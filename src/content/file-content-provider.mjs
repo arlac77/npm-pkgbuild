@@ -11,6 +11,13 @@ import { ContentProvider } from "./content-provider.mjs";
  * @param {string} definitions.base base directory where to find the files
  */
 export class FileContentProvider extends ContentProvider {
+  /**
+   * @return {string} name of the content provider
+   */
+  static get name() {
+    return "files";
+  }
+
   constructor(definitions, entryProperties) {
     super();
 
@@ -28,6 +35,10 @@ export class FileContentProvider extends ContentProvider {
     this.entryProperties = entryProperties;
   }
 
+  toString() {
+    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern}`;
+  }
+
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
     const base = definitions.base;
@@ -35,7 +46,10 @@ export class FileContentProvider extends ContentProvider {
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
-      yield Object.assign(new FileSystemEntry(name, base), this.entryProperties);
+      yield Object.assign(
+        new FileSystemEntry(name, base),
+        this.entryProperties
+      );
     }
   }
 }

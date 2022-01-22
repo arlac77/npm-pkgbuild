@@ -28,6 +28,11 @@ export class NodeModulesContentProvider extends ContentProvider {
     this.entryProperties = entryProperties;
   }
 
+  toString()
+  {
+    return `${this.constructor.name}: ${this.dir}`;
+  }
+
   async *[Symbol.asyncIterator]() {
     const tmp = await mkdtemp(join(tmpdir(), "node-modules"));
 

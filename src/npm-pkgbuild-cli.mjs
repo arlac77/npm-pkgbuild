@@ -76,7 +76,7 @@ program
       for (const outputFactory of allOutputs.filter(
         o => options[o.name] === true || output[o.name] !== undefined
       )) {
-        if(options.available && !await outputFactory.available) {
+        if (options.available && !(await outputFactory.available)) {
           continute;
         }
 
@@ -120,10 +120,7 @@ program
 
         if (options.verbose) {
           console.log(output.properties);
-          console.log(
-            "sources",
-            sources.map(s => s.constructor.name)
-          );
+          console.log(`sources: ${sources}`);
         }
 
         const fileName = await output.execute(

@@ -26,6 +26,11 @@ export class NPMPackContentProvider extends ContentProvider {
     this.entryProperties = entryProperties;
   }
 
+  toString()
+  {
+    return `${this.constructor.name}: ${this.dir}`;
+  }
+
   async *[Symbol.asyncIterator]() {
     const entries = [];
 

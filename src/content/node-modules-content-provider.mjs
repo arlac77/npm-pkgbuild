@@ -5,6 +5,7 @@ import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
+import { utf8StreamOptions } from "../util.mjs";
 
 /**
  * Content from node_modules
@@ -30,17 +31,11 @@ export class NodeModulesContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {
     const tmp = await mkdtemp(join(tmpdir(), "node-modules"));
 
-/*
-    await Promise.all(
-      ["package.json", "package-lock.json"].map(n =>
-        cp(join(this.dir, n), join(tmp, n))
-      )
+    const json = JSON.parse(
+      await readFile(join(this.dir, "package.json"), utf8StreamOptions)
     );
-*/
-
-    const json = JSON.parse(await readFile(join(this.dir, "package.json"),{encoding:"utf8"}));
     delete json.devDependencies;
-    await writeFile(join(tmp,"package.json"),JSON.stringify(json),{encoding:"utf8"});
+    await writeFile(join(tmp, "package.json"), JSON.stringify(json), utf8StreamOptions);
 
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });

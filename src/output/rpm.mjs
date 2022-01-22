@@ -41,6 +41,15 @@ export class RPM extends Packager {
     };
   }
 
+  static async available() {
+    try {
+      await execa("rpmbuild", ["--version"]);
+      return true;
+    } catch {}
+
+    return false;
+  }
+
   async execute(sources, transformer, dependencies, options, expander) {
     const { properties, tmpdir, staging, destination } = await this.prepareExecute(options);
 

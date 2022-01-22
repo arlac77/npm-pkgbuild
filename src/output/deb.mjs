@@ -26,6 +26,15 @@ export class DEB extends Packager {
     return fields;
   }
 
+  static async available() {
+    try {
+      await execa("dpkg", ["--version"]);
+      return true;
+    } catch {}
+
+    return false;
+  }
+
   get packageFileName() {
     const p = this.properties;
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;

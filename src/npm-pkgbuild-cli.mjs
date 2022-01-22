@@ -38,6 +38,7 @@ program
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
+  .option("-a --available", "only excute availabe output methods", false)
   .option(
     "-c --content <dir>",
     "content directory",
@@ -75,6 +76,10 @@ program
       for (const outputFactory of allOutputs.filter(
         o => options[o.name] === true || output[o.name] !== undefined
       )) {
+        if(options.available && !await outputFactory.available) {
+          continute;
+        }
+
         Object.assign(properties, options.define);
 
         for (const [k, v] of Object.entries(properties)) {
@@ -115,6 +120,10 @@ program
 
         if (options.verbose) {
           console.log(output.properties);
+          console.log(
+            "sources",
+            sources.map(s => s.constructor.name)
+          );
         }
 
         const fileName = await output.execute(

@@ -27,6 +27,10 @@ export class Packager {
     };
   }
 
+  static available() {
+    return false;
+  }
+
   constructor(properties) {
     this._properties = { ...properties };
   }
@@ -52,6 +56,7 @@ export class Packager {
 
     return properties;
   }
+
 
   async prepareExecute(options) {
     const tmpdir = await this.tmpdir;

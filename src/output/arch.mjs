@@ -1,5 +1,5 @@
 import { join } from "path";
-import { createReadStream, createWriteStream } from "fs";
+import { createReadStream, createWriteStream, truncateSync } from "fs";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
@@ -65,13 +65,24 @@ export class ARCH extends Packager {
     return fields;
   }
 
+  static async available() {
+    try {
+      await execa("makepkg", ["-V"]);
+      return true;
+    } catch {}
+
+    return false;
+  }
+
   get packageFileName() {
     const p = this.properties;
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.constructor.fileNameExtension}`;
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, staging, destination } = await this.prepareExecute(options);
+    const { properties, staging, destination } = await this.prepareExecute(
+      options
+    );
 
     if (properties.source) {
       properties.md5sums = ["SKIP"];
@@ -200,6 +211,7 @@ function normalizeExpression(e) {
 
 function makeDepends(dependencies) {
   return Object.entries(dependencies).map(
-    ([name, version]) => `${mapping[name] ? mapping[name] : name}${normalizeExpression(version)}`
+    ([name, version]) =>
+      `${mapping[name] ? mapping[name] : name}${normalizeExpression(version)}`
   );
 }

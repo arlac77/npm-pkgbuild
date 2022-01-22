@@ -2,24 +2,30 @@ import { basename } from "path";
 import { createReadStream } from "fs";
 import fetch from "node-fetch";
 
-export async function publish(fileName, destination, properties) {
-
-  if(!destination) {
-    return;
-  }
-
-  destination = destination.replace(
+export function analysePublish(publish, properties) {
+  publish = publish.replace(
     /\{\{(\w+)\}\}/m,
     (match, key, offset, string) => properties[key]
   );
 
-  destination = destination + '/' + basename(fileName);
+  const m = publish.match(/^([\w_\+]+:)\/\/(.*)/);
+  const scheme = m ? m[0] : "file:";
 
-  console.log(destination);
+  return { publish, scheme };
+}
 
-  //  const m = destination.match(/^([^:]+):/);
+export async function publish(fileName, destination, properties) {
+  if (!destination) {
+    return;
+  }
 
-  if (destination.startsWith("http://") || destination.startsWith("https://")) {
+  let { publish, scheme } = analysePublish(destination, properties);
+
+  publish = publish + "/" + basename(fileName);
+
+  console.log(publish);
+
+  if (scheme === "http:" || scheme === "https:") {
     const headers = {};
 
     if (properties.username) {
@@ -28,11 +34,9 @@ export async function publish(fileName, destination, properties) {
         Buffer.from(properties.username + ":" + properties.password).toString(
           "base64"
         );
-
-      console.log(headers.authorization);
     }
 
-    const response = await fetch(destination, {
+    const response = await fetch(publish, {
       method: "PUT",
       headers,
       body: createReadStream(fileName)

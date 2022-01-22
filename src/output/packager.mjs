@@ -1,6 +1,7 @@
 import { join, dirname } from "path";
 import { tmpdir } from "os";
 import { mkdtemp, mkdir } from "fs/promises";
+import { analysePublish } from "../publish.mjs";
 
 /**
  * @typedef {Object} Field
@@ -83,14 +84,9 @@ export class Packager {
     }
 
     if (options.publish) {
-      const m = options.publish.match(/^([\w_\+]+):\/\/(.*)/);
+      const { publish, scheme } = analysePublish(options.publish, out.properties);
 
-      if (m) {
-        out.destination = m[1] === "file" ? m[2] : tmpdir;
-      }
-      else {
-        out.destination = options.publish;
-      }
+      out.destination = scheme === 'file:' ? publish : tmpdir;
 
       await mkdir(dirname(out.destination), { recursive: true });
     }

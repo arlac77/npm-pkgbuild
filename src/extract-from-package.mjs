@@ -115,7 +115,9 @@ export async function extractFromPackage(pkg, dir) {
   };
 
   await packageWalker(async (pkg, base, modulePath) => {
-    processPkg(pkg, base);
+    if (modulePath.length > 0) {
+      processPkg(pkg, base);
+    }
     return true;
   }, dir);
 

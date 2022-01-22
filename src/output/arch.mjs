@@ -200,6 +200,6 @@ function normalizeExpression(e) {
 
 function makeDepends(dependencies) {
   return Object.entries(dependencies).map(
-    ([name, version]) => `${name}${normalizeExpression(version)}`
+    ([name, version]) => `${mapping[name] ? mapping[name] : name}${normalizeExpression(version)}`
   );
 }

@@ -67,6 +67,10 @@ program
           pkgDir
         );
 
+      if (options.verbose) {
+        console.log(`sources: ${sources}`);
+      }
+
       for (const inputFactory of allInputs.filter(
         inputFactory => options[inputFactory.name] === true
       )) {

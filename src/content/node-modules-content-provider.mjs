@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.log|\.tmp|\.bak|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|readme.*\.md)$/i
+          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|readme.*\.md|\.c|\.cc|\.h|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(
@@ -71,25 +71,9 @@ const toBeIgnored = [
   {
     options: { filesOnly: true },
     pattern: [
-      "*.mk",
-      "*.bat",
-      "*.orig",
       "*.d.ts*",
-      "*.1",
-      "*.2",
-      "*.3",
-      "*.4",
-      "*.5",
-      "*.6",
-      "*.7",
-      "*.8",
-      "*.9",
       "*.patch",
-      "*.cc",
-      "*.c",
-      "*.h",
       "*.h.in",
-      "*.cmake",
       "*.gyp",
       ".jshintrc*",
       ".esl*",
@@ -100,7 +84,6 @@ const toBeIgnored = [
       ".dockerignore",
       ".dir-locals.el",
       "appveyor.yml",
-      "yarn.lock",
       "gulpfile.js",
       "jsdoc.json",
       "Gruntfile.js",

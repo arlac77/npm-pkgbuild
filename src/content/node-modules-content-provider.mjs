@@ -30,11 +30,13 @@ export class NodeModulesContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {
     const tmp = await mkdtemp(join(tmpdir(), "node-modules"));
 
+/*
     await Promise.all(
       ["package.json", "package-lock.json"].map(n =>
         cp(join(this.dir, n), join(tmp, n))
       )
     );
+*/
 
     const json = JSON.parse(await readFile(join(this.dir, "package.json"),{encoding:"utf8"}));
     delete json.devDependencies;
@@ -43,7 +45,6 @@ export class NodeModulesContentProvider extends ContentProvider {
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
     await arb.prune({ saveType: "prod" });
-
     await arb.reify({ save: true });
 
     for (const name of await globby("node_modules/**/*", {

@@ -1,12 +1,13 @@
 import { tmpdir } from "os";
 import { join } from "path";
-import { cp, mkdtemp, readFile, writeFile } from "fs/promises";
+import { mkdtemp, readFile, writeFile } from "fs/promises";
 import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
+import { StringContentEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
-
+import { shrinkNPM } from "../npm-shrink.mjs";
 /**
  * Content from node_modules
  */
@@ -59,10 +60,23 @@ export class NodeModulesContentProvider extends ContentProvider {
       cwd: tmp
     })) {
       if (!toBeSkipped.test(name)) {
-        yield Object.assign(
-          new FileSystemEntry(name, tmp),
-          this.entryProperties
-        );
+        if (name.endsWith("package.json")) {
+          const json = shrinkNPM(
+            JSON.parse(await readFile(join(tmp, name), utf8StreamOptions))
+          );
+
+          if (json) {
+            yield Object.assign(
+              new StringContentEntry(name, JSON.stringify(json)),
+              this.entryProperties
+            );
+          }
+        } else {
+          yield Object.assign(
+            new FileSystemEntry(name, tmp),
+            this.entryProperties
+          );
+        }
       }
     }
   }

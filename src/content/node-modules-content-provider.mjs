@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CHANGELOG(\.md?)|HISTORY\.md|LICENSE(\.md)?|readme.*\.md|\.c|\.cc|\.h|Makefile|\.cmake|\.mk|\.\d)$/i
+          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CHANGELOG(\.md?)|HISTORY\.md|LICENSE(\-\w+|\.md)?|readme.*\.md|\.a|\.c|\.cc|\.h|Makefile|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(

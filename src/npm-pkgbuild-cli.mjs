@@ -47,18 +47,18 @@ program
   )
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .addOption(
-    new program.Option("--publish <url>", "publishing url of the package").env(
-      "PACMAN_PUBLISH"
-    ).argParser((value) => {
+    new program.Option("--publish <url>", "publishing url of the package")
+      .env("PACMAN_PUBLISH")
+      .argParser(value => {
         let [url, user, password] = value.split(/,/);
-        if(user) {
-        	url = process.env[url];
-        	console.log(this,url,user,password);
-        	return url;	
+        if (user) {
+          url = process.env[url];
+          console.log(this, url, user, password);
+          return url;
         }
 
         return value;
-    })
+      })
   )
   .action(async options => {
     try {

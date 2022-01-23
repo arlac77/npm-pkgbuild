@@ -46,7 +46,12 @@ export class NodeModulesContentProvider extends ContentProvider {
     );
 
     const arb = new Arborist({ path: tmp });
-    await arb.buildIdealTree({ update: true, prune: true, saveType: "prod" });
+    await arb.buildIdealTree({
+      rm: ["@types/node"],
+      update: true,
+      prune: true,
+      saveType: "prod"
+    });
     await arb.prune({ saveType: "prod" });
     await arb.reify({ save: true });
 
@@ -145,9 +150,8 @@ const toBeSkipped = new RegExp(
       "SFTPStream\\.md",
       "LIMITS\\.md",
       "Porting-Buffer\\.md",
-      "chains and topics\\.md",
+      "chains and topics\\.md"
     ].join("|") +
     ")$",
   "i"
 );
-

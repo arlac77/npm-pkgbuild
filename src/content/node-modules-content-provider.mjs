@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CHANGELOG(\.md?)|HISTORY\.md|LICENSE(\-\w+|\.md)?|readme.*\.md|\.a|\.c|\.cc|\.h|Makefile|\.cmake|\.mk|\.\d)$/i
+          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CONTRIBUTING(.md)?|CHANGELOG(\.md)?|HISTORY(\.md)?|LICENSE(\-\w+|\.md)?|README(.*\.md)?|\.o|\.a|\.c|\.cc|\.h|Makefile(\.in)?|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(
@@ -109,7 +109,6 @@ const toBeIgnored = [
   {
     options: { ignoreCase: true },
     pattern: [
-      "CONTRIBUTING*",
       "Contributors*",
       "PATENTS*",
       "AUTHORS*",

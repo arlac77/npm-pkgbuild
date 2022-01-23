@@ -118,6 +118,7 @@ const toBeSkipped = new RegExp(
       "HISTORY(\\.md)?",
       "LICENSE(\\-\\w+|\\.md|\\.txt)?",
       "README(.*\\.md)?",
+      "\\.armv6\\.node",
       "\\.o",
       "\\.a",
       "\\.c",
@@ -128,7 +129,6 @@ const toBeSkipped = new RegExp(
       "\\.cmake",
       "\\.mk",
       "\\.d",
-
       "\\.patch",
       "\\.esl*",
       "\\.zuul\\.yml",

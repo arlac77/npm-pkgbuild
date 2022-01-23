@@ -49,7 +49,16 @@ program
   .addOption(
     new program.Option("--publish <url>", "publishing url of the package").env(
       "PACMAN_PUBLISH"
-    )
+    ).argParser((value) => {
+        let [url, user, password] = value.split(/,/);
+        if(user) {
+        	url = process.env[url];
+        	console.log(this,url,user,password);
+        	return url;	
+        }
+
+        return value;
+    })
   )
   .action(async options => {
     try {

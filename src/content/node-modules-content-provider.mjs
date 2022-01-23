@@ -48,7 +48,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({
-      rm: ["@types/node"],
+      rm: ["@types/node", "@types/uuid"],
       update: true,
       prune: true,
       saveType: "prod"
@@ -95,6 +95,7 @@ const toBeSkipped = new RegExp(
       "\\.bat",
       "\\.gypi",
       "\\.gyp",
+      "\\.markdown",
       "appveyor\\.yml",
       "yarn\\.lock",
       "\\.DS_Store",
@@ -114,7 +115,7 @@ const toBeSkipped = new RegExp(
       "CONTRIBUT(ORS|ING)(\\.md)?",
       "CHANGELOG(\\.md)?",
       "HISTORY(\\.md)?",
-      "LICENSE(-\w+|\\.md|\\.txt)?",
+      "LICENSE(\\-\\w+|\\.md|\\.txt)?",
       "README(.*\\.md)?",
       "\\.o",
       "\\.a",

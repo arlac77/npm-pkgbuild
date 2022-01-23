@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.map|\.ts|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.jshint(rc)?|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|UPGRAD(E|ING)(\.md)?|AUTHORS(\.md)?|CONTRIBUT(ORS|ING)(.md)?|CHANGELOG(\.md)?|HISTORY(\.md)?|LICENSE(\-\w+|\.md|\.txt)?|README(.*\.md)?|\.o|\.a|\.c|\.cc|\.h|\.in|Makefile|\.cmake|\.mk|\.\d)$/i
+          /(~|\.map|\.ts|\.orig|\.log|\.tmp|\.bak|\.bat|\.gypi|\.gyp|appveyor\.yml|yarn\.lock|\.DS_Store|jenkinsfile|\.travis\.yml|\.jshint(rc)?|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CODE_OF_CONDUCT(\.md)?|GOVERNANCE(\.md)?|CODEOWNERS(\.md)?|UPGRAD(E|ING)(\.md)?|AUTHORS(\.md)?|CONTRIBUT(ORS|ING)(.md)?|CHANGELOG(\.md)?|HISTORY(\.md)?|LICENSE(\-\w+|\.md|\.txt)?|README(.*\.md)?|\.o|\.a|\.c|\.cc|\.h|\.in|Makefile|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(
@@ -80,14 +80,12 @@ const toBeIgnored = [
       ".tern-project",
       ".dockerignore",
       ".dir-locals.el",
-      "appveyor.yml",
       "gulpfile.js",
       "jsdoc.json",
       "Gruntfile.js",
       "karma.conf.js",
       "verb.md",
       ".nvmrc",
-      "config.gypi",
       "bower.json",
       "*.bash_completion.*",
       ".coveralls.yml",
@@ -112,11 +110,9 @@ const toBeIgnored = [
       "SECURITY.md",
       "SFTPStream.md",
       "LIMITS.md",
-      "GOVERNANCE.md",
       "Porting-Buffer.md",
       "chains and topics.md",
-      "CODE_OF_CONDUCT*",
-      "CODEOWNERS"
+      "CODE_OF_CONDUCT*"
     ]
   }
 ];

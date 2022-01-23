@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|readme.*\.md|\.c|\.cc|\.h|Makefile|\.cmake|\.mk|\.\d)$/i
+          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CHANGELOG(\.md?)|HISTORY\.md|LICENSE(\.md)?|readme.*\.md|\.c|\.cc|\.h|Makefile|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(
@@ -74,7 +74,6 @@ const toBeIgnored = [
       "*.d.ts*",
       "*.patch",
       "*.h.in",
-      "*.gyp",
       ".jshintrc*",
       ".esl*",
       ".zuul.yml",
@@ -112,11 +111,9 @@ const toBeIgnored = [
     pattern: [
       "CONTRIBUTING*",
       "Contributors*",
-      "CHANGES*",
       "PATENTS*",
       "AUTHORS*",
       "NOTICE*",
-      "HISTORY*",
       "SUMMARY.md",
       "MIGRAT*.md",
       "UPGRAD*.md",
@@ -130,8 +127,7 @@ const toBeIgnored = [
       "Porting-Buffer.md",
       "chains and topics.md",
       "CODE_OF_CONDUCT*",
-      "CODEOWNERS",
-      "LICENSE.DOCS*"
+      "CODEOWNERS"
     ]
   }
 ];

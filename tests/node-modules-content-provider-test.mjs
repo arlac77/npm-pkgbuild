@@ -11,7 +11,7 @@ test("NodeModules entries", async t => {
     entries[entry.name] = entry;
   }
 
-  t.truthy(entries["node_modules/uti/LICENSE"]);
+  t.truthy(entries["node_modules/uti/package.json"]);
 
-  t.is(Object.entries(entries).length, 4);
+  t.is(Object.entries(entries).length, 3);
 });

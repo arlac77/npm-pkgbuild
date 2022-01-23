@@ -104,6 +104,8 @@ const toBeSkipped = new RegExp(
       "\\.npm.*",
       "\\.git.*",
       "rollup\\.config\\.(js|mjs|cjs)",
+      "COPYING",
+      "Doxyfile",
       "CODE_OF_CONDUCT(\\.md)?",
       "GOVERNANCE(\\.md)?",
       "CODEOWNERS(\\.md)?",
@@ -112,7 +114,7 @@ const toBeSkipped = new RegExp(
       "CONTRIBUT(ORS|ING)(\\.md)?",
       "CHANGELOG(\\.md)?",
       "HISTORY(\\.md)?",
-      "LICENSE(-w+|\\.md|\\.txt)?",
+      "LICENSE(-\w+|\\.md|\\.txt)?",
       "README(.*\\.md)?",
       "\\.o",
       "\\.a",
@@ -164,7 +166,8 @@ const toBeSkipped = new RegExp(
       "SFTPStream\\.md",
       "LIMITS\\.md",
       "Porting-Buffer\\.md",
-      "chains and topics\\.md"
+      "chains and topics\\.md",
+      "build_detect_platform"
     ].join("|") +
     ")$",
   "i"

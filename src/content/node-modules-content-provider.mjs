@@ -88,6 +88,7 @@ const toBeSkipped = new RegExp(
       "~",
       "\\.map",
       "\\.ts",
+      "\\.mts",
       "\\.orig",
       "\\.log",
       "\\.tmp",

@@ -55,7 +55,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (
         !name.match(
-          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|CONTRIBUTING(.md)?|CHANGELOG(\.md)?|HISTORY(\.md)?|LICENSE(\-\w+|\.md)?|README(.*\.md)?|\.o|\.a|\.c|\.cc|\.h|Makefile(\.in)?|\.cmake|\.mk|\.\d)$/i
+          /(~|\.orig|\.log|\.tmp|\.bak|\.bat|\.gyp|yarn\.lock|\.DS_Store|\.travis\.yml|\.npm.*|\.git.*|rollup\.config\.(js|mjs|cjs)|UPGRAD(E|ING)(\.md)?|AUTHORS(\.md)?|CONTRIBUT(ORS|ING)(.md)?|CHANGELOG(\.md)?|HISTORY(\.md)?|LICENSE(\-\w+|\.md|\.txt)?|README(.*\.md)?|\.o|\.a|\.c|\.cc|\.h|\.in|Makefile|\.cmake|\.mk|\.\d)$/i
         )
       ) {
         yield Object.assign(
@@ -69,11 +69,9 @@ export class NodeModulesContentProvider extends ContentProvider {
 
 const toBeIgnored = [
   {
-    options: { filesOnly: true },
     pattern: [
       "*.d.ts*",
       "*.patch",
-      "*.h.in",
       ".jshintrc*",
       ".esl*",
       ".zuul.yml",
@@ -103,19 +101,11 @@ const toBeIgnored = [
       "cypress.json",
       ".airtap.yml",
       ".jscs.json",
-      "sauce-labs.svg"
-    ]
-  },
-  {
-    options: { ignoreCase: true },
-    pattern: [
-      "Contributors*",
+      "sauce-labs.svg",
       "PATENTS*",
-      "AUTHORS*",
       "NOTICE*",
       "SUMMARY.md",
       "MIGRAT*.md",
-      "UPGRAD*.md",
       "PULL_REQUEST_TEMPLATE.md",
       "PATTERNS.md",
       "REFERENCE.md",

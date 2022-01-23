@@ -37,7 +37,7 @@ export class RPM extends Packager {
       named: {
         staging: "BUILDROOT"
       },
-      others: ["RPMS", "SRPMS", "SOURCES", "SPECS"],
+      others: ["RPMS", "SRPMS", "SOURCES", "SPECS"]
     };
   }
 
@@ -51,7 +51,8 @@ export class RPM extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, tmpdir, staging, destination } = await this.prepareExecute(options);
+    const { properties, tmpdir, staging, destination } =
+      await this.prepareExecute(options);
 
     properties.Requires = Object.entries(dependencies)
       .map(([n, e]) => `${n}${e}`)
@@ -125,12 +126,14 @@ export class RPM extends Packager {
       console.log(rpmbuild.stdout);
     }
 
+    const packageFile = join(destination, this.packageFileName);
+
     await cp(
       join(tmpdir, "RPMS", properties.arch, this.packageFileName),
-      join(destination, this.packageFileName),
+      packageFile,
       { preserveTimestamps: true }
     );
-    return join(destination, this.packageFileName);
+    return packageFile;
   }
 }
 

@@ -119,6 +119,7 @@ program
               ".json",
               ".html",
               ".txt",
+              ".webmanifest",
               ".service",
               ".socket"
             ]),

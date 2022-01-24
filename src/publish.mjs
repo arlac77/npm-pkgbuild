@@ -5,12 +5,12 @@ import fetch from "node-fetch";
 export function analysePublish(publish, properties) {
   publish.url = publish.url.replace(
     /\{\{(\w+)\}\}/m,
-    (match, key, offset, string) => properties[key]
+    (match, key, offset, string) => properties[key] || '{{' + key + '}}'
   );
 
   const m = publish.url.match(/^([\w_\+]+:)\/\/(.*)/);
 
-  publish.scheme = m ? m[0] : "file:";
+  publish.scheme = m ? m[1] : "file:";
 
   return publish;
 }

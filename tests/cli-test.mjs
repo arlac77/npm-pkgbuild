@@ -15,11 +15,15 @@ test("cli --deb", async t => {
       new URL("fixtures/content", import.meta.url).pathname,
       "-m",
       new URL("fixtures/pkg", import.meta.url).pathname,
-      "--publish", destination
+      "--publish",
+      destination
     ]
   );
 
-  const fileName = join(destination,"npm-pkgbuild_0.0.0-semantic-release_all.deb");
+  const fileName = join(
+    destination,
+    "npm-pkgbuild_0.0.0-semantic-release_all.deb"
+  );
   const s = await stat(fileName);
   t.true(s.size >= 900, `package file size ${s.size}`);
 });

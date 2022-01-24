@@ -50,14 +50,13 @@ program
     new program.Option("--publish <url>", "publishing url of the package")
       .env("PACMAN_PUBLISH")
       .argParser(value => {
-        let [url, user, password] = value.split(/,/);
-        if (user) {
-          url = process.env[url];
-          console.log(this, url, user, password);
-          return url;
+        let values = value.split(/,/);
+        if (values.length > 1) {
+          values = values.map(v => process.env[v] || v);
+          return { url: value[0], user: value[1], password: value[2] };
         }
 
-        return value;
+        return { url: value };
       })
   )
   .action(async options => {

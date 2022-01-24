@@ -3,15 +3,16 @@ import { createReadStream } from "fs";
 import fetch from "node-fetch";
 
 export function analysePublish(publish, properties) {
-  publish = publish.replace(
+  publish.url = publish.url.replace(
     /\{\{(\w+)\}\}/m,
     (match, key, offset, string) => properties[key]
   );
 
-  const m = publish.match(/^([\w_\+]+:)\/\/(.*)/);
-  const scheme = m ? m[0] : "file:";
+  const m = publish.url.match(/^([\w_\+]+:)\/\/(.*)/);
 
-  return { publish, scheme };
+  publish.scheme = m ? m[0] : "file:";
+
+  return publish;
 }
 
 export async function publish(fileName, destination, properties) {
@@ -19,24 +20,24 @@ export async function publish(fileName, destination, properties) {
     return;
   }
 
-  let { publish, scheme } = analysePublish(destination, properties);
+  const publish = analysePublish(destination, properties);
 
-  publish = publish + "/" + basename(fileName);
+  publish.url = publish.url + "/" + basename(fileName);
 
-  console.log(publish);
+  console.log(publish.url);
 
-  if (scheme === "http:" || scheme === "https:") {
+  if (publish.scheme === "http:" || publish.scheme === "https:") {
     const headers = {};
 
-    if (properties.username) {
+    if (publish.username) {
       headers.authorization =
         "Basic " +
-        Buffer.from(properties.username + ":" + properties.password).toString(
+        Buffer.from(publish.username + ":" + publish.password).toString(
           "base64"
         );
     }
 
-    const response = await fetch(publish, {
+    const response = await fetch(publish.url, {
       method: "PUT",
       headers,
       body: createReadStream(fileName)

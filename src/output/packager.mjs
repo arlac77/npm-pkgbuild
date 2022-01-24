@@ -58,7 +58,6 @@ export class Packager {
     return properties;
   }
 
-
   async prepareExecute(options) {
     const tmpdir = await this.tmpdir;
 
@@ -80,13 +79,13 @@ export class Packager {
       mkdir(join(tmpdir, d), mdo)
     ])) {
       await nd[2];
-      out[nd[0]] = nd[1]; 
+      out[nd[0]] = nd[1];
     }
 
     if (options.publish) {
-      const { publish, scheme } = analysePublish(options.publish, out.properties);
+      const publish = analysePublish(options.publish, out.properties);
 
-      out.destination = scheme === 'file:' ? publish : tmpdir;
+      out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
 
       await mkdir(dirname(out.destination), { recursive: true });
     }

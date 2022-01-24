@@ -62,7 +62,7 @@ export async function extractFromPackage(pkg, dir) {
   let output = {};
   let arch = new Set();
 
-  const processPkg = (pkg, dir) => {
+  const processPkg = (pkg, dir, modulePath) => {
     if (pkg.cpu) {
       for (const a of asArray(pkg.cpu)) {
         arch.add(npmArchMapping[a]);
@@ -84,7 +84,7 @@ export async function extractFromPackage(pkg, dir) {
         .filter(([k, v]) => typeof v === "string")
         .forEach(([k, v]) => (properties[k] = v));
 
-      if (pkgbuild.content) {
+      if (pkgbuild.content && !modulePath) {
         Object.entries(pkgbuild.content).forEach(
           ([destination, definitions]) => {
             for (const definition of asArray(definitions)) {
@@ -116,7 +116,7 @@ export async function extractFromPackage(pkg, dir) {
 
   await packageWalker(async (pkg, base, modulePath) => {
     if (modulePath.length > 0) {
-      processPkg(pkg, base);
+      processPkg(pkg, base, modulePath);
     }
     return true;
   }, dir);

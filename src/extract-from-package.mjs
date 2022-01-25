@@ -72,44 +72,45 @@ export async function extractFromPackage(pkg, dir) {
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 
-      if (pkgbuild.arch) {
-        for (const a of asArray(pkgbuild.arch)) {
-          arch.add(a);
+      if (pkgbuild.abstract || !modulePath) {
+        if (pkgbuild.arch) {
+          for (const a of asArray(pkgbuild.arch)) {
+            arch.add(a);
+          }
         }
-      }
 
-      Object.assign(output, pkgbuild.output);
+        Object.assign(output, pkgbuild.output);
 
-      Object.entries(pkgbuild)
-        .filter(([k, v]) => typeof v === "string")
-        .forEach(([k, v]) => (properties[k] = v));
+        Object.entries(pkgbuild)
+          .filter(([k, v]) => typeof v === "string")
+          .forEach(([k, v]) => (properties[k] = v));
 
-      if (pkgbuild.content && !modulePath) {
-        Object.entries(pkgbuild.content).forEach(
-          ([destination, definitions]) => {
-            for (const definition of asArray(definitions)) {
-              const entryProperties = { destination };
+        if (pkgbuild.content && !modulePath) {
+          Object.entries(pkgbuild.content).forEach(
+            ([destination, definitions]) => {
+              for (const definition of asArray(definitions)) {
+                const entryProperties = { destination };
 
-              if (definition.type) {
-                const type = allInputs.find(i => i.name === definition.type);
-                if (type) {
-                  delete definition.type;
-                  sources.push(
-                    new type({ ...definition, dir }, entryProperties)
-                  );
+                if (definition.type) {
+                  const type = allInputs.find(i => i.name === definition.type);
+                  if (type) {
+                    delete definition.type;
+                    sources.push(
+                      new type({ ...definition, dir }, entryProperties)
+                    );
+                  } else {
+                    console.error(`Unknown type '${type}'`);
+                  }
                 } else {
-                  console.error(`Unknown type '${type}'`);
+                  sources.push(
+                    new FileContentProvider(definition, entryProperties)
+                  );
                 }
-              } else {
-                sources.push(
-                  new FileContentProvider(definition, entryProperties)
-                );
               }
             }
-          }
-        );
+          );
+        }
       }
-
       Object.assign(dependencies, pkgbuild.depends);
     }
   };

@@ -8,7 +8,7 @@ export function analysePublish(publish, properties) {
     (match, key, offset, string) => properties[key] || '{{' + key + '}}'
   );
 
-  const m = publish.url.match(/^([\w_\+]+:)\/\/(.*)/);
+  const m = publish.url.match(/^([^:]+:)\/\/(.*)/);
 
   publish.scheme = m ? m[1] : "file:";
 

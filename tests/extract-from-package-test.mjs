@@ -44,7 +44,7 @@ efpt.title = (
 
 test(
   efpt,
-  { name: "n1", description: "d1", version: "1.2.3", "cpu": "arm64" },
+  { name: "n1", description: "d1", version: "1.2.3", "cpu": "arm64", pkg: {} },
   { name: "n1", description: "d1", version: "1.2.3", "arch": ["aarch64"] }
 );
 

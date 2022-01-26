@@ -63,12 +63,6 @@ export async function extractFromPackage(pkg, dir) {
   let arch = new Set();
 
   const processPkg = (pkg, dir, modulePath) => {
-    if (pkg.cpu) {
-      for (const a of asArray(pkg.cpu)) {
-        arch.add(npmArchMapping[a]);
-      }
-    }
-
     if (pkg.pkg) {
       const pkgbuild = pkg.pkg;
 
@@ -79,6 +73,12 @@ export async function extractFromPackage(pkg, dir) {
           }
         }
 
+        if (pkg.cpu) {
+          for (const a of asArray(pkg.cpu)) {
+            arch.add(npmArchMapping[a]);
+          }
+        }
+    
         Object.assign(output, pkgbuild.output);
 
         Object.entries(pkgbuild)

@@ -1,9 +1,11 @@
 import test from "ava";
+import { arch as hostArch } from "process";
 import { dirname } from "path";
 import {
   FileContentProvider,
   NPMPackContentProvider,
-  extractFromPackage
+  extractFromPackage,
+	archMapping, npmArchMapping
 } from "npm-pkgbuild";
 
 async function efpt(
@@ -76,7 +78,7 @@ test(
     version: "1.2.3",
     other: "o1",
     license: "BSD",
-    arch: ["aarch64","x86_64"],
+    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
     c1: "v1",
     source: "github:/arlac77/npm-pkgbuild"
   },

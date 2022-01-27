@@ -11,11 +11,13 @@ import { RPM } from "./output/rpm.mjs";
 export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 export const allOutputs = [DEB, ARCH, RPM];
 
-const npmArchMapping = {
+export const npmArchMapping = {
   arm64: "aarch64",
   arm: "armv7h",
   x64: "x86_64"
 };
+
+export const archMapping = Object.fromEntries(Object.entries(npmArchMapping).map(a=>[a[1],a[0]]));
 
 /**
  * Extract package definition from package.json.
@@ -70,7 +72,7 @@ export async function extractFromPackage(pkg, dir) {
       if (pkgbuild.abstract || !modulePath) {
         if (pkgbuild.arch) {
           for (const a of asArray(pkgbuild.arch)) {
-            if(hostArch === a) {
+            if(npmArchMapping[hostArch] === a) {
               arch.add(a);
             }
           }

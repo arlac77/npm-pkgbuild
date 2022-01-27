@@ -53,7 +53,7 @@ program
         let values = value.split(/,/);
         if (values.length > 1) {
           values = values.map(v => process.env[v] || v);
-          return { url: value[0], user: value[1], password: value[2] };
+          return { url: values[0], user: values[1], password: values[2] };
         }
 
         return { url: value };
@@ -129,7 +129,7 @@ program
 
         if (options.verbose) {
           console.log(output.properties);
-          console.log(`sources: ${sources}`);
+          console.log(`sources: ${sources.join('\n  ')}`);
         }
 
         const fileName = await output.execute(

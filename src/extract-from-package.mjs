@@ -1,3 +1,4 @@
+import { arch as hostArch } from 'process';
 import { packageWalker } from "npm-package-walker";
 import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
@@ -69,7 +70,9 @@ export async function extractFromPackage(pkg, dir) {
       if (pkgbuild.abstract || !modulePath) {
         if (pkgbuild.arch) {
           for (const a of asArray(pkgbuild.arch)) {
-            arch.add(a);
+            if(hostArch === a) {
+              arch.add(a);
+            }
           }
         }
 

@@ -13,7 +13,7 @@ export const allOutputs = [DEB, ARCH, RPM];
 const npmArchMapping = {
   arm64: "aarch64",
   arm: "armv7h",
-  x86: "x86_64"
+  x64: "x86_64"
 };
 
 /**

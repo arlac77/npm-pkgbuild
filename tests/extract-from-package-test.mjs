@@ -50,6 +50,12 @@ test(
 
 test(
   efpt,
+  { name: "n1", description: "d1", version: "1.2.3", "cpu": "x64", pkg: {} },
+  { name: "n1", description: "d1", version: "1.2.3", "arch": ["x86_64"] }
+);
+
+test(
+  efpt,
   {
     name: "n1",
     description: "d1",

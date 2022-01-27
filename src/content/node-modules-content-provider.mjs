@@ -48,7 +48,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({
-      rm: ["@types/node", "@types/uuid"],
+      //rm: ["@types/node", "@types/uuid"],
       update: true,
       prune: true,
       saveType: "prod"
@@ -171,6 +171,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$",
+    ")$|(node_modules\/\@types)",
   "i"
 );

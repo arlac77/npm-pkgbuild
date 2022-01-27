@@ -171,6 +171,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$|(node_modules\/\@types)",
+    ")$|(node_modules\/(\@types|node\-addon\-api))",
   "i"
 );

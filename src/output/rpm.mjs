@@ -1,4 +1,5 @@
 import { join } from "path";
+import { createReadStream } from "fs";
 import { cp } from "fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
@@ -8,7 +9,22 @@ import {
   colonSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, fieldProvider } from "../util.mjs";
+import {
+  copyEntries,
+  fieldProvider,
+  utf8StreamOptions,
+  extractFunctions
+} from "../util.mjs";
+
+/**
+ * map install hook named from arch to rpm
+ */
+const hookMapping = {
+  pre_instll: "pre",
+  post_install: "post",
+  pre_remove: "preun",
+  post_remove: "postun"
+};
 
 export class RPM extends Packager {
   static get name() {
@@ -64,28 +80,34 @@ export class RPM extends Packager {
 
     async function* trailingLines() {
       yield "%define _unpackaged_files_terminate_build 0\n";
+      yield `%description\n\n`;
 
-      for (const [name, options] of Object.entries(sections)) {
-        if (options.mandatory) {
-          yield `%${name}\n\n`;
-
-          if (name === "files") {
-            for (const file of files) {
-              yield "/" + file + "\n";
-            }
-
-            for await (const file of copyEntries(
-              transform(sources, transformer),
-              staging,
-              expander
-            )) {
-              if (options.verbose) {
-                console.log(file.destination);
-              }
-              yield file.destination + "\n";
-            }
+      if (options.hooks) {
+        for (const f of extractFunctions(
+          createReadStream(options.hooks, utf8StreamOptions)
+        )) {
+          const name = hookMapping[f.name];
+          if (name) {
+            yield `%${name}\n`;
+            yield f.body;
           }
         }
+      }
+
+      yield `%files\n\n`;
+      for (const file of files) {
+        yield "/" + file + "\n";
+      }
+
+      for await (const file of copyEntries(
+        transform(sources, transformer),
+        staging,
+        expander
+      )) {
+        if (options.verbose) {
+          console.log(file.destination);
+        }
+        yield file.destination + "\n";
       }
     }
 
@@ -158,14 +180,4 @@ const fields = {
   },
   URL: { alias: "homepage", type: "string" },
   Requires: { type: "string[]" }
-};
-
-const sections = {
-  description: { mandatory: true },
-  prep: { mandatory: false },
-  build: { mandatory: false },
-  install: { mandatory: false },
-  check: { mandatory: false },
-  files: { mandatory: true },
-  changelog: { mandatory: false }
 };

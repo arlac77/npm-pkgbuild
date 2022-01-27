@@ -82,14 +82,19 @@ export class RPM extends Packager {
       yield "%define _unpackaged_files_terminate_build 0\n";
       yield `%description\n\n`;
 
-      if (options.hooks) {
-        for (const f of extractFunctions(
-          createReadStream(options.hooks, utf8StreamOptions)
+      if (properties.hooks) {
+        for await (const f of extractFunctions(
+          createReadStream(properties.hooks, utf8StreamOptions)
         )) {
           const name = hookMapping[f.name];
           if (name) {
             yield `%${name}\n`;
-            yield f.body;
+
+            yield f.body.replace(
+              /\{\{(\w+)\}\}/m,
+              (match, key, offset, string) =>
+                properties[key] || "{{" + key + "}}"
+            ) + "\n\n";
           }
         }
       }

@@ -16,7 +16,8 @@ test("rpm", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT"
+    license: "MIT",
+    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
   };
 
   const out = new RPM(properties);
@@ -31,7 +32,7 @@ test("rpm", async t => {
     aggregateFifo(sources),
     transformer,
     dependencies,
-    { destination, verbose: false }
+    { destination, verbose: true }
   );
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 

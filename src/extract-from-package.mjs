@@ -1,4 +1,4 @@
-import { arch as hostArch } from 'process';
+import { arch as hostArch } from "process";
 import { packageWalker } from "npm-package-walker";
 import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
@@ -17,7 +17,9 @@ export const npmArchMapping = {
   x64: "x86_64"
 };
 
-export const archMapping = Object.fromEntries(Object.entries(npmArchMapping).map(a=>[a[1],a[0]]));
+export const archMapping = Object.fromEntries(
+  Object.entries(npmArchMapping).map(a => [a[1], a[0]])
+);
 
 /**
  * Extract package definition from package.json.
@@ -72,7 +74,7 @@ export async function extractFromPackage(pkg, dir) {
       if (pkgbuild.abstract || !modulePath) {
         if (pkgbuild.arch) {
           for (const a of asArray(pkgbuild.arch)) {
-            if(npmArchMapping[hostArch] === a) {
+            if (npmArchMapping[hostArch] === a) {
               arch.add(a);
             }
           }
@@ -83,7 +85,7 @@ export async function extractFromPackage(pkg, dir) {
             arch.add(npmArchMapping[a]);
           }
         }
-    
+
         Object.assign(output, pkgbuild.output);
 
         Object.entries(pkgbuild)

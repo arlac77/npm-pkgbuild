@@ -171,6 +171,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$|(node_modules\/(\@types|node\-addon\-api)|win32\-(ia32|x64))",
+    ")$|(node_modules\/(\@types|node\-addon\-api)|(win32|android|darwin)\-(ia32|x64|arm|arm64))",
   "i"
 );

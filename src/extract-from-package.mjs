@@ -72,17 +72,15 @@ export async function extractFromPackage(pkg, dir) {
       const pkgbuild = pkg.pkg;
 
       if (pkgbuild.abstract || !modulePath) {
-        if (pkgbuild.arch) {
-          for (const a of asArray(pkgbuild.arch)) {
-            if (npmArchMapping[hostArch] === a) {
-              arch.add(a);
-            }
-          }
-        }
-
         if (pkg.cpu) {
           for (const a of asArray(pkg.cpu)) {
             arch.add(npmArchMapping[a]);
+          }
+        }
+  
+        if (pkgbuild.arch) {
+          for (const a of asArray(pkgbuild.arch)) {
+              arch.add(a);
           }
         }
 
@@ -132,7 +130,7 @@ export async function extractFromPackage(pkg, dir) {
   processPkg(pkg, dir);
 
   if (arch.size > 0) {
-    properties.arch = [...arch];
+    properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch])
   }
 
   return { properties, sources, dependencies, output };

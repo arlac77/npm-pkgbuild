@@ -46,14 +46,13 @@ efpt.title = (
 
 test(
   efpt,
-  { name: "n1", description: "d1", version: "1.2.3", cpu: "arm64", pkg: {} },
-  { name: "n1", description: "d1", version: "1.2.3", arch: ["aarch64"] }
-);
-
-test(
-  efpt,
-  { name: "n1", description: "d1", version: "1.2.3", cpu: "x64", pkg: {} },
-  { name: "n1", description: "d1", version: "1.2.3", arch: ["x86_64"] }
+  { name: "n1", description: "d1", version: "1.2.3", cpu: hostArch, pkg: {} },
+  {
+    name: "n1",
+    description: "d1",
+    version: "1.2.3",
+    arch: [npmArchMapping[hostArch]]
+  }
 );
 
 test(
@@ -85,6 +84,20 @@ test(
   undefined,
   undefined,
   { dep: {} }
+);
+
+test(
+  efpt,
+  {
+    cpu: ["arm64", "x64"],
+    pkg: {}
+  },
+  {
+    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/]
+  },
+  undefined,
+  undefined,
+  {  }
 );
 
 test(

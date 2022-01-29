@@ -30,7 +30,7 @@ test(
     base: new URL("fixtures/skeleton", import.meta.url).pathname
   },
   "dest",
-  [{name:"package.json",destination:"dest/"}]
+  [{name:"package.json",destination:"dest"}]
 );
 
 test(
@@ -40,7 +40,7 @@ test(
     pattern: "**/*.json"
   },
   "dest",
-  [{name:"package.json", destination: "dest/"}]
+  [{name:"package.json", destination: "dest"}]
 );
 
 test(

@@ -30,6 +30,9 @@ export class FileContentProvider extends ContentProvider {
     } else {
       this.definitions = { pattern: ["**/*"], ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
+      if(!entryProperties.destination.endsWith('/')) {
+      	entryProperties.destination += '/';
+      }
     }
 
     this.entryProperties = entryProperties;

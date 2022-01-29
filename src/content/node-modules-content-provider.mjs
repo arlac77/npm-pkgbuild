@@ -48,7 +48,6 @@ export class NodeModulesContentProvider extends ContentProvider {
 
     const arb = new Arborist({ path: tmp });
     await arb.buildIdealTree({
-      //rm: ["@types/node", "@types/uuid"],
       update: true,
       prune: true,
       saveType: "prod"
@@ -159,7 +158,7 @@ const toBeSkipped = new RegExp(
       "\\.jscs\\.json",
       "sauce-labs\\.svg",
       "PATENTS(\\.md)?",
-      "release-notes\\.md"
+      "release-notes\\.md",
       "NOTICE(\\.md)?",
       "SUMMARY\\.md",
       "MIGRAT.*\\.md",

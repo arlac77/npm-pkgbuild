@@ -4,7 +4,7 @@ import { readFileSync, createWriteStream } from "fs";
 import { mkdir } from "fs/promises";
 import { fileURLToPath } from "url";
 import { join, dirname } from "path";
-import program from "commander";
+import { program } from "commander";
 import { pkgbuild } from "./pkgbuild.mjs";
 import { rpmspec } from "./rpmspec.mjs";
 import { systemd } from "./systemd.mjs";

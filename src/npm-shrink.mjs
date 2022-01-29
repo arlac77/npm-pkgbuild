@@ -94,7 +94,8 @@ export function shrinkNPM(pkg) {
     "readmeFilename",
     "readme",
     "node-gyp-build-optional",
-    "node-gyp-build-test"
+    "node-gyp-build-test",
+    "jsdelivr"
   ].map(key => {
     delete pkg[key];
   });

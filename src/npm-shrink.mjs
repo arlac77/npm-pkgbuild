@@ -79,6 +79,7 @@ export function shrinkNPM(pkg) {
     "coordinates",
     "tap",
     "typesVersions",
+    "typeCoverage",
     "node-gyp-build-optional",
     "node-gyp-build-test",
     "gitHead",

@@ -3,7 +3,7 @@
 import { readFileSync } from "fs";
 import { readFile } from "fs/promises";
 import { join } from "path";
-import { program } from "commander";
+import { program } from "commander";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { createContext } from "expression-expander";
 import { packageDirectory } from "pkg-dir";

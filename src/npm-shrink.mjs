@@ -1,7 +1,7 @@
-export function shrinkNPM(pkg) {
-  [
-    "version",
-    "name",
+const nameAndVersion = ["name", "version"];
+
+export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion }) {
+  const toBeRemoved = [
     "dependencies",
     "sideEffects",
     "jspm",
@@ -95,10 +95,23 @@ export function shrinkNPM(pkg) {
     "readme",
     "node-gyp-build-optional",
     "node-gyp-build-test",
-    "jsdelivr"
-  ].map(key => {
+    "jsdelivr",
+    "types",
+    "unpkg",
+    "shim",
+    "browser",
+    "testling"
+  ];
+
+  toBeRemoved.map(key => {
     delete pkg[key];
   });
+
+  if (options && options.removeKeys) {
+    options.removeKeys.map(key => {
+      delete pkg[key];
+    });
+  }
 
   switch (pkg.main) {
     case "index":
@@ -115,12 +128,5 @@ export function shrinkNPM(pkg) {
     }
   }
 
-  for (const toBeRemoved of ["types", "unpkg", "shim", "browser", "testling"]) {
-    // TODO mark files as to be skipped
-
-    delete pkg[toBeRemoved];
-  }
-
-  return Object.keys(pkg).length === 0 ? undefined : pkg
+  return Object.keys(pkg).length === 0 ? undefined : pkg;
 }
-

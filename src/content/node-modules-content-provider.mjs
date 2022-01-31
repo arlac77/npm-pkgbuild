@@ -61,7 +61,8 @@ export class NodeModulesContentProvider extends ContentProvider {
       if (!toBeSkipped.test(name)) {
         if (name.endsWith("package.json")) {
           const json = shrinkNPM(
-            JSON.parse(await readFile(join(tmp, name), utf8StreamOptions))
+            JSON.parse(await readFile(join(tmp, name), utf8StreamOptions)),
+            {}
           );
 
           if (json) {
@@ -180,6 +181,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$|(node_modules\/(\@types|node\-addon\-api)|(win32|android|darwin)\-(ia32|x64|arm|arm64))",
+    ")$|(node_modules/(@types|node-addon-api)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"
 );

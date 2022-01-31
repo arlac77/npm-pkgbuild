@@ -51,6 +51,7 @@ test(
     name: "n1",
     description: "d1",
     version: "1.2.3",
+    access: "private",
     arch: [npmArchMapping[hostArch]]
   }
 );
@@ -77,6 +78,7 @@ test(
     version: "1.2.3",
     other: "o1",
     license: "BSD",
+    access: "private",
     arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
     c1: "v1",
     source: "github:/arlac77/npm-pkgbuild"
@@ -93,11 +95,12 @@ test(
     pkg: {}
   },
   {
+    access: "private",
     arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/]
   },
   undefined,
   undefined,
-  {  }
+  {}
 );
 
 test(
@@ -110,13 +113,16 @@ test(
       }
     ]
   },
-  { maintainer: "Markus Felten <markus.felten@gmx.de>" }
+  { access: "private", maintainer: "Markus Felten <markus.felten@gmx.de>" }
 );
 
 test(
   efpt,
   {
     name: "konsum-frontend",
+    "publishConfig": {
+      "access": "public"
+    },  
     pkg: {
       content: {
         "${installdir}": [
@@ -142,6 +148,7 @@ test(
     }
   },
   {
+    access: "public",
     groups: "home automation",
     hooks: "pkgbuild/hooks.sh",
     installdir: "/services/konsum/frontend",

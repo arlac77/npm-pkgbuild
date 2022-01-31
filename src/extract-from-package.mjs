@@ -46,6 +46,11 @@ export async function extractFromPackage(pkg, dir) {
     properties.name = properties.name.replace(/^\@\w+\//, "");
   }
 
+  properties.access = "private";
+  if (pkg.publishConfig) {
+    properties.access = pkg.publishConfig.access;
+  }
+
   if (pkg.contributors) {
     properties.maintainer = pkg.contributors.map(
       c => `${c.name} <${c.email}>`
@@ -77,10 +82,10 @@ export async function extractFromPackage(pkg, dir) {
             arch.add(npmArchMapping[a]);
           }
         }
-  
+
         if (pkgbuild.arch) {
           for (const a of asArray(pkgbuild.arch)) {
-              arch.add(a);
+            arch.add(a);
           }
         }
 
@@ -130,7 +135,7 @@ export async function extractFromPackage(pkg, dir) {
   processPkg(pkg, dir);
 
   if (arch.size > 0) {
-    properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch])
+    properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch]);
   }
 
   return { properties, sources, dependencies, output };

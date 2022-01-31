@@ -136,7 +136,6 @@ const toBeSkipped = new RegExp(
       "Makefile(\\.am|\\.fallback|\\.msc)?",
       "\\.cmake",
       "\\.mk",
-      "\\.d",
       "\\.patch",
       "\\.esl*",
       "\\.zuul\\.yml",

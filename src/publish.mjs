@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 
 export function analysePublish(publish, properties) {
   publish.url = publish.url.replace(
-    /\{\{(\w+)\}\}/m,
+    /\{\{(\w+)\}\}/mg,
     (match, key, offset, string) => properties[key] || '{{' + key + '}}'
   );
 

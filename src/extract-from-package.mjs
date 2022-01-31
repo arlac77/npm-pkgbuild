@@ -1,5 +1,6 @@
 import { arch as hostArch } from "process";
 import { packageWalker } from "npm-package-walker";
+import { createContext } from "expression-expander";
 import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
@@ -67,6 +68,8 @@ export async function extractFromPackage(pkg, dir) {
     }
   }
 
+  const context = createContext({ properties });
+
   let dependencies = { ...pkg.engines };
   let sources = [];
   let output = {};
@@ -98,6 +101,8 @@ export async function extractFromPackage(pkg, dir) {
         if (pkgbuild.content && !modulePath) {
           Object.entries(pkgbuild.content).forEach(
             ([destination, definitions]) => {
+              destination = context.expand(destination);
+              definitions = context.expand(definitions);
               for (const definition of asArray(definitions)) {
                 const entryProperties = { destination };
 

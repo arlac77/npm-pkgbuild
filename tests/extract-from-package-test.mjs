@@ -157,17 +157,17 @@ test(
   [
     new NPMPackContentProvider(
       { dir: dirname(new URL(import.meta.url).pathname) },
-      { destination: "${installdir}" }
+      { destination: "/services/konsum/frontend" }
     ),
     new FileContentProvider(
       { base: "build" },
-      { destination: "${installdir}" }
+      { destination: "/services/konsum/frontend" }
     ),
-    new FileContentProvider({ base: "dist" }, { destination: "${installdir}" }),
+    new FileContentProvider({ base: "dist" }, { destination: "/services/konsum/frontend" }),
 
     new FileContentProvider(
       { base: "pkgbuild", pattern: ["nginx.conf"] },
-      { destination: "/etc/nginx/sites/common/${name}.conf" }
+      { destination: "/etc/nginx/sites/common/konsum-frontend.conf" }
     )
   ],
   {

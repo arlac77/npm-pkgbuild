@@ -30,7 +30,7 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.dir}`;
+    return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;
   }
 
   async *[Symbol.asyncIterator]() {

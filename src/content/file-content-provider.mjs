@@ -30,7 +30,7 @@ export class FileContentProvider extends ContentProvider {
     } else {
       this.definitions = { pattern: ["**/*"], ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
-/*
+      /*
       if(entryProperties && entryProperties.destination && !entryProperties.destination.endsWith('/')) {
       	entryProperties.destination += '/';
       }
@@ -41,13 +41,14 @@ export class FileContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern}`;
+    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties.destination}`;
   }
 
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
     const base = definitions.base;
 
+    console.log("XXX", base, definitions.pattern);
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {

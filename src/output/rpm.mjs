@@ -24,6 +24,9 @@ const hookMapping = {
   post_install: "post",
   pre_remove: "preun",
   post_remove: "postun"
+/* TODO with logic check $1
+  pre_upgrade:
+  post_upgrade:*/
 };
 
 export class RPM extends Packager {

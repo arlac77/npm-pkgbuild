@@ -48,7 +48,6 @@ export class FileContentProvider extends ContentProvider {
     const definitions = this.definitions;
     const base = definitions.base;
 
-    console.log("XXX", base, definitions.pattern);
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {

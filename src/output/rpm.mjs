@@ -177,7 +177,7 @@ const fields = {
   Version: { alias: "version", type: "string", mandatory: true },
   Release: { alias: "release", type: "integer", default: 1, mandatory: true },
   Source0: { alias: "source", type: "string" },
-  Group: { alias: "group", type: "string" },
+  Group: { alias: "groups", type: "string" },
   Packager: { alias: "maintainer", type: "string" },
   Vendor: { alias: "vendor", type: "string" },
   BuildArch: {

@@ -25,8 +25,6 @@ const { version, description } = JSON.parse(
   utf8StreamOptions
 );
 
-const cwd = process.cwd();
-
 program.description(description).version(version);
 
 allOutputs.forEach(o => program.option(`--${o.name}`, o.description));

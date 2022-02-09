@@ -103,6 +103,7 @@ const toBeSkipped = new RegExp(
       "\\.cs",
       "\\.markdown",
       "appveyor\\.yml",
+      "seed\\.yml",
       "\\.xclangspec",
       "\\.pbfilespec",
       "yarn\\.lock",

@@ -8,6 +8,7 @@ import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
 import { shrinkNPM } from "../npm-shrink.mjs";
+
 /**
  * Content from node_modules
  */
@@ -171,7 +172,7 @@ const toBeSkipped = new RegExp(
       "\\.babelrc.*",
       "\\.nycrc",
       "\\.env",
-      "x-package\\.json5",
+      "x-package\\.json5?",
       "component\\.json",
       "tsconfig\\.json",
       "cypress\\.json",

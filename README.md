@@ -35,11 +35,19 @@ The resulting pkg will contain the package dist content and all production depen
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters)
     *   [name](#name)
-*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+*   [extractFunctions](#extractfunctions)
     *   [Parameters](#parameters-1)
+*   [fieldProvider](#fieldprovider)
+    *   [Parameters](#parameters-2)
+*   [Expander](#expander)
+    *   [Parameters](#parameters-3)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-4)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+    *   [Parameters](#parameters-5)
     *   [name](#name-1)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-2)
+    *   [Parameters](#parameters-6)
     *   [name](#name-2)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [fields](#fields)
@@ -48,19 +56,11 @@ The resulting pkg will contain the package dist content and all production depen
 *   [Field](#field)
     *   [Properties](#properties)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-3)
+    *   [Parameters](#parameters-7)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-4)
+        *   [Parameters](#parameters-8)
 *   [hookMapping](#hookmapping)
-*   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-5)
-*   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-6)
-*   [Expander](#expander)
-    *   [Parameters](#parameters-7)
-*   [copyEntries](#copyentries)
-    *   [Parameters](#parameters-8)
 
 ## ContentProvider
 
@@ -89,6 +89,46 @@ Content provided form the file system.
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## extractFunctions
+
+Extract shell functions from a given text
+
+### Parameters
+
+*   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+Returns **AsyncIterator\<FunctionDecl>** 
+
+## fieldProvider
+
+### Parameters
+
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `fields` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+Returns **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+
+## Expander
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+### Parameters
+
+*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+## copyEntries
+
+Copy content from source into destinationDirectory.
+
+### Parameters
+
+*   `source` **AsyncIterator\<ContentEntry>** 
+*   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
+*   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>** 
 
 ## NodeModulesContentProvider
 
@@ -174,46 +214,6 @@ Execute package generation
 ## hookMapping
 
 map install hook named from arch to rpm
-
-## extractFunctions
-
-Extract shell functions from a given text
-
-### Parameters
-
-*   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
-
-Returns **AsyncIterator\<FunctionDecl>** 
-
-## fieldProvider
-
-### Parameters
-
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-*   `fields` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-Returns **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
-
-## Expander
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-### Parameters
-
-*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-## copyEntries
-
-Copy content from source into destinationDirectory.
-
-### Parameters
-
-*   `source` **AsyncIterator\<ContentEntry>** 
-*   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
-*   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>** 
 
 # install
 

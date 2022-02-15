@@ -52,7 +52,7 @@
     "node-fetch": "^3.2.0",
     "npm-package-walker": "^5.0.5",
     "npm-packlist": "^3.0.0",
-    "pacote": "^12.0.3",
+    "pacote": "^13.0.0",
     "pkg-dir": "^6.0.1",
     "tar-stream": "^2.2.0"
   },

@@ -1,6 +1,6 @@
 const nameAndVersion = ["name", "version"];
 
-export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion }) {
+export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDefaults: flase }) {
   const toBeRemoved = [
     "dependencies",
     "sideEffects",
@@ -113,13 +113,15 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion }) {
     });
   }
 
-  switch (pkg.main) {
-    case "index":
-    case "./index":
-    case "index.js":
-    case "./index.js":
-    case "":
-      delete pkg.main;
+  if(options.removeDefaults) {
+    switch (pkg.main) {
+      case "index":
+      case "./index":
+      case "index.js":
+      case "./index.js":
+      case "":
+        delete pkg.main;
+    }
   }
 
   for (const key of Object.keys(pkg)) {

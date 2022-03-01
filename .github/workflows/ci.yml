@@ -18,7 +18,7 @@ jobs:
           https://github.com/ThePoorPilot/pacman-utils/releases/download/5.2.2-3_2.31-0/pacman-utils_5.2.2-3_amd64.deb
 
           sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build / Test Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -40,7 +40,7 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0

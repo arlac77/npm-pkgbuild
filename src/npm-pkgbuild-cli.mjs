@@ -51,7 +51,19 @@ program
         let values = value.split(/,/);
         if (values.length > 1) {
           values = values.map(v => process.env[v] || v);
-          return { url: values[0], user: values[1], password: values[2] };
+          let password = values[2];
+          const m = password.match(/\{([^\}]+)\}(.*)/);
+          if (m) {
+            switch (m[1]) {
+              case "BASE64":
+                password = Buffer.from(m[2], "base64").toString("utf8");
+                break;
+              default:
+                console.log(`Unknown algorithm ${m[1]}`);
+            }
+          }
+
+          return { url: values[0], user: values[1], password };
         }
 
         return { url: value };
@@ -127,7 +139,7 @@ program
 
         if (options.verbose) {
           console.log(output.properties);
-          console.log(`sources: ${sources.join('\n  ')}`);
+          console.log(`sources: ${sources.join("\n  ")}`);
         }
 
         const fileName = await output.execute(

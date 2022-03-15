@@ -1,6 +1,6 @@
 import { join } from "path";
 import { execa } from "execa";
-import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { EmptyContentEntry, ReadableStreamContentEntry, StringContentEntry } from "content-entry";
 import {
   transform,
   createPropertiesTransformer
@@ -8,6 +8,14 @@ import {
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import { copyEntries, fieldProvider } from "../util.mjs";
+
+/**
+ * map install hook named from arch to deb
+ */
+const hookMapping = {
+  post_install: "DEBIAN/postinst",
+  post_remove: "DEBIAN/postrm"
+};
 
 export class DEB extends Packager {
   static get name() {
@@ -41,7 +49,9 @@ export class DEB extends Packager {
   }
 
   async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, staging, destination } = await this.prepareExecute(options);
+    const { properties, staging, destination } = await this.prepareExecute(
+      options
+    );
 
     transformer.push(
       createPropertiesTransformer(
@@ -50,6 +60,33 @@ export class DEB extends Packager {
         "mode"
       )
     );
+
+    if (properties.hooks) {
+      for await (const f of extractFunctions(
+        createReadStream(properties.hooks, utf8StreamOptions)
+      )) {
+        const name = hookMapping[f.name];
+        if (name) {
+          transformer.push({
+            match: entry => entry.name === name,
+            transform: async entry =>
+              new ReadableStreamContentEntry(
+                entry.name,
+                keyValueTransformer(await entry.readStream, fp)
+              ),
+            createEntryWhenMissing: () =>
+              new StringContentEntry(
+                name,
+                f.body.replace(
+                  /\{\{(\w+)\}\}/m,
+                  (match, key, offset, string) =>
+                    properties[key] || "{{" + key + "}}"
+                )
+              )
+          });
+        }
+      }
+    }
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";

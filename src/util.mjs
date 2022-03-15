@@ -6,6 +6,26 @@ import { createWriteStream } from "fs";
 export const utf8StreamOptions = { encoding: "utf8" };
 
 /**
+ * Decode a password
+ * @param {string} password 
+ * @returns {string} plaintext password
+ */
+export function decodePassword(password)
+{
+  const m = password.match(/\{([^\}]+)\}(.*)/);
+  if (m) {
+    switch (m[1]) {
+      case "BASE64":
+        return Buffer.from(m[2], "base64").toString("utf8");
+        break;
+      default:
+        throw new Error(`Unknown algorithm ${m[1]}`);
+    }
+  }
+  return password;
+}
+
+/**
  * Extract shell functions from a given text
  * @param {AsyncIterator<string>} source
  * @return {AsyncIterator<FunctionDecl>}

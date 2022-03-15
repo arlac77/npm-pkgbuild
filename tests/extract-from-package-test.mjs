@@ -69,7 +69,7 @@ test(
       arch: ["aarch64", "x86_64"],
       name: "n2",
       other: "o1",
-      output: { dep: {} }
+      output: { deb: {} }
     }
   },
   {
@@ -85,7 +85,7 @@ test(
   },
   undefined,
   undefined,
-  { dep: {} }
+  { deb: {} }
 );
 
 test(

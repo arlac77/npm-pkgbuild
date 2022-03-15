@@ -1,13 +1,17 @@
 import { join } from "path";
 import { execa } from "execa";
-import { EmptyContentEntry, ReadableStreamContentEntry, StringContentEntry } from "content-entry";
+import {
+  EmptyContentEntry,
+  ReadableStreamContentEntry,
+  StringContentEntry
+} from "content-entry";
 import {
   transform,
   createPropertiesTransformer
 } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, fieldProvider } from "../util.mjs";
+import { copyEntries, fieldProvider, extractFunctions } from "../util.mjs";
 
 /**
  * map install hook named from arch to deb

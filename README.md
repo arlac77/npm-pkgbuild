@@ -53,14 +53,16 @@ The resulting pkg will contain the package dist content and all production depen
     *   [execute](#execute)
         *   [Parameters](#parameters-4)
 *   [hookMapping](#hookmapping)
-*   [extractFunctions](#extractfunctions)
+*   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-5)
-*   [fieldProvider](#fieldprovider)
+*   [extractFunctions](#extractfunctions)
     *   [Parameters](#parameters-6)
-*   [Expander](#expander)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-7)
-*   [copyEntries](#copyentries)
+*   [Expander](#expander)
     *   [Parameters](#parameters-8)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-9)
 
 ## ContentProvider
 
@@ -174,6 +176,16 @@ Execute package generation
 ## hookMapping
 
 map install hook named from arch to rpm
+
+## decodePassword
+
+Decode a password
+
+### Parameters
+
+*   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** plaintext password
 
 ## extractFunctions
 

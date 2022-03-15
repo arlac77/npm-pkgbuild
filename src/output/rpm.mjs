@@ -20,7 +20,7 @@ import {
  * map install hook named from arch to rpm
  */
 const hookMapping = {
-  pre_instll: "pre",
+  pre_install: "pre",
   post_install: "post",
   pre_remove: "preun",
   post_remove: "postun"

@@ -1,4 +1,5 @@
 import { join } from "path";
+import { createReadStream } from "fs";
 import { execa } from "execa";
 import {
   EmptyContentEntry,
@@ -11,7 +12,12 @@ import {
 } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { copyEntries, fieldProvider, extractFunctions } from "../util.mjs";
+import {
+  copyEntries,
+  fieldProvider,
+  extractFunctions,
+  utf8StreamOptions
+} from "../util.mjs";
 
 /**
  * map install hook named from arch to deb
@@ -57,14 +63,6 @@ export class DEB extends Packager {
       options
     );
 
-    transformer.push(
-      createPropertiesTransformer(
-        entry => (entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true : false),
-        { mode: { value: 0o775 } },
-        "mode"
-      )
-    );
-
     if (properties.hooks) {
       for await (const f of extractFunctions(
         createReadStream(properties.hooks, utf8StreamOptions)
@@ -91,6 +89,14 @@ export class DEB extends Packager {
         }
       }
     }
+
+    transformer.push(
+      createPropertiesTransformer(
+        entry => (entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true : false),
+        { mode: { value: 0o775 } },
+        "mode"
+      )
+    );
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";

@@ -16,7 +16,8 @@ test("deb", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT"
+    license: "MIT",
+    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
   };
 
   const out = new DEB(properties);

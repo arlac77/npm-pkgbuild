@@ -45,6 +45,8 @@ The resulting pkg will contain the package dist content and all production depen
 *   [fields](#fields)
 *   [fields](#fields-1)
 *   [fields](#fields-2)
+*   [hookMapping](#hookmapping)
+*   [hookMapping](#hookmapping-1)
 *   [Field](#field)
     *   [Properties](#properties)
 *   [Packager](#packager)
@@ -52,7 +54,6 @@ The resulting pkg will contain the package dist content and all production depen
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
         *   [Parameters](#parameters-4)
-*   [hookMapping](#hookmapping)
 *   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-5)
 *   [extractFunctions](#extractfunctions)
@@ -138,6 +139,14 @@ well known package properties
 
 *   **See**: <https://rpm-packaging-guide.github.io>
 
+## hookMapping
+
+map install hook named from arch to deb
+
+## hookMapping
+
+map install hook named from arch to rpm
+
 ## Field
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
@@ -172,10 +181,6 @@ Execute package generation
 *   `dependencies`  
 *   `options`  
 *   `expander`  
-
-## hookMapping
-
-map install hook named from arch to rpm
 
 ## decodePassword
 

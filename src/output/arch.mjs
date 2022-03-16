@@ -12,6 +12,7 @@ import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
+import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
 import {
   copyEntries,
@@ -136,7 +137,7 @@ package() {
     });
 
     for await (const file of copyEntries(
-      transform(sources, transformer),
+      transform(aggregateFifo(sources), transformer),
       join(staging, "src"),
       expander
     )) {

@@ -8,6 +8,7 @@ import {
   keyValueTransformer,
   colonSeparatedKeyValuePairOptions
 } from "key-value-transformer";
+import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
 import {
   copyEntries,
@@ -122,7 +123,7 @@ export class RPM extends Packager {
     const fp = fieldProvider(properties, fields);
 
     for await (const file of copyEntries(
-      transform(sources, [
+      transform(aggregateFifo(sources), [
         {
           match: entry => entry.name === specFileName,
           transform: async entry =>

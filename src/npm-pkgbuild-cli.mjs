@@ -131,7 +131,7 @@ program
         }
 
         const fileName = await output.execute(
-          aggregateFifo(sources.map(c => c[Symbol.asyncIterator]())),
+          sources.map(c => c[Symbol.asyncIterator]()),
           transformer,
           dependencies,
           options,

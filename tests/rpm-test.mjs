@@ -2,7 +2,6 @@ import test from "ava";
 import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, RPM } from "npm-pkgbuild";
 
 test("rpm", async t => {
@@ -29,7 +28,7 @@ test("rpm", async t => {
     konsum: ">=4.3.8"
   };
   const fileName = await out.execute(
-    aggregateFifo(sources),
+    sources,
     transformer,
     dependencies,
     { destination, verbose: true }

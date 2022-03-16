@@ -2,7 +2,6 @@ import test from "ava";
 import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, DEB } from "npm-pkgbuild";
 
 test("deb", async t => {
@@ -17,6 +16,7 @@ test("deb", async t => {
     version: "1.0.0",
     description: "a description",
     license: "MIT",
+    maintainer: "hugo",
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
   };
 
@@ -28,12 +28,10 @@ test("deb", async t => {
     konsum: ">=4.3.8"
   };
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.execute(
-    aggregateFifo(sources),
-    transformer,
-    dependencies,
-    { destination }
-  );
+  const fileName = await out.execute(sources, transformer, dependencies, {
+    destination,
+    verbose: false
+  });
   t.is(fileName, join(destination, "abc_1.0.0_all.deb"));
 
   const s = await stat(fileName);

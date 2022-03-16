@@ -10,6 +10,7 @@ import {
   transform,
   createPropertiesTransformer
 } from "content-entry-transform";
+import { aggregateFifo } from "aggregate-async-iterator";
 import { keyValueTransformer } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
 import {
@@ -58,40 +59,30 @@ export class DEB extends Packager {
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
-  async execute(sources, transformer, dependencies, options, expander) {
-    const { properties, staging, destination } = await this.prepareExecute(
-      options
-    );
-
+  async *hookFiles(properties) {
     if (properties.hooks) {
       for await (const f of extractFunctions(
         createReadStream(properties.hooks, utf8StreamOptions)
       )) {
         const name = hookMapping[f.name];
         if (name) {
-          transformer.push({
-            match: entry => entry.name === name,
-            transform: async entry =>
-              new ReadableStreamContentEntry(
-                entry.name,
-                keyValueTransformer(await entry.readStream, fp)
-              ),
-            createEntryWhenMissing: () =>
-              Object.create(
-                new StringContentEntry(
-                  name,
-                  f.body.replace(
-                    /\{\{(\w+)\}\}/m,
-                    (match, key, offset, string) =>
-                      properties[key] || "{{" + key + "}}"
-                  )
-                ),
-                { mode: { value: 0o775 } }
-              )
-          });
+          yield new StringContentEntry(
+            name,
+            f.body.replace(
+              /\{\{(\w+)\}\}/m,
+              (match, key, offset, string) =>
+                properties[key] || "{{" + key + "}}"
+            )
+          );
         }
       }
     }
+  }
+
+  async execute(sources, transformer, dependencies, options, expander) {
+    const { properties, staging, destination } = await this.prepareExecute(
+      options
+    );
 
     transformer.push(
       createPropertiesTransformer(
@@ -115,12 +106,15 @@ export class DEB extends Packager {
     });
 
     for await (const file of copyEntries(
-      transform(sources, transformer),
+      transform(
+        aggregateFifo([...sources, this.hookFiles(properties)]),
+        transformer
+      ),
       staging,
       expander
     )) {
       if (options.verbose) {
-        console.log(file.destination);
+        console.log(file.destination, `mode=${file.mode}`);
       }
     }
 

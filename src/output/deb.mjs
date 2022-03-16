@@ -77,13 +77,16 @@ export class DEB extends Packager {
                 keyValueTransformer(await entry.readStream, fp)
               ),
             createEntryWhenMissing: () =>
-              new StringContentEntry(
-                name,
-                f.body.replace(
-                  /\{\{(\w+)\}\}/m,
-                  (match, key, offset, string) =>
-                    properties[key] || "{{" + key + "}}"
-                )
+              Object.create(
+                new StringContentEntry(
+                  name,
+                  f.body.replace(
+                    /\{\{(\w+)\}\}/m,
+                    (match, key, offset, string) =>
+                      properties[key] || "{{" + key + "}}"
+                  )
+                ),
+                { mode: { value: 0o775 } }
               )
           });
         }

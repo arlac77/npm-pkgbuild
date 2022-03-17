@@ -5,12 +5,12 @@ import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
-import { DEB } from "./output/deb.mjs";
+import { DEBIAN } from "./output/debian.mjs";
 import { ARCH } from "./output/arch.mjs";
 import { RPM } from "./output/rpm.mjs";
 
 export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
-export const allOutputs = [DEB, ARCH, RPM];
+export const allOutputs = [DEBIAN, ARCH, RPM];
 
 export const npmArchMapping = {
   arm64: "aarch64",

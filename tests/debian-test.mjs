@@ -2,9 +2,9 @@ import test from "ava";
 import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { FileContentProvider, DEB } from "npm-pkgbuild";
+import { FileContentProvider, DEBIAN } from "npm-pkgbuild";
 
-test("deb", async t => {
+test("debian", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -20,7 +20,7 @@ test("deb", async t => {
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
   };
 
-  const out = new DEB(properties);
+  const out = new DEBIAN(properties);
 
   const transformer = [];
   const dependencies = {

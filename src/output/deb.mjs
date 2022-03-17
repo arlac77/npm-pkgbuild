@@ -92,6 +92,10 @@ export class DEB extends Packager {
       )
     );
 
+    properties.Depends = Object.entries(dependencies).map(
+      ([n, e]) => `${n} (${e})`
+    );
+
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
 
@@ -150,13 +154,16 @@ const fields = {
   },
   Homepage: { alias: "homepage", type: "string" },
   Bugs: { alias: "bugs", type: "string" },
-  Depends: { alias: "depends", type: "packageList" },
-  Recommends: { type: "packageList" },
-  Suggests: { type: "packageList" },
-  Provides: { type: "packageList" },
-  Breaks: { type: "packageList" },
-  Replaces: { type: "packageList" },
-
+  Depends: { type: "string[]" },
+  "Pre-Depends": { type: "string[]" },
+  "Build-Depends": { type: "string[]" },
+  "Build-Depends-Indep": { type: "string[]" },
+  "Build-Depends-Arch": { type: "string[]" },
+  Recommends: { type: "string[]" },
+  Suggests: { type: "string[]" },
+  Provides: { type: "string[]" },
+  Breaks: { type: "string[]" },
+  Replaces: { type: "string[]" },
   Source: { alias: "source", type: "string" },
   Uploaders: { mandatory: false },
   "Installed-Size": {}

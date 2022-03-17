@@ -32,7 +32,7 @@ export function decodePassword(password)
  */
 export async function* extractFunctions(source) {
   let name;
-  let body = [];
+  const body = [];
 
   for await (const line of asLines(source)) {
     let m;

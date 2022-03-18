@@ -47,23 +47,23 @@ The resulting pkg will contain the package dist content and all production depen
 *   [fields](#fields-2)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
+*   [decodePassword](#decodepassword)
+    *   [Parameters](#parameters-3)
+*   [extractFunctions](#extractfunctions)
+    *   [Parameters](#parameters-4)
+*   [fieldProvider](#fieldprovider)
+    *   [Parameters](#parameters-5)
+*   [Expander](#expander)
+    *   [Parameters](#parameters-6)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-7)
 *   [Field](#field)
     *   [Properties](#properties)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-3)
+    *   [Parameters](#parameters-8)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-4)
-*   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-5)
-*   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-6)
-*   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-7)
-*   [Expander](#expander)
-    *   [Parameters](#parameters-8)
-*   [copyEntries](#copyentries)
-    *   [Parameters](#parameters-9)
+        *   [Parameters](#parameters-9)
 
 ## ContentProvider
 
@@ -147,41 +147,6 @@ map install hook named from arch to deb
 
 map install hook named from arch to rpm
 
-## Field
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-### Properties
-
-*   `alias` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** interchangeable field name
-*   `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `default` **any** 
-*   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
-
-## Packager
-
-### Parameters
-
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-### tmpdir
-
-Create tmp directory.
-
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** directory path
-
-### execute
-
-Execute package generation
-
-#### Parameters
-
-*   `sources`  
-*   `transformer`  
-*   `dependencies`  
-*   `options`  
-*   `expander`  
-
 ## decodePassword
 
 Decode a password
@@ -231,6 +196,41 @@ Copy content from source into destinationDirectory.
 *   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 *   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
 *   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>** 
+
+## Field
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+*   `alias` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** interchangeable field name
+*   `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `default` **any** 
+*   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+
+## Packager
+
+### Parameters
+
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+### tmpdir
+
+Create tmp directory.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** directory path
+
+### execute
+
+Execute package generation
+
+#### Parameters
+
+*   `sources`  
+*   `transformer`  
+*   `dependencies`  
+*   `options`  
+*   `expander`  
 
 # install
 

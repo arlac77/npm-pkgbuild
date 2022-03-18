@@ -10,10 +10,12 @@
   },
   "description": "create ArchLinux, RPM and Debian packages from npm packages",
   "keywords": [
+    "package",
     "ArchLinux",
     "arch-linux",
     "aur",
     "debian",
+    "deb",
     "pacman",
     "pkgbuild",
     "rpm",
@@ -64,7 +66,7 @@
     "stream-buffers": "^3.0.2"
   },
   "engines": {
-    "node": ">=16.13.0"
+    "node": ">=16.14.2"
   },
   "repository": {
     "type": "git",

@@ -11,18 +11,37 @@
 
 ## npm-pkgbuild
 
-create ArchLinux, RPM and Debian packages from npm packages.
+Create ArchLinux, RPM and Debian packages from npm packages.
 
 # usage
 
 In a package directory execute
 
 ```shell
-npm-pkgbuild --pkg
+npm-pkgbuild --rpm --debian --arch --content build
 ```
 
-This will create a PKGBUILD file and execute it
-The resulting pkg will contain the package dist content and all production dependencies
+This will create a arch, rpm and a debian package of the build dir.
+
+You can specify the package content in package.json.
+
+```json
+{
+	"pkg": {
+		"content": {
+			"/some/location" : { "base": "build" },
+			"/etc/myconfig.json" : "sample-config.json"
+		},
+		"hooks" : "pkg/hooks",
+		"output": {
+			"debian" : {},
+			"rpm" : {},
+			"arch" : {}
+		},
+		"dependencies": { "nginx" : ">=1.12" }
+	}
+}
+```
 
 # API
 

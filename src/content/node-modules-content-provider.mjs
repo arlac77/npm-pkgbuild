@@ -49,7 +49,7 @@ export class NodeModulesContentProvider extends ContentProvider {
     );
 
     // TODO find .npmrc
-    const npmrc = parse(await readFile(join(homedir(), ".npmrc"), "utf8"));
+    const npmrc = parse(await readFile(join(homedir(), ".npmrc"), utf8StreamOptions));
     const arb = new Arborist({ path: tmp, ...npmrc });
     await arb.buildIdealTree({
       update: true,

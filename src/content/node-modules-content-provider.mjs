@@ -1,8 +1,9 @@
-import { tmpdir } from "os";
+import { tmpdir, homedir } from "os";
 import { join } from "path";
 import { mkdtemp, readFile, writeFile } from "fs/promises";
 import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
+import { parse } from "ini";
 import { StringContentEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
@@ -47,7 +48,9 @@ export class NodeModulesContentProvider extends ContentProvider {
       utf8StreamOptions
     );
 
-    const arb = new Arborist({ path: tmp });
+    // TODO find .npmrc
+    const npmrc = parse(await readFile(join(homedir(), ".npmrc"), "utf8"));
+    const arb = new Arborist({ path: tmp, ...npmrc });
     await arb.buildIdealTree({
       update: true,
       prune: true,

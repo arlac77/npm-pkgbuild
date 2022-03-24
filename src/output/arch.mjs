@@ -34,13 +34,16 @@ export const pkgKeyValuePairOptions = {
       return [m[2], m[3] ? m[3].split(/\s*,\s*/) : m[4]];
     }
   },
-  keyValueLine: (key, value, lineEnding) =>
-    `${keyPrefix(key)}=${
-      Array.isArray(value)
-        ? "(" + value.map(v => quote(v)).join(" ") + ")"
-        : quote(value)
-    }${lineEnding}`
+  keyValueLines: keyValueLines3
 };
+
+function* keyValueLines3(key, value, lineEnding) {
+  yield `${keyPrefix(key)}=${
+    Array.isArray(value)
+      ? "(" + value.map(v => quote(v)).join(" ") + ")"
+      : quote(value)
+  }${lineEnding}`;
+}
 
 function keyPrefix(key) {
   const f = fields[key];

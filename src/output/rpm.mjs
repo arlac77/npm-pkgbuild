@@ -6,7 +6,7 @@ import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
-  colonSeparatedKeyValuePairOptions
+  colonSeparatedKeyValuePairOptionsDoublingKeys
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
@@ -25,7 +25,7 @@ const hookMapping = {
   post_install: "post",
   pre_remove: "preun",
   post_remove: "postun"
-/* TODO with logic check $1
+  /* TODO with logic check $1
   pre_upgrade:
   post_upgrade:*/
 };
@@ -74,9 +74,10 @@ export class RPM extends Packager {
     const { properties, tmpdir, staging, destination } =
       await this.prepareExecute(options);
 
-    properties.Requires = Object.entries(dependencies)
-      .map(([n, e]) => `${n}${e}`)
-      .join(" ");
+    properties.Requires = Object.entries(dependencies).map(
+      ([name, e]) =>
+        `${name} ${e.replace(/([<=>])\d/, (match, p1) => `${p1} `)}`
+    );
 
     const specFileName = `${properties.name}.spec`;
 
@@ -130,7 +131,7 @@ export class RPM extends Packager {
             new ReadableStreamContentEntry(
               entry.name,
               keyValueTransformer(await entry.readStream, fp, {
-                ...colonSeparatedKeyValuePairOptions,
+                ...colonSeparatedKeyValuePairOptionsDoublingKeys,
                 trailingLines
               })
             ),

@@ -1,5 +1,5 @@
 import { join } from "path";
-import { createReadStream, createWriteStream, truncateSync } from "fs";
+import { createReadStream, createWriteStream } from "fs";
 import { pipeline } from "stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";

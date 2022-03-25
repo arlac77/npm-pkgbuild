@@ -169,6 +169,8 @@ export class RPM extends Packager {
   }
 }
 
+
+const pkglist = { type: "string[]" };
 /**
  * @see https://rpm-packaging-guide.github.io
  */
@@ -189,5 +191,8 @@ const fields = {
     mandatory: true
   },
   URL: { alias: "homepage", type: "string" },
-  Requires: { type: "string[]" }
+  Requires: pkglist,
+  Obsoletes: pkglist,
+  Conflicts: pkglist
 };
+

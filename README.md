@@ -30,7 +30,15 @@ You can specify the package content in package.json.
 	"pkg": {
 		"content": {
 			"/some/location" : { "base": "build" },
-			"/etc/myconfig.json" : "sample-config.json"
+			"/etc/myconfig.json" : "sample-config.json",
+            "/opt/myapp": [
+                {
+                "type": "npm-pack"
+                },
+                {
+                "type": "node-modules"
+                }
+            ]
 		},
 		"hooks" : "pkg/hooks",
 		"output": {
@@ -42,6 +50,20 @@ You can specify the package content in package.json.
 	}
 }
 ```
+
+# content providers
+
+# files (default)
+
+content from the file system
+
+## npm-pack
+
+content as provided by npm pack
+
+## node-modules
+
+content of all (production) modules
 
 # API
 

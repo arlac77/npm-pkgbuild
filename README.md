@@ -63,7 +63,7 @@ content as provided by npm pack
 
 ## node-modules
 
-content of all (production) modules
+content of all (production) dependencies
 
 # API
 

@@ -70,25 +70,31 @@ export class NodeModulesContentProvider extends ContentProvider {
     })) {
       if (!toBeSkipped.test(name)) {
         if (name.endsWith("package.json")) {
-          const json = shrinkNPM(
-            JSON.parse(
-              await readFile(join(pkgSourceDir, name), utf8StreamOptions)
-            ),
-            {}
-          );
-
-          if (json) {
-            yield Object.assign(
-              new StringContentEntry(name, JSON.stringify(json)),
-              this.entryProperties
+          try {
+            const json = shrinkNPM(
+              JSON.parse(
+                await readFile(join(pkgSourceDir, name), utf8StreamOptions)
+              ),
+              {}
             );
+
+            if (json) {
+              yield Object.assign(
+                new StringContentEntry(name, JSON.stringify(json)),
+                this.entryProperties
+              );
+            }
+
+            continue;
+          } catch (e) {
+            console.error(e, name);
           }
-        } else {
-          yield Object.assign(
-            new FileSystemEntry(name, pkgSourceDir),
-            this.entryProperties
-          );
         }
+        
+        yield Object.assign(
+          new FileSystemEntry(name, pkgSourceDir),
+          this.entryProperties
+        );
       }
     }
   }

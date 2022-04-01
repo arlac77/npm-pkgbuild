@@ -14,7 +14,8 @@ import {
   copyEntries,
   fieldProvider,
   utf8StreamOptions,
-  extractFunctions
+  extractFunctions,
+  packageNameMapping
 } from "../util.mjs";
 
 /**
@@ -76,7 +77,9 @@ export class RPM extends Packager {
 
     properties.Requires = Object.entries(dependencies).map(
       ([name, e]) =>
-        `${name} ${e.replace(/([<=>])\d/, (match, p1) => `${p1} `)}`
+        `${
+          packageNameMapping[name] ? packageNameMapping[name] : name
+        } ${e.replace(/([<=>])\d/, (match, p1) => `${p1} `)}`
     );
 
     const specFileName = `${properties.name}.spec`;
@@ -169,7 +172,6 @@ export class RPM extends Packager {
   }
 }
 
-
 const pkglist = { type: "string[]" };
 /**
  * @see https://rpm-packaging-guide.github.io
@@ -195,4 +197,3 @@ const fields = {
   Obsoletes: pkglist,
   Conflicts: pkglist
 };
-

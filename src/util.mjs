@@ -6,6 +6,13 @@ import { createWriteStream } from "fs";
 export const utf8StreamOptions = { encoding: "utf8" };
 
 /**
+ * what is the node name in the package eco-system
+ */
+ export const packageNameMapping = {
+  node: "nodejs"
+};
+
+/**
  * Decode a password
  * @param {string} password 
  * @returns {string} plaintext password

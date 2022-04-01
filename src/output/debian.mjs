@@ -17,7 +17,8 @@ import {
   copyEntries,
   fieldProvider,
   extractFunctions,
-  utf8StreamOptions
+  utf8StreamOptions,
+  packageNameMapping
 } from "../util.mjs";
 
 /**
@@ -93,7 +94,7 @@ export class DEBIAN extends Packager {
     );
 
     properties.Depends = Object.entries(dependencies).map(
-      ([n, e]) => `${n} (${e})`
+      ([name, e]) => `${packageNameMapping[name] ? packageNameMapping[name] : name} (${e})`
     );
 
     const fp = fieldProvider(properties, fields);

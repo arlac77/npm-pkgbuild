@@ -18,7 +18,8 @@ import {
   copyEntries,
   fieldProvider,
   quote,
-  utf8StreamOptions
+  utf8StreamOptions,
+  packageNameMapping
 } from "../util.mjs";
 
 /**
@@ -200,9 +201,6 @@ const fields = {
   options: { type: "string[]" }
 };
 
-const mapping = {
-  node: "nodejs"
-};
 
 function normalizeExpression(e) {
   e = e.replace(/\-([\w\d]+)$/, "");
@@ -216,6 +214,6 @@ function normalizeExpression(e) {
 function makeDepends(dependencies) {
   return Object.entries(dependencies).map(
     ([name, version]) =>
-      `${mapping[name] ? mapping[name] : name}${normalizeExpression(version)}`
+      `${packageNameMapping[name] ? packageNameMapping[name] : name}${normalizeExpression(version)}`
   );
 }

@@ -36,7 +36,8 @@ You can specify the package content in package.json.
                 "type": "npm-pack"
                 },
                 {
-                "type": "node-modules"
+                "type": "node-modules",
+                "withoutDevelpmentDependencies": true
                 }
             ]
 		},
@@ -64,6 +65,10 @@ content as provided by npm pack
 ## node-modules
 
 content of all (production) dependencies
+
+options:
+    - withoutDevelpmentDependencies when to stip away dev dependencies
+
 
 # API
 

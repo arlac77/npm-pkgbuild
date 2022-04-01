@@ -27,7 +27,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   constructor(definitions, entryProperties) {
     super();
-    Object.assign(this, definitions);
+    Object.assign(this, { withoutDevelpmentDependencies: true }, definitions);
     this.entryProperties = entryProperties;
   }
 
@@ -36,36 +36,44 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   async *[Symbol.asyncIterator]() {
-    const tmp = await mkdtemp(join(tmpdir(), "node-modules"));
+    let pkgSourceDir = this.dir;
 
-    const json = JSON.parse(
-      await readFile(join(this.dir, "package.json"), utf8StreamOptions)
-    );
-    delete json.devDependencies;
-    await writeFile(
-      join(tmp, "package.json"),
-      JSON.stringify(json),
-      utf8StreamOptions
-    );
+    if (this.withoutDevelpmentDependencies) {
+      pkgSourceDir = await mkdtemp(join(tmpdir(), "node-modules"));
 
-    // TODO find .npmrc
-    const npmrc = parse(await readFile(join(homedir(), ".npmrc"), utf8StreamOptions));
-    const arb = new Arborist({ path: tmp, ...npmrc });
-    await arb.buildIdealTree({
-      update: true,
-      prune: true,
-      saveType: "prod"
-    });
-    await arb.prune({ saveType: "prod" });
-    await arb.reify({ save: true });
+      const json = JSON.parse(
+        await readFile(join(this.dir, "package.json"), utf8StreamOptions)
+      );
+      delete json.devDependencies;
+      await writeFile(
+        join(pkgSourceDir, "package.json"),
+        JSON.stringify(json),
+        utf8StreamOptions
+      );
+
+      // TODO find .npmrc
+      const npmrc = parse(
+        await readFile(join(homedir(), ".npmrc"), utf8StreamOptions)
+      );
+      const arb = new Arborist({ path: pkgSourceDir, ...npmrc });
+      await arb.buildIdealTree({
+        update: true,
+        prune: true,
+        saveType: "prod"
+      });
+      await arb.prune({ saveType: "prod" });
+      await arb.reify({ save: true });
+    }
 
     for (const name of await globby("node_modules/**/*", {
-      cwd: tmp
+      cwd: pkgSourceDir
     })) {
       if (!toBeSkipped.test(name)) {
         if (name.endsWith("package.json")) {
           const json = shrinkNPM(
-            JSON.parse(await readFile(join(tmp, name), utf8StreamOptions)),
+            JSON.parse(
+              await readFile(join(pkgSourceDir, name), utf8StreamOptions)
+            ),
             {}
           );
 
@@ -77,7 +85,7 @@ export class NodeModulesContentProvider extends ContentProvider {
           }
         } else {
           yield Object.assign(
-            new FileSystemEntry(name, tmp),
+            new FileSystemEntry(name, pkgSourceDir),
             this.entryProperties
           );
         }

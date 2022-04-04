@@ -29,10 +29,10 @@ export async function publish(fileName, destination, properties) {
   if (publish.scheme === "http:" || publish.scheme === "https:") {
     const headers = {};
 
-    if (publish.username) {
+    if (publish.user) {
       headers.authorization =
         "Basic " +
-        Buffer.from(publish.username + ":" + publish.password).toString(
+        Buffer.from(publish.user + ":" + publish.password).toString(
           "base64"
         );
     }

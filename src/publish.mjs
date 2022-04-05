@@ -43,9 +43,9 @@ export async function publish(fileName, destination, properties) {
       body: createReadStream(fileName)
     });
 
-    console.log(response);
-
-    return;
+    if(!response.ok) {
+      throw new Error(`Unable to publish to ${publish.url}: ${response.statusText}(${response.statusCode})`);
+    }
   }
 
   /*

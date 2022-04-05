@@ -7,6 +7,9 @@ import { ContentProvider } from "./content-provider.mjs";
 
 /**
  * Content from npm pack.
+ * 
+ * @param {Object} definitions 
+ * @param {Object} entryProperties to be set for each entry
  */
 export class NPMPackContentProvider extends ContentProvider {
   /**
@@ -23,7 +26,10 @@ export class NPMPackContentProvider extends ContentProvider {
   constructor(definitions, entryProperties) {
     super();
     Object.assign(this, definitions);
-    this.entryProperties = entryProperties;
+
+    this.entryProperties = Object.fromEntries(
+      Object.entries(entryProperties).map(([key, value]) => [key, { value }])
+    );
   }
 
   toString() {
@@ -50,7 +56,10 @@ export class NPMPackContentProvider extends ContentProvider {
               header.name.substring(8),
               Buffer.concat(chunks)
             ),
-            { mode: { value: header.mode } }
+            {
+              mode: { value: header.mode },
+              ...this.entryProperties
+            }
           )
         );
 

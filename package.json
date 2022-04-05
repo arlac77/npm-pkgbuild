@@ -50,7 +50,7 @@
     "expression-expander": "^7.0.16",
     "globby": "^13.1.0",
     "ini": "^2.0.0",
-    "iterable-string-interceptor": "^1.0.14",
+    "iterable-string-interceptor": "^1.0.15",
     "key-value-transformer": "^2.1.1",
     "node-fetch": "^3.2.3",
     "npm-package-walker": "^5.0.6",

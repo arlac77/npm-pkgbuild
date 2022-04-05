@@ -103,6 +103,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 const toBeSkipped = new RegExp(
   "(" +
     [
+      "package-lock.json",
       "~",
       "\\.\\d",
       "\\.map",
@@ -140,16 +141,17 @@ const toBeSkipped = new RegExp(
       "Copyrightnotice\\.txt",
       "Doxyfile",
       "Dockerfile",
-      "CODE_OF_CONDUCT(\\.md)?",
+      "CODE_OF_CONDUCT(\\.md|\\.txt)?",
       "GOVERNANCE(\\.md)?",
       "CODEOWNERS(\\.md)?",
       "UPGRAD(E|ING)(\\.md)?",
-      "AUTHORS(\\.md)?",
+      "AUTHORS(\\.md|\\.txt)?",
       "OWNERS",
       "CONTRIBUT(ORS|ING)(\\.md)?",
       "CHANGELOG(\\.md)?",
       "CHANGES(\\.md)?",
       "HISTORY(\\.md)?",
+      "DOCUMENTATION(\\.md)?",
       "LICEN[SC]E(\\-\\w+(\\.txt)?|\\.md|\\.txt|\\.BSD|\\.APACHE2|\\.MIT|\\.terms)?",
       "README(.*\\.md|\\.txt)?",
       "INSTALL(.*\\.md)?",
@@ -212,6 +214,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$|(node_modules/(@types|node-addon-api)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
+    ")$|(node_modules/(@types|node-addon-api|node-gyp)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"
 );

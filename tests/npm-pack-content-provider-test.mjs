@@ -11,5 +11,7 @@ test("NPMPack entries", async t => {
     entries[entry.name] = entry;
   }
 
-  t.truthy(entries['package.json']);
+  t.truthy(entries["package.json"]);
+
+  t.is(entries["package.json"].mode, 420);
 });

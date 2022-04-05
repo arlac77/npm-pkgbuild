@@ -1,9 +1,9 @@
 import { pipeline } from "stream/promises";
 import { createGunzip } from "zlib";
 import pacote from "pacote";
-import tar from "tar-stream";
-import { ContentProvider } from "./content-provider.mjs";
+import { extract as tarExtract } from "tar-stream";
 import { BufferContentEntry } from "content-entry";
+import { ContentProvider } from "./content-provider.mjs";
 
 /**
  * Content from npm pack.
@@ -26,8 +26,7 @@ export class NPMPackContentProvider extends ContentProvider {
     this.entryProperties = entryProperties;
   }
 
-  toString()
-  {
+  toString() {
     return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;
   }
 
@@ -35,7 +34,7 @@ export class NPMPackContentProvider extends ContentProvider {
     const entries = [];
 
     await pacote.tarball.stream(this.dir, async stream => {
-      const extract = tar.extract();
+      const extract = tarExtract();
 
       extract.on("entry", async (header, stream, next) => {
         stream.on("end", () => next());
@@ -46,12 +45,12 @@ export class NPMPackContentProvider extends ContentProvider {
         }
 
         entries.push(
-          Object.assign(
+          Object.create(
             new BufferContentEntry(
               header.name.substring(8),
               Buffer.concat(chunks)
             ),
-            this.entryProperties
+            { mode: { value: header.mode } }
           )
         );
 

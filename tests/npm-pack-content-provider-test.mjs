@@ -21,4 +21,7 @@ test("NPMPack entries", async t => {
   const e = entries["package.json"];
   t.is(e.mode, 420);
   t.is(e.destination, destination);
+
+  e.destination =  "new value";
+  t.is(e.destination,  "new value");
 });

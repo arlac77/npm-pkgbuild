@@ -24,7 +24,7 @@ export async function publish(fileName, destination, properties) {
 
   publish.url = publish.url + "/" + basename(fileName);
 
-  console.log(publish.url);
+  console.log(`Publishing to ${publish.url}`);
 
   if (publish.scheme === "http:" || publish.scheme === "https:") {
     const headers = {};

@@ -36,6 +36,7 @@ program
   )
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
   .option("-a --available", "only excute availabe output methods", false)
+  .option("--continue", "continue on error")
   .option(
     "-c --content <dir>",
     "content directory",
@@ -140,8 +141,10 @@ program
         await publish(fileName, options.publish, properties);
       }
     } catch (e) {
-      console.log(e);
-      process.exit(-1);
+      console.error(e);
+      if(!options.continue) {
+        process.exit(-1);
+      }
     }
   })
   .parse(process.argv);

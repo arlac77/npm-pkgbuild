@@ -31,13 +31,13 @@ const hookMapping = {
   post_upgrade:*/
 };
 
-export function requiresFromDependencies(dependencies)
-{
+export function requiresFromDependencies(dependencies) {
   return Object.entries(dependencies).map(
     ([name, e]) =>
-      `${
-        packageNameMapping[name] ? packageNameMapping[name] : name
-      } ${e.replace(/([<=>])(\d)/, (match, p1,p2) => `${p1} ${p2}`)}`
+      `${packageNameMapping[name] ? packageNameMapping[name] : name}${e
+        .replace(/^\s*(\w+)/,  (match, p1) => ` = ${p1}`)
+        .replace(/^\s*$/,  "")
+        .replace(/^\s*(<|<=|>|>=|=)\s*(\w+)/, (match, p1, p2) => ` ${p1} ${p2}`)}`
   );
 }
 

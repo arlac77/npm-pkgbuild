@@ -6,7 +6,28 @@ import { FileContentProvider, RPM } from "npm-pkgbuild";
 import { requiresFromDependencies } from "../src/output/rpm.mjs";
 
 test("requiresFromDependencies", t => {
-  t.deepEqual(requiresFromDependencies({ A: ">=1.2.3" }), ["A >= 1.2.3"]);
+  t.deepEqual(
+    requiresFromDependencies({
+      A0: "1.2.3",
+      A1: "=1.2.3",
+      A2: "<=1.2.3",
+      A3: ">=1.2.3",
+      A4: "<1.2.3",
+      A5: ">1.2.3",
+      B: "",
+      C: " "
+    }),
+    [
+      "A0 = 1.2.3",
+      "A1 = 1.2.3",
+      "A2 <= 1.2.3",
+      "A3 >= 1.2.3",
+      "A4 < 1.2.3",
+      "A5 > 1.2.3",
+      "B",
+      "C"
+    ]
+  );
 });
 
 test("rpm", async t => {

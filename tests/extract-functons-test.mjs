@@ -10,10 +10,11 @@ test("extractFunctions", async t => {
 
   for await (const f of extractFunctions(
     source(`
-post_install() {
+post_install()    {  
     systemctl start {{name}}
 }
-pre_remove() {
+pre_remove()
+{
     systemctl stop {{name}}
 }
 `)

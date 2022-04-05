@@ -39,18 +39,28 @@ export function decodePassword(password)
  */
 export async function* extractFunctions(source) {
   let name;
+  let insideBody;
   const body = [];
 
   for await (const line of asLines(source)) {
     let m;
 
-    if ((m = line.match(/^\s*(function\s*)?([\w_]+)\s*\(\s*\)/))) {
+    if ((m = line.match(/^\s*(function\s*)?([\w_]+)\s*\(\s*\)\s*(\{)?/))) {
       name = m[2];
+      insideBody = m[3] ? true : false;
       continue;
     }
 
     if (name) {
-      if (line.match(/^}$/)) {
+      if (line.match(/^\s*{\s*$/)) {
+        if(insideBody) {
+          body.push(line);
+        }
+        else {
+          insideBody = true;
+        }
+      }
+      else if (line.match(/^}$/)) {
         yield { name, body: body.join("\n")};
         name = undefined;
         body.length = 0;

@@ -124,7 +124,7 @@ export function fieldProvider(properties, fields) {
           if (value === undefined) {
             if (field.default === undefined) {
               if (field.mandatory) {
-                console.log(`Missing value for mandatory field ${name}`);
+                console.error(`Missing value for mandatory field ${name}`);
               }
             } else {
               yield [name, field.default];

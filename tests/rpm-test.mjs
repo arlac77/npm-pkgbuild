@@ -3,6 +3,11 @@ import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { FileContentProvider, RPM } from "npm-pkgbuild";
+import { requiresFromDependencies } from "../src/output/rpm.mjs";
+
+test("requiresFromDependencies", t => {
+  t.deepEqual(requiresFromDependencies({ A: ">=1.2.3" }), ["A >= 1.2.3"]);
+});
 
 test("rpm", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
@@ -27,12 +32,10 @@ test("rpm", async t => {
     "nginx-mainline": ">=1.21.4",
     konsum: ">=4.3.8"
   };
-  const fileName = await out.execute(
-    sources,
-    transformer,
-    dependencies,
-    { destination, verbose: true }
-  );
+  const fileName = await out.execute(sources, transformer, dependencies, {
+    destination,
+    verbose: true
+  });
   t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
 
   const s = await stat(fileName);

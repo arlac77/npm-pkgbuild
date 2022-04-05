@@ -31,6 +31,16 @@ const hookMapping = {
   post_upgrade:*/
 };
 
+export function requiresFromDependencies(dependencies)
+{
+  return Object.entries(dependencies).map(
+    ([name, e]) =>
+      `${
+        packageNameMapping[name] ? packageNameMapping[name] : name
+      } ${e.replace(/([<=>])(\d)/, (match, p1,p2) => `${p1} ${p2}`)}`
+  );
+}
+
 export class RPM extends Packager {
   static get name() {
     return "rpm";
@@ -75,12 +85,7 @@ export class RPM extends Packager {
     const { properties, tmpdir, staging, destination } =
       await this.prepareExecute(options);
 
-    properties.Requires = Object.entries(dependencies).map(
-      ([name, e]) =>
-        `${
-          packageNameMapping[name] ? packageNameMapping[name] : name
-        } ${e.replace(/([<=>])\d/, (match, p1) => `${p1} `)}`
-    );
+    properties.Requires = requiresFromDependencies(dependencies);
 
     const specFileName = `${properties.name}.spec`;
 

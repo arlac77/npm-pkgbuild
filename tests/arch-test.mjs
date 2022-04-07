@@ -4,7 +4,7 @@ import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { FileContentProvider, ARCH } from "npm-pkgbuild";
 
-test("pkg", async t => {
+test("arch", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname

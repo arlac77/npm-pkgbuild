@@ -19,21 +19,27 @@ test("copyEntries destination base dir", async t => {
     const b = new StringContentEntry("b");
     b.destination = "/d2/d21";
     yield b;
+
+    const c = new StringContentEntry("c");
+    yield c;
   }
 
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
   for await (const entry of copyEntries(files(), tmp)) {
     switch(entry.name) {
-      case 'a': t.is(entry.destination,"/d1/d11/a");
+      case 'a': t.is(entry.destination,"d1/d11/a");
       break;
-      case 'b': t.is(entry.destination,"/d2/d21");
+      case 'b': t.is(entry.destination,"d2/d21");
+      break;
+      case 'c': t.is(entry.destination,"c");
       break;
     }
   }
 
   await access(join(tmp, "d1/d11/a"), constants.F_OK);
   await access(join(tmp, "d2/d21"), constants.F_OK);
+  await access(join(tmp, "c"), constants.F_OK);
   t.true(true);
 });
 

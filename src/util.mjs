@@ -8,17 +8,16 @@ export const utf8StreamOptions = { encoding: "utf8" };
 /**
  * what is the node name in the package eco-system
  */
- export const packageNameMapping = {
+export const packageNameMapping = {
   node: "nodejs"
 };
 
 /**
  * Decode a password
- * @param {string} password 
+ * @param {string} password
  * @returns {string} plaintext password
  */
-export function decodePassword(password)
-{
+export function decodePassword(password) {
   const m = password.match(/\{([^\}]+)\}(.*)/);
   if (m) {
     switch (m[1]) {
@@ -53,19 +52,16 @@ export async function* extractFunctions(source) {
 
     if (name) {
       if (line.match(/^\s*{\s*$/)) {
-        if(insideBody) {
+        if (insideBody) {
           body.push(line);
-        }
-        else {
+        } else {
           insideBody = true;
         }
-      }
-      else if (line.match(/^}$/)) {
-        yield { name, body: body.join("\n")};
+      } else if (line.match(/^}$/)) {
+        yield { name, body: body.join("\n") };
         name = undefined;
         body.length = 0;
-      }
-      else {
+      } else {
         body.push(line);
       }
     }
@@ -148,6 +144,7 @@ export function fieldProvider(properties, fields) {
 
 /**
  * Copy content from source into destinationDirectory.
+ * destination paths a generated without leading '/'
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
  * @param {Expander} expander
@@ -159,13 +156,11 @@ export async function* copyEntries(
   expander = v => v
 ) {
   for await (const entry of source) {
+    const d = entry.destination;
+
     const name = expander(
-      entry.destination === undefined
-        ? entry.name
-        : entry.destination.endsWith("/")
-        ? join(entry.destination, entry.name)
-        : entry.destination
-    );
+      d === undefined ? entry.name : d.endsWith("/") ? join(d, entry.name) : d
+    ).replace(/^\//,'');
 
     entry.destination = name;
     const destination = join(destinationDirectory, name);

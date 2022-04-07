@@ -4,8 +4,8 @@ import fetch from "node-fetch";
 
 export function analysePublish(publish, properties) {
   publish.url = publish.url.replace(
-    /\{\{(\w+)\}\}/mg,
-    (match, key, offset, string) => properties[key] || '{{' + key + '}}'
+    /\{\{(\w+)\}\}/gm,
+    (match, key, offset, string) => properties[key] || "{{" + key + "}}"
   );
 
   const m = publish.url.match(/^([^:]+:)\/\/(.*)/);
@@ -27,14 +27,14 @@ export async function publish(fileName, destination, properties) {
   console.log(`Publishing to ${publish.url}`);
 
   if (publish.scheme === "http:" || publish.scheme === "https:") {
-    const headers = {};
+    const headers = {
+      "user-agent": "npm-pkgbuild"
+    };
 
     if (publish.user) {
       headers.authorization =
         "Basic " +
-        Buffer.from(publish.user + ":" + publish.password).toString(
-          "base64"
-        );
+        Buffer.from(publish.user + ":" + publish.password).toString("base64");
     }
 
     const response = await fetch(publish.url, {
@@ -43,8 +43,10 @@ export async function publish(fileName, destination, properties) {
       body: createReadStream(fileName)
     });
 
-    if(!response.ok) {
-      throw new Error(`Unable to publish to ${publish.url}: ${response.statusText}(${response.statusCode})`);
+    if (!response.ok) {
+      throw new Error(
+        `Unable to publish to ${publish.url}: ${response.statusText}(${response.statusCode})`
+      );
     }
   }
 

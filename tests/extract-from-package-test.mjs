@@ -106,6 +106,19 @@ test(
 test(
   efpt,
   {
+    pkg: {}
+  },
+  {
+    access: "private"
+  },
+  undefined,
+  undefined,
+  {}
+);
+
+test(
+  efpt,
+  {
     contributors: [
       {
         name: "Markus Felten",
@@ -120,9 +133,9 @@ test(
   efpt,
   {
     name: "konsum-frontend",
-    "publishConfig": {
-      "access": "public"
-    },  
+    publishConfig: {
+      access: "public"
+    },
     pkg: {
       content: {
         "${installdir}": [
@@ -163,7 +176,10 @@ test(
       { base: "build" },
       { destination: "/services/konsum/frontend" }
     ),
-    new FileContentProvider({ base: "dist" }, { destination: "/services/konsum/frontend" }),
+    new FileContentProvider(
+      { base: "dist" },
+      { destination: "/services/konsum/frontend" }
+    ),
 
     new FileContentProvider(
       { base: "pkgbuild", pattern: ["nginx.conf"] },

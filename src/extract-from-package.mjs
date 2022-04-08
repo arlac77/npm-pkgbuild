@@ -28,78 +28,78 @@ export const archMapping = Object.fromEntries(
  * @param {string} dir
  * @returns {Object}
  */
-export async function extractFromPackage(pkg, dir) {
+export async function extractFromPackage(json, dir) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
-      .map(key => [key, pkg[key]])
+      .map(key => [key, json[key]])
       .filter(([k, v]) => v !== undefined)
   );
 
-  if (pkg.bugs) {
-    if (pkg.bugs.url) {
-      properties.bugs = pkg.bugs.url;
+  if (json.bugs) {
+    if (json.bugs.url) {
+      properties.bugs = json.bugs.url;
     }
   }
 
-  Object.assign(properties, pkg.config);
+  Object.assign(properties, json.config);
 
   if (properties.name) {
     properties.name = properties.name.replace(/^\@\w+\//, "");
   }
 
   properties.access = "private";
-  if (pkg.publishConfig) {
-    properties.access = pkg.publishConfig.access;
+  if (json.publishConfig) {
+    properties.access = json.publishConfig.access;
   }
 
-  if (pkg.contributors) {
-    properties.maintainer = pkg.contributors.map(
+  if (json.contributors) {
+    properties.maintainer = json.contributors.map(
       c => `${c.name} <${c.email}>`
     )[0];
   }
 
-  if (pkg.repository) {
-    if (typeof pkg.repository === "string") {
-      properties.source = pkg.repository;
+  if (json.repository) {
+    if (typeof json.repository === "string") {
+      properties.source = json.repository;
     } else {
-      if (pkg.repository.url) {
-        properties.source = pkg.repository.url;
+      if (json.repository.url) {
+        properties.source = json.repository.url;
       }
     }
   }
 
   const context = createContext({ properties });
 
-  let dependencies = { ...pkg.engines };
+  let dependencies = { ...json.engines };
   let sources = [];
   let output = {};
   let arch = new Set();
 
-  const processPkg = (pkg, dir, modulePath) => {
-    if (pkg.pkg) {
-      const pkgbuild = pkg.pkg;
+  const processPkg = (json, dir, modulePath) => {
+    const pkg = json.pkg;
 
-      if (pkgbuild.abstract || !modulePath) {
-        if (pkg.cpu) {
-          for (const a of asArray(pkg.cpu)) {
-            arch.add(npmArchMapping[a]);
-          }
+    if (pkg) {
+      if (json.cpu) {
+        for (const a of asArray(json.cpu)) {
+          arch.add(npmArchMapping[a]);
         }
+      }
 
-        if (pkgbuild.arch) {
-          for (const a of asArray(pkgbuild.arch)) {
+      if (pkg.abstract || !modulePath) {
+        if (pkg.arch) {
+          for (const a of asArray(pkg.arch)) {
             arch.add(a);
           }
         }
 
-        Object.assign(output, pkgbuild.output);
+        Object.assign(output, pkg.output);
 
-        Object.entries(pkgbuild)
+        Object.entries(pkg)
           .filter(([k, v]) => typeof v === "string")
           .forEach(([k, v]) => (properties[k] = v));
 
-        if (pkgbuild.content && !modulePath) {
-          Object.entries(pkgbuild.content).forEach(
+        if (pkg.content && !modulePath) {
+          Object.entries(pkg.content).forEach(
             ([destination, definitions]) => {
               destination = context.expand(destination);
               definitions = context.expand(definitions);
@@ -126,18 +126,18 @@ export async function extractFromPackage(pkg, dir) {
           );
         }
       }
-      Object.assign(dependencies, pkgbuild.depends);
+      Object.assign(dependencies, pkg.depends);
     }
   };
 
-  await packageWalker(async (pkg, base, modulePath) => {
+  await packageWalker(async (json, base, modulePath) => {
     if (modulePath.length > 0) {
-      processPkg(pkg, base, modulePath);
+      processPkg(json, base, modulePath);
     }
     return true;
   }, dir);
 
-  processPkg(pkg, dir);
+  processPkg(json, dir);
 
   if (arch.size > 0) {
     properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch]);

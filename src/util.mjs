@@ -144,7 +144,7 @@ export function fieldProvider(properties, fields) {
 
 /**
  * Copy content from source into destinationDirectory.
- * destination paths a generated without leading '/'
+ * Destination paths a generated without leading '/' (as for as entry names too).
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
  * @param {Expander} expander

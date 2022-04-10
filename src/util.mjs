@@ -6,7 +6,7 @@ import { createWriteStream } from "fs";
 export const utf8StreamOptions = { encoding: "utf8" };
 
 /**
- * what is the node name in the package eco-system
+ * What is the node name in the package eco-system
  */
 export const packageNameMapping = {
   node: "nodejs"
@@ -32,7 +32,7 @@ export function decodePassword(password) {
 }
 
 /**
- * Extract shell functions from a given text
+ * Extract shell functions from a given text.
  * @param {AsyncIterator<string>} source
  * @return {AsyncIterator<FunctionDecl>}
  */

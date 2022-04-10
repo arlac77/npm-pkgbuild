@@ -3,7 +3,7 @@ Description={{description}}
 
 [Service]
 Type=notify
-ExecStart={{installdir}}/bin/{{unit}}
+ExecStart={{install.dir}}/bin/{{unit}}
 TimeoutStartSec=20
 StandardOutput=syslog
 User=nobody

@@ -16,7 +16,7 @@
     }
   },
   "pkg": {
-    "installdir": "/services/${name}",
+    "install.dir": "/services/${name}/",
     "groups": "webhook",
     "depends": {
       "redis": ">=5.0.3"

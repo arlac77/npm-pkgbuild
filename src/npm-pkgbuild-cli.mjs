@@ -88,16 +88,6 @@ program
 
         Object.assign(properties, { type: outputFactory.name }, options.define);
 
-        /*
-        for (const [k, v] of Object.entries(properties)) {
-          if (typeof v === "string") {
-            properties[k] = v.replace(
-              /\$\{([^\}]+)\}/m,
-              (m, k) => properties[k]
-            );
-          }
-        }*/
-
         sources.push(
           ...[...options.content, ...options.meta]
             .filter(x => x)

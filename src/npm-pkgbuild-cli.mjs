@@ -88,6 +88,7 @@ program
 
         Object.assign(properties, { type: outputFactory.name }, options.define);
 
+        /*
         for (const [k, v] of Object.entries(properties)) {
           if (typeof v === "string") {
             properties[k] = v.replace(
@@ -95,7 +96,7 @@ program
               (m, k) => properties[k]
             );
           }
-        }
+        }*/
 
         sources.push(
           ...[...options.content, ...options.meta]
@@ -121,7 +122,8 @@ program
               ".service",
               ".socket"
             ]),
-            properties
+            context.expand(properties)
+            //properties
           )
         ];
 

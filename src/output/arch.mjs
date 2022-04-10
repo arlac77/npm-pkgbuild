@@ -22,6 +22,16 @@ import {
   packageNameMapping
 } from "../util.mjs";
 
+
+
+function* keyValueLines(key, value, options) {
+  yield `${keyPrefix(key)}${options.keyValueSeparator}${
+    Array.isArray(value)
+      ? "(" + value.map(v => quote(v)).join(" ") + ")"
+      : quote(value)
+  }${options.lineEnding}`;
+}
+
 /**
  * @type KeyValueTransformOptions
  * Options to describe key value pair separated by an equal sign '='
@@ -35,16 +45,9 @@ export const pkgKeyValuePairOptions = {
       return [m[2], m[3] ? m[3].split(/\s*,\s*/) : m[4]];
     }
   },
-  keyValueLines: keyValueLines3
+  keyValueLines
 };
 
-function* keyValueLines3(key, value, lineEnding) {
-  yield `${keyPrefix(key)}=${
-    Array.isArray(value)
-      ? "(" + value.map(v => quote(v)).join(" ") + ")"
-      : quote(value)
-  }${lineEnding}`;
-}
 
 function keyPrefix(key) {
   const f = fields[key];

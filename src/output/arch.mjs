@@ -111,6 +111,10 @@ package() {
 `;
     }
 
+    if(properties.backup && properties.backup[0] === '/') {
+    	properties.backup = properties.backup.replace(/\//,'');
+    }
+    
     if (properties.hooks) {
       await pipeline(
         iterableStringInterceptor(

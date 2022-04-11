@@ -110,7 +110,8 @@ program
               ".txt",
               ".webmanifest",
               ".service",
-              ".socket"
+              ".socket",
+              ".rules"
             ]),
             context.expand(properties)
             //properties

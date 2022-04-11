@@ -152,7 +152,7 @@ const toBeSkipped = new RegExp(
       "CHANGES(\\.md)?",
       "HISTORY(\\.md)?",
       "DOCUMENTATION(\\.md)?",
-      "LICEN[SC]E(\\-\\w+(\\.txt)?|\\.md|\\.txt|\\.BSD|\\.APACHE2|\\.MIT|\\.terms)?",
+      "LICEN[SC]E(\\-\\w+)?(\\.txt|\\.md|\\.BSD|\\.APACHE2|\\.MIT|\\.terms)?",
       "README(.*\\.md|\\.txt)?",
       "INSTALL(.*\\.md)?",
       "\\.armv6\\.node",

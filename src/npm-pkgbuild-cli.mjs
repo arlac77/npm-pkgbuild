@@ -114,7 +114,6 @@ program
               ".rules"
             ]),
             context.expand(properties)
-            //properties
           )
         ];
 

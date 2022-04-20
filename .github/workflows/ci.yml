@@ -7,6 +7,7 @@ jobs:
       matrix:
         node-version:
           - 16.14.2
+          - 18.0.0
     steps:
       - name: Dependencies
         run: >

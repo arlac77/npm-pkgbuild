@@ -151,6 +151,7 @@ const toBeSkipped = new RegExp(
       "CHANGELOG(\\.md)?",
       "CHANGES(\\.md)?",
       "HISTORY(\\.md)?",
+      "ROADMAP(\\.md)?",
       "DOCUMENTATION(\\.md)?",
       "LICEN[SC]E(\\-\\w+)?(\\.txt|\\.md|\\.BSD|\\.APACHE2|\\.MIT|\\.terms)?",
       "README(.*\\.md|\\.txt)?",

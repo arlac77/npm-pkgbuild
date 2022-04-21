@@ -40,12 +40,12 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^5.0.6",
+    "@npmcli/arborist": "^5.1.0",
     "aggregate-async-iterator": "^1.1.10",
     "commander": "^9.2.0",
     "content-entry": "^4.1.12",
     "content-entry-filesystem": "^4.0.11",
-    "content-entry-transform": "^1.3.17",
+    "content-entry-transform": "^1.3.18",
     "execa": "^6.1.0",
     "expression-expander": "^7.0.16",
     "globby": "^13.1.0",
@@ -54,7 +54,7 @@
     "key-value-transformer": "^3.0.0",
     "node-fetch": "^3.2.3",
     "npm-package-walker": "^5.0.6",
-    "npm-packlist": "^5.0.0",
+    "npm-packlist": "^5.0.1",
     "pacote": "^13.1.1",
     "pkg-dir": "^6.0.1",
     "tar-stream": "^2.2.0"

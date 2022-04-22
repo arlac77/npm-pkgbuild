@@ -120,6 +120,7 @@ const toBeSkipped = new RegExp(
       "\\.gyp",
       "\\.stamp",
       "\\.cs",
+      "\\.cmd",
       "\\.markdown",
       "appveyor\\.yml",
       "seed\\.yml",

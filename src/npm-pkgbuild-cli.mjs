@@ -46,7 +46,7 @@ program
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .addOption(
     new program.Option("--publish <url>", "publishing url of the package")
-      .env("PKGBULD_PUBLISH")
+      .env("PKGBUILD_PUBLISH")
       .argParser(value => {
         let values = value.split(/,/);
         if (values.length > 1) {

@@ -49,8 +49,13 @@ export class Packager {
         properties[k] = e;
       } else {
         const vak = v.alias || k;
-        if (properties[vak] === undefined && v.default !== undefined) {
-          properties[vak] = v.default;
+        if (v.default !== undefined) {
+          if (
+            (Array.isArray(properties[vak]) && properties[vak].length === 0) ||
+            properties[vak] === undefined
+          ) {
+            properties[vak] = v.default;
+          }
         }
       }
     });

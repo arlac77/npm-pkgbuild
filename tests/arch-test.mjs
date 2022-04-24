@@ -7,6 +7,7 @@ import { FileContentProvider, ARCH } from "npm-pkgbuild";
 test("arch default properties", async t => {
   const properties = {
     name: "abc",
+    arch: [],
     version: "1.0.0",
     description: "a description",
     license: "MIT"

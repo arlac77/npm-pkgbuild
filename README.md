@@ -34,7 +34,7 @@ You can specify the package content in package.json.
 
 ```json
 {
-	"pkg": {
+	"pkgbuild": {
 		"content": {
 			"/some/location" : { "base": "build" },
 			"/etc/myconfig.json" : "sample-config.json",

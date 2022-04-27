@@ -76,7 +76,7 @@ export async function extractFromPackage(json, dir) {
   let arch = new Set();
 
   const processPkg = (json, dir, modulePath) => {
-    const pkg = json.pkg;
+    const pkg = json.pkgbuild;
 
     if (pkg) {
       if (json.cpu) {

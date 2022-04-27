@@ -46,7 +46,7 @@ efpt.title = (
 
 test(
   efpt,
-  { name: "n1", description: "d1", version: "1.2.3", cpu: hostArch, pkg: {} },
+  { name: "n1", description: "d1", version: "1.2.3", cpu: hostArch, pkgbuild: {} },
   {
     name: "n1",
     description: "d1",
@@ -65,7 +65,7 @@ test(
     license: "BSD",
     config: { c1: "v1" },
     repository: "github:/arlac77/npm-pkgbuild",
-    pkg: {
+    pkgbuild: {
       arch: ["aarch64", "x86_64"],
       name: "n2",
       other: "o1",
@@ -92,7 +92,7 @@ test(
   efpt,
   {
     cpu: ["arm64", "x64"],
-    pkg: {}
+    pkgbuild: {}
   },
   {
     access: "private",
@@ -106,7 +106,7 @@ test(
 test(
   efpt,
   {
-    pkg: {}
+    pkgbuild: {}
   },
   {
     access: "private"
@@ -136,7 +136,7 @@ test(
     publishConfig: {
       access: "public"
     },
-    pkg: {
+    pkgbuild: {
       content: {
         "${installdir}": [
           {

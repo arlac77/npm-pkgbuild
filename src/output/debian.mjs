@@ -93,10 +93,13 @@ export class DEBIAN extends Packager {
       )
     );
 
-    properties.Depends = Object.entries(dependencies).map(
-      ([name, e]) => `${packageNameMapping[name] ? packageNameMapping[name] : name} (${e})`
-    );
-
+    if (Object.keys(dependencies).length > 0) {
+      properties.Depends = Object.entries(dependencies).map(
+        ([name, e]) =>
+          `${packageNameMapping[name] ? packageNameMapping[name] : name} (${e})`
+      );
+    }
+    
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
 

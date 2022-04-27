@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { program } from "commander";
@@ -20,8 +21,10 @@ import {
 } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url).pathname),
-  utf8StreamOptions
+  readFileSync(
+    fileURLToPath(new URL("../package.json", import.meta.url)),
+    utf8StreamOptions
+  )
 );
 
 program.description(description).version(version);
@@ -45,13 +48,20 @@ program
   )
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .addOption(
-    new program.Option("--publish <url>", "publishing url (or directory) of the package")
+    new program.Option(
+      "--publish <url>",
+      "publishing url (or directory) of the package"
+    )
       .env("PKGBUILD_PUBLISH")
       .argParser(value => {
         let values = value.split(/,/);
         if (values.length > 1) {
           values = values.map(v => process.env[v] || v);
-          return { url: values[0], user: values[1], password: decodePassword(values[2]) };
+          return {
+            url: values[0],
+            user: values[1],
+            password: decodePassword(values[2])
+          };
         }
 
         return { url: value };
@@ -135,7 +145,7 @@ program
       }
     } catch (e) {
       console.error(e);
-      if(!options.continue) {
+      if (!options.continue) {
         process.exit(-1);
       }
     }

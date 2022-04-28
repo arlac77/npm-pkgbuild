@@ -2,14 +2,19 @@ import test from "ava";
 import { FileContentProvider } from "npm-pkgbuild";
 
 async function fcpt(t, definition, destination, list) {
-  const content = new FileContentProvider(definition,{ destination });
+  const content = new FileContentProvider(definition,
+    typeof destination === "string" ? { destination } : destination);
 
   const entries = [];
   for await (const entry of content) {
     entries.push(entry);
   }
 
-  t.deepEqual(entries.map(e => {return { name: e.name, destination: e.destination}; }),list);
+  t.deepEqual(entries.map(e => { 
+    const r = { name: e.name, destination: e.destination };
+    if(e.user) { r.user = e.user; }
+    return r;
+  }), list);
 
   const exists = await Promise.all(entries.map(e => e.isExistent));
   t.is(exists.filter(e => e).length, entries.length);
@@ -20,8 +25,14 @@ fcpt.title = (providedTitle = "FileContentProvider list", definition, destinatio
   )} -> ${JSON.stringify(list)}`.trim();
 
 
-test(fcpt, new URL("fixtures/skeleton/package.json", import.meta.url).pathname, "dest/package.json",
-  [{name: "package.json", destination: "dest/package.json"}]
+test(fcpt, new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
+  { destination: "dest/package.json",
+    user: "root"
+   },
+  [{
+    name: "package.json", 
+    user: "root",
+    destination: "dest/package.json"}]
 );
 
 test(

@@ -149,7 +149,8 @@ test(
             base: "dist"
           }
         ],
-        "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf"
+  //      "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf",
+        "/etc/nginx/sites/common/${name}.conf": { name: "pkgbuild/nginx.conf", owner: "root" }
       },
       depends: {
         "nginx-mainline": ">=1.21.1",
@@ -181,9 +182,13 @@ test(
       { destination: "/services/konsum/frontend" }
     ),
 
+    /*new FileContentProvider(
+      { base: "pkgbuild", pattern: ["other.conf"] },
+      { destination: "/etc/nginx/sites/common/other.conf", owner: "root" }
+    ),*/
     new FileContentProvider(
-      { base: "pkgbuild", pattern: ["nginx.conf"] },
-      { destination: "/etc/nginx/sites/common/konsum-frontend.conf" }
+      { name : "pkgbuild/nginx.conf" },
+      { destination: "/etc/nginx/sites/common/konsum-frontend.conf", owner: "root" }
     )
   ],
   {

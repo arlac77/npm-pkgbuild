@@ -22,6 +22,8 @@ export const archMapping = Object.fromEntries(
   Object.entries(npmArchMapping).map(a => [a[1], a[0]])
 );
 
+const entryAttributeNames = ["owner", "group", "mode"];
+
 /**
  * Extract package definition from package.json.
  * @param {Object} pkg package.json content
@@ -99,31 +101,39 @@ export async function extractFromPackage(json, dir) {
           .forEach(([k, v]) => (properties[k] = v));
 
         if (pkg.content && !modulePath) {
-          Object.entries(pkg.content).forEach(
-            ([destination, definitions]) => {
-              destination = context.expand(destination);
-              definitions = context.expand(definitions);
-              for (const definition of asArray(definitions)) {
-                const entryProperties = { destination };
+          Object.entries(pkg.content).forEach(([destination, definitions]) => {
+            destination = context.expand(destination);
+            definitions = context.expand(definitions);
 
-                if (definition.type) {
-                  const type = allInputs.find(i => i.name === definition.type);
-                  if (type) {
-                    delete definition.type;
-                    sources.push(
-                      new type({ ...definition, dir }, entryProperties)
-                    );
-                  } else {
-                    console.error(`Unknown type '${type}'`);
-                  }
-                } else {
-                  sources.push(
-                    new FileContentProvider(definition, entryProperties)
-                  );
-                }
+            const allEntryProperties = {};
+
+            for (const a of entryAttributeNames) {
+              if (definitions[a] !== undefined) {
+                allEntryProperties[a] = definitions[a];
+                delete definitions[a];
               }
             }
-          );
+
+            for (const definition of asArray(definitions)) {
+              const entryProperties = { ...allEntryProperties, destination };
+
+              if (definition.type) {
+                const type = allInputs.find(i => i.name === definition.type);
+                if (type) {
+                  delete definition.type;
+                  sources.push(
+                    new type({ ...definition, dir }, entryProperties)
+                  );
+                } else {
+                  console.error(`Unknown type '${type}'`);
+                }
+              } else {
+                sources.push(
+                  new FileContentProvider(definition, entryProperties)
+                );
+              }
+            }
+          });
         }
       }
       Object.assign(dependencies, pkg.depends);

@@ -75,73 +75,82 @@ program
         console.log(`pkgdir: ${pkgDir}`);
       }
 
-      const { properties, sources, output, dependencies } =
-        await extractFromPackage(
-          JSON.parse(
-            await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
-          ),
-          pkgDir
-        );
-
-      for (const inputFactory of allInputs.filter(
-        inputFactory => options[inputFactory.name] === true
+      for await (const {
+        properties,
+        sources,
+        output,
+        dependencies,
+        variant
+      } of extractFromPackage(
+        JSON.parse(
+          await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
+        ),
+        pkgDir
       )) {
-        sources.push(new inputFactory());
-      }
-
-      for (const outputFactory of allOutputs.filter(
-        o => options[o.name] === true || output[o.name] !== undefined
-      )) {
-        if (options.available && !(await outputFactory.available)) {
-          continute;
+        for (const inputFactory of allInputs.filter(
+          inputFactory => options[inputFactory.name] === true
+        )) {
+          sources.push(new inputFactory());
         }
 
-        Object.assign(properties, { type: outputFactory.name }, options.define);
+        for (const outputFactory of allOutputs.filter(
+          o => options[o.name] === true || output[o.name] !== undefined
+        )) {
+          if (options.available && !(await outputFactory.available)) {
+            continute;
+          }
 
-        sources.push(
-          ...[...options.content, ...options.meta]
-            .filter(x => x)
-            .map(
-              source =>
-                new FileContentProvider({
-                  base: source
-                })
+          Object.assign(
+            properties,
+            { type: outputFactory.name },
+            options.define
+          );
+
+          sources.push(
+            ...[...options.content, ...options.meta]
+              .filter(x => x)
+              .map(
+                source =>
+                  new FileContentProvider({
+                    base: source
+                  })
+              )
+          );
+
+          const context = createContext({ properties });
+          const output = new outputFactory(context.expand(properties));
+          const transformer = [
+            createExpressionTransformer(
+              nameExtensionMatcher([
+                ".conf",
+                ".json",
+                ".html",
+                ".txt",
+                ".webmanifest",
+                ".service",
+                ".socket",
+                ".rules"
+              ]),
+              context.expand(properties)
             )
-        );
+          ];
 
-        const context = createContext({ properties });
-        const output = new outputFactory(context.expand(properties));
-        const transformer = [
-          createExpressionTransformer(
-            nameExtensionMatcher([
-              ".conf",
-              ".json",
-              ".html",
-              ".txt",
-              ".webmanifest",
-              ".service",
-              ".socket",
-              ".rules"
-            ]),
-            context.expand(properties)
-          )
-        ];
+          if (options.verbose) {
+            console.log(output.properties);
+            console.log(`sources: ${sources.join("\n  ")}`);
+            console.log(`dependencies: ${JSON.stringify(dependencies)}`);
+          }
 
-        if (options.verbose) {
-          console.log(output.properties);
-          console.log(`sources: ${sources.join("\n  ")}`);
-          console.log(`dependencies: ${JSON.stringify(dependencies)}`);
+          const fileName = await output.execute(
+            sources.map(c => c[Symbol.asyncIterator]()),
+            transformer,
+            dependencies,
+            options,
+            path => context.expand(path)
+          );
+
+          await publish(fileName, options.publish, properties);
         }
-
-        const fileName = await output.execute(
-          sources.map(c => c[Symbol.asyncIterator]()),
-          transformer,
-          dependencies,
-          options,
-          path => context.expand(path)
-        );
-
-        await publish(fileName, options.publish, properties);
       }
     } catch (e) {
       console.error(e);

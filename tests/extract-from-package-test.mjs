@@ -16,21 +16,25 @@ async function efpt(
   expectedDependencies,
   expectedOutput
 ) {
-  const { properties, sources, dependencies, output } =
-    await extractFromPackage(pkg, dirname(new URL(import.meta.url).pathname));
+  for await (const {
+    properties,
+    sources,
+    dependencies,
+    output
+  } of extractFromPackage(pkg, dirname(new URL(import.meta.url).pathname))) {
+    t.deepEqual(properties, expectedProperties, "properties");
 
-  t.deepEqual(properties, expectedProperties, "properties");
+    if (expectedContent) {
+      t.deepEqual(sources, expectedContent, "content");
+    }
 
-  if (expectedContent) {
-    t.deepEqual(sources, expectedContent, "content");
-  }
+    if (expectedDependencies) {
+      t.deepEqual(dependencies, expectedDependencies, "dependencies");
+    }
 
-  if (expectedDependencies) {
-    t.deepEqual(dependencies, expectedDependencies, "dependencies");
-  }
-
-  if (expectedOutput) {
-    t.deepEqual(output, expectedOutput, "output");
+    if (expectedOutput) {
+      t.deepEqual(output, expectedOutput, "output");
+    }
   }
 }
 efpt.title = (
@@ -46,13 +50,20 @@ efpt.title = (
 
 test(
   efpt,
-  { name: "n1", description: "d1", version: "1.2.3", cpu: hostArch, pkgbuild: {} },
+  {
+    name: "n1",
+    description: "d1",
+    version: "1.2.3",
+    cpu: hostArch,
+    pkgbuild: {}
+  },
   {
     name: "n1",
     description: "d1",
     version: "1.2.3",
     access: "private",
-    arch: [npmArchMapping[hostArch]]
+    arch: [npmArchMapping[hostArch]],
+    variant: "default"
   }
 );
 
@@ -81,7 +92,8 @@ test(
     access: "private",
     arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
     c1: "v1",
-    source: "github:/arlac77/npm-pkgbuild"
+    source: "github:/arlac77/npm-pkgbuild",
+    variant: "default"
   },
   undefined,
   undefined,
@@ -96,7 +108,8 @@ test(
   },
   {
     access: "private",
-    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/]
+    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
+    variant: "default"
   },
   undefined,
   undefined,
@@ -109,7 +122,8 @@ test(
     pkgbuild: {}
   },
   {
-    access: "private"
+    access: "private",
+    variant: "default"
   },
   undefined,
   undefined,
@@ -126,7 +140,11 @@ test(
       }
     ]
   },
-  { access: "private", maintainer: "Markus Felten <markus.felten@gmx.de>" }
+  {
+    access: "private",
+    variant: "default",
+    maintainer: "Markus Felten <markus.felten@gmx.de>"
+  }
 );
 
 test(
@@ -149,8 +167,11 @@ test(
             base: "dist"
           }
         ],
-  //      "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf",
-        "/etc/nginx/sites/common/${name}.conf": { name: "pkgbuild/nginx.conf", owner: "root" }
+        //      "/etc/nginx/sites/common/${name}.conf": "pkgbuild/nginx.conf",
+        "/etc/nginx/sites/common/${name}.conf": {
+          name: "pkgbuild/nginx.conf",
+          owner: "root"
+        }
       },
       depends: {
         "nginx-mainline": ">=1.21.1",
@@ -166,7 +187,8 @@ test(
     groups: "home automation",
     hooks: "pkgbuild/hooks.sh",
     installdir: "/services/konsum/frontend",
-    name: "konsum-frontend"
+    name: "konsum-frontend",
+    variant: "default"
   },
   [
     new NPMPackContentProvider(
@@ -187,8 +209,11 @@ test(
       { destination: "/etc/nginx/sites/common/other.conf", owner: "root" }
     ),*/
     new FileContentProvider(
-      { name : "pkgbuild/nginx.conf" },
-      { destination: "/etc/nginx/sites/common/konsum-frontend.conf", owner: "root" }
+      { name: "pkgbuild/nginx.conf" },
+      {
+        destination: "/etc/nginx/sites/common/konsum-frontend.conf",
+        owner: "root"
+      }
     )
   ],
   {

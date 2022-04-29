@@ -30,12 +30,15 @@ const entryAttributeNames = ["owner", "group", "mode"];
  * @param {string} dir
  * @returns {Object}
  */
-export async function extractFromPackage(json, dir) {
+export async function * extractFromPackage(json, dir) {
+
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
       .map(key => [key, json[key]])
       .filter(([k, v]) => v !== undefined)
   );
+
+  let variant = "default";
 
   if (json.bugs) {
     if (json.bugs.url) {
@@ -88,6 +91,10 @@ export async function extractFromPackage(json, dir) {
       }
 
       if (pkg.abstract || !modulePath) {
+        if(pkg.variant) {
+          variant = pkg.variant;
+        }
+
         if (pkg.arch) {
           for (const a of asArray(pkg.arch)) {
             arch.add(a);
@@ -153,5 +160,7 @@ export async function extractFromPackage(json, dir) {
     properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch]);
   }
 
-  return { properties, sources, dependencies, output };
+  properties.variant = variant;
+  
+  yield { properties, sources, dependencies, output, variant };
 }

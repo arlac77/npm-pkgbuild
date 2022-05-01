@@ -41,13 +41,13 @@ fcpt.title = (
 test(
   fcpt,
   new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
-  { destination: "dest/package.json", user: "root", group: "sys" },
+  { destination: "dest/package.json", user: "root", group: "sys", mode: 0o640 },
   [
     {
       name: "package.json",
       user: "root",
       group: "sys",
-      mode: 0o644,
+      mode: 0o640,
       destination: "dest/package.json"
     }
   ]

@@ -38,13 +38,14 @@ You can specify the package content in package.json.
 		"content": {
 			"/some/location" : { "base": "build" },
 			"/etc/myconfig.json" : "sample-config.json",
+			"/erc/secret" : { "name":  "secret", "mode": "600" }
             "/opt/myapp": [
                 {
-                "type": "npm-pack"
+                  "type": "npm-pack"
                 },
                 {
-                "type": "node-modules",
-                "withoutDevelpmentDependencies": true
+                  "type": "node-modules",
+                  "withoutDevelpmentDependencies": true
                 }
             ]
 		},
@@ -61,7 +62,7 @@ You can specify the package content in package.json.
 
 # content providers
 
-# files (default)
+## files (default)
 
 content from the file system
 

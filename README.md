@@ -77,6 +77,10 @@ content of all (production) dependencies
 options:
     - withoutDevelpmentDependencies when to stip away dev dependencies (defaults to true)
 
+# shared configuration
+
+You can import common configuration from other packages
+see mf-hosting module as an example
 
 # API
 

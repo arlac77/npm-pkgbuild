@@ -36,18 +36,18 @@ You can specify the package content in package.json.
 {
 	"pkgbuild": {
 		"content": {
-			"/some/location" : { "base": "build" },
+			"/some/location/" : { "base": "build" },
 			"/etc/myconfig.json" : "sample-config.json",
-			"/erc/secret" : { "name":  "secret", "mode": "600" }
-            "/opt/myapp": [
-                {
-                  "type": "npm-pack"
-                },
-                {
-                  "type": "node-modules",
-                  "withoutDevelpmentDependencies": true
-                }
-            ]
+			"/erc/secret" : { "name":  "secret", "mode": "600" },
+      "/opt/myapp": [
+        {
+          "type": "npm-pack"
+        },
+        {
+          "type": "node-modules",
+          "withoutDevelpmentDependencies": true
+        }
+      ]
 		},
 		"hooks" : "pkg/hooks",
 		"output": {

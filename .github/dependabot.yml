@@ -4,15 +4,11 @@ updates:
     directory: /
     schedule:
       interval: daily
-      time: '04:00'
-    open-pull-requests-limit: 10
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: daily
     commit-message:
       prefix: 'fix(deps):'
       prefix-development: 'chore(deps):'
+    labels:
+      - "npm dependencies"
   - package-ecosystem: github-actions
     directory: /
     schedule:

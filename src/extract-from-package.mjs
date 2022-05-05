@@ -140,7 +140,8 @@ export async function extractFromPackage(json, dir) {
   processPkg(json, dir);
 
   if (arch.size > 0) {
-    properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch]);
+    const mappedArch = [...arch].filter(a => a === npmArchMapping[hostArch])
+    properties.arch = mappedArch.length > 0 ? mappedArch : Array.from(arch).slice(0,1);
   }
 
   return { properties, sources, dependencies, output };

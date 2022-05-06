@@ -12,10 +12,21 @@ import { RPM } from "./output/rpm.mjs";
 export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 export const allOutputs = [DEBIAN, ARCH, RPM];
 
+/**
+ * Node architecture name to os native name
+ * {@see https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processargv}
+ */
 export const npmArchMapping = {
   arm64: "aarch64",
   arm: "armv7h",
+  mips : "mips",
+  mipsel: "mipsel",
+  ppc: "ppc",
+  s390: "s390",
+  s390x: "s390x"
+  ia32 : "x32",
   x64: "x86_64"
+  ppc64: "ppc64"
 };
 
 export const archMapping = Object.fromEntries(

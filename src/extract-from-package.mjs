@@ -23,9 +23,9 @@ export const npmArchMapping = {
   mipsel: "mipsel",
   ppc: "ppc",
   s390: "s390",
-  s390x: "s390x"
+  s390x: "s390x",
   ia32 : "x32",
-  x64: "x86_64"
+  x64: "x86_64",
   ppc64: "ppc64"
 };
 

@@ -44,6 +44,7 @@ const entryAttributeNames = ["owner", "group", "mode"];
  * - for each architecture deliver a new result
  * - if not architecture is given one result set is provided nethertheless
  * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
+ * - architecture given in a abstract definition are used to reduce the set of avaliable architectures 
  * @param {Object} pkg package.json content
  * @param {string} dir
  * @returns {AsyncIter<PackageDefinition>}
@@ -96,17 +97,25 @@ export async function* extractFromPackage(json, dir) {
   let sources = [];
   let output = {};
   let arch = new Set();
-
+  let restrictArch = new Set();
+  
   const processPkg = (json, dir, modulePath) => {
     const pkg = json.pkgbuild;
 
     if (pkg) {
-      if (json.cpu) {
-        for (const a of asArray(json.cpu)) {
-          arch.add(npmArchMapping[a]);
+      if(!modulePath) {
+        if (json.cpu) {
+          for (const a of asArray(json.cpu)) {
+            arch.add(npmArchMapping[a]);
+          }
+        }
+        if(pkg.arch) {
+        	for(const a of asArray(pkg.arch)) {
+        	  arch.add(a);
+        	}
         }
       }
-
+      
       if (pkg.abstract || !modulePath) {
         if (pkg.variant) {
           variant = pkg.variant;
@@ -114,7 +123,7 @@ export async function* extractFromPackage(json, dir) {
 
         if (pkg.arch) {
           for (const a of asArray(pkg.arch)) {
-            arch.add(a);
+            restrictArch.add(a);
           }
         }
 
@@ -178,8 +187,10 @@ export async function* extractFromPackage(json, dir) {
   if (arch.size > 0) {
     // provide each arch separadly
     for (const a of arch) {
-      properties.arch = [a];
-      yield { properties, sources, dependencies, output, variant };
+      if(!restrictArch.size || restrictArch.has(a)) {
+        properties.arch = [a];
+        yield { properties, sources, dependencies, output, variant };
+      }
     }
   } else {
     // or one set if no arch is given

@@ -8,44 +8,35 @@ import {
   npmArchMapping
 } from "npm-pkgbuild";
 
-async function efpt(
-  t,
-  pkg,
-  expectedProperties,
-  expectedContent,
-  expectedDependencies,
-  expectedOutput
-) {
+async function efpt(t, pkg, expected) {
+  let v = 0;
+
   for await (const {
     properties,
     sources,
     dependencies,
     output
   } of extractFromPackage(pkg, dirname(new URL(import.meta.url).pathname))) {
-    t.deepEqual(properties, expectedProperties, "properties");
+    t.deepEqual(properties, expected[v].properties, "properties");
 
-    if (expectedContent) {
-      t.deepEqual(sources, expectedContent, "content");
+    if (expected[v].content) {
+      t.deepEqual(sources, expected[v].content, "content");
     }
 
-    if (expectedDependencies) {
-      t.deepEqual(dependencies, expectedDependencies, "dependencies");
+    if (expected[v].dependencies) {
+      t.deepEqual(dependencies, expected[v].dependencies, "dependencies");
     }
 
-    if (expectedOutput) {
-      t.deepEqual(output, expectedOutput, "output");
+    if (expected[v].output) {
+      t.deepEqual(output, expected[v].output, "output");
     }
+
+    v++;
   }
 }
-efpt.title = (
-  providedTitle = "extractFromPackage",
-  pkg,
-  expectedProperties,
-  expectedContent,
-  expectedOutput
-) =>
+efpt.title = (providedTitle = "extractFromPackage", pkg, expected) =>
   ` ${providedTitle} ${JSON.stringify(pkg)} -> ${JSON.stringify(
-    expectedProperties
+    expected
   )}`.trim();
 
 test(
@@ -57,14 +48,18 @@ test(
     cpu: hostArch,
     pkgbuild: {}
   },
-  {
-    name: "n1",
-    description: "d1",
-    version: "1.2.3",
-    access: "private",
-    arch: [npmArchMapping[hostArch]],
-    variant: "default"
-  }
+  [
+    {
+      properties: {
+        name: "n1",
+        description: "d1",
+        version: "1.2.3",
+        access: "private",
+        arch: [npmArchMapping[hostArch]],
+        variant: "default"
+      }
+    }
+  ]
 );
 
 test(
@@ -83,21 +78,23 @@ test(
       output: { deb: {} }
     }
   },
-  {
-    name: "n2",
-    description: "d1",
-    version: "1.2.3",
-    other: "o1",
-    license: "BSD",
-    access: "private",
-    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
-    c1: "v1",
-    source: "github:/arlac77/npm-pkgbuild",
-    variant: "default"
-  },
-  undefined,
-  undefined,
-  { deb: {} }
+  [
+    {
+      properties: {
+        name: "n2",
+        description: "d1",
+        version: "1.2.3",
+        other: "o1",
+        license: "BSD",
+        access: "private",
+        arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
+        c1: "v1",
+        source: "github:/arlac77/npm-pkgbuild",
+        variant: "default"
+      },
+      output: { deb: {} }
+    }
+  ]
 );
 
 test(
@@ -106,14 +103,33 @@ test(
     cpu: ["arm64", "x64"],
     pkgbuild: {}
   },
+  [
+    {
+      properties: {
+        access: "private",
+        arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
+        variant: "default"
+      },
+      output: {}
+    }
+  ]
+);
+
+test.skip(
+  efpt,
   {
-    access: "private",
-    arch: [npmArchMapping[hostArch] /*"aarch64","x86_64"*/],
-    variant: "default"
+    pkgbuild: { arch: "armhf" }
   },
-  undefined,
-  undefined,
-  {}
+  [
+    {
+      properties: {
+        arch: ["armvhf"],
+        access: "private",
+        variant: "default"
+      },
+      output: {}
+    }
+  ]
 );
 
 test(
@@ -121,13 +137,15 @@ test(
   {
     pkgbuild: {}
   },
-  {
-    access: "private",
-    variant: "default"
-  },
-  undefined,
-  undefined,
-  {}
+  [
+    {
+      properties: {
+        access: "private",
+        variant: "default"
+      },
+      output: {}
+    }
+  ]
 );
 
 test(
@@ -140,11 +158,15 @@ test(
       }
     ]
   },
-  {
-    access: "private",
-    variant: "default",
-    maintainer: "Markus Felten <markus.felten@gmx.de>"
-  }
+  [
+    {
+      properties: {
+        access: "private",
+        variant: "default",
+        maintainer: "Markus Felten <markus.felten@gmx.de>"
+      }
+    }
+  ]
 );
 
 test(
@@ -182,42 +204,46 @@ test(
       installdir: "/services/konsum/frontend"
     }
   },
-  {
-    access: "public",
-    groups: "home automation",
-    hooks: "pkgbuild/hooks.sh",
-    installdir: "/services/konsum/frontend",
-    name: "konsum-frontend",
-    variant: "default"
-  },
   [
-    new NPMPackContentProvider(
-      { dir: dirname(new URL(import.meta.url).pathname) },
-      { destination: "/services/konsum/frontend" }
-    ),
-    new FileContentProvider(
-      { base: "build" },
-      { destination: "/services/konsum/frontend" }
-    ),
-    new FileContentProvider(
-      { base: "dist" },
-      { destination: "/services/konsum/frontend" }
-    ),
+    {
+      properties: {
+        access: "public",
+        groups: "home automation",
+        hooks: "pkgbuild/hooks.sh",
+        installdir: "/services/konsum/frontend",
+        name: "konsum-frontend",
+        variant: "default"
+      },
+      content: [
+        new NPMPackContentProvider(
+          { dir: dirname(new URL(import.meta.url).pathname) },
+          { destination: "/services/konsum/frontend" }
+        ),
+        new FileContentProvider(
+          { base: "build" },
+          { destination: "/services/konsum/frontend" }
+        ),
+        new FileContentProvider(
+          { base: "dist" },
+          { destination: "/services/konsum/frontend" }
+        ),
 
-    /*new FileContentProvider(
+        /*new FileContentProvider(
       { base: "pkgbuild", pattern: ["other.conf"] },
       { destination: "/etc/nginx/sites/common/other.conf", owner: "root" }
     ),*/
-    new FileContentProvider(
-      { name: "pkgbuild/nginx.conf" },
-      {
-        destination: "/etc/nginx/sites/common/konsum-frontend.conf",
-        owner: "root"
+        new FileContentProvider(
+          { name: "pkgbuild/nginx.conf" },
+          {
+            destination: "/etc/nginx/sites/common/konsum-frontend.conf",
+            owner: "root"
+          }
+        )
+      ],
+      dependencies: {
+        "nginx-mainline": ">=1.21.1",
+        konsum: ">=4.1.0"
       }
-    )
-  ],
-  {
-    "nginx-mainline": ">=1.21.1",
-    konsum: ">=4.1.0"
-  }
+    }
+  ]
 );

@@ -1,4 +1,3 @@
-import { arch as hostArch } from "process";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
 import { asArray } from "./util.mjs";
@@ -13,36 +12,43 @@ export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
 export const allOutputs = [DEBIAN, ARCH, RPM];
 
 /**
- * Node architecture name to os native name
+ * Node architecture name to os native name mapping
  * {@see https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processargv}
  */
 export const npmArchMapping = {
   arm64: "aarch64",
   arm: "armv7h",
-  mips : "mips",
+  mips: "mips",
   mipsel: "mipsel",
   ppc: "ppc",
   s390: "s390",
   s390x: "s390x",
-  ia32 : "x32",
+  ia32: "x32",
   x64: "x86_64",
   ppc64: "ppc64"
 };
 
-export const archMapping = Object.fromEntries(
-  Object.entries(npmArchMapping).map(a => [a[1], a[0]])
-);
-
 const entryAttributeNames = ["owner", "group", "mode"];
 
 /**
+ * @typedef {Object} PackageDefinition 
+ * @property {Object} properties values describing the package attributes
+ * @property {ContentProvider[]} sources content providers
+ * @property {Object} dependencies
+ * @property {Object} output package type
+ * @property {string} variant identifier of the variant
+ */
+
+/**
  * Extract package definition from package.json.
+ * - for each architecture deliver a new result
+ * - if not architecture is given one result set is provided nethertheless
+ * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
  * @param {Object} pkg package.json content
  * @param {string} dir
- * @returns {Object}
+ * @returns {AsyncIter<PackageDefinition>}
  */
-export async function * extractFromPackage(json, dir) {
-
+export async function* extractFromPackage(json, dir) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
       .map(key => [key, json[key]])
@@ -102,7 +108,7 @@ export async function * extractFromPackage(json, dir) {
       }
 
       if (pkg.abstract || !modulePath) {
-        if(pkg.variant) {
+        if (pkg.variant) {
           variant = pkg.variant;
         }
 
@@ -167,11 +173,16 @@ export async function * extractFromPackage(json, dir) {
 
   processPkg(json, dir);
 
-  if (arch.size > 0) {
-    properties.arch = [...arch].filter(a => a === npmArchMapping[hostArch]);
-  }
-
   properties.variant = variant;
-  
-  yield { properties, sources, dependencies, output, variant };
+
+  if (arch.size > 0) {
+    // provide each arch separadly
+    for (const a of arch) {
+      properties.arch = [a];
+      yield { properties, sources, dependencies, output, variant };
+    }
+  } else {
+    // or one set if no arch is given
+    yield { properties, sources, dependencies, output, variant };
+  }
 }

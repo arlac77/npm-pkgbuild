@@ -36,6 +36,7 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   async *[Symbol.asyncIterator]() {
+    try {
     let pkgSourceDir = this.dir;
 
     if (this.withoutDevelpmentDependencies) {
@@ -97,6 +98,11 @@ export class NodeModulesContentProvider extends ContentProvider {
         );
       }
     }
+  }
+  catch(e) {
+    console.error(e);
+  	throw e;
+  }
   }
 }
 

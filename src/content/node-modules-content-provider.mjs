@@ -52,10 +52,22 @@ export class NodeModulesContentProvider extends ContentProvider {
         utf8StreamOptions
       );
 
-      // TODO find .npmrc
-      const npmrc = parse(
-        await readFile(join(homedir(), ".npmrc"), utf8StreamOptions)
-      );
+      let npmrcContent;
+
+      const searchDirs = [pkgSourceDir, homedir()];
+      for(const d of searchDirs) {
+        try {
+          npmrcContent = await readFile(join(d, ".npmrc"), utf8StreamOptions);
+          break;
+        }
+        catch {}
+      }
+      
+      if(!npmrcContent) {
+        throw new Error(`.npmrc not found in ${searchDirs}`);	
+      }
+      
+      const npmrc = parse(npmrcContent);
       const arb = new Arborist({ path: pkgSourceDir, ...npmrc });
       await arb.buildIdealTree({
         update: true,

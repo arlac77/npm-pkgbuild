@@ -62,12 +62,21 @@ export class NodeModulesContentProvider extends ContentProvider {
         }
         catch {}
       }
+
+      let npmrc = {};
       
-      if(!npmrcContent) {
-        throw new Error(`.npmrc not found in ${searchDirs}`);	
+      if(npmrcContent) {
+        npmrc = parse(npmrcContent);
+      }
+      else {
+        if(process.env.NPM_TOKEN) {
+          npmrc['_authToken'] = process.env.NPM_TOKEN;
+        }
+        else {
+          throw new Error(`.npmrc not found in ${searchDirs}`);
+        }
       }
       
-      const npmrc = parse(npmrcContent);
       const arb = new Arborist({ path: pkgSourceDir, ...npmrc });
       await arb.buildIdealTree({
         update: true,

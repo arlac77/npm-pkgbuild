@@ -38,7 +38,7 @@ program
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option("-p --pkgdir <dir>", "which package to use", process.cwd())
-  .option("-a --available", "only excute availabe output methods", false)
+  .option("-a --available", "only execute availabe output methods", false)
   .option("--continue", "continue on error")
   .option(
     "-c --content <dir>",
@@ -85,7 +85,8 @@ program
         JSON.parse(
           await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
         ),
-        pkgDir
+        pkgDir,
+        options
       )) {
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true

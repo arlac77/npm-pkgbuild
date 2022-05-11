@@ -47,9 +47,10 @@ const entryAttributeNames = ["owner", "group", "mode"];
  * - architecture given in a abstract definition are used to reduce the set of avaliable architectures
  * @param {Object} pkg package.json content
  * @param {string} dir
+ * @param {Object} options
  * @returns {AsyncIter<PackageDefinition>}
  */
-export async function* extractFromPackage(json, dir) {
+export async function* extractFromPackage(json, dir, options = {}) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
       .map(key => [key, json[key]])
@@ -186,11 +187,22 @@ export async function* extractFromPackage(json, dir) {
 
   if (arch.size > 0) {
     // provide each arch separadly
+
+    let numberOfArchs = 0;
+
     for (const a of arch) {
       if (!restrictArch.size || restrictArch.has(a)) {
-        properties.arch = [a];
-        yield { properties, sources, dependencies, output, variant };
+        if (options.available && npmArchMapping[process.arch] !== a) {
+          break;
+        } else {
+          numberOfArchs++;
+          properties.arch = [a];
+          yield { properties, sources, dependencies, output, variant };
+        }
       }
+    }
+    if (numberOfArchs === 0) {
+      console.warn(`No matching arch remaining was ${[...arch]}`);
     }
   } else {
     // or one set if no arch is given

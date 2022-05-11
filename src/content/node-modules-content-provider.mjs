@@ -37,93 +37,89 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   async *[Symbol.asyncIterator]() {
     try {
-    let pkgSourceDir = this.dir;
+      let pkgSourceDir = this.dir;
 
-    if (this.withoutDevelpmentDependencies) {
-      pkgSourceDir = await mkdtemp(join(tmpdir(), "node-modules"));
+      if (this.withoutDevelpmentDependencies) {
+        pkgSourceDir = await mkdtemp(join(tmpdir(), "node-modules"));
 
-      const json = JSON.parse(
-        await readFile(join(this.dir, "package.json"), utf8StreamOptions)
-      );
-      delete json.devDependencies;
-      await writeFile(
-        join(pkgSourceDir, "package.json"),
-        JSON.stringify(json),
-        utf8StreamOptions
-      );
+        const json = JSON.parse(
+          await readFile(join(this.dir, "package.json"), utf8StreamOptions)
+        );
+        delete json.devDependencies;
+        await writeFile(
+          join(pkgSourceDir, "package.json"),
+          JSON.stringify(json),
+          utf8StreamOptions
+        );
 
-      let npmrcContent;
+        let npmrcContent;
 
-      const searchDirs = [pkgSourceDir, homedir()];
-      for(const d of searchDirs) {
-        try {
-          npmrcContent = await readFile(join(d, ".npmrc"), utf8StreamOptions);
-          break;
-        }
-        catch {}
-      }
-
-      let npmrc = {};
-      
-      if(npmrcContent) {
-        npmrc = parse(npmrcContent);
-      }
-      else {
-        if(process.env.NPM_TOKEN) {
-          npmrc['_authToken'] = process.env.NPM_TOKEN;
-        }
-        else {
-          throw new Error(`.npmrc not found in ${searchDirs}`);
-        }
-      }
-      
-      const arb = new Arborist({ path: pkgSourceDir, ...npmrc });
-      await arb.buildIdealTree({
-        update: true,
-        prune: true,
-        saveType: "prod"
-      });
-      await arb.prune({ saveType: "prod" });
-      await arb.reify({ save: true });
-    }
-
-    for (const name of await globby("node_modules/**/*", {
-      cwd: pkgSourceDir
-    })) {
-      if (!toBeSkipped.test(name)) {
-        if (name.endsWith("package.json")) {
+        const searchDirs = [pkgSourceDir, homedir()];
+        for (const d of searchDirs) {
           try {
-            const json = shrinkNPM(
-              JSON.parse(
-                await readFile(join(pkgSourceDir, name), utf8StreamOptions)
-              ),
-              {}
-            );
+            npmrcContent = await readFile(join(d, ".npmrc"), utf8StreamOptions);
+            break;
+          } catch {}
+        }
 
-            if (json) {
-              yield Object.assign(
-                new StringContentEntry(name, JSON.stringify(json)),
-                this.entryProperties
-              );
-            }
+        let npmrc = {};
 
-            continue;
-          } catch (e) {
-            console.error(e, name);
+        if (npmrcContent) {
+          npmrc = parse(npmrcContent);
+        } else {
+          if (process.env.NPM_TOKEN) {
+            npmrc["_authToken"] = process.env.NPM_TOKEN;
+          } else {
+            throw new Error(`.npmrc not found in ${searchDirs}`);
           }
         }
-        
-        yield Object.assign(
-          new FileSystemEntry(name, pkgSourceDir),
-          this.entryProperties
-        );
+
+        const arb = new Arborist({ path: pkgSourceDir, ...npmrc });
+        await arb.buildIdealTree({
+          update: true,
+          prune: true,
+          saveType: "prod"
+        });
+        await arb.prune({ saveType: "prod" });
+        await arb.reify({ save: true });
       }
+
+      for (const name of await globby("node_modules/**/*", {
+        cwd: pkgSourceDir
+      })) {
+        if (!toBeSkipped.test(name)) {
+          if (name.endsWith("package.json")) {
+            try {
+              const json = shrinkNPM(
+                JSON.parse(
+                  await readFile(join(pkgSourceDir, name), utf8StreamOptions)
+                ),
+                {}
+              );
+
+              if (json) {
+                yield Object.assign(
+                  new StringContentEntry(name, JSON.stringify(json)),
+                  this.entryProperties
+                );
+              }
+
+              continue;
+            } catch (e) {
+              console.error(e, name);
+            }
+          }
+
+          yield Object.assign(
+            new FileSystemEntry(name, pkgSourceDir),
+            this.entryProperties
+          );
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
-  }
-  catch(e) {
-    console.error(e);
-  	throw e;
-  }
   }
 }
 

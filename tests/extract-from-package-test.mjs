@@ -161,6 +161,41 @@ test(
 test(
   efpt,
   {
+    cpu: ["arm", "arm64", "x64"],
+    pkgbuild: {
+      variant: "v1",
+      arch: ["aarch64", "arm", "x86_64"]
+    }
+  },
+  [
+    {
+      properties: {
+        access: "private",
+        arch: ["aarch64"],
+        variant: "v1"
+      }
+    },
+    {
+      properties: {
+        access: "private",
+        arch: ["x86_64"],
+        variant: "v1"
+      }
+    },
+    {
+      properties: {
+        access: "private",
+        arch: ["arm"],
+        variant: "v1"
+      }
+    }
+
+  ]
+);
+
+test(
+  efpt,
+  {
     pkgbuild: {}
   },
   [

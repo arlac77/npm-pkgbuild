@@ -140,6 +140,7 @@ program
           ];
 
           if (options.verbose) {
+            console.log(`publish: ${options.publish.url}`);
             console.log(output.properties);
             console.log(`sources: ${sources.join("\n  ")}`);
             console.log(`dependencies: ${JSON.stringify(dependencies)}`);

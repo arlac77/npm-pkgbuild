@@ -20,7 +20,7 @@ export async function publish(fileName, destination, properties) {
     return;
   }
 
-  const publish = analysePublish(destination, properties);
+  const publish = analysePublish(Object.assign({}, destination), properties);
 
   const url = publish.url + "/" + basename(fileName);
 

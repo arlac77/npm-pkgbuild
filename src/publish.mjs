@@ -22,9 +22,9 @@ export async function publish(fileName, destination, properties) {
 
   const publish = analysePublish(destination, properties);
 
-  publish.url = publish.url + "/" + basename(fileName);
+  const url = publish.url + "/" + basename(fileName);
 
-  console.log(`Publishing to ${publish.url}`);
+  console.log(`Publishing to ${url}`);
 
   if (publish.scheme === "http:" || publish.scheme === "https:") {
     const headers = {
@@ -37,7 +37,7 @@ export async function publish(fileName, destination, properties) {
         Buffer.from(publish.user + ":" + publish.password).toString("base64");
     }
 
-    const response = await fetch(publish.url, {
+    const response = await fetch(url, {
       method: "PUT",
       headers,
       body: createReadStream(fileName)
@@ -45,7 +45,7 @@ export async function publish(fileName, destination, properties) {
 
     if (!response.ok) {
       throw new Error(
-        `Unable to publish to ${publish.url}: ${response.statusText}(${response.statusCode})`
+        `Unable to publish to ${url}: ${response.statusText}(${response.statusCode})`
       );
     }
   }

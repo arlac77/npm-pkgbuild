@@ -75,6 +75,8 @@ program
         console.log(`pkgdir: ${pkgDir}`);
       }
 
+      const publishOptions = options.publish;
+      
       for await (const {
         properties,
         sources,
@@ -101,6 +103,9 @@ program
             continute;
           }
 
+          // start with a fresh copy
+          options.publish = Object.assign( {}, publishOptions);
+          
           Object.assign(
             properties,
             {
@@ -140,7 +145,6 @@ program
           ];
 
           if (options.verbose) {
-            console.log(`publish: ${options.publish.url}`);
             console.log(output.properties);
             console.log(`sources: ${sources.join("\n  ")}`);
             console.log(`dependencies: ${JSON.stringify(dependencies)}`);

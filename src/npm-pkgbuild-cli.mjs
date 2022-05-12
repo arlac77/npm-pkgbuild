@@ -103,7 +103,10 @@ program
 
           Object.assign(
             properties,
-            { type: outputFactory.name },
+            {
+              type: outputFactory.name,
+              "user-agent": `npm-pkgbuild-${version}`
+            },
             options.define
           );
 

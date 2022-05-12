@@ -28,7 +28,7 @@ export async function publish(fileName, destination, properties) {
 
   if (publish.scheme === "http:" || publish.scheme === "https:") {
     const headers = {
-      "user-agent": "npm-pkgbuild"
+      "user-agent": properties["user-agent"] || "npm-pkgbuild"
     };
 
     if (publish.user) {

@@ -5,7 +5,5 @@ doc
 *.tmp
 .test
 .tmp
-rollup.config.*
 .vscode
 .github
-jsconfig.json

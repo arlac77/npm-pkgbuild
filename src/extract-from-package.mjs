@@ -200,7 +200,7 @@ export async function* extractFromPackage(options = {}) {
   processPkg(json, dir);
 
   properties.variant = variant;
-  
+
   if (arch.size > 0) {
     // provide each arch separadly
 
@@ -213,7 +213,14 @@ export async function* extractFromPackage(options = {}) {
         } else {
           numberOfArchs++;
           properties.arch = [a];
-          yield { properties: context.expand(properties), sources, dependencies, output, variant, context };
+          yield {
+            properties: context.expand(properties),
+            sources,
+            dependencies,
+            output,
+            variant,
+            context
+          };
         }
       }
     }
@@ -222,6 +229,13 @@ export async function* extractFromPackage(options = {}) {
     }
   } else {
     // or one set if no arch is given
-    yield { properties: context.expand(properties), sources, dependencies, output, variant, context };
+    yield {
+      properties: context.expand(properties),
+      sources,
+      dependencies,
+      output,
+      variant,
+      context
+    };
   }
 }

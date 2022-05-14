@@ -22,8 +22,6 @@ import {
   packageNameMapping
 } from "../util.mjs";
 
-
-
 function* keyValueLines(key, value, options) {
   yield `${keyPrefix(key)}${options.keyValueSeparator}${
     Array.isArray(value)
@@ -122,7 +120,7 @@ package() {
       await pipeline(
         iterableStringInterceptor(
           createReadStream(
-            join(options.pkgdir, properties.hooks),
+            join(options.dir, properties.hooks),
             utf8StreamOptions
           ),
           createPropertiesInterceptor(properties)

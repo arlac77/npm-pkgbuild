@@ -1,6 +1,5 @@
 import test from "ava";
 import { arch as hostArch } from "process";
-import { dirname } from "path";
 import {
   FileContentProvider,
   NPMPackContentProvider,
@@ -8,7 +7,7 @@ import {
   npmArchMapping
 } from "npm-pkgbuild";
 
-async function efpt(t, pkg, expected) {
+async function efpt(t, json, expected) {
   let v = 0;
 
   for await (const {
@@ -16,7 +15,7 @@ async function efpt(t, pkg, expected) {
     sources,
     dependencies,
     output
-  } of extractFromPackage(pkg, dirname(new URL(import.meta.url).pathname))) {
+  } of extractFromPackage({json})) {
     const e = expected[v];
 
     t.truthy(e, `expected ${v}`);
@@ -275,7 +274,7 @@ test(
       },
       sources: [
         new NPMPackContentProvider(
-          { dir: dirname(new URL(import.meta.url).pathname) },
+          { dir: undefined /*dirname(new URL(import.meta.url).pathname)*/ },
           { destination: "/services/konsum/frontend/" }
         ),
         new FileContentProvider(

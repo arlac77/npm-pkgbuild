@@ -2,11 +2,7 @@
 
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
-import { readFile } from "fs/promises";
-import { join } from "path";
 import { program } from "commander";
-import { createContext } from "expression-expander";
-import { packageDirectory } from "pkg-dir";
 import {
   createExpressionTransformer,
   nameExtensionMatcher
@@ -37,7 +33,7 @@ program
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
-  .option("-p --pkgdir <dir>", "which package to use", process.cwd())
+  .option("-p --dir <dir>", "which package to use", process.cwd())
   .option("-a --available", "only execute availabe output methods", false)
   .option("--continue", "continue on error")
   .option(
@@ -69,27 +65,15 @@ program
   )
   .action(async options => {
     try {
-      const pkgDir = await packageDirectory({ cwd: options.pkgdir });
-
-      if (options.verbose) {
-        console.log(`pkgdir: ${pkgDir}`);
-      }
-
       const publishOptions = options.publish;
-      
+
       for await (const {
         properties,
         sources,
         output,
         dependencies,
-        variant
-      } of extractFromPackage(
-        JSON.parse(
-          await readFile(join(pkgDir, "package.json"), utf8StreamOptions)
-        ),
-        pkgDir,
-        options
-      )) {
+        context
+      } of extractFromPackage(options)) {
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true
         )) {
@@ -104,8 +88,8 @@ program
           }
 
           // start with a fresh copy
-          options.publish = Object.assign( {}, publishOptions);
-          
+          options.publish = Object.assign({}, publishOptions);
+
           Object.assign(
             properties,
             {
@@ -126,8 +110,7 @@ program
               )
           );
 
-          const context = createContext({ properties });
-          const output = new outputFactory(context.expand(properties));
+          const output = new outputFactory(properties);
           const transformer = [
             createExpressionTransformer(
               nameExtensionMatcher([
@@ -140,7 +123,7 @@ program
                 ".socket",
                 ".rules"
               ]),
-              context.expand(properties)
+              properties
             )
           ];
 
@@ -155,7 +138,7 @@ program
             transformer,
             dependencies,
             options,
-            path => context.expand(path)
+            context.expand
           );
 
           await publish(fileName, options.publish, properties);

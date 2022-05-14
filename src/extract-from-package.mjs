@@ -1,6 +1,9 @@
+import { readFile } from "fs/promises";
+import { join } from "path";
+import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
-import { asArray } from "./util.mjs";
+import { asArray, utf8StreamOptions } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
@@ -45,12 +48,23 @@ const entryAttributeNames = ["owner", "group", "mode"];
  * - if not architecture is given one result set is provided nethertheless
  * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
  * - architecture given in a abstract definition are used to reduce the set of avaliable architectures
- * @param {Object} pkg package.json content
- * @param {string} dir
  * @param {Object} options
+ * @param {Object} options.json package.json content
+ * @param {string} options.pkgDir
  * @returns {AsyncIter<PackageDefinition>}
  */
-export async function* extractFromPackage(json, dir, options = {}) {
+export async function* extractFromPackage(options = {}) {
+  let json = options.json;
+  let dir = options.pkgDir;
+
+  if (!json) {
+    dir = await packageDirectory({ cwd: dir });
+
+    json = JSON.parse(
+      await readFile(join(dir, "package.json"), utf8StreamOptions)
+    );
+  }
+
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
       .map(key => [key, json[key]])
@@ -174,17 +188,19 @@ export async function* extractFromPackage(json, dir, options = {}) {
     }
   };
 
-  await packageWalker(async (json, base, modulePath) => {
-    if (modulePath.length > 0) {
-      processPkg(json, base, modulePath);
-    }
-    return true;
-  }, dir);
+  if (dir) {
+    await packageWalker(async (json, base, modulePath) => {
+      if (modulePath.length > 0) {
+        processPkg(json, base, modulePath);
+      }
+      return true;
+    }, dir);
+  }
 
   processPkg(json, dir);
 
   properties.variant = variant;
-
+  
   if (arch.size > 0) {
     // provide each arch separadly
 
@@ -197,7 +213,7 @@ export async function* extractFromPackage(json, dir, options = {}) {
         } else {
           numberOfArchs++;
           properties.arch = [a];
-          yield { properties, sources, dependencies, output, variant };
+          yield { properties: context.expand(properties), sources, dependencies, output, variant, context };
         }
       }
     }
@@ -206,6 +222,6 @@ export async function* extractFromPackage(json, dir, options = {}) {
     }
   } else {
     // or one set if no arch is given
-    yield { properties, sources, dependencies, output, variant };
+    yield { properties: context.expand(properties), sources, dependencies, output, variant, context };
   }
 }

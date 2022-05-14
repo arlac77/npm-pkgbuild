@@ -9,6 +9,11 @@ test("analysePublish", t => {
   t.is(publish.url, "http://myserver.com/private/aarch64");
 });
 
+test("publish nowhere", async t => {
+  await publish(new URL("fixtures/content/file1.txt", import.meta.url).pathname);
+  t.true(true, "does not fail")
+});
+
 test("publish twice", async t => {
   const file = new URL("fixtures/content/file1.txt", import.meta.url).pathname;
 

@@ -27,18 +27,18 @@ This will create a arch, rpm and a debian package of the build dir.
 ## upload package
 
 ```shell
-npm-pkgbuild --rpm --debian --arch --content build --publish 'https://my.package-service.com/binaries/linux/{{type}}/{{access}}/{{arch}}'
+npm-pkgbuild --arch --content build --publish 'https://my.package-service.com/binaries/linux/{{type}}/{{access}}/{{arch}}'
 ```
 
 You can specify the package content in package.json.
 
 ```json
 {
-	"pkgbuild": {
-		"content": {
-			"/some/location/" : { "base": "build" },
-			"/etc/myconfig.json" : "sample-config.json",
-			"/erc/secret" : { "name":  "secret", "mode": "600" },
+  "pkgbuild": {
+    "content": {
+      "/some/location/" : { "base": "build" },
+      "/etc/myconfig.json" : "sample-config.json",
+      "/erc/secret" : { "name":  "secret", "mode": "600" },
       "/opt/myapp": [
         {
           "type": "npm-pack"
@@ -48,15 +48,15 @@ You can specify the package content in package.json.
           "withoutDevelpmentDependencies": true
         }
       ]
-		},
-		"hooks" : "pkg/hooks",
-		"output": {
-			"debian" : {},
-			"rpm" : {},
-			"arch" : {}
-		},
-		"dependencies": { "nginx" : ">=1.12" }
-	}
+    },
+    "hooks" : "pkg/hooks",
+    "output": {
+      "debian" : {},
+      "rpm" : {},
+      "arch" : {}
+    },
+  "dependencies": { "nginx" : ">=1.12" }
+  }
 }
 ```
 

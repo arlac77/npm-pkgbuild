@@ -33,6 +33,49 @@ export const npmArchMapping = {
 
 const entryAttributeNames = ["owner", "group", "mode"];
 
+function extractFromRootPackage(json) {
+  const properties = Object.fromEntries(
+    ["name", "version", "description", "homepage", "license"]
+      .map(key => [key, json[key]])
+      .filter(([k, v]) => v !== undefined)
+  );
+
+  if (properties.name) {
+    properties.name = properties.name.replace(/^\@\w+\//, "");
+  }
+
+  if (json.bugs) {
+    if (json.bugs.url) {
+      properties.bugs = json.bugs.url;
+    }
+  }
+
+  properties.access = "private";
+  if (json.publishConfig) {
+    properties.access = json.publishConfig.access;
+  }
+
+  Object.assign(properties, json.config);
+
+  if (json.contributors) {
+    properties.maintainer = json.contributors.map(
+      c => `${c.name} <${c.email}>`
+    )[0];
+  }
+
+  if (json.repository) {
+    if (typeof json.repository === "string") {
+      properties.source = json.repository;
+    } else {
+      if (json.repository.url) {
+        properties.source = json.repository.url;
+      }
+    }
+  }
+
+  return { properties, dependencies: { ...json.engines } };
+}
+
 /**
  * @typedef {Object} PackageDefinition
  * @property {Object} properties values describing the package attributes
@@ -65,50 +108,11 @@ export async function* extractFromPackage(options = {}) {
     );
   }
 
-  const properties = Object.fromEntries(
-    ["name", "version", "description", "homepage", "license"]
-      .map(key => [key, json[key]])
-      .filter(([k, v]) => v !== undefined)
-  );
-
   let variant = "default";
 
-  if (json.bugs) {
-    if (json.bugs.url) {
-      properties.bugs = json.bugs.url;
-    }
-  }
-
-  Object.assign(properties, json.config);
-
-  if (properties.name) {
-    properties.name = properties.name.replace(/^\@\w+\//, "");
-  }
-
-  properties.access = "private";
-  if (json.publishConfig) {
-    properties.access = json.publishConfig.access;
-  }
-
-  if (json.contributors) {
-    properties.maintainer = json.contributors.map(
-      c => `${c.name} <${c.email}>`
-    )[0];
-  }
-
-  if (json.repository) {
-    if (typeof json.repository === "string") {
-      properties.source = json.repository;
-    } else {
-      if (json.repository.url) {
-        properties.source = json.repository.url;
-      }
-    }
-  }
-
+  const { properties, dependencies } = extractFromRootPackage(json);
   const context = createContext({ properties });
 
-  let dependencies = { ...json.engines };
   let sources = [];
   let output = {};
   let arch = new Set();

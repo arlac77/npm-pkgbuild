@@ -203,8 +203,6 @@ export async function* extractFromPackage(options = {}) {
   await packageWalker(async (packageContent, base, modulePath) => {
     if (modulePath.length > 0) {
       processPkg(packageContent, base, modulePath);
-    } else {
-      json = packageContent;
     }
     return true;
   }, dir);

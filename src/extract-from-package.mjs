@@ -75,7 +75,11 @@ function extractFromRootPackage(json) {
     }
   }
 
-  return { properties, dependencies: { ...json.engines } };
+  return {
+    properties,
+    dependencies: { ...json.engines },
+    context: createContext({ properties })
+  };
 }
 
 const entryAttributeNames = ["owner", "group", "mode"];
@@ -137,17 +141,6 @@ function* content2Sources(content, dir) {
  * @returns {AsyncIter<PackageDefinition>}
  */
 export async function* extractFromPackage(options = {}) {
-  let json = options.json;
-  let dir = options.dir;
-
-  if (!json) {
-    dir = await packageDirectory({ cwd: dir });
-
-    json = JSON.parse(
-      await readFile(join(dir, "package.json"), utf8StreamOptions)
-    );
-  }
-
   let variant = "default";
   let sources = [];
   let output = {};
@@ -194,13 +187,26 @@ export async function* extractFromPackage(options = {}) {
     }
   }
 
-  const { properties, dependencies } = extractFromRootPackage(json);
-  const context = createContext({ properties });
+  let json = options.json;
+  let dir = options.dir;
 
-  if (dir) {
-    await packageWalker(async (json, base, modulePath) => {
+  if (!json) {
+    dir = await packageDirectory({ cwd: dir });
+
+    json = JSON.parse(
+      await readFile(join(dir, "package.json"), utf8StreamOptions)
+    );
+  }
+
+  const { properties, dependencies, context } = extractFromRootPackage(json);
+
+  if (json) {
+  } else {
+    await packageWalker(async (packageContent, base, modulePath) => {
       if (modulePath.length > 0) {
-        processPkg(json, base, modulePath);
+        processPkg(packageContent, base, modulePath);
+      } else {
+        json = packageContent;
       }
       return true;
     }, dir);

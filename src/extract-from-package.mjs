@@ -200,17 +200,14 @@ export async function* extractFromPackage(options = {}) {
 
   const { properties, dependencies, context } = extractFromRootPackage(json);
 
-  if (json) {
-  } else {
-    await packageWalker(async (packageContent, base, modulePath) => {
-      if (modulePath.length > 0) {
-        processPkg(packageContent, base, modulePath);
-      } else {
-        json = packageContent;
-      }
-      return true;
-    }, dir);
-  }
+  await packageWalker(async (packageContent, base, modulePath) => {
+    if (modulePath.length > 0) {
+      processPkg(packageContent, base, modulePath);
+    } else {
+      json = packageContent;
+    }
+    return true;
+  }, dir);
 
   processPkg(json, dir);
 

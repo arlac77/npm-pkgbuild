@@ -31,8 +31,11 @@ export const npmArchMapping = {
   ppc64: "ppc64"
 };
 
-const entryAttributeNames = ["owner", "group", "mode"];
-
+/**
+ * Deliver basic properties from the root package
+ * @param {Object} json  content of rool package.json
+ * @returns {Object} key value pairs extracted from json
+ */
 function extractFromRootPackage(json) {
   const properties = Object.fromEntries(
     ["name", "version", "description", "homepage", "license"]
@@ -50,10 +53,9 @@ function extractFromRootPackage(json) {
     }
   }
 
-  properties.access = "private";
-  if (json.publishConfig) {
-    properties.access = json.publishConfig.access;
-  }
+  properties.access = json.publishConfig
+    ? json.publishConfig.access
+    : "private";
 
   Object.assign(properties, json.config);
 
@@ -74,6 +76,44 @@ function extractFromRootPackage(json) {
   }
 
   return { properties, dependencies: { ...json.engines } };
+}
+
+const entryAttributeNames = ["owner", "group", "mode"];
+
+/**
+ * Delivers ContetProviders from pkgbuild.content
+ * @param {Object} content from pkgbuild.content
+ * @returns {Iterator<ContentProvider>}
+ */
+function* content2Sources(content, dir) {
+  if (content) {
+    for (const [destination, definitions] of Object.entries(content)) {
+      const allEntryProperties = {};
+
+      for (const a of entryAttributeNames) {
+        if (definitions[a] !== undefined) {
+          allEntryProperties[a] = definitions[a];
+          delete definitions[a];
+        }
+      }
+
+      for (const definition of asArray(definitions)) {
+        const entryProperties = { ...allEntryProperties, destination };
+
+        if (definition.type) {
+          const type = allInputs.find(i => i.name === definition.type);
+          if (type) {
+            delete definition.type;
+            yield new type({ ...definition, dir }, entryProperties);
+          } else {
+            console.error(`Unknown type '${type}'`);
+          }
+        } else {
+          yield new FileContentProvider(definition, entryProperties);
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -119,76 +159,42 @@ export async function* extractFromPackage(options = {}) {
   let restrictArch = new Set();
 
   const processPkg = (json, dir, modulePath) => {
-    const pkg = json.pkgbuild;
+    const pkgbuild = json.pkgbuild;
 
-    if (pkg) {
+    if (pkgbuild) {
       if (!modulePath) {
         if (json.cpu) {
           for (const a of asArray(json.cpu)) {
             arch.add(npmArchMapping[a]);
           }
         }
-        if (pkg.arch) {
-          for (const a of asArray(pkg.arch)) {
+        if (pkgbuild.arch) {
+          for (const a of asArray(pkgbuild.arch)) {
             arch.add(a);
           }
         }
       }
 
-      if (pkg.abstract || !modulePath) {
-        if (pkg.variant) {
-          variant = pkg.variant;
+      if (pkgbuild.abstract || !modulePath) {
+        if (pkgbuild.variant) {
+          variant = pkgbuild.variant;
         }
 
-        if (pkg.arch) {
-          for (const a of asArray(pkg.arch)) {
+        if (pkgbuild.arch) {
+          for (const a of asArray(pkgbuild.arch)) {
             restrictArch.add(a);
           }
         }
 
-        Object.assign(output, pkg.output);
+        Object.assign(output, pkgbuild.output);
 
-        Object.entries(pkg)
+        Object.entries(pkgbuild)
           .filter(([k, v]) => typeof v === "string")
           .forEach(([k, v]) => (properties[k] = v));
 
-        if (pkg.content && !modulePath) {
-          Object.entries(pkg.content).forEach(([destination, definitions]) => {
-            destination = context.expand(destination);
-            definitions = context.expand(definitions);
-
-            const allEntryProperties = {};
-
-            for (const a of entryAttributeNames) {
-              if (definitions[a] !== undefined) {
-                allEntryProperties[a] = definitions[a];
-                delete definitions[a];
-              }
-            }
-
-            for (const definition of asArray(definitions)) {
-              const entryProperties = { ...allEntryProperties, destination };
-
-              if (definition.type) {
-                const type = allInputs.find(i => i.name === definition.type);
-                if (type) {
-                  delete definition.type;
-                  sources.push(
-                    new type({ ...definition, dir }, entryProperties)
-                  );
-                } else {
-                  console.error(`Unknown type '${type}'`);
-                }
-              } else {
-                sources.push(
-                  new FileContentProvider(definition, entryProperties)
-                );
-              }
-            }
-          });
-        }
+        sources.push(...content2Sources(context.expand(pkgbuild.content), dir));
       }
-      Object.assign(dependencies, pkg.depends);
+      Object.assign(dependencies, pkgbuild.depends);
     }
   };
 

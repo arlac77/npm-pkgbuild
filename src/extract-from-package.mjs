@@ -138,7 +138,7 @@ function* content2Sources(content, dir) {
  */
 export async function* extractFromPackage(options = {}) {
   let json = options.json;
-  let dir = options.pkgDir;
+  let dir = options.dir;
 
   if (!json) {
     dir = await packageDirectory({ cwd: dir });
@@ -149,16 +149,12 @@ export async function* extractFromPackage(options = {}) {
   }
 
   let variant = "default";
-
-  const { properties, dependencies } = extractFromRootPackage(json);
-  const context = createContext({ properties });
-
   let sources = [];
   let output = {};
   let arch = new Set();
   let restrictArch = new Set();
 
-  const processPkg = (json, dir, modulePath) => {
+  function processPkg(json, dir, modulePath) {
     const pkgbuild = json.pkgbuild;
 
     if (pkgbuild) {
@@ -196,7 +192,10 @@ export async function* extractFromPackage(options = {}) {
       }
       Object.assign(dependencies, pkgbuild.depends);
     }
-  };
+  }
+
+  const { properties, dependencies } = extractFromRootPackage(json);
+  const context = createContext({ properties });
 
   if (dir) {
     await packageWalker(async (json, base, modulePath) => {

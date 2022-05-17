@@ -53,7 +53,7 @@
     "iterable-string-interceptor": "^2.0.0",
     "key-value-transformer": "^3.0.0",
     "node-fetch": "^3.2.4",
-    "npm-package-walker": "^5.0.6",
+    "npm-package-walker": "^6.0.0",
     "npm-packlist": "^5.0.3",
     "pacote": "^13.3.0",
     "pkg-dir": "^6.0.1",

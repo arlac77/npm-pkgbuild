@@ -33,7 +33,7 @@ export const npmArchMapping = {
 
 /**
  * Deliver basic properties from the root package
- * @param {Object} json  content of rool package.json
+ * @param {Object} json content of root package.json
  * @returns {Object} key value pairs extracted from json
  */
 function extractFromRootPackage(json) {
@@ -85,7 +85,7 @@ function extractFromRootPackage(json) {
 const entryAttributeNames = ["owner", "group", "mode"];
 
 /**
- * Delivers ContetProviders from pkgbuild.content
+ * Delivers ContentProviders from pkgbuild.content
  * @param {Object} content from pkgbuild.content
  * @returns {Iterator<ContentProvider>}
  */
@@ -137,7 +137,7 @@ function* content2Sources(content, dir) {
  * - architecture given in a abstract definition are used to reduce the set of avaliable architectures
  * @param {Object} options
  * @param {Object} options.json package.json content
- * @param {string} options.pkgDir
+ * @param {string} options.dir where to look for package.json
  * @returns {AsyncIter<PackageDefinition>}
  */
 export async function* extractFromPackage(options = {}) {
@@ -235,7 +235,7 @@ export async function* extractFromPackage(options = {}) {
       }
     }
     if (numberOfArchs === 0) {
-      console.warn(`No matching arch remaining was ${[...arch]}`);
+      console.warn(`No matching arch remaining, was ${[...arch]}`);
     }
   } else {
     // or one set if no arch is given

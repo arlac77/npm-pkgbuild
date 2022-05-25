@@ -146,6 +146,8 @@ const toBeSkipped = new RegExp(
       "\\.cs",
       "\\.cmd",
       "\\.markdown",
+      "\\.sublime-project",
+      "\\.sublime-workspace",
       "appveyor\\.yml",
       "seed\\.yml",
       "\\.xclangspec",

@@ -117,10 +117,13 @@ program
                 ".conf",
                 ".json",
                 ".html",
+                ".css",
                 ".txt",
                 ".webmanifest",
                 ".service",
                 ".socket",
+                ".path",
+                ".timer",
                 ".rules"
               ]),
               properties

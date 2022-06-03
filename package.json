@@ -47,7 +47,7 @@
     "content-entry-filesystem": "^5.0.3",
     "content-entry-transform": "^1.4.3",
     "execa": "^6.1.0",
-    "expression-expander": "^7.0.16",
+    "expression-expander": "^7.0.17",
     "globby": "^13.1.1",
     "ini": "^3.0.0",
     "iterable-string-interceptor": "^2.0.1",

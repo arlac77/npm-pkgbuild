@@ -52,7 +52,7 @@
     "ini": "^3.0.0",
     "iterable-string-interceptor": "^2.0.3",
     "key-value-transformer": "^3.0.2",
-    "node-fetch": "^3.2.5",
+    "node-fetch": "^3.2.6",
     "npm-package-walker": "^6.0.2",
     "npm-packlist": "^5.1.0",
     "pacote": "^13.5.0",

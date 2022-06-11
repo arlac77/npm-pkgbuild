@@ -1,6 +1,6 @@
-import { join, dirname } from "path";
-import { tmpdir } from "os";
-import { mkdtemp, mkdir } from "fs/promises";
+import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
+import { mkdtemp, mkdir } from "node:fs/promises";
 import { analysePublish } from "../publish.mjs";
 
 /**

@@ -1,5 +1,5 @@
-import { basename } from "path";
-import { createReadStream } from "fs";
+import { basename } from "node:path";
+import { createReadStream } from "node:fs";
 import fetch from "node-fetch";
 
 export function analysePublish(publish, properties) {

@@ -1,7 +1,7 @@
-import { join, dirname } from "path";
-import { mkdir } from "fs/promises";
-import { pipeline } from "stream/promises";
-import { createWriteStream } from "fs";
+import { join, dirname } from "node:path";
+import { mkdir } from "node:fs/promises";
+import { pipeline } from "node:stream/promises";
+import { createWriteStream } from "node:fs";
 
 export const utf8StreamOptions = { encoding: "utf8" };
 

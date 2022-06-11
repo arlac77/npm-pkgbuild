@@ -1,6 +1,6 @@
-import { join } from "path";
-import { createReadStream } from "fs";
-import { cp } from "fs/promises";
+import { join } from "node:path";
+import { createReadStream } from "node:fs";
+import { cp } from "node:fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";

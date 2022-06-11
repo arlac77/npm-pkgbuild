@@ -1,6 +1,6 @@
-import { constants } from "fs";
-import { mkdir, readFile, writeFile, copyFile } from "fs/promises";
-import { join, dirname } from "path";
+import { constants } from "node:fs";
+import { mkdir, readFile, writeFile, copyFile } from "node:fs/promises";
+import { join, dirname } from "node:path";
 import { globbyStream } from "globby";
 import { utf8StreamOptions } from "./util.mjs";
 
@@ -8,7 +8,6 @@ const pkgEntriesToBeRemoved = [
   "version",
   "name",
   "dependencies",
-
   "jspm",
   "jsnext:main",
   "man",

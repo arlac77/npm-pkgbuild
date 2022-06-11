@@ -1,4 +1,4 @@
-import { pipeline } from "stream/promises";
+import { pipeline } from "node:stream/promises";
 import { createGunzip } from "zlib";
 import pacote from "pacote";
 import { extract as tarExtract } from "tar-stream";

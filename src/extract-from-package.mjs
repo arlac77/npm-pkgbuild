@@ -1,5 +1,5 @@
-import { readFile } from "fs/promises";
-import { join } from "path";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";

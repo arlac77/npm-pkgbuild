@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { dirname } from "node:path";
 import { globby } from "globby";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";

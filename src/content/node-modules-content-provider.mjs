@@ -1,6 +1,6 @@
-import { tmpdir, homedir } from "os";
-import { join } from "path";
-import { mkdtemp, readFile, writeFile } from "fs/promises";
+import { tmpdir, homedir } from "node:os";
+import { join } from "node:path";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";

@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { createReadStream } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { execa } from "execa";
 import {
   EmptyContentEntry,
@@ -99,7 +100,7 @@ export class DEBIAN extends Packager {
           `${packageNameMapping[name] ? packageNameMapping[name] : name} (${e})`
       );
     }
-    
+
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
 
@@ -124,6 +125,12 @@ export class DEBIAN extends Packager {
       if (options.verbose) {
         console.log(file.destination, `mode=${file.mode}`);
       }
+    }
+
+    if (options.verbose) {
+      console.log(
+        await readFile(join(staging, debianControlName), { encoding: "utf8" })
+      );
     }
 
     const dpkg = await execa("dpkg", ["-b", staging, destination]);

@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { createReadStream } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
@@ -150,6 +151,12 @@ export class RPM extends Packager {
       expander
     )) {
       files.push(file.destination);
+    }
+
+    if (options.verbose) {
+      console.log(
+        await readFile(join(staging, specFileName), { encoding: "utf8" })
+      );
     }
 
     const rpmbuild = await execa("rpmbuild", [

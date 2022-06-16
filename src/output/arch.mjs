@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { createReadStream, createWriteStream } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
@@ -153,6 +154,12 @@ package() {
       if (options.verbose) {
         console.log(file.destination);
       }
+    }
+
+    if (options.verbose) {
+      console.log(
+        await readFile(join(staging, PKGBUILD), { encoding: "utf8" })
+      );
     }
 
     const makepkg = await execa("makepkg", ["-f", "-e"], {

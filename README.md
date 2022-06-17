@@ -18,7 +18,7 @@ Create ArchLinux, RPM and Debian packages from npm packages.
 In a package directory execute
 
 ```shell
-npm-pkgbuild --rpm --debian --arch --content build --publish /some/directory
+npm-pkgbuild --rpm --debian --arch --content /destination:build --publish /some/directory
 ```
 
 This will create a arch, rpm and a debian package of the build dir.

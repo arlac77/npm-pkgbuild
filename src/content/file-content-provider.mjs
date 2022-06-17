@@ -34,16 +34,16 @@ export class FileContentProvider extends ContentProvider {
 
     this.entryProperties = entryProperties;
 
-    if(this.entryProperties) {
-    for(const a of ["mode"]) {
-      if(this.entryProperties[a] !== undefined) {
-        if(!this.baseProperties) {
-          this.baseProperties = {};
+    if (this.entryProperties) {
+      for (const a of ["mode"]) {
+        if (this.entryProperties[a] !== undefined) {
+          if (!this.baseProperties) {
+            this.baseProperties = {};
+          }
+          this.baseProperties[a] = { value: this.entryProperties[a] };
+          delete this.entryProperties[a];
         }
-    	this.baseProperties[a] = { value: this.entryProperties[a] };
-    	delete this.entryProperties[a];
       }
-    }
     }
   }
 
@@ -63,7 +63,9 @@ export class FileContentProvider extends ContentProvider {
         this.entryProperties
       );
 
-      yield this.baseProperties ? Object.create(entry, this.baseProperties) : entry;
+      yield this.baseProperties
+        ? Object.create(entry, this.baseProperties)
+        : entry;
     }
   }
 }

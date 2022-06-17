@@ -102,12 +102,20 @@ program
           sources.push(
             ...[...options.content, ...options.meta]
               .filter(x => x)
-              .map(
-                source =>
-                  new FileContentProvider({
-                    base: source
-                  })
-              )
+              .map(source => {
+                let [destination, base] = source.split(/:/);
+                if (!base) {
+                  destination = "/";
+                  base = source;
+                }
+
+                return new FileContentProvider(
+                  {
+                    base
+                  },
+                  { destination }
+                );
+              })
           );
 
           const output = new outputFactory(properties);

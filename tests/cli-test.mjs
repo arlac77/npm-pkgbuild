@@ -10,9 +10,10 @@ test("cli --debian", async t => {
   const p = await execa(
     new URL("../src/npm-pkgbuild-cli.mjs", import.meta.url).pathname,
     [
+      "--verbose",
       "--debian",
       "-c",
-      new URL("fixtures/content", import.meta.url).pathname,
+      '/myservice:' + new URL("fixtures/content", import.meta.url).pathname,
       "-m",
       new URL("fixtures/pkg", import.meta.url).pathname,
       "--publish",
@@ -24,6 +25,7 @@ test("cli --debian", async t => {
     destination,
     "npm-pkgbuild_0.0.0-semantic-release_all.deb"
   );
+
   const s = await stat(fileName);
   t.true(s.size >= 900, `package file size ${s.size}`);
 });

@@ -11,7 +11,14 @@ import { DEBIAN } from "./output/debian.mjs";
 import { ARCH } from "./output/arch.mjs";
 import { RPM } from "./output/rpm.mjs";
 
+/**
+ * All content providers
+ */
 export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
+
+/**
+ * All output formats
+ */
 export const allOutputs = [DEBIAN, ARCH, RPM];
 
 /**

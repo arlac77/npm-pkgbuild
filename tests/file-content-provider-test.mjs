@@ -83,3 +83,10 @@ test(
 );
 
 test(fcpt, "pacman/tmpfiles.conf", "dest", []);
+test(fcpt, new URL("fixtures/content/", import.meta.url).pathname, "dest", [
+  { name: "file1.txt", mode: 0o644, destination: "dest" },
+  { name: "file2.json", mode: 0o644, destination: "dest" }
+]);
+test(fcpt, new URL("fixtures/content/*.txt", import.meta.url).pathname, "dest", [
+  { name: "file1.txt", mode: 0o644, destination: "dest" },
+]);

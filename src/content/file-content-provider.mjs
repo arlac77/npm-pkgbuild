@@ -22,13 +22,12 @@ export class FileContentProvider extends ContentProvider {
     super();
 
     if (typeof definitions === "string") {
-      if(definitions.endsWith('/')) {
+      if (definitions.endsWith("/")) {
         this.definitions = {
           base: definitions,
           pattern: ["**/*"]
-        };	
-      }
-      else {
+        };
+      } else {
         const base = dirname(definitions);
         this.definitions = {
           base,

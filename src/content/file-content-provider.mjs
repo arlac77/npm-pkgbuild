@@ -4,6 +4,8 @@ import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
+const DEFAULT_PATTERN=["**/*"];
+
 /**
  * Content provided form the file system.
  * @param {Object|string} definitions
@@ -25,7 +27,7 @@ export class FileContentProvider extends ContentProvider {
       if (definitions.endsWith("/")) {
         this.definitions = {
           base: definitions,
-          pattern: ["**/*"]
+          pattern: DEFAULT_PATTERN
         };
       } else {
         const base = dirname(definitions);
@@ -35,7 +37,7 @@ export class FileContentProvider extends ContentProvider {
         };
       }
     } else {
-      this.definitions = { pattern: ["**/*"], ...definitions };
+      this.definitions = { pattern: DEFAULT_PATTERN, ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
     }
 

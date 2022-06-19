@@ -87,6 +87,7 @@ program
             continute;
           }
 
+          try {
           // start with a fresh copy
           options.publish = Object.assign({}, publishOptions);
 
@@ -153,13 +154,22 @@ program
           );
 
           await publish(fileName, options.publish, properties);
+          }
+          catch(e) {
+          	handleError(e,options);
+          }
         }
       }
     } catch (e) {
-      console.error(e);
-      if (!options.continue) {
-        process.exit(-1);
-      }
+      handleError(e,options);
     }
   })
   .parse(process.argv);
+
+function handleError(e,options)
+{
+	console.error(e);
+	if(!options.continue) {
+		process.exit(-1);
+	}
+}

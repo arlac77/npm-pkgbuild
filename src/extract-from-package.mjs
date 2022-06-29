@@ -7,6 +7,7 @@ import { asArray, utf8StreamOptions } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
+import { NFTContentProvider } from "./content/nft-content-provider.mjs";
 import { DEBIAN } from "./output/debian.mjs";
 import { ARCH } from "./output/arch.mjs";
 import { RPM } from "./output/rpm.mjs";
@@ -14,7 +15,7 @@ import { RPM } from "./output/rpm.mjs";
 /**
  * All content providers
  */
-export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider];
+export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider, NFTContentProvider];
 
 /**
  * All output formats

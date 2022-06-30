@@ -54,7 +54,7 @@ export class NFTContentProvider extends ContentProvider {
 
     const { fileList } = await nodeFileTrace(definitions.start);
 
-    for (const name fileList) {
+    for (const name of fileList) {
       const entry = Object.assign(
         new FileSystemEntry(name, base),
         this.entryProperties

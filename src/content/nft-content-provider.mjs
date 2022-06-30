@@ -1,10 +1,10 @@
 import { dirname } from "node:path";
 import { globby } from "globby";
+import { nodeFileTrace } from "@vercel/nft";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
-const DEFAULT_PATTERN=["**/*"];
 
 /**
  * Content provided form the file system.
@@ -24,21 +24,9 @@ export class NFTContentProvider extends ContentProvider {
     super();
 
     if (typeof definitions === "string") {
-      if (definitions.endsWith("/")) {
-        this.definitions = {
-          base: definitions,
-          pattern: DEFAULT_PATTERN
-        };
-      } else {
-        const base = dirname(definitions);
-        this.definitions = {
-          base,
-          pattern: [definitions.substring(base.length + 1)]
-        };
-      }
+      this.definitions = { start: [definitions] };
     } else {
-      this.definitions = { pattern: DEFAULT_PATTERN, ...definitions };
-      this.definitions.pattern = asArray(this.definitions.pattern);
+      this.definitions = definitions;
     }
 
     this.entryProperties = entryProperties;
@@ -57,16 +45,16 @@ export class NFTContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties.destination}`;
+    return `${this.constructor.name}: ${this.definitions.start} -> ${this.entryProperties.destination}`;
   }
 
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
-    const base = definitions.base;
+    const base = definitions.base || process.cwd();
 
-    for (const name of await globby(definitions.pattern, {
-      cwd: base
-    })) {
+    const { fileList } = await nodeFileTrace(definitions.start);
+
+    for (const name fileList) {
       const entry = Object.assign(
         new FileSystemEntry(name, base),
         this.entryProperties

@@ -23,7 +23,7 @@ export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider, NF
 export const allOutputs = [DEBIAN, ARCH, RPM];
 
 /**
- * Node architecture name to os native name mapping
+ * Node architecture name to os native arch name mapping
  * {@see https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processargv}
  */
 export const npmArchMapping = {
@@ -52,7 +52,7 @@ function extractFromRootPackage(json) {
   );
 
   if (properties.name) {
-    properties.name = properties.name.replace(/^\@\w+\//, "");
+    properties.name = properties.name.replace(/^\@[^\/]+\//, "");
   }
 
   if (json.bugs) {

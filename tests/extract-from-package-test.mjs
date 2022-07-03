@@ -47,7 +47,7 @@ efpt.title = (providedTitle = "extractFromPackage", pkg, expected) =>
 test(
   efpt,
   {
-    name: "@some-org/n1",
+    name: "@some-org_new/n1",
     description: "d1",
     version: "1.2.3",
     cpu: hostArch,

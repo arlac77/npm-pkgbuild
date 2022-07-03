@@ -3,6 +3,8 @@ import { createReadStream } from "node:fs";
 import fetch from "node-fetch";
 
 export function analysePublish(publish, properties) {
+  publish = Object.assign({}, publish);
+
   publish.url = publish.url.replace(
     /\{\{(\w+)\}\}/gm,
     (match, key, offset, string) => properties[key] || "{{" + key + "}}"
@@ -20,7 +22,7 @@ export async function publish(fileName, destination, properties) {
     return;
   }
 
-  const publish = analysePublish(Object.assign({}, destination), properties);
+  const publish = analysePublish(destination, properties);
 
   const url = publish.url + "/" + basename(fileName);
 

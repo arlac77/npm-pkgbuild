@@ -45,27 +45,13 @@ program
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .addOption(
     new program.Option(
-      "--publish <url>",
-      "publishing url (or directory) of the package"
+      "--publish <url...>",
+      "publishing urls (or directories) of the package"
     )
-      .env("PKGBUILD_PUBLISH")
-      .argParser(value => {
-        let values = value.split(/,/);
-        if (values.length > 1) {
-          values = values.map(v => process.env[v] || v);
-          return {
-            url: values[0],
-            user: values[1],
-            password: decodePassword(values[2])
-          };
-        }
-
-        return { url: value };
-      })
   )
   .action(async options => {
     try {
-      const publishOptions = options.publish;
+      options.publish = preparePublish(options.publish);
 
       for await (const {
         properties,
@@ -88,88 +74,106 @@ program
           }
 
           try {
-          // start with a fresh copy
-          options.publish = Object.assign({}, publishOptions);
+            Object.assign(
+              properties,
+              {
+                type: outputFactory.name,
+                "user-agent": `npm-pkgbuild-${version}`
+              },
+              options.define
+            );
 
-          Object.assign(
-            properties,
-            {
-              type: outputFactory.name,
-              "user-agent": `npm-pkgbuild-${version}`
-            },
-            options.define
-          );
+            sources.push(
+              ...[...options.content, ...options.meta]
+                .filter(x => x)
+                .map(source => {
+                  let [destination, base] = source.split(/:/);
+                  if (!base) {
+                    destination = "/";
+                    base = source;
+                  }
 
-          sources.push(
-            ...[...options.content, ...options.meta]
-              .filter(x => x)
-              .map(source => {
-                let [destination, base] = source.split(/:/);
-                if (!base) {
-                  destination = "/";
-                  base = source;
-                }
+                  return new FileContentProvider(
+                    {
+                      base
+                    },
+                    { destination }
+                  );
+                })
+            );
 
-                return new FileContentProvider(
-                  {
-                    base
-                  },
-                  { destination }
-                );
-              })
-          );
+            const output = new outputFactory(properties);
+            const transformer = [
+              createExpressionTransformer(
+                nameExtensionMatcher([
+                  ".conf",
+                  ".json",
+                  ".html",
+                  ".css",
+                  ".txt",
+                  ".webmanifest",
+                  ".service",
+                  ".socket",
+                  ".path",
+                  ".timer",
+                  ".rules"
+                ]),
+                properties
+              )
+            ];
 
-          const output = new outputFactory(properties);
-          const transformer = [
-            createExpressionTransformer(
-              nameExtensionMatcher([
-                ".conf",
-                ".json",
-                ".html",
-                ".css",
-                ".txt",
-                ".webmanifest",
-                ".service",
-                ".socket",
-                ".path",
-                ".timer",
-                ".rules"
-              ]),
-              properties
-            )
-          ];
+            if (options.verbose) {
+              console.log(output.properties);
+              console.log(`sources: ${sources.join("\n  ")}`);
+              console.log(`dependencies: ${JSON.stringify(dependencies)}`);
+            }
 
-          if (options.verbose) {
-            console.log(output.properties);
-            console.log(`sources: ${sources.join("\n  ")}`);
-            console.log(`dependencies: ${JSON.stringify(dependencies)}`);
-          }
+            const fileName = await output.execute(
+              sources.map(c => c[Symbol.asyncIterator]()),
+              transformer,
+              dependencies,
+              options,
+              context.expand
+            );
 
-          const fileName = await output.execute(
-            sources.map(c => c[Symbol.asyncIterator]()),
-            transformer,
-            dependencies,
-            options,
-            context.expand
-          );
-
-          await publish(fileName, options.publish, properties);
-          }
-          catch(e) {
-          	handleError(e,options);
+            for(const p of options.publish) {
+              await publish(fileName, p, properties);
+            }
+          } catch (e) {
+            handleError(e, options);
           }
         }
       }
     } catch (e) {
-      handleError(e,options);
+      handleError(e, options);
     }
   })
   .parse(process.argv);
 
-function handleError(e,options)
-{
-	console.error(e);
-	if(!options.continue) {
-		process.exit(-1);
-	}
+function handleError(e, options) {
+  console.error(e);
+  if (!options.continue) {
+    process.exit(-1);
+  }
+}
+
+function preparePublish(publish=[]) {
+  const e = process.env["PKGBUILD_PUBLISH"]
+  if(e) {
+    publish.push(e);
+  }
+
+  return publish.map(value => {
+    let values = value.split(/,/);
+    if (values.length > 1) {
+      values = values.map(v => process.env[v] || v);
+      return {
+        url: values[0],
+        user: values[1],
+        password: decodePassword(values[2])
+      };
+    }
+
+    return { url: value };
+  });
 }

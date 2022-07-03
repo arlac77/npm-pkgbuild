@@ -87,8 +87,8 @@ export class Packager {
       out[nd[0]] = nd[1];
     }
 
-    if (options.publish) {
-      const publish = analysePublish(options.publish, out.properties);
+    if (options.publish && options.publish.length) {
+      const publish = analysePublish(options.publish[0], out.properties);
 
       out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
 

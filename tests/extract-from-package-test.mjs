@@ -15,7 +15,7 @@ async function efpt(t, json, expected) {
     sources,
     dependencies,
     output
-  } of extractFromPackage({json})) {
+  } of extractFromPackage({ json })) {
     const e = expected[v];
 
     t.truthy(e, `expected ${v}`);
@@ -47,7 +47,7 @@ efpt.title = (providedTitle = "extractFromPackage", pkg, expected) =>
 test(
   efpt,
   {
-    name: "n1",
+    name: "@some-org/n1",
     description: "d1",
     version: "1.2.3",
     cpu: hostArch,
@@ -188,7 +188,6 @@ test(
         variant: "v1"
       }
     }
-
   ]
 );
 

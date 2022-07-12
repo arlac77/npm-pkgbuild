@@ -40,7 +40,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^5.2.3",
+    "@npmcli/arborist": "^5.3.0",
     "@vercel/nft": "^0.20.1",
     "aggregate-async-iterator": "^1.1.14",
     "commander": "^9.3.0",
@@ -53,7 +53,7 @@
     "ini": "^3.0.0",
     "iterable-string-interceptor": "^2.0.4",
     "key-value-transformer": "^3.0.3",
-    "node-fetch": "^3.2.7",
+    "node-fetch": "^3.2.8",
     "npm-package-walker": "^6.0.3",
     "npm-packlist": "^5.1.1",
     "pacote": "^13.6.1",

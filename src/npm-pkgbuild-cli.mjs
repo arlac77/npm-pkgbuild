@@ -137,7 +137,7 @@ program
             );
 
             for(const p of options.publish) {
-              await publish(fileName, p, properties);
+              await publish(fileName, p, output.properties );
             }
           } catch (e) {
             handleError(e, options);

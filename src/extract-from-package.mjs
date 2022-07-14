@@ -41,8 +41,8 @@ export const npmArchMapping = {
 
 /**
  * Deliver basic properties from the root package
- * @param {Object} json content of root package.json
- * @returns {Object} key value pairs extracted from json
+ * @param {Object} content of root package.json
+ * @returns {Object} key value pairs extracted from package
  */
 function extractFromRootPackage(json) {
   const properties = Object.fromEntries(
@@ -140,13 +140,13 @@ function* content2Sources(content, dir) {
 /**
  * Extract package definition from package.json.
  * - for each architecture deliver a new result
- * - if not architecture is given one result set is provided nethertheless
+ * - if no architecture is given one result set is provided nethertheless
  * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
- * - architecture given in a abstract definition are used to reduce the set of avaliable architectures
+ * - architecture given in a abstract definition are used to restrict the set of avaliable architectures
  * @param {Object} options
  * @param {Object} options.json package.json content
  * @param {string} options.dir where to look for package.json
- * @returns {AsyncIter<PackageDefinition>}
+ * @returns {AsyncIterator<PackageDefinition>}
  */
 export async function* extractFromPackage(options = {}) {
   let variant = "default";

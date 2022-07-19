@@ -50,15 +50,24 @@ test("publish twice", async t => {
   }
 });
 
+test("preparePublish path only", t => {
+  t.deepEqual(preparePublish(["/path/to"]), [
+    { url: "/path/to" }
+  ]);
+});
+
 test("preparePublish simple", t => {
   t.deepEqual(preparePublish(["http://somewhere.com/"]), [
     { url: "http://somewhere.com/" }
   ]);
 });
 
-test.skip("preparePublish with url credentials", t => {
-  t.deepEqual(preparePublish(["http://user@password/somewhere.com/"]), [
-    { url: "http://somewhere.com/" }
-  ]);
+test("preparePublish with url credentials", t => {
+  t.deepEqual(
+    preparePublish(["http://USER:PASSWORD@somewhere.com/"], {
+      USER: "myUser",
+      PASSWORD: "myPassword"
+    }),
+    [{ username: "myUser", password: "myPassword", url: "http://somewhere.com/" }]
+  );
 });
-

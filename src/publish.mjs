@@ -89,7 +89,7 @@ export function preparePublish(publish = [], env = {}) {
       url.password = "";
 
       return {
-        url: url.href,
+        url: url.href.replace(/%7B/g,'{').replace(/%7D/g,'}'),
         ...(username.length ? { username, password } : {})
       };
     } catch {

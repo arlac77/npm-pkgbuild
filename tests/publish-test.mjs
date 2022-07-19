@@ -62,6 +62,12 @@ test("preparePublish simple", t => {
   ]);
 });
 
+test("preparePublish simple placeholders", t => {
+  t.deepEqual(preparePublish(["http://somewhere.com/{{type}}"]), [
+    { url: "http://somewhere.com/{{type}}" }
+  ]);
+});
+
 test("preparePublish with url credentials", t => {
   t.deepEqual(
     preparePublish(["http://USER:PASSWORD@somewhere.com/"], {

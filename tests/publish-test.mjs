@@ -1,17 +1,22 @@
 import test from "ava";
-import { analysePublish, publish } from "../src/publish.mjs";
+import { analysePublish, publish, preparePublish } from "../src/publish.mjs";
 
 test("analysePublish", t => {
   const destination = { url: "http://myserver.com/{{access}}/{{arch}}" };
 
-  const publish = analysePublish(destination, { arch: "aarch64", access: "private" });
+  const publish = analysePublish(destination, {
+    arch: "aarch64",
+    access: "private"
+  });
 
   t.is(publish.url, "http://myserver.com/private/aarch64");
 });
 
 test("publish nowhere", async t => {
-  await publish(new URL("fixtures/content/file1.txt", import.meta.url).pathname);
-  t.true(true, "does not fail")
+  await publish(
+    new URL("fixtures/content/file1.txt", import.meta.url).pathname
+  );
+  t.true(true, "does not fail");
 });
 
 test("publish twice", async t => {
@@ -26,13 +31,34 @@ test("publish twice", async t => {
     properties.type = "debian";
     await publish(file, destination, properties);
   } catch (e) {
-    t.true(e.toString().indexOf("http://myserver.com/debian/private/aarch64/file1.txt") >= 0);
+    t.true(
+      e
+        .toString()
+        .indexOf("http://myserver.com/debian/private/aarch64/file1.txt") >= 0
+    );
   }
 
   try {
     properties.type = "arch";
     await publish(file, destination, properties);
   } catch (e) {
-    t.true(e.toString().indexOf("http://myserver.com/arch/private/aarch64/file1.txt") >= 0);
+    t.true(
+      e
+        .toString()
+        .indexOf("http://myserver.com/arch/private/aarch64/file1.txt") >= 0
+    );
   }
 });
+
+test("preparePublish simple", t => {
+  t.deepEqual(preparePublish(["http://somewhere.com/"]), [
+    { url: "http://somewhere.com/" }
+  ]);
+});
+
+test.skip("preparePublish with url credentials", t => {
+  t.deepEqual(preparePublish(["http://user@password/somewhere.com/"]), [
+    { url: "http://somewhere.com/" }
+  ]);
+});
+

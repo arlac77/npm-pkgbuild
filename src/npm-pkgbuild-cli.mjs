@@ -7,13 +7,14 @@ import {
   createExpressionTransformer,
   nameExtensionMatcher
 } from "content-entry-transform";
-import { utf8StreamOptions, decodePassword } from "./util.mjs";
+import { utf8StreamOptions } from "./util.mjs";
 import {
   FileContentProvider,
   allInputs,
   allOutputs,
   extractFromPackage,
-  publish
+  publish,
+  preparePublish
 } from "npm-pkgbuild";
 
 const { version, description } = JSON.parse(
@@ -51,7 +52,7 @@ program
   )
   .action(async options => {
     try {
-      options.publish = preparePublish(options.publish);
+      options.publish = preparePublish(options.publish, process.env);
 
       for await (const {
         properties,
@@ -136,8 +137,8 @@ program
               context.expand
             );
 
-            for(const p of options.publish) {
-              await publish(fileName, p, output.properties );
+            for (const p of options.publish) {
+              await publish(fileName, p, output.properties);
             }
           } catch (e) {
             handleError(e, options);
@@ -155,25 +156,4 @@ function handleError(e, options) {
   if (!options.continue) {
     process.exit(-1);
   }
-}
-
-function preparePublish(publish=[]) {
-  const e = process.env["PKGBUILD_PUBLISH"]
-  if(e) {
-    publish.push(e);
-  }
-
-  return publish.map(value => {
-    let values = value.split(/,/);
-    if (values.length > 1) {
-      values = values.map(v => process.env[v] || v);
-      return {
-        url: values[0],
-        user: values[1],
-        password: decodePassword(values[2])
-      };
-    }
-
-    return { url: value };
-  });
 }

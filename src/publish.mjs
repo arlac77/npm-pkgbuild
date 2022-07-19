@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
 import fetch from "node-fetch";
+import { decodePassword} from "./util.mjs";
 
 export function analysePublish(publish, properties) {
   publish = Object.assign({}, publish);
@@ -55,4 +56,26 @@ export async function publish(fileName, destination, properties) {
   /*
     console.log(`#<CI>publish ${fileName}`);
     */
+}
+
+
+export function preparePublish(publish=[], env) {
+  const e = env && env["PKGBUILD_PUBLISH"]
+  if(e) {
+    publish.push(e);
+  }
+
+  return publish.map(value => {
+    let values = value.split(/,/);
+    if (values.length > 1) {
+      values = values.map(v => process.env[v] || v);
+      return {
+        url: values[0],
+        user: values[1],
+        password: decodePassword(values[2])
+      };
+    }
+
+    return { url: value };
+  });
 }

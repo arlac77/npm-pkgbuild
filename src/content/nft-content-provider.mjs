@@ -20,6 +20,11 @@ export class NFTContentProvider extends ContentProvider {
     return "nft";
   }
 
+  static get description()
+  {
+  	return "user vercels NFT as source"
+  }
+  
   constructor(definitions, entryProperties) {
     super();
 

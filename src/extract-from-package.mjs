@@ -15,7 +15,11 @@ import { RPM } from "./output/rpm.mjs";
 /**
  * All content providers
  */
-export const allInputs = [NPMPackContentProvider, NodeModulesContentProvider, NFTContentProvider];
+export const allInputs = [
+  NPMPackContentProvider,
+  NodeModulesContentProvider,
+  NFTContentProvider
+];
 
 /**
  * All output formats
@@ -159,7 +163,11 @@ export async function* extractFromPackage(options = {}) {
     const pkgbuild = json.pkgbuild;
 
     if (pkgbuild) {
-      if (!modulePath) {
+      if (modulePath) {
+        if (!pkgbuild.abstract) {
+          dependencies[pkgbuild.name || json.name] = ">=" + json.version;
+        }
+      } else {
         if (json.cpu) {
           for (const a of asArray(json.cpu)) {
             arch.add(npmArchMapping[a]);

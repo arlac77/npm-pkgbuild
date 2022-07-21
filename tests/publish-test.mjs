@@ -72,7 +72,7 @@ test("preparePublish with url credentials", t => {
   t.deepEqual(
     preparePublish(["http://USER:PASSWORD@somewhere.com/"], {
       USER: "myUser",
-      PASSWORD: "myPassword"
+      PASSWORD: "{BASE64}bXlQYXNzd29yZA=="
     }),
     [{ username: "myUser", password: "myPassword", url: "http://somewhere.com/" }]
   );

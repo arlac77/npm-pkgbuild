@@ -76,14 +76,14 @@ export function preparePublish(publish = [], env = {}) {
       values = values.map(v => vm(v));
       return {
         url: values[0],
-        user: values[1],
-        password: decodePassword(values[2])
+        user: vm(values[1]),
+        password: decodePassword(vm(values[2]))
       };
     }
 
     try {
       const url = new URL(value);
-      let password = vm(url.password);
+      let password = decodePassword(vm(url.password));
       let username = vm(url.username);
       url.username = "";
       url.password = "";

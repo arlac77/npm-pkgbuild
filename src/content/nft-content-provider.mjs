@@ -1,5 +1,3 @@
-import { dirname } from "node:path";
-import { globby } from "globby";
 import { nodeFileTrace } from "@vercel/nft";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
@@ -32,6 +30,7 @@ export class NFTContentProvider extends ContentProvider {
       this.definitions = { start: [definitions] };
     } else {
       this.definitions = definitions;
+      this.definitions.start = asArray(this.definitions.start);
     }
 
     this.entryProperties = entryProperties;

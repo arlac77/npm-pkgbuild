@@ -137,6 +137,7 @@ const skipPattern = [
   ".nycrc",
   "**.DS_Store",
   ".env",
+  "**.vcxproj.filters",
   "**lerna.json",
   "x-package.json5",
   "component.json",

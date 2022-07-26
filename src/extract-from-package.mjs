@@ -158,6 +158,7 @@ export async function* extractFromPackage(options = {}) {
   let output = {};
   let arch = new Set();
   let restrictArch = new Set();
+  let groups;
 
   function processPkg(json, dir, modulePath) {
     const pkgbuild = json.pkgbuild;
@@ -165,9 +166,13 @@ export async function* extractFromPackage(options = {}) {
     if (pkgbuild) {
       if (modulePath) {
         if (!pkgbuild.abstract) {
-          dependencies[pkgbuild.name || json.name] = ">=" + json.version;
+          if(json.groups === groups) {
+            dependencies[pkgbuild.name || json.name] = ">=" + json.version;
+          }
         }
       } else {
+        groups = pkgbuild.groups;
+
         if (json.cpu) {
           for (const a of asArray(json.cpu)) {
             arch.add(npmArchMapping[a]);

@@ -166,7 +166,7 @@ export async function* extractFromPackage(options = {}) {
     if (pkgbuild) {
       if (modulePath) {
         if (!pkgbuild.abstract) {
-          if(json.groups === groups) {
+          if(pkgbuild.groups === groups) {
             dependencies[pkgbuild.name || json.name] = ">=" + json.version;
           }
         }

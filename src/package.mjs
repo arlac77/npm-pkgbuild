@@ -145,7 +145,7 @@ const skipPattern = [
   "cypress.json",
   ".airtap.yml",
   ".jscs.json",
-  "python3",
+  "**/python3",
   "sauce-labs.svg",
   "*Makefile*",
   "CONTRIBUTING*",

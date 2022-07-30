@@ -256,7 +256,7 @@ export async function* extractFromPackage(options = {}) {
       }
     }
     if (numberOfArchs === 0) {
-      console.warn(`No matching arch remaining, ${[...arch]} : ${[...arch]} : @${process.arch}`);
+      console.warn(`No matching arch remaining, ${[...arch]} : ${[...arch]} : ${process.arch}`);
     }
   } else {
     // or one set if no arch is given

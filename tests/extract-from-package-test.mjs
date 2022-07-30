@@ -1,5 +1,7 @@
 import test from "ava";
 import { arch as hostArch } from "process";
+import { join } from "path";
+import { mkdir, writeFile } from "fs/promises";
 import {
   FileContentProvider,
   NPMPackContentProvider,
@@ -10,12 +12,26 @@ import {
 async function efpt(t, json, expected) {
   let v = 0;
 
+  let dir;
+
+  if (json.node_modules) {
+    dir = new URL("../build/efpt", import.meta.url).pathname;
+    await mkdir(dir, { recursive: true });
+
+    for (const [n, v] of Object.entries(json.node_modules)) {
+      const md = join(dir, "node_modules", n);
+
+      await mkdir(md, { recursive: true });
+      await writeFile(join(md, "package.json"), JSON.stringify(v), "utf8");
+    }
+  }
+
   for await (const {
     properties,
     sources,
     dependencies,
     output
-  } of extractFromPackage({ json })) {
+  } of extractFromPackage({ json, dir })) {
     const e = expected[v];
 
     t.truthy(e, `expected ${v}`);
@@ -121,7 +137,19 @@ test(
   efpt,
   {
     cpu: ["arm64", "x64"],
-    pkgbuild: {}
+    pkgbuild: {},
+    node_modules: {
+      hosting: {
+        pkgbuild: {
+          output: {
+            arch: {},
+            debian: {}
+          },
+          arch: ["x86_64", "aarch64", "arm"],
+          abstract: true
+        }
+      }
+    }
   },
   [
     {

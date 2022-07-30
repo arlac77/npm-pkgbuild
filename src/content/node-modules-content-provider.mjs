@@ -126,6 +126,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 const toBeSkipped = new RegExp(
   "(" +
     [
+      "python3",
       "package-lock.json",
       "~",
       "\\.\\d",
@@ -133,6 +134,7 @@ const toBeSkipped = new RegExp(
       "\\.umd\\.js",
       "\\.ts",
       "\\.mts",
+      "\\.d\\.ts",
       "\\.coffee",
       "tsdoc-metadata\\.json",
       "\\.orig",

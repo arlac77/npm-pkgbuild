@@ -9,13 +9,16 @@ import {
   npmArchMapping
 } from "npm-pkgbuild";
 
+let id = 1;
+
 async function efpt(t, json, expected) {
   let v = 0;
 
   let dir;
 
   if (json.node_modules) {
-    dir = new URL("../build/efpt", import.meta.url).pathname;
+    const name = json.name ? json.name.replace(/\//g,'_').replace(/@/,''): id++;
+    dir = new URL(`../build/efpt-${name}`, import.meta.url).pathname;
     await mkdir(dir, { recursive: true });
 
     for (const [n, v] of Object.entries(json.node_modules)) {

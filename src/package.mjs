@@ -97,7 +97,7 @@ const skipPattern = [
   "**.npm*",
   "**rollup.config.*",
   "**.travis.yml",
-  "**~",
+  "**/*~",
   "**.bak",
   "**.log",
   "**.mk",
@@ -135,7 +135,7 @@ const skipPattern = [
   ".istanbul.yml",
   ".babelrc.*",
   ".nycrc",
-  "**.DS_Store",
+  "**/.DS_Store",
   ".env",
   "**.vcxproj.filters",
   "**lerna.json",
@@ -219,7 +219,7 @@ export async function* copyNodeModule(source, dest, options = defaultOptions) {
     cwd: dirname(pkgFile)
   })) {
     if (
-      f.match(/(readme|changelog|history|license(-\w+)?|licence)(\.\w*)?$/i)
+      f.match(/(readme|changelog|history|licen[sc]e(-\w+)?)(\.\w*)?$/i)
     ) {
       continue;
     }
@@ -229,7 +229,7 @@ export async function* copyNodeModule(source, dest, options = defaultOptions) {
       await mkdir(dest, { recursive: true });
       await copyFile(join(source, f), d, constants.COPYFILE_FICLONE);
     }
-    yield join(d);
+    yield d;
   }
 }
 

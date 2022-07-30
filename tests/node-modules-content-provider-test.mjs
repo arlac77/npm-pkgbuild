@@ -12,10 +12,10 @@ test("NodeModules entries", async t => {
   }
 
   t.truthy(entries["node_modules/uti/package.json"]);
-
+  t.truthy(entries["node_modules/uti/src/uti.mjs"]);
+  t.truthy(entries["node_modules/uti/src/well-known-utis.mjs"]);
   t.is(Object.entries(entries).length, 3);
 });
-
 
 test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
   const content = new NodeModulesContentProvider({

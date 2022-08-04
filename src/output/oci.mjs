@@ -5,7 +5,7 @@ import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
 
 function into(buffer, string) {
-  for (let i in string.length) {
+  for (let i = 0; i <  string.length; i++) {
     buffer[i] = string.charCodeAt(i);
   }
 }
@@ -44,16 +44,22 @@ export class OCI extends Packager {
     const header = new Uint8Array(512);
     const ustar = new Uint8Array(header, 256, 8);
     into(ustar, "ustar");
-
+    
     for await (const entry of aggregateFifo(sources)) {
-      console.log("XXXX",entry.name, entry.destination);
-
+      into(header,entry.name);
       out.write(header);
-
-      await pipeline(await entry.readStream, out);
+      const stream = await entry.readStream;
+      
+      stream.pipe( out, { end: false});
+      await new Promise((resolve,reject) => 
+      {
+        stream.on( 'close', () => resolve() );
+        stream.on( 'error', err => reject(err));
+      });
     }
 
-    console.log("end");
+    out.close();
+    
     return packageFile;
   }
 }

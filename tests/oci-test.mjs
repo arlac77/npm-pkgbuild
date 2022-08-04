@@ -4,7 +4,7 @@ import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { FileContentProvider, OCI } from "npm-pkgbuild";
 
-test.skip("oci", async t => {
+test("oci", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname

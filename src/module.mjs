@@ -10,4 +10,5 @@ export * from "./content/nft-content-provider.mjs";
 export * from "./output/debian.mjs";
 export * from "./output/rpm.mjs";
 export * from "./output/arch.mjs";
+export * from "./output/oci.mjs";
 export * from "./output/packager.mjs";

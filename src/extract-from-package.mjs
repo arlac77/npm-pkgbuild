@@ -11,6 +11,7 @@ import { NFTContentProvider } from "./content/nft-content-provider.mjs";
 import { DEBIAN } from "./output/debian.mjs";
 import { ARCH } from "./output/arch.mjs";
 import { RPM } from "./output/rpm.mjs";
+import { OCI } from "./output/oci.mjs";
 
 /**
  * All content providers
@@ -24,7 +25,7 @@ export const allInputs = [
 /**
  * All output formats
  */
-export const allOutputs = [DEBIAN, ARCH, RPM];
+export const allOutputs = [DEBIAN, ARCH, RPM, OCI];
 
 /**
  * Node architecture name to os native arch name mapping

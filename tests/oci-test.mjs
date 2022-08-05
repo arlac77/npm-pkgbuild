@@ -1,7 +1,7 @@
 import test from "ava";
-import { join } from "path";
-import { stat, mkdtemp } from "fs/promises";
-import { tmpdir } from "os";
+import { join } from "node:path";
+import { stat, mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { FileContentProvider, OCI } from "npm-pkgbuild";
 
 test("oci", async t => {
@@ -31,5 +31,5 @@ test("oci", async t => {
   t.is(fileName, join(destination, "abc-1.0.0.oci.tar.gz"));
 
   const s = await stat(fileName);
-  t.true(s.size >= 800, `package file size ${s.size}`);
+  t.true(s.size >= 10, `package file size ${s.size}`);
 });

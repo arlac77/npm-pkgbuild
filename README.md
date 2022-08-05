@@ -23,7 +23,6 @@ npm-pkgbuild --rpm --debian --arch --content /destination:build --publish /some/
 
 This will create a arch, rpm and a debian package of the build dir.
 
-
 ## upload package
 
 ```shell
@@ -75,7 +74,7 @@ content as provided by npm pack
 content of all (production) dependencies
 
 options:
-    - withoutDevelpmentDependencies when to stip away dev dependencies (defaults to true)
+\- withoutDevelpmentDependencies when to stip away dev dependencies (defaults to true)
 
 # shared configuration
 
@@ -88,50 +87,45 @@ see [mf-hoting](https://www.npmjs.com/package/mf-hosting) module as an example.
 
 ### Table of Contents
 
-- [usage](#usage)
-  - [upload package](#upload-package)
-- [content providers](#content-providers)
-- [files (default)](#files-default)
-  - [npm-pack](#npm-pack)
-  - [node-modules](#node-modules)
-- [API](#api)
-    - [Table of Contents](#table-of-contents)
-  - [ContentProvider](#contentprovider)
-    - [asyncIterator](#asynciterator)
-  - [FileContentProvider](#filecontentprovider)
-    - [Parameters](#parameters)
-    - [name](#name)
-  - [NodeModulesContentProvider](#nodemodulescontentprovider)
-    - [Parameters](#parameters-1)
-    - [name](#name-1)
-  - [NPMPackContentProvider](#npmpackcontentprovider)
-    - [Parameters](#parameters-2)
-    - [name](#name-2)
-  - [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
-  - [fields](#fields)
-  - [fields](#fields-1)
-  - [fields](#fields-2)
-  - [hookMapping](#hookmapping)
-  - [hookMapping](#hookmapping-1)
-  - [Field](#field)
-    - [Properties](#properties)
-  - [Packager](#packager)
-    - [Parameters](#parameters-3)
-    - [tmpdir](#tmpdir)
-    - [execute](#execute)
-      - [Parameters](#parameters-4)
-  - [decodePassword](#decodepassword)
-    - [Parameters](#parameters-5)
-  - [extractFunctions](#extractfunctions)
-    - [Parameters](#parameters-6)
-  - [fieldProvider](#fieldprovider)
-    - [Parameters](#parameters-7)
-  - [Expander](#expander)
-    - [Parameters](#parameters-8)
-  - [copyEntries](#copyentries)
-    - [Parameters](#parameters-9)
-- [install](#install)
-- [license](#license)
+*   [ContentProvider](#contentprovider)
+    *   [asyncIterator](#asynciterator)
+*   [FileContentProvider](#filecontentprovider)
+    *   [Parameters](#parameters)
+    *   [name](#name)
+*   [NFTContentProvider](#nftcontentprovider)
+    *   [Parameters](#parameters-1)
+    *   [name](#name-1)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+    *   [Parameters](#parameters-2)
+    *   [name](#name-2)
+*   [NPMPackContentProvider](#npmpackcontentprovider)
+    *   [Parameters](#parameters-3)
+    *   [name](#name-3)
+*   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
+*   [fields](#fields)
+*   [fields](#fields-1)
+*   [fields](#fields-2)
+*   [hookMapping](#hookmapping)
+*   [hookMapping](#hookmapping-1)
+*   [Field](#field)
+    *   [Properties](#properties)
+*   [Packager](#packager)
+    *   [Parameters](#parameters-4)
+    *   [tmpdir](#tmpdir)
+    *   [execute](#execute)
+        *   [Parameters](#parameters-5)
+*   [available](#available)
+*   [packageNameMapping](#packagenamemapping)
+*   [decodePassword](#decodepassword)
+    *   [Parameters](#parameters-6)
+*   [extractFunctions](#extractfunctions)
+    *   [Parameters](#parameters-7)
+*   [fieldProvider](#fieldprovider)
+    *   [Parameters](#parameters-8)
+*   [Expander](#expander)
+    *   [Parameters](#parameters-9)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-10)
 
 ## ContentProvider
 
@@ -144,6 +138,24 @@ List all entries.
 Returns **asyncIterator\<ContentEntry>** all entries
 
 ## FileContentProvider
+
+**Extends ContentProvider**
+
+Content provided form the file system.
+
+### Parameters
+
+*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))** 
+
+    *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)** 
+    *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
+*   `entryProperties`  
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## NFTContentProvider
 
 **Extends ContentProvider**
 
@@ -184,8 +196,8 @@ Content from npm pack.
 
 ### Parameters
 
-*   `definitions`  
-*   `entryProperties`  
+*   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
 
 ### name
 
@@ -250,6 +262,16 @@ Execute package generation
 *   `options`  
 *   `expander`  
 
+## available
+
+Check for rpmbuild presence.
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true when rpmbuild is present
+
+## packageNameMapping
+
+What is the node name in the package eco-system
+
 ## decodePassword
 
 Decode a password
@@ -262,7 +284,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## extractFunctions
 
-Extract shell functions from a given text
+Extract shell functions from a given text.
 
 ### Parameters
 
@@ -292,6 +314,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 ## copyEntries
 
 Copy content from source into destinationDirectory.
+Destination paths a generated without leading '/' (as for entry names too).
 
 ### Parameters
 

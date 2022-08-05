@@ -69,13 +69,14 @@ export class OCI extends Packager {
       out.write(header);
 
       stream.pipe(out, { end: false });
+
       await new Promise((resolve, reject) => {
-        stream.on("close", () => resolve());
+        stream.on("close", resolve);
         stream.on("error", err => reject(err));
       });
     }
 
-    //out.close();
+    out.close();
 
     return packageFile;
   }

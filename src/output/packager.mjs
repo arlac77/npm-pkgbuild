@@ -36,6 +36,11 @@ export class Packager {
     this._properties = { ...properties };
   }
 
+  get fileNameExtension()
+  {
+  	return this.constructor.fileNameExtension;
+  }
+  
   get fields() {
     return this.constructor.fields;
   }

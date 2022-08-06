@@ -57,7 +57,7 @@ export class RPM extends Packager {
 
   get packageFileName() {
     const p = this.properties;
-    return `${p.name}-${p.version}-${p.release}.${p.arch}${this.constructor.fileNameExtension}`;
+    return `${p.name}-${p.version}-${p.release}.${p.arch}${this.fileNameExtension}`;
   }
 
   static get fields() {

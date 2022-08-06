@@ -38,7 +38,7 @@ export class OCI extends Packager {
 
   get packageFileName() {
     const p = this.properties;
-    return `${p.name}-${p.version}${this.constructor.fileNameExtension}`;
+    return `${p.name}-${p.version}${this.fileNameExtension}`;
   }
 
   async execute(sources, transformer, dependencies, options, expander) {

@@ -47,7 +47,6 @@ export const pkgKeyValuePairOptions = {
   keyValueLines
 };
 
-
 function keyPrefix(key) {
   const f = fields[key];
   return f && f.prefix ? f.prefix + key : key;
@@ -83,7 +82,7 @@ export class ARCH extends Packager {
 
   get packageFileName() {
     const p = this.properties;
-    return `${p.name}-${p.version}-${p.release}-${p.arch}${this.constructor.fileNameExtension}`;
+    return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
   async execute(sources, transformer, dependencies, options, expander) {

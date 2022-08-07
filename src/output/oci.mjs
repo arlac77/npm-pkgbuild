@@ -76,7 +76,7 @@ export class OCI extends Packager {
       });
     }
 
-    out.close();
+    out.end();
 
     return packageFile;
   }

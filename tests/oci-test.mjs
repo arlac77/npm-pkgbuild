@@ -31,5 +31,5 @@ test("oci", async t => {
   t.is(fileName, join(destination, "abc-1.0.0.oci.tar.gz"));
 
   const s = await stat(fileName);
-  t.true(s.size >= 10, `package file size ${s.size}`);
+  t.true(s.size >= 770, `package file size ${s.size}`);
 });

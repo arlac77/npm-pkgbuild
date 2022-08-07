@@ -76,7 +76,7 @@ export class OCI extends Packager {
       });
     }
 
-    out.end();
+    out.end(new Uint8Array(1024));
 
     return packageFile;
   }

@@ -4,18 +4,33 @@ import { createGzip } from "node:zlib";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
 
-function into(buffer, string) {
+function into(buffer, offset, string) {
   for (let i = 0; i < string.length; i++) {
-    buffer[i] = string.charCodeAt(i);
+    buffer[offset + i] = string.charCodeAt(i);
   }
 }
 
-function intoOctal(buffer, number) {
-  const string = Math.floor(number).toString(8);
+function intoOctal(buffer, offset, length, number) {
+  const string = "000000000000" + Math.floor(number).toString(8);
 
-  for (let i = 0; i < string.length; i++) {
-    buffer[i] = string.charCodeAt(i);
+  length -= 1;
+  let n = string.length - length;
+
+  //console.log("octal", string, string.length, length, n);
+  for (let i = 0; i < length; i++) {
+    buffer[offset + i] = string.charCodeAt(i + n);
   }
+}
+
+function chksum(header) {
+  let chksum = 0;
+  for (let i = 0; i < header.length; i++) {
+    if (i < 148 || i > 148 + 8) {
+      chksum += header[i];
+    }
+  }
+
+  return chksum;
 }
 
 export class OCI extends Packager {
@@ -51,36 +66,51 @@ export class OCI extends Packager {
 
     console.log(packageFile);
 
-    const filler = new Uint8Array(1024);
     const header = new Uint8Array(512);
-    const ustarField = new Uint8Array(header, 256, 8);
-    const sizeField = new Uint8Array(header, 124, 12);
-    into(ustarField, "ustar\x0000");
+    into(header, 257, "ustar");
+
+    intoOctal(header, 108, 8, 0 /* root */);
+    intoOctal(header, 116, 8, 3 /* sys */);
+
+    into(header, 265, "root");
+    into(header, 297, "sys");
+
     header[156] = "0".charCodeAt(0);
 
     for await (const entry of aggregateFifo(sources)) {
-      const size = await entry.size;
-      const stream = await entry.readStream;
+      //      const size = await entry.size;
+      const buffer = await entry.buffer;
+      const size = buffer.length;
 
-      console.log(entry.name, size);
+      into(header, 0, entry.name);
+      intoOctal(header, 100, 8, entry.mode);
+      intoOctal(header, 124, 12, size);
+      intoOctal(header, 136, 12, Date.now());
+      intoOctal(header, 148, 8, chksum(header));
 
-      into(header, entry.name);
-      intoOctal(sizeField, size);
       out.write(header);
 
+      out.write(buffer);
+
+      /*
+      const stream = await entry.readStream;
       stream.pipe(out, { end: false });
 
       await new Promise((resolve, reject) => {
         stream.on("close", resolve);
         stream.on("error", reject);
-      });
+      });*/
 
       const allign = 512 - (size % 512);
+
+      //      console.log(entry.name, size, buffer.length,allign);
+
       if (allign > 0) {
-        out.write(new Uint8Array(filler, 0, allign));
+        out.write(new Uint8Array(allign));
       }
     }
 
+    const filler = new Uint8Array(1024*8);
     out.end(filler);
 
     return packageFile;

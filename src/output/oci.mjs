@@ -68,6 +68,8 @@ export class OCI extends Packager {
 
     const header = new Uint8Array(512);
     into(header, 257, "ustar");
+    header[263] = 48 // 0;
+    header[264] = 48 // 0;
 
     intoOctal(header, 108, 8, 0 /* root */);
     intoOctal(header, 116, 8, 3 /* sys */);
@@ -75,7 +77,7 @@ export class OCI extends Packager {
     into(header, 265, "root");
     into(header, 297, "sys");
 
-    header[156] = "0".charCodeAt(0);
+    header[156] = 48; // 0
 
     for await (const entry of aggregateFifo(sources)) {
       //      const size = await entry.size;
@@ -85,7 +87,7 @@ export class OCI extends Packager {
       into(header, 0, entry.name);
       intoOctal(header, 100, 8, entry.mode);
       intoOctal(header, 124, 12, size);
-      intoOctal(header, 136, 12, Date.now());
+      intoOctal(header, 136, 12, await entry.mtime);
       intoOctal(header, 148, 8, chksum(header));
 
       out.write(header);

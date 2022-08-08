@@ -72,7 +72,7 @@ export class OCI extends Packager {
 
       await new Promise((resolve, reject) => {
         stream.on("close", resolve);
-        stream.on("error", err => reject(err));
+        stream.on("error", reject);
       });
 
       const allign = 512 - (size % 512);

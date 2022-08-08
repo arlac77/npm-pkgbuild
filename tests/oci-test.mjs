@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { FileContentProvider, OCI } from "npm-pkgbuild";
 
 test("oci", async t => {
-  const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
+  const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
     })[Symbol.asyncIterator]()
@@ -31,5 +31,5 @@ test("oci", async t => {
   t.is(fileName, join(destination, "abc-1.0.0.oci.tar.gz"));
 
   const s = await stat(fileName);
-  t.true(s.size >= 770, `package file size ${s.size}`);
+  t.true(s.size >= 10, `package file size (${s.size})`);
 });

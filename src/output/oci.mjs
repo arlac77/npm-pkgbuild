@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { createWriteStream } from "node:fs";
-import { createGzip } from 'node:zlib';
+import { createGzip } from "node:zlib";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
 
@@ -10,8 +10,7 @@ function into(buffer, string) {
   }
 }
 
-function intoOctal(buffer,number)
-{
+function intoOctal(buffer, number) {
   const string = Math.floor(number).toString(8);
 
   for (let i = 0; i < string.length; i++) {
@@ -47,16 +46,17 @@ export class OCI extends Packager {
     const packageFile = join(destination, this.packageFileName);
 
     const out = createGzip();
-    
+
     out.pipe(createWriteStream(packageFile));
 
     console.log(packageFile);
 
+    const filler = new Uint8Array(1024);
     const header = new Uint8Array(512);
     const ustarField = new Uint8Array(header, 256, 8);
     const sizeField = new Uint8Array(header, 124, 12);
     into(ustarField, "ustar\x0000");
-    header[156] = '0'.charCodeAt(0);
+    header[156] = "0".charCodeAt(0);
 
     for await (const entry of aggregateFifo(sources)) {
       const size = await entry.size;
@@ -74,9 +74,14 @@ export class OCI extends Packager {
         stream.on("close", resolve);
         stream.on("error", err => reject(err));
       });
+
+      const allign = 512 - (size % 512);
+      if (allign > 0) {
+        out.write(new Uint8Array(filler, 0, allign));
+      }
     }
 
-    out.end(new Uint8Array(1024));
+    out.end(filler);
 
     return packageFile;
   }

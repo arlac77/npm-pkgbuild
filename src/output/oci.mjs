@@ -16,7 +16,6 @@ function intoOctal(buffer, offset, length, number) {
   length -= 1;
   let n = string.length - length;
 
-  //console.log("octal", string, string.length, length, n);
   for (let i = 0; i < length; i++) {
     buffer[offset + i] = string.charCodeAt(i + n);
   }
@@ -55,8 +54,32 @@ export class OCI extends Packager {
 
   async execute(sources, transformer, dependencies, options, expander) {
     const { properties, destination } = await this.prepareExecute(options);
-
     const packageFile = join(destination, this.packageFileName);
+
+    const meta = {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "config": {
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "size": 7023,
+        "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
+      },
+      "layers": [
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 32654,
+          "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0"
+        },
+        {
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 73109,
+          "digest": "sha256:ec4b8955958665577945c89419d1af06b5f7636b4ac3da7f12184802ad867736"
+        }
+      ], 
+      "annotations": {
+        description: properties.description
+      }
+    };
 
     const out = createGzip();
 

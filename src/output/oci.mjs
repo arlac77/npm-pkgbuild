@@ -25,9 +25,7 @@ function intoOctal(buffer, offset, length, number) {
 function chksum(header) {
   let chksum = 0;
   for (let i = 0; i < header.length; i++) {
-    if (i < 148 || i > 148 + 8) {
-      chksum += header[i];
-    }
+    chksum += i < 148 || i >= 148 + 8 ? header[i] : 32;
   }
 
   return chksum;

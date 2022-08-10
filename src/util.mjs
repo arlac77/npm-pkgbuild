@@ -23,7 +23,6 @@ export function decodePassword(password) {
     switch (m[1]) {
       case "BASE64":
         return Buffer.from(m[2], "base64").toString("utf8");
-        break;
       default:
         throw new Error(`Unknown algorithm ${m[1]}`);
     }

@@ -118,7 +118,8 @@ export class OCI extends Packager {
       intoOctal(header, 100, 8, entry.mode);
       intoOctal(header, 124, 12, size);
 
-      intoOctal(header, 136, 12, (await entry.mtime).getTime() / 1000);
+      const mtime = await entry.mtime;
+      intoOctal(header, 136, 12, mtime ? mtime.getTime() / 1000: 0);
       intoOctal(header, 148, 8, chksum(header));
 
       out.write(header);

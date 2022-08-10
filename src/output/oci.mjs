@@ -10,9 +10,15 @@ const MEDIA_TYPE_MANIFEST = "application/vnd.oci.image.manifest.v1+json";
 const MEDIA_TYPE_CONFIG = "application/vnd.oci.image.config.v1+json";
 const MEDI_TYPE_IMAGE_LAYER = "application/vnd.oci.image.layer.v1.tar+gzip";
 
-function into(buffer, offset, string) {
-  for (let i = 0; i < string.length; i++) {
+function into(buffer, offset, length, string) {
+  let i = 0;
+
+  for (; i < string.length; i++) {
     buffer[offset + i] = string.charCodeAt(i);
+  }
+
+  for (; i < length; i++) {
+    buffer[offset + i] = 0;
   }
 }
 
@@ -91,15 +97,15 @@ export class OCI extends Packager {
     console.log(packageFile);
 
     const header = new Uint8Array(512);
-    into(header, 257, "ustar");
+    into(header, 257, 6, "ustar");
     header[263] = 48; // 0;
     header[264] = 48; // 0;
 
     intoOctal(header, 108, 8, 0 /* root */);
     intoOctal(header, 116, 8, 3 /* sys */);
 
-    into(header, 265, "root");
-    into(header, 297, "sys");
+    into(header, 265, 32, "root");
+    into(header, 297, 32, "sys");
 
     header[156] = 48; // 0
 
@@ -108,7 +114,7 @@ export class OCI extends Packager {
       const buffer = await entry.buffer;
       const size = buffer.length;
 
-      into(header, 0, entry.name);
+      into(header, 0,100, entry.name);
       intoOctal(header, 100, 8, entry.mode);
       intoOctal(header, 124, 12, size);
       intoOctal(header, 136, 12, await entry.mtime);

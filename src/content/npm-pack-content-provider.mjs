@@ -56,6 +56,7 @@ export class NPMPackContentProvider extends ContentProvider {
                 Buffer.concat(chunks)
               ),
               {
+                mtime: { value: header.mtime },
                 mode: { value: header.mode }
               }
             ),

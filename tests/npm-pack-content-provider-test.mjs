@@ -19,6 +19,7 @@ test("NPMPack entries", async t => {
   t.truthy(entries["package.json"]);
 
   const e = entries["package.json"];
+  t.truthy(e.mtime);
   t.is(e.mode, 420);
   t.is(e.destination, destination);
 

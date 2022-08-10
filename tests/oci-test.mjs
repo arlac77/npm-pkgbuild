@@ -6,6 +6,8 @@ import { createReadStream } from "node:fs";
 import { createGunzip } from "node:zlib";
 import { pipeline } from "node:stream/promises";
 import { extract } from "tar-stream";
+import { execa } from "execa";
+
 import { FileContentProvider, OCI } from "npm-pkgbuild";
 
 test("oci", async t => {
@@ -57,4 +59,11 @@ test("oci", async t => {
 
   t.is(entries["file1.txt"].size, 93);
   t.is(entries["file2.json"].size, 23);
+
+
+  const p = await execa("tar", ["tvfz", fileName]);
+
+  t.is(p.stdout,
+    `-rw-r--r-- root/sys         93 2022-01-31 01:05 file1.txt
+-rw-r--r-- root/sys         23 2022-01-31 01:05 file2.json`);
 });

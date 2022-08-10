@@ -46,7 +46,7 @@
     "commander": "^9.4.0",
     "content-entry": "^5.1.1",
     "content-entry-filesystem": "^5.2.1",
-    "content-entry-transform": "^1.4.11",
+    "content-entry-transform": "^1.4.12",
     "execa": "^6.1.0",
     "expression-expander": "^7.0.19",
     "globby": "^13.1.2",

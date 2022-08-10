@@ -78,12 +78,6 @@ export class OCI extends Packager {
           "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
       },
       layers: [
-        {
-          mediaType: MEDI_TYPE_IMAGE_LAYER,
-          size: 73109,
-          digest:
-            "sha256:ec4b8955958665577945c89419d1af06b5f7636b4ac3da7f12184802ad867736"
-        }
       ],
       annotations: {
         description: properties.description,
@@ -92,14 +86,11 @@ export class OCI extends Packager {
     };
 
     const out = createGzip();
-    const hash = createHash("sha256");
-
-    console.log(packageFile);
 
     const header = new Uint8Array(512);
     into(header, 257, 6, "ustar");
-    header[263] = 48; // 0;
-    header[264] = 48; // 0;
+    header[263] = 48; // '0';
+    header[264] = 48; // '0';
 
     intoOctal(header, 108, 8, 0 /* root */);
     intoOctal(header, 116, 8, 3 /* sys */);
@@ -107,19 +98,22 @@ export class OCI extends Packager {
     into(header, 265, 32, "root");
     into(header, 297, 32, "sys");
 
-    header[156] = 48; // 0
+    header[156] = 48; // '0'
 
     for await (const entry of aggregateFifo(sources)) {
       //      const size = await entry.size;
       const buffer = await entry.buffer;
       const size = buffer.length;
 
-      into(header, 0,100, entry.name);
+      into(header, 0, 100, entry.name);
       intoOctal(header, 100, 8, entry.mode);
       intoOctal(header, 124, 12, size);
 
       const mtime = await entry.mtime;
-      intoOctal(header, 136, 12, mtime ? mtime.getTime() / 1000: 0);
+      if (!mtime) {
+        console.warn("no mtime", entry.name);
+      }
+      intoOctal(header, 136, 12, mtime ? mtime.getTime() / 1000 : 0);
       intoOctal(header, 148, 8, chksum(header));
 
       out.write(header);
@@ -141,12 +135,29 @@ export class OCI extends Packager {
       }
     }
 
+    const hash = createHash("sha256");
+    let size = 0;
+    out.on("data", chunk => {
+      hash.update(chunk);
+      size += chunk.length;
+    });
+
     const filler = new Uint8Array(1024 * 8);
     out.end(filler);
 
     await pipeline(out, createWriteStream(packageFile));
 
-    console.log(hash.digest("base64"));
+    const layer = {
+      mediaType: MEDI_TYPE_IMAGE_LAYER,
+      size,
+      digest: "sha256:" + hash.digest("hex")
+    };
+
+    console.log(layer);
+
+    meta.layers.push(layer);
+
+    console.log(packageFile);
 
     return packageFile;
   }

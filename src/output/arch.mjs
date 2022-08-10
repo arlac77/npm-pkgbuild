@@ -49,7 +49,7 @@ export const pkgKeyValuePairOptions = {
 
 function keyPrefix(key) {
   const f = fields[key];
-  return f && f.prefix ? f.prefix + key : key;
+  return f?.prefix ? f.prefix + key : key;
 }
 
 const PKGBUILD = "PKGBUILD";

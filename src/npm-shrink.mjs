@@ -107,7 +107,7 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDef
     delete pkg[key];
   });
 
-  if (options && options.removeKeys) {
+  if (options?.removeKeys) {
     options.removeKeys.map(key => {
       delete pkg[key];
     });

@@ -64,7 +64,7 @@ export class OCI extends Packager {
     return `${p.name}-${p.version}${this.fileNameExtension}`;
   }
 
-  async execute(sources, transformer, dependencies, options, expander) {
+  async execute(sources, transformer, dependencies, options, expander = v => v) {
     const { properties, destination } = await this.prepareExecute(options);
     const packageFile = join(destination, this.packageFileName);
 
@@ -77,8 +77,7 @@ export class OCI extends Packager {
         digest:
           "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
       },
-      layers: [
-      ],
+      layers: [],
       annotations: {
         description: properties.description,
         version: properties.version
@@ -105,7 +104,17 @@ export class OCI extends Packager {
       const buffer = await entry.buffer;
       const size = buffer.length;
 
-      into(header, 0, 100, entry.name);
+      const destination = entry.destination;
+
+      const name = expander(
+        destination === undefined
+          ? entry.name
+          : destination.endsWith("/")
+          ? join(destination, entry.name)
+          : destination
+      ).replace(/^\//, "");
+
+      into(header, 0, 100, name);
       intoOctal(header, 100, 8, entry.mode);
       intoOctal(header, 124, 12, size);
       intoOctal(header, 136, 12, (await entry.mtime).getTime() / 1000);

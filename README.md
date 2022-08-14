@@ -92,25 +92,14 @@ see [mf-hoting](https://www.npmjs.com/package/mf-hosting) module as an example.
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters)
     *   [name](#name)
-*   [packageNameMapping](#packagenamemapping)
-*   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-1)
-*   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-2)
-*   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-3)
-*   [Expander](#expander)
-    *   [Parameters](#parameters-4)
-*   [copyEntries](#copyentries)
-    *   [Parameters](#parameters-5)
 *   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-6)
+    *   [Parameters](#parameters-1)
     *   [name](#name-1)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-2)
     *   [name](#name-2)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-8)
+    *   [Parameters](#parameters-3)
     *   [name](#name-3)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [fields](#fields)
@@ -121,11 +110,22 @@ see [mf-hoting](https://www.npmjs.com/package/mf-hosting) module as an example.
 *   [Field](#field)
     *   [Properties](#properties)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-9)
+    *   [Parameters](#parameters-4)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-10)
+        *   [Parameters](#parameters-5)
 *   [available](#available)
+*   [packageNameMapping](#packagenamemapping)
+*   [decodePassword](#decodepassword)
+    *   [Parameters](#parameters-6)
+*   [extractFunctions](#extractfunctions)
+    *   [Parameters](#parameters-7)
+*   [fieldProvider](#fieldprovider)
+    *   [Parameters](#parameters-8)
+*   [Expander](#expander)
+    *   [Parameters](#parameters-9)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-10)
 
 ## ContentProvider
 
@@ -154,61 +154,6 @@ Content provided form the file system.
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## packageNameMapping
-
-What is the node name in the package eco-system
-
-## decodePassword
-
-Decode a password
-
-### Parameters
-
-*   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** plaintext password
-
-## extractFunctions
-
-Extract shell functions from a given text.
-
-### Parameters
-
-*   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
-
-Returns **AsyncIterator\<FunctionDecl>** 
-
-## fieldProvider
-
-### Parameters
-
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-*   `fields` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-Returns **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
-
-## Expander
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-### Parameters
-
-*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-## copyEntries
-
-Copy content from source into destinationDirectory.
-Destination paths a generated without leading '/' (as for entry names too).
-
-### Parameters
-
-*   `source` **AsyncIterator\<ContentEntry>** 
-*   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
-*   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>** 
 
 ## NFTContentProvider
 
@@ -322,6 +267,61 @@ Execute package generation
 Check for rpmbuild presence.
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true when rpmbuild is present
+
+## packageNameMapping
+
+What is the node name in the package eco-system
+
+## decodePassword
+
+Decode a password
+
+### Parameters
+
+*   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** plaintext password
+
+## extractFunctions
+
+Extract shell functions from a given text.
+
+### Parameters
+
+*   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+Returns **AsyncIterator\<FunctionDecl>** 
+
+## fieldProvider
+
+### Parameters
+
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `fields` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+Returns **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+
+## Expander
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+### Parameters
+
+*   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+## copyEntries
+
+Copy content from source into destinationDirectory.
+Destination paths a generated without leading '/' (as for entry names too).
+
+### Parameters
+
+*   `source` **AsyncIterator\<ContentEntry>** 
+*   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+*   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
+*   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>** 
 
 # install
 

@@ -45,7 +45,7 @@
     "aggregate-async-iterator": "^1.1.14",
     "commander": "^9.4.0",
     "content-entry": "^5.2.3",
-    "content-entry-filesystem": "^5.2.4",
+    "content-entry-filesystem": "^5.2.5",
     "content-entry-transform": "^1.4.15",
     "execa": "^6.1.0",
     "expression-expander": "^7.0.19",

@@ -57,7 +57,7 @@
     "npm-package-walker": "^6.0.3",
     "npm-packlist": "^5.1.1",
     "pacote": "^13.6.1",
-    "pkg-dir": "^6.0.1",
+    "pkg-dir": "^7.0.0",
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {

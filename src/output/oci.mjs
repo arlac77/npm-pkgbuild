@@ -22,6 +22,15 @@ function into(buffer, offset, length, string) {
   }
 }
 
+const ZEROS = "0000000000000000000";
+const SEVENS = "7777777777777777777";
+
+function encodeOctal(val, n) {
+  val = val.toString(8);
+  if (val.length > n) return SEVENS.slice(0, n) + " ";
+  else return ZEROS.slice(0, n - val.length) + val + " ";
+}
+
 function intoOctal(buffer, offset, length, number) {
   const string = "000000000000" + Math.floor(number).toString(8);
 
@@ -64,7 +73,13 @@ export class OCI extends Packager {
     return `${p.name}-${p.version}${this.fileNameExtension}`;
   }
 
-  async execute(sources, transformer, dependencies, options, expander = v => v) {
+  async execute(
+    sources,
+    transformer,
+    dependencies,
+    options,
+    expander = v => v
+  ) {
     const { properties, destination } = await this.prepareExecute(options);
     const packageFile = join(destination, this.packageFileName);
 
@@ -88,8 +103,8 @@ export class OCI extends Packager {
 
     const header = new Uint8Array(512);
     into(header, 257, 6, "ustar");
-    header[263] = 48; // '0';
-    header[264] = 48; // '0';
+    header[263] = 32; // 48; // '0';
+    header[264] = 32; // 48; // '0';
 
     intoOctal(header, 108, 8, 0 /* root */);
     intoOctal(header, 116, 8, 3 /* sys */);
@@ -98,6 +113,8 @@ export class OCI extends Packager {
     into(header, 297, 32, "sys");
 
     header[156] = 48; // '0'
+
+    let pos = 0;
 
     for await (const entry of aggregateFifo(sources)) {
       //      const size = await entry.size;
@@ -116,12 +133,22 @@ export class OCI extends Packager {
 
       into(header, 0, 100, name);
       intoOctal(header, 100, 8, entry.mode);
+      into(header, 124, 12, encodeOctal(size, 12));
+      into(header, 136, 12, encodeOctal((await entry.mtime).getTime() / 1000, 12));
+     // into(header, 148, 8, encodeOctal(chksum(header), 8));
+      intoOctal(header, 148, 8, chksum(header));
+
+      console.log(pos, name, size);
+      /*
       intoOctal(header, 124, 12, size);
       intoOctal(header, 136, 12, (await entry.mtime).getTime() / 1000);
       intoOctal(header, 148, 8, chksum(header));
+*/
 
       out.write(header);
       out.write(buffer);
+
+      pos += header.length + buffer.length;
 
       /*
       const stream = await entry.readStream;
@@ -132,10 +159,12 @@ export class OCI extends Packager {
         stream.on("error", reject);
       });*/
 
-      const allign = 512 - (size % 512);
+      const allign = 512 - (size & 511);      
+      //const allign = 512 - (size % 512);
 
       if (allign > 0) {
         out.write(new Uint8Array(allign));
+        pos += allign;
       }
     }
 
@@ -146,7 +175,7 @@ export class OCI extends Packager {
       size += chunk.length;
     });
 
-    const filler = new Uint8Array(1024 * 8);
+    const filler = new Uint8Array(1024);
     out.end(filler);
 
     await pipeline(out, createWriteStream(packageFile));

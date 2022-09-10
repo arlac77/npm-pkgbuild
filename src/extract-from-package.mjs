@@ -258,7 +258,7 @@ export async function* extractFromPackage(options = {}) {
 
       // armv7h,aarch64,x86_64 : armv7h,aarch64,x86_64 : x64    
       console.warn(
-        `No matching arch remaining, ${[...arch]} : ${[...restrictedArch]} : ${
+        `No matching arch remaining, ${[...arch]} : ${[...restrictArch]} : ${
           process.arch
         }`
       );

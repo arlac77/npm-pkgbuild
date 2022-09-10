@@ -255,8 +255,10 @@ export async function* extractFromPackage(options = {}) {
       }
     }
     if (numberOfArchs === 0) {
+
+      // armv7h,aarch64,x86_64 : armv7h,aarch64,x86_64 : x64    
       console.warn(
-        `No matching arch remaining, ${[...arch]} : ${[...arch]} : ${
+        `No matching arch remaining, ${[...arch]} : ${[...restrictedArch]} : ${
           process.arch
         }`
       );

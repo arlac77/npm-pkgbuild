@@ -238,9 +238,7 @@ export async function* extractFromPackage(options = {}) {
 
     for (const a of arch) {
       if (!restrictArch.size || restrictArch.has(a)) {
-        if (options.available && npmArchMapping[process.arch] !== a) {
-          break;
-        } else {
+         if (!options.available || npmArchMapping[process.arch] === a) {
           numberOfArchs++;
           properties.arch = [a];
           yield {
@@ -255,10 +253,8 @@ export async function* extractFromPackage(options = {}) {
       }
     }
     if (numberOfArchs === 0) {
-
-      // armv7h,aarch64,x86_64 : armv7h,aarch64,x86_64 : x64    
       console.warn(
-        `No matching arch remaining, ${[...arch]} : ${[...restrictArch]} : ${
+        `No arch remaining, ${[...arch]} : ${[...restrictArch]} : ${
           process.arch
         }`
       );

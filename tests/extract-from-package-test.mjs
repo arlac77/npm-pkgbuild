@@ -57,6 +57,8 @@ async function efpt(t, json, expected) {
 
     v++;
   }
+
+  t.is(v, expected.length)
 }
 efpt.title = (providedTitle = "extractFromPackage", pkg, expected) =>
   ` ${providedTitle} ${JSON.stringify(pkg)} -> ${JSON.stringify(

@@ -244,6 +244,6 @@ const toBeSkipped = new RegExp(
       "chains and topics\\.md",
       "build_detect_platform"
     ].join("|") +
-    ")$|(node_modules/(@types|node-addon-api)|(node_modules/node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
+    ")$|(node_modules/(@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"
 );

@@ -1,5 +1,6 @@
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
+import { mkdir, copyFile } from "node:fs/promises";
 import fetch from "node-fetch";
 import { decodePassword } from "./util.mjs";
 
@@ -29,29 +30,39 @@ export async function publish(fileName, destination, properties) {
 
   console.log(`Publishing to ${url}`);
 
-  if (publish.scheme === "http:" || publish.scheme === "https:") {
-    const headers = {
-      "user-agent": properties["user-agent"] || "npm-pkgbuild"
-    };
+  switch(publish.scheme) {
+    case "file:":
+      if(url.pathname !== fileName) {
+        await mkdir(publish.url, { recursive: true });
+        await copyFile(fileName, url);
+      }
+    break;
+    case "http:":
+    case "https:":
+      {
+      const headers = {
+        "user-agent": properties["user-agent"] || "npm-pkgbuild"
+      };
 
-    if (publish.username) {
-      headers.authorization =
-        "Basic " +
-        Buffer.from(publish.username + ":" + publish.password).toString(
-          "base64"
+      if (publish.username) {
+        headers.authorization =
+          "Basic " +
+          Buffer.from(publish.username + ":" + publish.password).toString(
+            "base64"
+          );
+      }
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: createReadStream(fileName)
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Unable to publish to ${url}: ${response.statusText}(${response.statusCode})`
         );
-    }
-
-    const response = await fetch(url, {
-      method: "PUT",
-      headers,
-      body: createReadStream(fileName)
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Unable to publish to ${url}: ${response.statusText}(${response.statusCode})`
-      );
+      }
     }
   }
 

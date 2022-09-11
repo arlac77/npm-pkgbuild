@@ -30,16 +30,15 @@ export async function publish(fileName, destination, properties) {
 
   console.log(`Publishing to ${url}`);
 
-  switch(publish.scheme) {
+  switch (publish.scheme) {
     case "file:":
-      if(url.pathname !== fileName) {
+      if (url.pathname !== fileName) {
         await mkdir(publish.url, { recursive: true });
         await copyFile(fileName, url);
       }
-    break;
+      break;
     case "http:":
-    case "https:":
-      {
+    case "https:": {
       const headers = {
         "user-agent": properties["user-agent"] || "npm-pkgbuild"
       };
@@ -100,7 +99,7 @@ export function preparePublish(publish = [], env = {}) {
       url.password = "";
 
       return {
-        url: url.href.replace(/%7B/g,'{').replace(/%7D/g,'}'),
+        url: url.href.replace(/%7B/g, "{").replace(/%7D/g, "}"),
         ...(username.length ? { username, password } : {})
       };
     } catch {

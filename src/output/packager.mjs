@@ -92,12 +92,14 @@ export class Packager {
       out[nd[0]] = nd[1];
     }
 
-    if (options.publish?.length) {
-      const publish = analysePublish(options.publish[0], out.properties);
+    if (options.publish) {
+      for(const op of options.publish) {
+        const publish = analysePublish(op, out.properties);
 
-      out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
-
-      await mkdir(dirname(out.destination), { recursive: true });
+        out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
+  
+        await mkdir(out.destination, { recursive: true });
+      }
     }
 
     return out;

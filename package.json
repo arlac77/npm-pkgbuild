@@ -55,7 +55,7 @@
     "key-value-transformer": "^3.0.3",
     "node-fetch": "^3.2.10",
     "npm-package-walker": "^6.1.0",
-    "npm-packlist": "^5.1.2",
+    "npm-packlist": "^6.0.0",
     "pacote": "^13.6.1",
     "pkg-dir": "^7.0.0",
     "tar-stream": "^2.2.0"

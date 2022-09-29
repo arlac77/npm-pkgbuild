@@ -11,6 +11,16 @@ jobs:
           - 16.17.0
           - 18.10.0
     steps:
+      - name: Dependencies
+        run: >
+          sudo apt-get update
+
+          sudo apt-get install ksh curl
+
+          wget
+          https://github.com/ThePoorPilot/pacman-utils/releases/download/5.2.2-3_2.31-0/pacman-utils_5.2.2-3_amd64.deb
+
+          sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
       - uses: actions/checkout@v3
       - name: Build / Test Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.0
@@ -20,6 +30,11 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run cover --if-present
+        env:
+          CI: 'true'
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PKGBUILD_PUBLISH: ${{ secrets.PKGBUILD_PUBLISH }}
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
@@ -33,16 +48,6 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-      - name: Dependencies
-        run: >
-          sudo apt-get update
-
-          sudo apt-get install ksh curl
-
-          wget
-          https://github.com/ThePoorPilot/pacman-utils/releases/download/5.2.2-3_2.31-0/pacman-utils_5.2.2-3_amd64.deb
-
-          sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3.5.0
         with:

@@ -67,6 +67,7 @@ export class NodeModulesContentProvider extends ContentProvider {
         if (npmrcContent) {
           npmrc = parse(npmrcContent);
         } else {
+          console.log(Object.keys(process.env));
           if (process.env.NPM_TOKEN) {
             npmrc["_authToken"] = process.env.NPM_TOKEN;
           } else {

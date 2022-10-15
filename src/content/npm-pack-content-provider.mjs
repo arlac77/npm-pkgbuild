@@ -1,6 +1,7 @@
 import { pipeline } from "node:stream/promises";
 import { createGunzip } from "zlib";
 import pacote from "pacote";
+import Arborist from "@npmcli/arborist";
 import { extract } from "tar-stream";
 import { BufferContentEntry } from "content-entry";
 import { ContentProvider } from "./content-provider.mjs";
@@ -68,7 +69,7 @@ export class NPMPackContentProvider extends ContentProvider {
       });
 
       await pipeline(stream, createGunzip(), ex);
-    });
+    },{ Arborist });
 
     for (const entry of entries) {
       yield entry;

@@ -9,7 +9,7 @@ jobs:
           - ubuntu-latest
         node-version:
           - 16.17.1
-          - 18.11.0
+          - 18.12.0
     steps:
       - name: Dependencies
         run: >

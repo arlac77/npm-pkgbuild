@@ -79,7 +79,7 @@ options:
 # shared configuration
 
 You can import common configuration from other packages
-see [mf-hoting](https://www.npmjs.com/package/mf-hosting) module as an example.
+see [mf-hosting](https://www.npmjs.com/package/mf-hosting) module as an example.
 
 # API
 

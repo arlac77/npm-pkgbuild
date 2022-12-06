@@ -4,7 +4,7 @@ import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
-const DEFAULT_PATTERN=["**/*"];
+const DEFAULT_PATTERN = ["**/*"];
 
 /**
  * Content provided form the file system.

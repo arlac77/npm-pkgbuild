@@ -8,7 +8,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 16.18.1
+          - 16.19.0
           - 18.12.1
     steps:
       - name: Dependencies

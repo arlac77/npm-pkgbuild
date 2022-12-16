@@ -56,7 +56,7 @@
     "node-fetch": "^3.3.0",
     "npm-package-walker": "^6.2.2",
     "npm-packlist": "^7.0.4",
-    "pacote": "^15.0.7",
+    "pacote": "^15.0.8",
     "pkg-dir": "^7.0.0",
     "tar-stream": "^3.0.0"
   },

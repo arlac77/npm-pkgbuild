@@ -36,9 +36,12 @@ export function requiresFromDependencies(dependencies) {
   return Object.entries(dependencies).map(
     ([name, e]) =>
       `${packageNameMapping[name] ? packageNameMapping[name] : name}${e
-        .replace(/^\s*(\w+)/,  (match, p1) => ` = ${p1}`)
-        .replace(/^\s*$/,  "")
-        .replace(/^\s*(<|<=|>|>=|=)\s*(\w+)/, (match, p1, p2) => ` ${p1} ${p2}`)}`
+        .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+        .replace(/^\s*$/, "")
+        .replace(
+          /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+          (match, p1, p2) => ` ${p1} ${p2}`
+        )}`
   );
 }
 
@@ -163,27 +166,29 @@ export class RPM extends Packager {
       );
     }
 
-    const rpmbuild = await execa("rpmbuild", [
-      "--define",
-      `_topdir ${tmpdir}`,
-      "--buildroot",
-      staging,
-      "-vv",
-      "-bb",
-      join(staging, specFileName)
-    ]);
+    if (!options.dry) {
+      const rpmbuild = await execa("rpmbuild", [
+        "--define",
+        `_topdir ${tmpdir}`,
+        "--buildroot",
+        staging,
+        "-vv",
+        "-bb",
+        join(staging, specFileName)
+      ]);
 
-    if (options.verbose) {
-      console.log(rpmbuild.stdout);
+      if (options.verbose) {
+        console.log(rpmbuild.stdout);
+      }
+
+      const packageFile = join(destination, this.packageFileName);
+
+      await cp(
+        join(tmpdir, "RPMS", properties.arch, this.packageFileName),
+        packageFile,
+        { preserveTimestamps: true }
+      );
     }
-
-    const packageFile = join(destination, this.packageFileName);
-
-    await cp(
-      join(tmpdir, "RPMS", properties.arch, this.packageFileName),
-      packageFile,
-      { preserveTimestamps: true }
-    );
     return packageFile;
   }
 }

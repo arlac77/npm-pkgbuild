@@ -133,10 +133,12 @@ export class DEBIAN extends Packager {
       );
     }
 
-    const dpkg = await execa("dpkg", ["-b", staging, destination]);
+    if (!options.dry) {
+      const dpkg = await execa("dpkg", ["-b", staging, destination]);
 
-    if (options.verbose) {
-      console.log(dpkg.stdout);
+      if (options.verbose) {
+        console.log(dpkg.stdout);
+      }
     }
 
     return join(destination, this.packageFileName);

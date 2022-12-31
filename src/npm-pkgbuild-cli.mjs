@@ -31,6 +31,7 @@ allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
+  .option("--dry", "do not execut only print definitions", false)
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )

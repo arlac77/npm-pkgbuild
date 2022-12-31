@@ -112,10 +112,10 @@ package() {
 `;
     }
 
-    if(properties.backup && properties.backup[0] === '/') {
-    	properties.backup = properties.backup.replace(/\//,'');
+    if (properties.backup && properties.backup[0] === "/") {
+      properties.backup = properties.backup.replace(/\//, "");
     }
-    
+
     if (properties.hooks) {
       await pipeline(
         iterableStringInterceptor(
@@ -161,13 +161,15 @@ package() {
       );
     }
 
-    const makepkg = await execa("makepkg", ["-f", "-e"], {
-      cwd: staging,
-      env: { PKGDEST: destination }
-    });
+    if (!options.dry) {
+      const makepkg = await execa("makepkg", ["-f", "-e"], {
+        cwd: staging,
+        env: { PKGDEST: destination }
+      });
 
-    if (options.verbose) {
-      console.log(makepkg.stdout);
+      if (options.verbose) {
+        console.log(makepkg.stdout);
+      }
     }
 
     return join(destination, this.packageFileName);
@@ -212,7 +214,6 @@ const fields = {
   options: { type: "string[]" }
 };
 
-
 function normalizeExpression(e) {
   e = e.replace(/\-([\w\d]+)$/, "");
   if (e.match(/^\d+/)) {
@@ -225,6 +226,8 @@ function normalizeExpression(e) {
 function makeDepends(dependencies) {
   return Object.entries(dependencies).map(
     ([name, version]) =>
-      `${packageNameMapping[name] ? packageNameMapping[name] : name}${normalizeExpression(version)}`
+      `${
+        packageNameMapping[name] ? packageNameMapping[name] : name
+      }${normalizeExpression(version)}`
   );
 }

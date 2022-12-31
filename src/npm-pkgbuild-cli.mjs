@@ -59,6 +59,7 @@ program
         properties,
         sources,
         output,
+        variant,
         dependencies,
         context
       } of extractFromPackage(options)) {
@@ -125,9 +126,10 @@ program
             ];
 
             if (options.verbose) {
-              console.log(output.properties);
-              console.log(`sources: ${sources.join("\n  ")}`);
+              console.log("variant     :",variant);
+              console.log(`sources     : ${sources.join("\n  ")}`);
               console.log(`dependencies: ${JSON.stringify(dependencies)}`);
+              console.log(output.properties);
             }
 
             const fileName = await output.execute(

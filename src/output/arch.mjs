@@ -80,8 +80,11 @@ export class ARCH extends Packager {
       const cfg = await readFile("/etc/makepkg.conf", { encoding: "utf8" });
       const i = cfg.indexOf("PKGEXT='");
       if (i > 0) {
-        ext = cfg.substring(i, 14).replace(/'/, "");
-        console.log("EXTENSION", ext);
+        const m = cfg
+          .substring(i)
+          .split(/\n/)[0]
+          .match(/='([^']+)'/);
+        ext = m[1];
       }
       return true;
     } catch {}

@@ -4,6 +4,11 @@ import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { FileContentProvider, ARCH } from "npm-pkgbuild";
 
+test("arch extension", async t => {
+  await ARCH.available();
+  t.true(ARCH.fileNameExtension.startsWith(".pkg.tar."));
+});
+
 test("arch default properties", async t => {
   const properties = {
     name: "abc",
@@ -51,7 +56,7 @@ test("arch", async t => {
   const fileName = await out.execute(sources, transformer, dependencies, {
     destination
   });
-  t.is(fileName, join(destination, "abc-1.0.0-1-any.pkg.tar.zst"));
+  t.is(fileName, join(destination, "abc-1.0.0-1-any" + ARCH.fileNameExtension));
 
   const s = await stat(fileName);
   t.true(s.size >= 800, `package file size ${s.size}`);

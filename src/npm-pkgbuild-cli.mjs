@@ -126,9 +126,12 @@ program
             ];
 
             if (options.verbose) {
-              console.log("variant     :", variant);
-              console.log(`sources     : ${sources.join("\n  ")}`);
-              console.log(`dependencies: ${kv(dependencies)}`);
+              console.log("variant:");
+              console.log(kv(variant,"  "));
+              console.log("sources:");
+              console.log("  " + sources.join("\n  "));
+              console.log("dependencies:");
+              console.log(kv(dependencies,"  "));
               console.log(kv(output.properties));
             }
 
@@ -163,8 +166,8 @@ function handleError(e, options) {
   }
 }
 
-function kv(object) {
+function kv(object, prefix="") {
   return object ? Object.entries(object)
-    .map(([k, v]) => `${k}: ${v}`)
+    .map(([k, v]) => `${prefix}${k}: ${v}`)
     .join("\n"): "";
 }

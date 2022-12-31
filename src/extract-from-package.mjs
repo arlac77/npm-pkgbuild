@@ -246,7 +246,7 @@ export async function* extractFromPackage(options = {}) {
             sources,
             dependencies,
             output,
-            variant,
+            variant: { name: variant, arch, type: Object.keys(output) },
             context
           };
         }
@@ -266,7 +266,7 @@ export async function* extractFromPackage(options = {}) {
       sources,
       dependencies,
       output,
-      variant,
+      variant: { name: variant, type: Object.keys(output) },
       context
     };
   }

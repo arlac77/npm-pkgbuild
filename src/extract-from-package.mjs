@@ -45,7 +45,7 @@ export const npmArchMapping = {
 };
 
 /**
- * Deliver basic properties from the root package
+ * Deliver basic properties from the root package.
  * @param {Object} content of root package.json
  * @returns {Object} key value pairs extracted from package
  */

@@ -54,6 +54,8 @@ function keyPrefix(key) {
 
 const PKGBUILD = "PKGBUILD";
 
+let ext = ".pkg.tar.xz";
+
 export class ARCH extends Packager {
   static get name() {
     return "arch";
@@ -64,7 +66,7 @@ export class ARCH extends Packager {
   }
 
   static get fileNameExtension() {
-    return ".pkg.tar.zst";
+    return ext;
   }
 
   static get fields() {
@@ -74,6 +76,13 @@ export class ARCH extends Packager {
   static async available() {
     try {
       await execa("makepkg", ["-V"]);
+
+      const cfg = await readFile("/etc/makepkg.conf", { encoding: "utf8" });
+      const i = cfg.indexOf("PKGEXT='");
+      if (i > 0) {
+        ext = cfg.substring(i, 14).replace(/'/, "");
+        console.log("EXTENSION", ext);
+      }
       return true;
     } catch {}
 

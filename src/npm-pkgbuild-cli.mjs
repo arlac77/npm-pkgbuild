@@ -126,10 +126,10 @@ program
             ];
 
             if (options.verbose) {
-              console.log("variant     :",variant);
+              console.log("variant     :", variant);
               console.log(`sources     : ${sources.join("\n  ")}`);
-              console.log(`dependencies: ${JSON.stringify(dependencies)}`);
-              console.log(output.properties);
+              console.log(`dependencies: ${kv(dependencies)}`);
+              console.log(kv(output.properties));
             }
 
             const fileName = await output.execute(
@@ -161,4 +161,10 @@ function handleError(e, options) {
   if (!options.continue) {
     process.exit(-1);
   }
+}
+
+function kv(object) {
+  return object ? Object.entries(object)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join("\n"): "";
 }

@@ -138,8 +138,10 @@ program
               context.expand
             );
 
-            for (const p of options.publish) {
-              await publish(fileName, p, output.properties);
+            if (!options.dry) {
+              for (const p of options.publish) {
+                await publish(fileName, p, output.properties);
+              }
             }
           } catch (e) {
             handleError(e, options);

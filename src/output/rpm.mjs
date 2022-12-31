@@ -166,6 +166,8 @@ export class RPM extends Packager {
       );
     }
 
+    const packageFile = join(destination, this.packageFileName);
+
     if (!options.dry) {
       const rpmbuild = await execa("rpmbuild", [
         "--define",
@@ -180,8 +182,6 @@ export class RPM extends Packager {
       if (options.verbose) {
         console.log(rpmbuild.stdout);
       }
-
-      const packageFile = join(destination, this.packageFileName);
 
       await cp(
         join(tmpdir, "RPMS", properties.arch, this.packageFileName),

@@ -337,3 +337,24 @@ test(
     }
   ]
 );
+
+test.only(
+  efpt,
+  {
+    pkgbuild: {
+      "activate": {
+        "environment": {
+          "has": "FLAG1"
+        }
+      },  
+      arch: "armhf" }
+  },
+  [
+    {
+      properties: {
+        access: "private",
+        variant: "default"
+      }
+    }
+  ]
+);

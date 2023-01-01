@@ -151,7 +151,7 @@ function* content2Sources(content, dir) {
  * @param {string} options.dir where to look for package.json
  * @returns {AsyncIterator<PackageDefinition>}
  */
-export async function* extractFromPackage(options = {}) {
+export async function* extractFromPackage(options = {}, env = {}) {
   let variant = "default";
   let sources = [];
   let output = {};
@@ -163,6 +163,12 @@ export async function* extractFromPackage(options = {}) {
     const pkgbuild = json.pkgbuild;
 
     if (pkgbuild) {
+      if(pkgbuild?.activate?.environment) {
+        if(env[pkgbuild.activate.environment.has] === undefined) {
+          return;
+        }
+      }
+
       if (modulePath) {
         if (!pkgbuild.abstract) {
           if (pkgbuild.groups === groups) {

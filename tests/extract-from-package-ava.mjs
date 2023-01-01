@@ -338,11 +338,11 @@ test(
   ]
 );
 
-test.only(
+test(
   efpt,
   {
     pkgbuild: {
-      "activate": {
+      "requires": {
         "environment": {
           "has": "FLAG1"
         }

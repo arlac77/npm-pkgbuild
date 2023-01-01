@@ -163,8 +163,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
     const pkgbuild = json.pkgbuild;
 
     if (pkgbuild) {
-      if(pkgbuild?.activate?.environment) {
-        if(env[pkgbuild.activate.environment.has] === undefined) {
+      if(pkgbuild?.requires?.environment) {
+        if(env[pkgbuild.requires.environment.has] === undefined) {
           return;
         }
       }

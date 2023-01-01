@@ -238,7 +238,7 @@ export async function* extractFromPackage(options = {}) {
 
     for (const a of arch) {
       if (!restrictArch.size || restrictArch.has(a)) {
-         if (!options.available || npmArchMapping[process.arch] === a) {
+         if (!options.prepare || npmArchMapping[process.arch] === a) {
           numberOfArchs++;
           properties.arch = [a];
           yield {

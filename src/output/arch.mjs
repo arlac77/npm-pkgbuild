@@ -54,7 +54,8 @@ function keyPrefix(key) {
 
 const PKGBUILD = "PKGBUILD";
 
-let ext = ".pkg.tar.xz";
+let _ext = ".pkg.tar.xz";
+let _prepared;
 
 export class ARCH extends Packager {
   static get name() {
@@ -66,14 +67,15 @@ export class ARCH extends Packager {
   }
 
   static get fileNameExtension() {
-    return ext;
+    return _ext;
   }
 
   static get fields() {
     return fields;
   }
 
-  static async available() {
+  static async prepare() {
+    if(_prepared === undefined) {
     try {
       await execa("makepkg", ["-V"]);
 
@@ -84,12 +86,14 @@ export class ARCH extends Packager {
           .substring(i)
           .split(/\n/)[0]
           .match(/='([^']+)'/);
-        ext = m[1];
+        _ext = m[1];
       }
-      return true;
-    } catch {}
-
-    return false;
+      _prepared = true;
+    } catch {
+      _prepared = false;
+    }
+  }
+    return _prepared;
   }
 
   get packageFileName() {

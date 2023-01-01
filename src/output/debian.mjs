@@ -47,7 +47,7 @@ export class DEBIAN extends Packager {
     return fields;
   }
 
-  static async available() {
+  static async prepare() {
     try {
       await execa("dpkg", ["--version"]);
       return true;

@@ -80,7 +80,7 @@ export class RPM extends Packager {
    * Check for rpmbuild presence.
    * @returns {boolean} true when rpmbuild is present
    */
-  static async available() {
+  static async prepare() {
     try {
       await execa("rpmbuild", ["--version"]);
       return true;

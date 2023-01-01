@@ -28,7 +28,7 @@ export class Packager {
     };
   }
 
-  static available() {
+  static prepare() {
     return false;
   }
 

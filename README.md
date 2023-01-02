@@ -125,7 +125,7 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) module as an example.
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
         *   [Parameters](#parameters-10)
-*   [available](#available)
+*   [prepare](#prepare)
 
 ## ContentProvider
 
@@ -317,7 +317,7 @@ Execute package generation
 *   `options` &#x20;
 *   `expander` &#x20;
 
-## available
+## prepare
 
 Check for rpmbuild presence.
 

@@ -40,7 +40,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^6.1.5",
+    "@npmcli/arborist": "^6.1.6",
     "@vercel/nft": "^0.22.5",
     "aggregate-async-iterator": "^1.1.15",
     "commander": "^9.5.0",

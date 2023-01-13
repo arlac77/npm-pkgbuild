@@ -14,7 +14,7 @@ test("cli --debian", async t => {
       "--debian",
       "-c",
       '/myservice:' + new URL("fixtures/content", import.meta.url).pathname,
-      "-m",
+      "-p",
       new URL("fixtures/pkg", import.meta.url).pathname,
       "--publish",
       destination

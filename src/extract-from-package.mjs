@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
@@ -44,55 +43,6 @@ export const npmArchMapping = {
   ppc64: "ppc64"
 };
 
-/**
- * Deliver basic properties from the root package.
- * @param {Object} content of root package.json
- * @returns {Object} key value pairs extracted from package
- */
-function extractFromRootPackage(json) {
-  const properties = Object.fromEntries(
-    ["name", "version", "description", "homepage", "license"]
-      .map(key => [key, json[key]])
-      .filter(([k, v]) => v !== undefined)
-  );
-
-  if (properties.name) {
-    properties.name = properties.name.replace(/^\@[^\/]+\//, "");
-  }
-
-  if (json.bugs?.url) {
-    properties.bugs = json.bugs.url;
-  }
-
-  properties.access = json.publishConfig
-    ? json.publishConfig.access
-    : "private";
-
-  Object.assign(properties, json.config);
-
-  if (json.contributors) {
-    properties.maintainer = json.contributors.map(
-      c => `${c.name} <${c.email}>`
-    )[0];
-  }
-
-  if (json.repository) {
-    if (typeof json.repository === "string") {
-      properties.source = json.repository;
-    } else {
-      if (json.repository.url) {
-        properties.source = json.repository.url;
-      }
-    }
-  }
-
-  return {
-    properties,
-    dependencies: { ...json.engines },
-    context: createContext({ properties })
-  };
-}
-
 const entryAttributeNames = ["owner", "group", "mode"];
 
 /**
@@ -137,7 +87,8 @@ function* content2Sources(content, dir) {
  * @property {ContentProvider[]} sources content providers
  * @property {Object} dependencies
  * @property {Object} output package type
- * @property {string} variant identifier of the variant
+ * @property {Object} variant identifier of the variant
+ * @property {string} variant.name name of the variant
  */
 
 /**
@@ -145,106 +96,179 @@ function* content2Sources(content, dir) {
  * - for each architecture deliver a new result
  * - if no architecture is given one result set is provided nethertheless
  * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
- * - architecture given in a abstract definition are used to restrict the set of avaliable architectures
+ * - architecture given in a variant definition are used to restrict the set of avaliable architectures
  * @param {Object} options
- * @param {Object} options.json package.json content
  * @param {string} options.dir where to look for package.json
+ * @param {Object} env as delared in process.env
  * @returns {AsyncIterator<PackageDefinition>}
  */
 export async function* extractFromPackage(options = {}, env = {}) {
-  let variant = "default";
-  let sources = [];
-  let output = {};
-  let arch = new Set();
-  let restrictArch = new Set();
-  let groups;
+  const variants = {};
+  const fragments = {};
+  let root, parent;
 
-  function processPkg(json, dir, modulePath) {
-    const pkgbuild = json.pkgbuild;
-
-    if (pkgbuild) {
-      if(pkgbuild?.requires?.environment) {
-        if(env[pkgbuild.requires.environment.has] === undefined) {
+  await packageWalker(async (packageContent, base, modulePath) => {
+    let i = 0;
+    for (const pkgbuild of Array.isArray(packageContent.pkgbuild)
+      ? packageContent.pkgbuild
+      : packageContent.pkgbuild
+      ? [packageContent.pkgbuild]
+      : []) {
+      if (pkgbuild.requires?.environment) {
+        if (env[pkgbuild.requires.environment.has] === undefined) {
           return;
         }
       }
 
-      if (modulePath) {
-        if (!pkgbuild.abstract) {
-          if (pkgbuild.groups === groups) {
-            dependencies[pkgbuild.name || json.name] = ">=" + json.version;
+      const fragment = {
+        name: `${packageContent.name}[${i++}]`,
+        depends: packageContent.engines || {},
+        arch: new Set(),
+        restrictArch: new Set()
+      };
+
+      if (packageContent.cpu) {
+        for (const a of asArray(packageContent.cpu)) {
+          fragment.arch.add(npmArchMapping[a]);
+        }
+      }
+      if (pkgbuild.arch) {
+        for (const a of asArray(pkgbuild.arch)) {
+          fragment.arch.add(a);
+          if (modulePath.length === 0) {
+            fragment.restrictArch.add(a);
           }
         }
+        delete pkgbuild.arch;
+      }
+
+      for (const k of ["output", "content", "depends"]) {
+        if (pkgbuild[k]) {
+          fragment[k] = pkgbuild[k];
+          delete pkgbuild[k];
+        }
+      }
+
+      const properties = Object.assign(
+        {
+          access: packageContent.publishConfig?.access || "private"
+        },
+        packageContent.config,
+        modulePath.length === 0 &&
+        Object.fromEntries(
+          ["name", "version", "description", "homepage", "license"]
+            .map(key => [key, packageContent[key]])
+            .filter(([k, v]) => v !== undefined)
+        ),
+        pkgbuild,
+      );
+
+      if (modulePath.length >= 1) {
+        fragment.parent =
+          modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
       } else {
-        groups = pkgbuild.groups;
-
-        if (json.cpu) {
-          for (const a of asArray(json.cpu)) {
-            arch.add(npmArchMapping[a]);
-          }
+        if (properties.name) {
+          properties.name = properties.name.replace(/^\@[^\/]+\//, "");
         }
-        if (pkgbuild.arch) {
-          for (const a of asArray(pkgbuild.arch)) {
-            arch.add(a);
+
+        if (packageContent.bugs?.url) {
+          properties.bugs = packageContent.bugs.url;
+        }
+
+        if (packageContent.contributors) {
+          properties.maintainer = packageContent.contributors.map(
+            c => `${c.name} <${c.email}>`
+          )[0];
+        }
+
+        if (typeof packageContent.repository === "string") {
+          properties.source = packageContent.repository;
+        } else {
+          if (packageContent.repository?.url) {
+            properties.source = packageContent.repository.url;
           }
         }
       }
 
-      if (pkgbuild.abstract || !modulePath) {
-        if (pkgbuild.variant) {
-          variant = pkgbuild.variant;
-        }
+      fragment.properties = properties;
+      fragment.dir = join(base, ...modulePath.map(p => `node_modules/${p}`));
 
-        if (pkgbuild.arch) {
-          for (const a of asArray(pkgbuild.arch)) {
-            restrictArch.add(a);
-          }
-        }
+      fragments[packageContent.name] = fragment;
 
-        Object.assign(output, pkgbuild.output);
-
-        Object.entries(pkgbuild)
-          .filter(([k, v]) => typeof v === "string")
-          .forEach(([k, v]) => (properties[k] = v));
-
-        sources.push(...content2Sources(context.expand(pkgbuild.content), dir));
+      if (pkgbuild.variant) {
+        fragment.priority = 1;
+        variants[pkgbuild.variant] = fragment;
       }
-      Object.assign(dependencies, pkgbuild.depends);
+
+      if (modulePath.length === 0) {
+        root = fragment;
+      }
     }
-  }
+    parent = packageContent.name;
 
-  let json = options.json;
-  let dir = options.dir;
-
-  if (!json) {
-    dir = await packageDirectory({ cwd: dir });
-
-    json = JSON.parse(
-      await readFile(join(dir, "package.json"), utf8StreamOptions)
-    );
-  }
-
-  const { properties, dependencies, context } = extractFromRootPackage(json);
-
-  await packageWalker(async (packageContent, base, modulePath) => {
-    if (modulePath.length > 0) {
-      processPkg(packageContent, base, modulePath);
-    }
     return true;
-  }, dir);
+  }, await packageDirectory({ cwd: options.dir }));
 
-  processPkg(json, dir);
+  if (root && Object.keys(variants).length === 0) {
+    variants.default = root;
+  }
 
-  properties.variant = variant;
+  //console.log(variants);
 
-  if (arch.size > 0) {
-    // provide each arch separadly
+  for (const [name, variant] of Object.entries(variants)) {
+    const arch = [...variant.arch].sort();
+    const properties = {};
+    const depends = {};
+    const output = {};
+    const sources = [];
 
+    for (
+      let fragment = variant;
+      fragment;
+      fragment = fragments[fragment.parent]
+    ) {
+      const context = createContext({ properties: fragment.properties });
+
+      Object.assign(properties, fragment.properties);
+      Object.assign(depends, fragment.depends);
+      Object.assign(output, fragment.output);
+
+      sources.push(
+        ...content2Sources(context.expand(fragment.content), fragment.dir)
+      );
+    }
+
+    properties.variant = name;
+
+    const context = createContext({ properties });
+
+    const result = {
+      context,
+      variant: { name },
+      sources,
+      output,
+      dependencies: depends,
+      properties: context.expand(properties)
+      };
+
+    if(arch.length === 0) {
+      yield result;
+    }
+    else {
+      for (const a of arch) {
+        result.variant.arch = a;
+        result.properties.arch = [a];
+        yield result;
+      }
+    }
+  }
+
+  /*
     let numberOfArchs = 0;
 
     for (const a of arch) {
       if (!restrictArch.size || restrictArch.has(a)) {
-         if (!options.prepare || npmArchMapping[process.arch] === a) {
+        if (!options.prepare || npmArchMapping[process.arch] === a) {
           numberOfArchs++;
           properties.arch = [a];
           yield {
@@ -265,15 +289,5 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }`
       );
     }
-  } else {
-    // or one set if no arch is given
-    yield {
-      properties: context.expand(properties),
-      sources,
-      dependencies,
-      output,
-      variant: { name: variant, type: Object.keys(output) },
-      context
-    };
-  }
+  */
 }

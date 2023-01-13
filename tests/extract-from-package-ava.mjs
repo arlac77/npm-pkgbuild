@@ -14,14 +14,22 @@ let id = 1;
 async function efpt(t, json, expected) {
   let v = 0;
 
-  let dir;
+  const name = json.name
+    ? json.name.replace(/\//g, "_").replace(/@/, "")
+    : id++;
+  let dir = new URL(`../build/efpt-${name}`, import.meta.url).pathname;
 
-  if (json.node_modules) {
-    const name = json.name ? json.name.replace(/\//g,'_').replace(/@/,''): id++;
-    dir = new URL(`../build/efpt-${name}`, import.meta.url).pathname;
-    await mkdir(dir, { recursive: true });
+  const node_modules = json.node_modules;
+  if (node_modules) {
+    delete json.node_modules;
 
-    for (const [n, v] of Object.entries(json.node_modules)) {
+    json.dependencies = {};
+
+    for (const [n, v] of Object.entries(node_modules)) {
+      v.name = n;
+
+      json.dependencies[n] = "*";
+
       const md = join(dir, "node_modules", n);
 
       await mkdir(md, { recursive: true });
@@ -29,12 +37,15 @@ async function efpt(t, json, expected) {
     }
   }
 
+  await mkdir(dir, { recursive: true });
+  await writeFile(join(dir, "package.json"), JSON.stringify(json), "utf8");
+
   for await (const {
     properties,
     sources,
     dependencies,
     output
-  } of extractFromPackage({ json, dir })) {
+  } of extractFromPackage({ dir })) {
     const e = expected[v];
 
     t.truthy(e, `expected ${v}`);
@@ -58,8 +69,9 @@ async function efpt(t, json, expected) {
     v++;
   }
 
-  t.is(v, expected.length)
+  t.is(v, expected.length);
 }
+
 efpt.title = (providedTitle = "extractFromPackage", pkg, expected) =>
   ` ${providedTitle} ${JSON.stringify(pkg)} -> ${JSON.stringify(
     expected
@@ -91,15 +103,15 @@ test(
 test(
   efpt,
   {
-    name: "n1",
+    name: "n2",
     description: "d1",
     version: "1.2.3",
     license: "BSD",
-    config: { c1: "v1" },
+    config: { c1: "value1" },
     repository: "github:/arlac77/npm-pkgbuild",
     pkgbuild: {
       arch: ["aarch64", "x86_64"],
-      name: "n2",
+      name: "n3",
       other: "o1",
       output: { deb: {} }
     }
@@ -107,14 +119,14 @@ test(
   [
     {
       properties: {
-        name: "n2",
+        name: "n3",
         description: "d1",
         version: "1.2.3",
         other: "o1",
         license: "BSD",
         access: "private",
         arch: ["aarch64"],
-        c1: "v1",
+        c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default"
       },
@@ -122,14 +134,14 @@ test(
     },
     {
       properties: {
-        name: "n2",
+        name: "n3",
         description: "d1",
         version: "1.2.3",
         other: "o1",
         license: "BSD",
         access: "private",
         arch: ["x86_64"],
-        c1: "v1",
+        c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default"
       },
@@ -141,17 +153,18 @@ test(
 test(
   efpt,
   {
+    name: "n4",
     cpu: ["arm64", "x64"],
     pkgbuild: {},
     node_modules: {
-      hosting: {
+      v7: {
         pkgbuild: {
           output: {
             arch: {},
             debian: {}
           },
-          arch: ["x86_64", "aarch64", "arm"],
-          abstract: true
+          arch: ["x86_64", "aarch64" /*, "arm"*/],
+          variant: "v7"
         }
       }
     }
@@ -159,16 +172,18 @@ test(
   [
     {
       properties: {
-        access: "private",
+        name: "n4",
         arch: ["aarch64"],
-        variant: "default"
+        access: "private",
+        variant: "v7"
       }
     },
     {
       properties: {
-        access: "private",
+        name: "n4",
         arch: ["x86_64"],
-        variant: "default"
+        access: "private",
+        variant: "v7"
       }
     }
   ]
@@ -177,11 +192,13 @@ test(
 test(
   efpt,
   {
+    name: "n5",
     pkgbuild: { arch: "armhf" }
   },
   [
     {
       properties: {
+        name: "n5",
         arch: ["armhf"],
         access: "private",
         variant: "default"
@@ -193,32 +210,36 @@ test(
 test(
   efpt,
   {
+    name: "n6",
     cpu: ["arm", "arm64", "x64"],
     pkgbuild: {
-      variant: "v1",
-      arch: ["aarch64", "arm", "x86_64"]
+      variant: "v8",
+      arch: ["aarch64", "armv7h", "x86_64"]
     }
   },
   [
     {
       properties: {
+        name: "n6",
         access: "private",
         arch: ["aarch64"],
-        variant: "v1"
+        variant: "v8"
       }
     },
     {
       properties: {
+        name: "n6",
+        access: "private",
+        arch: ["armv7h"],
+        variant: "v8"
+      }
+    },
+    {
+      properties: {
+        name: "n6",
         access: "private",
         arch: ["x86_64"],
-        variant: "v1"
-      }
-    },
-    {
-      properties: {
-        access: "private",
-        arch: ["arm"],
-        variant: "v1"
+        variant: "v8"
       }
     }
   ]
@@ -227,11 +248,13 @@ test(
 test(
   efpt,
   {
+    name: "n7",
     pkgbuild: {}
   },
   [
     {
       properties: {
+        name: "n7",
         access: "private",
         variant: "default"
       }
@@ -249,15 +272,7 @@ test(
       }
     ]
   },
-  [
-    {
-      properties: {
-        access: "private",
-        variant: "default",
-        maintainer: "Markus Felten <markus.felten@gmx.de>"
-      }
-    }
-  ]
+  []
 );
 
 test(
@@ -306,7 +321,10 @@ test(
       },
       sources: [
         new NPMPackContentProvider(
-          { dir: undefined /*dirname(new URL(import.meta.url).pathname)*/ },
+          {
+            dir: new URL("../build/efpt-konsum-frontend", import.meta.url)
+              .pathname
+          },
           { destination: "/services/konsum/frontend/" }
         ),
         new FileContentProvider(
@@ -341,20 +359,16 @@ test(
 test(
   efpt,
   {
+    name: "n12",
     pkgbuild: {
-      "requires": {
-        "environment": {
-          "has": "FLAG1"
+      variant: "v9",
+      requires: {
+        environment: {
+          has: "FLAG1"
         }
-      },  
-      arch: "armhf" }
-  },
-  [
-    {
-      properties: {
-        access: "private",
-        variant: "default"
-      }
+      },
+      arch: "armhf"
     }
-  ]
+  },
+  []
 );

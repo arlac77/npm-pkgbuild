@@ -23,7 +23,7 @@ test("cli --debian", async t => {
 
   const fileName = join(
     destination,
-    "npm-pkgbuild_0.0.0-semantic-release_all.deb"
+    "myservice_1.2.3_all.deb"
   );
 
   const s = await stat(fileName);

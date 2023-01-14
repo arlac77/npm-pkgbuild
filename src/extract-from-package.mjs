@@ -1,4 +1,4 @@
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
@@ -140,6 +140,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
           }
         }
         delete pkgbuild.arch;
+      }
+
+      if(pkgbuild.hooks) {
+        pkgbuild.hooks = resolve(base, pkgbuild.hooks);
       }
 
       for (const k of ["output", "content", "depends"]) {

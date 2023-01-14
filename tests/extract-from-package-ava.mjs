@@ -314,7 +314,10 @@ test(
       properties: {
         access: "public",
         groups: "home automation",
-        hooks: "pkgbuild/hooks.sh",
+        hooks: new URL(
+          "../build/efpt-konsum-frontend/pkgbuild/hooks.sh",
+          import.meta.url
+        ).pathname,
         installdir: "/services/konsum/frontend/",
         name: "konsum-frontend",
         variant: "default"

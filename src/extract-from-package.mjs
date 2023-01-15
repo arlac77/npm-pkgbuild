@@ -114,9 +114,20 @@ export async function* extractFromPackage(options = {}, env = {}) {
       : packageContent.pkgbuild
       ? [packageContent.pkgbuild]
       : []) {
-      if (pkgbuild.requires?.environment) {
-        if (env[pkgbuild.requires.environment.has] === undefined) {
-          return;
+      const requires = pkgbuild.requires;
+      if (requires) {
+        if (requires.properties) {
+          for (const [k, v] of Object.entries(requires.properties)) {
+            if (root.properties[k] !== v) {
+              return;
+            }
+          }
+        }
+
+        if (requires.environment) {
+          if (env[requires.environment.has] === undefined) {
+            return;
+          }
         }
       }
 

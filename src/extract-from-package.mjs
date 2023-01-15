@@ -119,14 +119,14 @@ export async function* extractFromPackage(options = {}, env = {}) {
         if (requires.properties) {
           for (const [k, v] of Object.entries(requires.properties)) {
             if (root.properties[k] !== v) {
-              return;
+              continue;
             }
           }
         }
 
         if (requires.environment) {
           if (env[requires.environment.has] === undefined) {
-            return;
+            continue;
           }
         }
       }

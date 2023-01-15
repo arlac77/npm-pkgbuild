@@ -134,9 +134,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
       if (pkgbuild.arch) {
         for (const a of asArray(pkgbuild.arch)) {
-          fragment.arch.add(a);
           if (modulePath.length === 0) {
-            fragment.restrictArch.add(a);
+            fragment.arch.add(a);
+          }
+          else {
+            fragment.restrictArch.add(a);          	
           }
         }
         delete pkgbuild.arch;

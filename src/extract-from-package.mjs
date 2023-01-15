@@ -117,11 +117,17 @@ export async function* extractFromPackage(options = {}, env = {}) {
       const requires = pkgbuild.requires;
       if (requires) {
         if (requires.properties) {
+          let fullfilled = true;
           for (const [k, v] of Object.entries(requires.properties)) {
             if (root.properties[k] !== v) {
-              continue;
+              fullfilled = false;
+              break;
             }
           }
+          if (!fullfilled) {
+            continue;
+          }
+          delete pkgbuild.requires;
         }
 
         if (requires.environment) {

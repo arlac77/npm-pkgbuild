@@ -392,9 +392,11 @@ test(
   {
     name: "n13",
     pkgbuild: {
-      p1: true,
-      node_modules: {
-        hosting: {
+      p1: true
+    },
+    node_modules: {
+      hosting: {
+        pkgbuild: {
           variant: "v10",
           requires: {
             properties: {
@@ -405,14 +407,45 @@ test(
       }
     }
   },
-
   [
     {
       properties: {
         access: "private",
         name: "n13",
-        variant: "default",
+        variant: "v10",
         p1: true
+      }
+    }
+  ]
+);
+
+test(
+  efpt,
+  {
+    name: "n14",
+    pkgbuild: {
+      p1: false
+    },
+    node_modules: {
+      hosting: {
+        pkgbuild: {
+          variant: "v11",
+          requires: {
+            properties: {
+              p1: true
+            }
+          }
+        }
+      }
+    }
+  },
+  [
+    {
+      properties: {
+        access: "private",
+        name: "n14",
+        variant: "default",
+        p1: false
       }
     }
   ]

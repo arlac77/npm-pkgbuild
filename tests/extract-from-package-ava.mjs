@@ -369,8 +369,7 @@ test(
         environment: {
           has: "FLAG1"
         }
-      },
-      arch: "armhf"
+      }
     }
   },
   []

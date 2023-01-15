@@ -142,10 +142,12 @@ export async function* extractFromPackage(options = {}, env = {}) {
         delete pkgbuild.arch;
       }
 
-      if(pkgbuild.hooks) {
-        pkgbuild.hooks = resolve(base, pkgbuild.hooks);
+      for (const k of ["hooks"]) {
+        if(pkgbuild[k]) {
+          pkgbuild[k] = resolve(base, pkgbuild[k]);
+        }
       }
-
+ 
       for (const k of ["output", "content", "depends"]) {
         if (pkgbuild[k]) {
           fragment[k] = pkgbuild[k];

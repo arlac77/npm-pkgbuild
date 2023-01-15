@@ -163,7 +163,7 @@ test(
             arch: {},
             debian: {}
           },
-          arch: ["x86_64", "aarch64" /*, "arm"*/],
+          arch: ["x86_64", "aarch64", "armv7"],
           variant: "v7"
         }
       }
@@ -307,6 +307,18 @@ test(
       groups: "home automation",
       hooks: "pkgbuild/hooks.sh",
       installdir: "/services/konsum/frontend/"
+    },
+    node_modules: {
+      hosting: {
+        pkgbuild: {
+          output: {
+            arch: {},
+            debian: {}
+          },
+          arch: ["x86_64", "aarch64", "armv7"],
+          variant: "mf"
+        }
+      }
     }
   },
   [
@@ -320,7 +332,7 @@ test(
         ).pathname,
         installdir: "/services/konsum/frontend/",
         name: "konsum-frontend",
-        variant: "default"
+        variant: "mf"
       },
       sources: [
         new NPMPackContentProvider(

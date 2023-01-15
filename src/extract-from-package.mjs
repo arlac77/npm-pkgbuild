@@ -2,7 +2,7 @@ import { join, resolve } from "node:path";
 import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
-import { asArray, utf8StreamOptions } from "./util.mjs";
+import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
@@ -191,6 +191,12 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (modulePath.length >= 1) {
         fragment.parent =
           modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
+        /*console.log(
+          "FRAGMENT",
+          fragment.name,
+          fragment.parent,
+          fragments[fragment.parent] ? "exists" : "missing"
+        );*/
       } else {
         if (properties.name) {
           properties.name = properties.name.replace(/^\@[^\/]+\//, "");
@@ -218,7 +224,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragment.properties = properties;
       fragment.dir = join(base, ...modulePath.map(p => `node_modules/${p}`));
 
-      fragments[packageContent.name] = fragment;
+      fragments[fragment.name] = fragment;
 
       if (pkgbuild.variant) {
         fragment.priority = 1;
@@ -228,8 +234,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (modulePath.length === 0) {
         root = fragment;
       }
+      parent = fragment.name;
     }
-    parent = packageContent.name;
 
     return true;
   }, await packageDirectory({ cwd: options.dir }));
@@ -237,9 +243,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
   if (root && Object.keys(variants).length === 0) {
     variants.default = root;
   }
+  /*
+  console.log("FRAGMENTS", Object.keys(fragments));
+  console.log("VARIANTS", variants);
+  */
 
   for (const [name, variant] of Object.entries(variants)) {
-    let arch = [...variant.arch];
+    let arch = variant.arch;
     const properties = {};
     const depends = {};
     const output = {};
@@ -262,8 +272,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       );
     }
 
-    arch = [...arch].sort();
-
     properties.variant = name;
 
     const context = createContext({ properties });
@@ -277,10 +285,19 @@ export async function* extractFromPackage(options = {}, env = {}) {
       properties: context.expand(properties)
     };
 
-    if (arch.length === 0) {
+    console.log(
+      "RESULT",
+      result.variant,
+      result.properties,
+      sources,
+      output,
+      arch
+    );
+
+    if (arch.size === 0) {
       yield result;
     } else {
-      for (const a of arch) {
+      for (const a of [...arch].sort()) {
         if (variant.restrictArch.size && !variant.restrictArch.has(a)) {
           console.log("RESTRICT", a);
         } else {

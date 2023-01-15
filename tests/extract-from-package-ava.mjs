@@ -386,3 +386,34 @@ test(
   },
   []
 );
+
+test(
+  efpt,
+  {
+    name: "n13",
+    pkgbuild: {
+      p1: true,
+      node_modules: {
+        hosting: {
+          variant: "v10",
+          requires: {
+            properties: {
+              p1: true
+            }
+          }
+        }
+      }
+    }
+  },
+
+  [
+    {
+      properties: {
+        access: "private",
+        name: "n13",
+        variant: "default",
+        p1: true
+      }
+    }
+  ]
+);

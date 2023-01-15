@@ -132,24 +132,24 @@ export async function* extractFromPackage(options = {}, env = {}) {
           fragment.arch.add(npmArchMapping[a]);
         }
       }
+
       if (pkgbuild.arch) {
         for (const a of asArray(pkgbuild.arch)) {
           if (modulePath.length === 0) {
             fragment.arch.add(a);
-          }
-          else {
-            fragment.restrictArch.add(a);          	
+          } else {
+            fragment.restrictArch.add(a);
           }
         }
         delete pkgbuild.arch;
       }
 
       for (const k of ["hooks"]) {
-        if(pkgbuild[k]) {
+        if (pkgbuild[k]) {
           pkgbuild[k] = resolve(base, pkgbuild[k]);
         }
       }
- 
+
       for (const k of ["output", "content", "depends"]) {
         if (pkgbuild[k]) {
           fragment[k] = pkgbuild[k];
@@ -163,12 +163,12 @@ export async function* extractFromPackage(options = {}, env = {}) {
         },
         packageContent.config,
         modulePath.length === 0 &&
-        Object.fromEntries(
-          ["name", "version", "description", "homepage", "license"]
-            .map(key => [key, packageContent[key]])
-            .filter(([k, v]) => v !== undefined)
-        ),
-        pkgbuild,
+          Object.fromEntries(
+            ["name", "version", "description", "homepage", "license"]
+              .map(key => [key, packageContent[key]])
+              .filter(([k, v]) => v !== undefined)
+          ),
+        pkgbuild
       );
 
       if (modulePath.length >= 1) {
@@ -221,10 +221,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
     variants.default = root;
   }
 
-  //console.log(variants);
-
   for (const [name, variant] of Object.entries(variants)) {
-    const arch = [...variant.arch].sort();
+    let arch = [...variant.arch];
     const properties = {};
     const depends = {};
     const output = {};
@@ -240,11 +238,14 @@ export async function* extractFromPackage(options = {}, env = {}) {
       Object.assign(properties, fragment.properties);
       Object.assign(depends, fragment.depends);
       Object.assign(output, fragment.output);
+      arch = new Set([...arch, ...fragment.arch]);
 
       sources.push(
         ...content2Sources(context.expand(fragment.content), fragment.dir)
       );
     }
+
+    arch = [...arch].sort();
 
     properties.variant = name;
 
@@ -257,45 +258,20 @@ export async function* extractFromPackage(options = {}, env = {}) {
       output,
       dependencies: depends,
       properties: context.expand(properties)
-      };
+    };
 
-    if(arch.length === 0) {
+    if (arch.length === 0) {
       yield result;
-    }
-    else {
+    } else {
       for (const a of arch) {
-        result.variant.arch = a;
-        result.properties.arch = [a];
-        yield result;
-      }
-    }
-  }
-
-  /*
-    let numberOfArchs = 0;
-
-    for (const a of arch) {
-      if (!restrictArch.size || restrictArch.has(a)) {
-        if (!options.prepare || npmArchMapping[process.arch] === a) {
-          numberOfArchs++;
-          properties.arch = [a];
-          yield {
-            properties: context.expand(properties),
-            sources,
-            dependencies,
-            output,
-            variant: { name: variant, arch, type: Object.keys(output) },
-            context
-          };
+        if (variant.restrictArch.size && !variant.restrictArch.has(a)) {
+          console.log("RESTRICT", a);
+        } else {
+          result.variant.arch = a;
+          result.properties.arch = [a];
+          yield result;
         }
       }
     }
-    if (numberOfArchs === 0) {
-      console.warn(
-        `No arch remaining, ${[...arch]} : ${[...restrictArch]} : ${
-          process.arch
-        }`
-      );
-    }
-  */
+  }
 }

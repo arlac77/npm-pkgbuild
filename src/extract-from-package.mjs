@@ -167,12 +167,14 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
       }
 
+      if (modulePath.length === 0 || pkgbuild.variant) {
       for (const k of ["output", "content", "depends"]) {
         if (pkgbuild[k]) {
           fragment[k] = pkgbuild[k];
           delete pkgbuild[k];
         }
       }
+    }
 
       const properties = Object.assign(
         {
@@ -191,12 +193,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (modulePath.length >= 1) {
         fragment.parent =
           modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
-        /*console.log(
-          "FRAGMENT",
-          fragment.name,
-          fragment.parent,
-          fragments[fragment.parent] ? "exists" : "missing"
-        );*/
       } else {
         if (properties.name) {
           properties.name = properties.name.replace(/^\@[^\/]+\//, "");
@@ -243,10 +239,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
   if (root && Object.keys(variants).length === 0) {
     variants.default = root;
   }
-  /*
-  console.log("FRAGMENTS", Object.keys(fragments));
-  console.log("VARIANTS", variants);
-  */
+  
+  //console.log("FRAGMENTS", Object.keys(fragments));
+  //console.log("VARIANTS", variants);
+  
 
   for (const [name, variant] of Object.entries(variants)) {
     let arch = variant.arch;
@@ -267,6 +263,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       Object.assign(output, fragment.output);
       arch = new Set([...arch, ...fragment.arch]);
 
+      //console.log("CONTENT", fragment.name, fragment.content);
       sources.push(
         ...content2Sources(context.expand(fragment.content), fragment.dir)
       );

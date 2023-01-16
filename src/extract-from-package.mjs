@@ -51,31 +51,29 @@ const entryAttributeNames = ["owner", "group", "mode"];
  * @returns {Iterator<ContentProvider>}
  */
 function* content2Sources(content, dir) {
-  if (content) {
-    for (const [destination, definitions] of Object.entries(content)) {
-      const allEntryProperties = {};
+  for (const [destination, definitions] of Object.entries(content)) {
+    const allEntryProperties = {};
 
-      for (const a of entryAttributeNames) {
-        if (definitions[a] !== undefined) {
-          allEntryProperties[a] = definitions[a];
-          delete definitions[a];
-        }
+    for (const a of entryAttributeNames) {
+      if (definitions[a] !== undefined) {
+        allEntryProperties[a] = definitions[a];
+        delete definitions[a];
       }
+    }
 
-      for (const definition of asArray(definitions)) {
-        const entryProperties = { ...allEntryProperties, destination };
+    for (const definition of asArray(definitions)) {
+      const entryProperties = { ...allEntryProperties, destination };
 
-        if (definition.type) {
-          const type = allInputs.find(i => i.name === definition.type);
-          if (type) {
-            delete definition.type;
-            yield new type({ ...definition, dir }, entryProperties);
-          } else {
-            console.error(`Unknown type '${type}'`);
-          }
+      if (definition.type) {
+        const type = allInputs.find(i => i.name === definition.type);
+        if (type) {
+          delete definition.type;
+          yield new type({ ...definition, dir }, entryProperties);
         } else {
-          yield new FileContentProvider(definition, entryProperties);
+          console.error(`Unknown type '${type}'`);
         }
+      } else {
+        yield new FileContentProvider(definition, entryProperties);
       }
     }
   }
@@ -168,13 +166,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       if (modulePath.length === 0 || pkgbuild.variant) {
-      for (const k of ["output", "content", "depends"]) {
-        if (pkgbuild[k]) {
-          fragment[k] = pkgbuild[k];
-          delete pkgbuild[k];
+        for (const k of ["output", "content", "depends"]) {
+          if (pkgbuild[k]) {
+            fragment[k] = pkgbuild[k];
+            delete pkgbuild[k];
+          }
         }
       }
-    }
 
       const properties = Object.assign(
         {
@@ -239,39 +237,40 @@ export async function* extractFromPackage(options = {}, env = {}) {
   if (root && Object.keys(variants).length === 0) {
     variants.default = root;
   }
-  
+
   //console.log("FRAGMENTS", Object.keys(fragments));
   //console.log("VARIANTS", variants);
-  
 
   for (const [name, variant] of Object.entries(variants)) {
     let arch = variant.arch;
     const properties = {};
     const depends = {};
     const output = {};
-    const sources = [];
+    const content = [];
 
     for (
       let fragment = variant;
       fragment;
       fragment = fragments[fragment.parent]
     ) {
-      const context = createContext({ properties: fragment.properties });
-
+      arch = new Set([...arch, ...fragment.arch]);
       Object.assign(properties, fragment.properties);
       Object.assign(depends, fragment.depends);
       Object.assign(output, fragment.output);
-      arch = new Set([...arch, ...fragment.arch]);
-
-      //console.log("CONTENT", fragment.name, fragment.content);
-      sources.push(
-        ...content2Sources(context.expand(fragment.content), fragment.dir)
-      );
+      if (fragment.content) {
+        content.push(fragment.content);
+      }
     }
 
     properties.variant = name;
 
     const context = createContext({ properties });
+
+    const sources = [];
+
+    for (const s of context.expand(content)) {
+      sources.push(...content2Sources(s, root.dir));
+    }
 
     const result = {
       context,

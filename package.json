@@ -42,7 +42,7 @@
     "@npmcli/arborist": "^6.1.6",
     "@vercel/nft": "^0.22.5",
     "aggregate-async-iterator": "^1.1.15",
-    "commander": "^9.5.0",
+    "commander": "^10.0.0",
     "content-entry": "^5.2.16",
     "content-entry-filesystem": "^5.2.13",
     "content-entry-transform": "^1.4.27",

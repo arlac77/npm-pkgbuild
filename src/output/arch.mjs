@@ -74,25 +74,28 @@ export class ARCH extends Packager {
     return fields;
   }
 
-  static async prepare() {
-    if(_prepared === undefined) {
-    try {
-      await execa("makepkg", ["-V"]);
+  static async prepare(options) {
+    if (_prepared === undefined) {
+      try {
+        await execa("makepkg", ["-V"]);
 
-      const cfg = await readFile("/etc/makepkg.conf", utf8StreamOptions);
-      const i = cfg.indexOf("PKGEXT='");
-      if (i > 0) {
-        const m = cfg
-          .substring(i)
-          .split(/\n/)[0]
-          .match(/='([^']+)'/);
-        _ext = m[1];
+        const cfg = await readFile("/etc/makepkg.conf", utf8StreamOptions);
+        if(options.verbose) {
+          console.log(cfg);
+        }
+        const i = cfg.indexOf("PKGEXT='");
+        if (i > 0) {
+          const m = cfg
+            .substring(i)
+            .split(/\n/)[0]
+            .match(/='([^']+)'/);
+          _ext = m[1];
+        }
+        _prepared = true;
+      } catch {
+        _prepared = false;
       }
-      _prepared = true;
-    } catch {
-      _prepared = false;
     }
-  }
     return _prepared;
   }
 

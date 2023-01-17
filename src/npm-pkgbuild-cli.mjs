@@ -72,7 +72,7 @@ program
         for (const outputFactory of allOutputs.filter(
           o => options[o.name] === true || output[o.name] !== undefined
         )) {
-          if (options.available && !(await outputFactory.prepare)) {
+          if (options.available && !(await outputFactory.prepare(options))) {
             continute;
           }
 

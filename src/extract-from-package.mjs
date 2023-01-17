@@ -265,12 +265,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
     properties.variant = name;
 
     const context = createContext({ properties });
-
-    const sources = [];
-
-    for (const s of context.expand(content)) {
-      sources.push(...content2Sources(s, root.dir));
-    }
+    const sources = context.expand(content).reduce((a, c) => {
+      a.push(...content2Sources(c, root.dir));
+      return a;
+    }, []);
 
     const result = {
       context,

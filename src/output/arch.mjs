@@ -79,7 +79,7 @@ export class ARCH extends Packager {
     try {
       await execa("makepkg", ["-V"]);
 
-      const cfg = await readFile("/etc/makepkg.conf", { encoding: "utf8" });
+      const cfg = await readFile("/etc/makepkg.conf", utf8StreamOptions);
       const i = cfg.indexOf("PKGEXT='");
       if (i > 0) {
         const m = cfg

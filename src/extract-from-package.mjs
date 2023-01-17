@@ -113,6 +113,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
       ? [packageContent.pkgbuild]
       : []) {
       const requires = pkgbuild.requires;
+      delete pkgbuild.requires;
+
+      let priority = 1;
+
       if (requires) {
         if (requires.properties) {
           let fullfilled = true;
@@ -125,13 +129,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
           if (!fullfilled) {
             continue;
           }
-          delete pkgbuild.requires;
         }
 
         if (requires.environment) {
           if (env[requires.environment.has] === undefined) {
             continue;
           }
+          priority++;
         }
       }
 
@@ -139,7 +143,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
         name: `${packageContent.name}[${i++}]`,
         depends: packageContent.engines || {},
         arch: new Set(),
-        restrictArch: new Set()
+        restrictArch: new Set(),
+        priority
       };
 
       if (packageContent.cpu) {
@@ -221,7 +226,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragments[fragment.name] = fragment;
 
       if (pkgbuild.variant) {
-        fragment.priority = 1;
         variants[pkgbuild.variant] = fragment;
       }
 
@@ -239,9 +243,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
   }
 
   //console.log("FRAGMENTS", Object.keys(fragments));
-  //console.log("VARIANTS", variants);
+  console.log("VARIANTS", variants);
 
-  for (const [name, variant] of Object.entries(variants)) {
+  for (const [name, variant] of Object.entries(variants).sort(
+    ([ua, a], [ub, b]) => a.priority - b.priority
+  )) {
     let arch = variant.arch;
     const properties = {};
     const depends = {};

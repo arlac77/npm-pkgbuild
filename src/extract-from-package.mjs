@@ -243,7 +243,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   }
 
   //console.log("FRAGMENTS", Object.keys(fragments));
-  console.log("VARIANTS", variants);
+  //console.log("VARIANTS", variants);
 
   for (const [name, variant] of Object.entries(variants).sort(
     ([ua, a], [ub, b]) => a.priority - b.priority

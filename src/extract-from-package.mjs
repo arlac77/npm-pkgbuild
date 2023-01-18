@@ -115,6 +115,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
       const requires = pkgbuild.requires;
       delete pkgbuild.requires;
 
+      let name = `${packageContent.name}[${i++}]`;
+
       let priority = 1;
 
       if (requires) {
@@ -137,19 +139,20 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
 
         if (fullfilled) {
-          console.log("requirement fullfilled", requires);
+          console.log(`${name}: requirement fullfilled`, requires);
         } else {
-          console.log("requirement not fullfilled", requires);
+          console.log(`${name}: requirement not fullfilled`, requires);
           continue;
         }
       }
 
+      console.log(`${name}: load`);
       const fragment = {
-        name: `${packageContent.name}[${i++}]`,
+        name,
+        priority,
         depends: packageContent.engines || {},
         arch: new Set(),
-        restrictArch: new Set(),
-        priority
+        restrictArch: new Set()
       };
 
       if (packageContent.cpu) {

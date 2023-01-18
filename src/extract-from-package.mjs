@@ -118,24 +118,27 @@ export async function* extractFromPackage(options = {}, env = {}) {
       let priority = 1;
 
       if (requires) {
+        let fullfilled = true;
+
         if (requires.properties) {
-          let fullfilled = true;
           for (const [k, v] of Object.entries(requires.properties)) {
             if (root.properties[k] !== v) {
               fullfilled = false;
               break;
             }
           }
-          if (!fullfilled) {
-            continue;
-          }
         }
 
         if (requires.environment) {
           if (env[requires.environment.has] === undefined) {
-            continue;
+            fullfilled = false;
           }
           priority++;
+        }
+
+        if (!fullfilled) {
+          console.log("requirement not fullfilled", requires);
+          continue;
         }
       }
 

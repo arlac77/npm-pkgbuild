@@ -112,6 +112,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
       : packageContent.pkgbuild
       ? [packageContent.pkgbuild]
       : []) {
+      if (modulePath.length > 0 && !pkgbuild.variant) {
+        continue;
+      }
+
       const requires = pkgbuild.requires;
       delete pkgbuild.requires;
 

@@ -80,7 +80,7 @@ export class ARCH extends Packager {
         await execa("makepkg", ["-V"]);
 
         const cfg = await readFile("/etc/makepkg.conf", utf8StreamOptions);
-        if(options.verbose) {
+        if (options.verbose) {
           console.log(cfg);
         }
         const i = cfg.indexOf("PKGEXT='");
@@ -138,10 +138,7 @@ package() {
     if (properties.hooks) {
       await pipeline(
         iterableStringInterceptor(
-          createReadStream(
-            join(options.dir, properties.hooks),
-            utf8StreamOptions
-          ),
+          createReadStream(properties.hooks, utf8StreamOptions),
           createPropertiesInterceptor(properties)
         ),
         createWriteStream(join(staging, properties.install), utf8StreamOptions)

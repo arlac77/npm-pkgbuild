@@ -136,7 +136,9 @@ export async function* extractFromPackage(options = {}, env = {}) {
           priority++;
         }
 
-        if (!fullfilled) {
+        if (fullfilled) {
+          console.log("requirement fullfilled", requires);
+        } else {
           console.log("requirement not fullfilled", requires);
           continue;
         }

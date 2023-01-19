@@ -252,11 +252,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
     variants.default = root;
   }
 
-  //console.log("FRAGMENTS", Object.keys(fragments));
-  //console.log("VARIANTS", variants);
-
   for (const [name, variant] of Object.entries(variants).sort(
-    ([ua, a], [ub, b]) => a.priority - b.priority
+    ([ua, a], [ub, b]) => b.priority - a.priority
   )) {
     let arch = variant.arch;
     const properties = {};

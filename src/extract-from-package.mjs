@@ -182,12 +182,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
       }
 
-      if (modulePath.length === 0 || pkgbuild.variant) {
-        for (const k of ["output", "content", "depends"]) {
-          if (pkgbuild[k]) {
-            fragment[k] = pkgbuild[k];
-            delete pkgbuild[k];
-          }
+      for (const k of ["output", "content", "depends"]) {
+        if (pkgbuild[k]) {
+          fragment[k] = pkgbuild[k];
+          delete pkgbuild[k];
         }
       }
 

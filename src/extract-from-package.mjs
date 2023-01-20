@@ -132,6 +132,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
               fullfilled = false;
               break;
             }
+
+            priority += 1;
           }
         }
 
@@ -139,7 +141,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           if (env[requires.environment.has] === undefined) {
             fullfilled = false;
           }
-          priority++;
+          priority += 10;
         }
 
         if (fullfilled) {

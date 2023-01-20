@@ -184,7 +184,10 @@ export class RPM extends Packager {
       }
 
       await cp(
-        join(tmpdir, "RPMS", properties.arch, this.packageFileName),
+        join(tmpdir, "RPMS",
+          // TODO handle arrays ?
+          Array.isArray(properties.arch) ? properties.arch[0] : properties.arch,
+          this.packageFileName),
         packageFile,
         { preserveTimestamps: true }
       );

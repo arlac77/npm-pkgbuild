@@ -11,4 +11,5 @@ export * from "./output/debian.mjs";
 export * from "./output/rpm.mjs";
 export * from "./output/arch.mjs";
 export * from "./output/oci.mjs";
+export * from "./output/docker.mjs";
 export * from "./output/packager.mjs";

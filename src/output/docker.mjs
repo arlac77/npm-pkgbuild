@@ -13,6 +13,11 @@ export class DOCKER extends Packager {
     return "docker";
   }
 
+  static get description()
+  {
+  	return "generate container image with docker|podman";
+  }
+
   async execute(
     sources,
     transformer,

@@ -121,7 +121,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       delete pkgbuild.requires;
 
       let name = `${packageContent.name}[${i++}]`;
-
       let priority = 1;
 
       if (requires) {
@@ -192,24 +191,22 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
       }
 
-      const properties = Object.assign(
-        {
-          access: packageContent.publishConfig?.access || "private"
-        },
-        packageContent.config,
-        modulePath.length === 0 &&
-          Object.fromEntries(
-            ["name", "version", "description", "homepage", "license"]
-              .map(key => [key, packageContent[key]])
-              .filter(([k, v]) => v !== undefined)
-          ),
-        pkgbuild
-      );
+      const properties = {};
 
       if (modulePath.length >= 1) {
         fragment.parent =
           modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
       } else {
+        properties.access = packageContent.publishConfig?.access || "private"
+ 
+        Object.assign(properties,
+          packageContent.config,
+          Object.fromEntries(
+            ["name", "version", "description", "homepage", "license"]
+              .map(key => [key, packageContent[key]])
+              .filter(([k, v]) => v !== undefined)
+        ));
+
         if (properties.name) {
           properties.name = properties.name.replace(/^\@[^\/]+\//, "");
         }
@@ -233,7 +230,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
       }
 
-      fragment.properties = properties;
+      fragment.properties = Object.assign(properties, pkgbuild);
       fragment.dir = join(base, ...modulePath.map(p => `node_modules/${p}`));
 
       fragments[fragment.name] = fragment;
@@ -259,7 +256,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
     ([ua, a], [ub, b]) => b.priority - a.priority
   )) {
     let arch = variant.arch;
-    const properties = {};
+    let properties = {};
     const depends = {};
     const output = {};
     const content = [];
@@ -269,8 +266,9 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragment;
       fragment = fragments[fragment.parent]
     ) {
+      //console.log("FRAGMENT", fragment.name, properties);
       arch = new Set([...arch, ...fragment.arch]);
-      Object.assign(properties, fragment.properties);
+      properties = Object.assign({}, fragment.properties, properties);
       Object.assign(depends, fragment.depends);
       Object.assign(output, fragment.output);
       if (fragment.content) {

@@ -288,7 +288,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
     const result = {
       context,
-      variant: { name },
+      variant: { name, priority: variant.priority },
       sources,
       output,
       dependencies: depends,

@@ -62,7 +62,7 @@ function* content2Sources(content, dir) {
       }
     }
 
-    for (const definition of asArray(definitions)) {
+    for (let definition of asArray(definitions)) {
       const entryProperties = { ...allEntryProperties, destination };
 
       if (definition.type) {
@@ -74,6 +74,11 @@ function* content2Sources(content, dir) {
           console.error(`Unknown type '${type}'`);
         }
       } else {
+        if (typeof definition === "object") {
+          definition.base = definition.base ? join(dir, definition.base) : dir;
+        } else {
+          definition = join(dir, definition);
+        }
         yield new FileContentProvider(definition, entryProperties);
       }
     }
@@ -197,15 +202,17 @@ export async function* extractFromPackage(options = {}, env = {}) {
         fragment.parent =
           modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
       } else {
-        properties.access = packageContent.publishConfig?.access || "private"
- 
-        Object.assign(properties,
+        properties.access = packageContent.publishConfig?.access || "private";
+
+        Object.assign(
+          properties,
           packageContent.config,
           Object.fromEntries(
             ["name", "version", "description", "homepage", "license"]
               .map(key => [key, packageContent[key]])
               .filter(([k, v]) => v !== undefined)
-        ));
+          )
+        );
 
         if (properties.name) {
           properties.name = properties.name.replace(/^\@[^\/]+\//, "");
@@ -272,7 +279,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       Object.assign(depends, fragment.depends);
       Object.assign(output, fragment.output);
       if (fragment.content) {
-        content.push(fragment.content);
+        content.push([fragment.content, fragment.dir]);
       }
     }
 
@@ -280,7 +287,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
     const context = createContext({ properties });
     const sources = context.expand(content).reduce((a, c) => {
-      a.push(...content2Sources(c, root.dir));
+      a.push(...content2Sources(c[0], c[1]));
       return a;
     }, []);
 

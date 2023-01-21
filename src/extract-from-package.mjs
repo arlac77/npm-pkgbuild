@@ -156,8 +156,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
           continue;
         }
       }
+      else {
+        console.log(`${name}: load`);
+      }
 
-      console.log(`${name}: load`);
       const fragment = {
         name,
         priority,
@@ -304,7 +306,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       "RESULT",
       result.variant,
       result.properties,
-      sources,
+      sources.map(s =>s.toString()).join('\n'),
       output,
       arch
     );

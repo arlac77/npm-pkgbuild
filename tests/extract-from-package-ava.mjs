@@ -343,7 +343,12 @@ test(
           { destination: "/services/konsum/frontend/" }
         ),
         new FileContentProvider(
-          { base: new URL("../build/efpt-konsum-frontend/build", import.meta.url).pathname },
+          {
+            base: new URL(
+              "../build/efpt-konsum-frontend/build",
+              import.meta.url
+            ).pathname
+          },
           { destination: "/services/konsum/frontend/" }
         ),
         new FileContentProvider(
@@ -353,11 +358,6 @@ test(
           },
           { destination: "/services/konsum/frontend/" }
         ),
-
-        /*new FileContentProvider(
-      { base: "pkgbuild", pattern: ["other.conf"] },
-      { destination: "/etc/nginx/sites/common/other.conf", owner: "root" }
-    ),*/
         new FileContentProvider(
           {
             name: "pkgbuild/nginx.conf",

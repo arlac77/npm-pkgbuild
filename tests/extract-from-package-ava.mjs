@@ -155,7 +155,9 @@ test(
   {
     name: "n4",
     cpu: ["arm64", "x64"],
-    pkgbuild: {},
+    pkgbuild: {
+      install: "/n4"
+    },
     node_modules: {
       v7: {
         pkgbuild: {
@@ -163,6 +165,7 @@ test(
             arch: {},
             debian: {}
           },
+          install: "/v7",
           arch: ["x86_64", "aarch64", "armv7"],
           variant: "v7"
         }
@@ -175,7 +178,8 @@ test(
         name: "n4",
         arch: ["aarch64"],
         access: "private",
-        variant: "v7"
+        variant: "v7",
+        install: "/n4"
       }
     },
     {
@@ -183,7 +187,8 @@ test(
         name: "n4",
         arch: ["x86_64"],
         access: "private",
-        variant: "v7"
+        variant: "v7",
+        install: "/n4"
       }
     }
   ]

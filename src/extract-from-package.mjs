@@ -155,8 +155,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           console.log(`${name}: requirement not fullfilled`, requires);
           continue;
         }
-      }
-      else {
+      } else {
         console.log(`${name}: load`);
       }
 
@@ -284,6 +283,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
     }
 
+    Object.assign(properties, root.properties);
+
     properties.variant = name;
 
     const context = createContext({ properties });
@@ -305,7 +306,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       "RESULT",
       result.variant,
       result.properties,
-      sources.map(s =>s.toString()).join('\n'),
+      sources.map(s => s.toString()).join("\n"),
       output,
       arch
     );

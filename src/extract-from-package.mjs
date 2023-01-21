@@ -111,7 +111,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   const fragments = {};
   let root, parent;
 
-  await packageWalker(async (packageContent, base, modulePath) => {
+  await packageWalker(async (packageContent, dir, modulePath) => {
     let i = 0;
     for (const pkgbuild of Array.isArray(packageContent.pkgbuild)
       ? packageContent.pkgbuild
@@ -187,7 +187,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
       for (const k of ["hooks"]) {
         if (pkgbuild[k]) {
-          pkgbuild[k] = resolve(base, pkgbuild[k]);
+          pkgbuild[k] = resolve(dir, pkgbuild[k]);
         }
       }
 
@@ -240,8 +240,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       fragment.properties = Object.assign(properties, pkgbuild);
-      fragment.dir = join(base, ...modulePath.map(p => `node_modules/${p}`));
-
+      fragment.dir = dir;
       fragments[fragment.name] = fragment;
 
       if (pkgbuild.variant) {

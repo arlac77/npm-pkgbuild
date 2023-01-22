@@ -273,7 +273,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragment;
       fragment = fragments[fragment.parent]
     ) {
-      //console.log("FRAGMENT", fragment.name, properties);
       arch = new Set([...arch, ...fragment.arch]);
       properties = Object.assign({}, fragment.properties, properties);
       Object.assign(depends, fragment.depends);
@@ -302,6 +301,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       properties: context.expand(properties)
     };
 
+/*
     console.log(
       "RESULT",
       result.variant,
@@ -310,6 +310,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       output,
       arch
     );
+*/
 
     if (arch.size === 0) {
       yield result;

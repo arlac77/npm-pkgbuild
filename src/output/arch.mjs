@@ -178,9 +178,15 @@ package() {
     }
 
     if (!options.dry) {
+      let PACKAGER;
+
+      if (properties.contributors?.length > 0) {
+        PACKAGER = person(properties.contributors);
+      }
+
       const makepkg = await execa("makepkg", ["-f", "-e"], {
         cwd: staging,
-        env: { PKGDEST: destination }
+        env: { PKGDEST: destination, PACKAGER }
       });
 
       if (options.verbose) {
@@ -190,6 +196,10 @@ package() {
 
     return join(destination, this.packageFileName);
   }
+}
+
+function person(contributors) {
+  return contributors[0].name + " " + contributors[0].email;
 }
 
 /**

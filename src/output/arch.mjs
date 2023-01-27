@@ -173,7 +173,7 @@ package() {
 
     if (options.verbose) {
       console.log(
-        await readFile(join(staging, PKGBUILD), { encoding: "utf8" })
+        await readFile(join(staging, PKGBUILD), utf8StreamOptions)
       );
     }
 

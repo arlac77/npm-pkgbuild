@@ -3,8 +3,10 @@ import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
   keyValueTransformer,
+  equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
+import { fieldProvider } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
 
@@ -13,9 +15,8 @@ export class DOCKER extends Packager {
     return "docker";
   }
 
-  static get description()
-  {
-  	return "generate container image with docker|podman";
+  static get description() {
+    return "generate container image with docker|podman";
   }
 
   async execute(
@@ -29,6 +30,13 @@ export class DOCKER extends Packager {
       options
     );
 
+    async function* trailingLines() {
+      yield `
+FROM node-18
+ENTRYPOINT ["node", ""]
+`;
+    }
+
     const fp = fieldProvider(properties, fields);
 
     transformer.push({
@@ -37,7 +45,10 @@ export class DOCKER extends Packager {
       transform: async entry =>
         new ReadableStreamContentEntry(
           "../" + entry.name,
-          keyValueTransformer(await entry.readStream, fp)
+          keyValueTransformer(await entry.readStream, fp, {
+            ...equalSeparatedKeyValuePairOptions,
+            trailingLines
+          })
         ),
       createEntryWhenMissing: () => new EmptyContentEntry(DOCKERFILE)
     });
@@ -56,5 +67,9 @@ export class DOCKER extends Packager {
   }
 }
 
+/**
+ * @see {https://docs.docker.com/engine/reference/builder/}
+ */
 const fields = {
+  version: { type: "string", mandatory: true }
 };

@@ -88,5 +88,6 @@ ENTRYPOINT ["node", ""]
  * @see {https://docs.docker.com/engine/reference/builder/}
  */
 const fields = {
-  version: { type: "string", mandatory: true }
+  version: { type: "string", mandatory: true },
+  author: { alias: "maintainer", type: "string" }
 };

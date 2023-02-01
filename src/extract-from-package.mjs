@@ -133,7 +133,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
         if (requires.properties) {
           for (const [k, v] of Object.entries(requires.properties)) {
-            if (root.properties[k] !== v) {
+            if (root.properties[k] !== v && options[k] !== v) {
               fullfilled = false;
               break;
             }

@@ -3,7 +3,6 @@ import { join } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { FileContentProvider, DOCKER } from "npm-pkgbuild";
-import { requiresFromDependencies } from "../src/output/rpm.mjs";
 
 test.skip("docker", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>

@@ -1,12 +1,15 @@
 import { join } from "node:path";
+import { readFile } from "node:fs/promises";
 import { execa } from "execa";
 import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { transform } from "content-entry-transform";
+import { aggregateFifo } from "aggregate-async-iterator";
 import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { fieldProvider } from "../util.mjs";
+import { fieldProvider, copyEntries, utf8StreamOptions } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
 
@@ -44,7 +47,7 @@ ENTRYPOINT ["node", ""]
       match: entry => entry.name === DOCKERFILE,
       transform: async entry =>
         new ReadableStreamContentEntry(
-          "../" + entry.name,
+          entry.name,
           keyValueTransformer(await entry.readStream, fp, {
             ...equalSeparatedKeyValuePairOptions,
             trailingLines
@@ -53,8 +56,22 @@ ENTRYPOINT ["node", ""]
       createEntryWhenMissing: () => new EmptyContentEntry(DOCKERFILE)
     });
 
+    for await (const file of copyEntries(
+      transform(aggregateFifo(sources), transformer),
+      staging,
+      expander
+    )) {
+      if (options.verbose) {
+        console.log("D", file.destination);
+      }
+    }
+
+    if (options.verbose) {
+      console.log(await readFile(join(staging, DOCKERFILE), utf8StreamOptions));
+    }
+
     if (!options.dry) {
-      const docker = await execa("docker", ["build", "-e"], {
+      const docker = await execa("docker", ["build", staging], {
         cwd: staging
       });
 

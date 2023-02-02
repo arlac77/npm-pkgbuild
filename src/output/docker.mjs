@@ -13,13 +13,22 @@ import { fieldProvider, copyEntries, utf8StreamOptions } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
 
+function * keyValueLines(key,value,options) {
+  yield `LABEL ${key}=${value}${options.lineEnding}`;
+}
+
+const labelKeyValuePairs = {
+  ...equalSeparatedKeyValuePairOptions,
+  keyValueLines
+};
+
 export class DOCKER extends Packager {
   static get name() {
     return "docker";
   }
 
   static get description() {
-    return "generate container image with docker|podman";
+    return "generate container image with docker or podman";
   }
 
   async execute(
@@ -49,7 +58,7 @@ ENTRYPOINT ["node", ""]
         new ReadableStreamContentEntry(
           entry.name,
           keyValueTransformer(await entry.readStream, fp, {
-            ...equalSeparatedKeyValuePairOptions,
+            ...labelKeyValuePairs,
             trailingLines
           })
         ),
@@ -62,7 +71,7 @@ ENTRYPOINT ["node", ""]
       expander
     )) {
       if (options.verbose) {
-        console.log("D", file.destination);
+        console.log(file.destination);
       }
     }
 

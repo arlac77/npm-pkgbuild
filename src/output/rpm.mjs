@@ -162,7 +162,7 @@ export class RPM extends Packager {
 
     if (options.verbose) {
       console.log(
-        await readFile(join(staging, specFileName), { encoding: "utf8" })
+        await readFile(join(staging, specFileName), utf8StreamOptions)
       );
     }
 

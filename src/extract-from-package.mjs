@@ -150,13 +150,19 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
 
         if (fullfilled) {
-          console.log(`${name}: requirement fullfilled`, requires);
+          if(options.verbose) {
+            console.log(`${name}: requirement fullfilled`, requires);
+          }
         } else {
-          console.log(`${name}: requirement not fullfilled`, requires);
+          if(options.verbose) {
+            console.log(`${name}: requirement not fullfilled`, requires);
+          }
           continue;
         }
       } else {
-        console.log(`${name}: load`);
+        if(options.verbose) {
+          console.log(`${name}: load`);
+        }
       }
 
       const fragment = {

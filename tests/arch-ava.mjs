@@ -5,7 +5,7 @@ import { tmpdir } from "os";
 import { FileContentProvider, ARCH } from "npm-pkgbuild";
 
 test("arch extension", async t => {
-  await ARCH.prepare({ verbose: false });
+  await ARCH.prepare({ verbose: false }, { arch: "aarch64" });
   t.true(ARCH.fileNameExtension.startsWith(".pkg.tar."));
 });
 

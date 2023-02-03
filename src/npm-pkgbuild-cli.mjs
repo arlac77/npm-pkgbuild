@@ -36,7 +36,11 @@ program
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option("-p --dir <dir>", "which package to use", process.cwd())
-  .option("-a --available", "only execute availabe output/arch combintions", false)
+  .option(
+    "-a --available",
+    "only execute availabe output/arch combintions",
+    false
+  )
   .option("--continue", "continue on error")
   .option(
     "-c --content <dir>",
@@ -72,7 +76,10 @@ program
         for (const outputFactory of allOutputs.filter(
           o => options[o.name] === true || output[o.name] !== undefined
         )) {
-          if (options.available && !(await outputFactory.prepare(options))) {
+          if (
+            options.available &&
+            !(await outputFactory.prepare(options, variant))
+          ) {
             continute;
           }
 
@@ -127,11 +134,11 @@ program
 
             if (options.verbose) {
               console.log("variant:");
-              console.log(kv(variant,"  "));
+              console.log(kv(variant, "  "));
               console.log("sources:");
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
-              console.log(kv(dependencies,"  "));
+              console.log(kv(dependencies, "  "));
               console.log(kv(output.properties));
             }
 
@@ -166,8 +173,10 @@ function handleError(e, options) {
   }
 }
 
-function kv(object, prefix="") {
-  return object ? Object.entries(object)
-    .map(([k, v]) => `${prefix}${k}: ${v}`)
-    .join("\n"): "";
+function kv(object, prefix = "") {
+  return object
+    ? Object.entries(object)
+        .map(([k, v]) => `${prefix}${k}: ${v}`)
+        .join("\n")
+    : "";
 }

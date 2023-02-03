@@ -56,6 +56,7 @@ const PKGBUILD = "PKGBUILD";
 
 let _ext = ".pkg.tar.xz";
 let _prepared;
+let _architecture = "aarch64";
 
 export class ARCH extends Packager {
   static get name() {
@@ -74,7 +75,7 @@ export class ARCH extends Packager {
     return fields;
   }
 
-  static async prepare(options) {
+  static async prepare(options, variant) {
     if (_prepared === undefined) {
       try {
         await execa("makepkg", ["-V"]);
@@ -83,20 +84,25 @@ export class ARCH extends Packager {
         if (options.verbose) {
           console.log(cfg);
         }
-        const i = cfg.indexOf("PKGEXT='");
-        if (i > 0) {
-          const m = cfg
-            .substring(i)
-            .split(/\n/)[0]
-            .match(/='([^']+)'/);
-          _ext = m[1];
+
+        function getValue(key) {
+          const i = cfg.indexOf(`${key}='`);
+          if (i > 0) {
+            const m = cfg
+              .substring(i)
+              .split(/\n/)[0]
+              .match(/='([^'"]+)['"]/);
+            return m[1];
+          }
         }
+        _ext = getValue("PKGEXT");
+        _architecture = getValue("CARCH");
         _prepared = true;
       } catch {
         _prepared = false;
       }
     }
-    return _prepared;
+    return _prepared && !variant || variant.arch === _architecture;
   }
 
   get packageFileName() {
@@ -172,9 +178,7 @@ package() {
     }
 
     if (options.verbose) {
-      console.log(
-        await readFile(join(staging, PKGBUILD), utf8StreamOptions)
-      );
+      console.log(await readFile(join(staging, PKGBUILD), utf8StreamOptions));
     }
 
     if (!options.dry) {

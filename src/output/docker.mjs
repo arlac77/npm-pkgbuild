@@ -13,7 +13,7 @@ import { fieldProvider, copyEntries, utf8StreamOptions } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
 
-function * keyValueLines(key,value,options) {
+function* keyValueLines(key, value, options) {
   yield `LABEL ${key}=${value}${options.lineEnding}`;
 }
 

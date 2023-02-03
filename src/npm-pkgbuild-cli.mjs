@@ -31,12 +31,12 @@ allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("--dry", "do not execut only print definitions", false)
+  .option("--dry", "do not execut, only print definitions", false)
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option("-p --dir <dir>", "which package to use", process.cwd())
-  .option("-a --available", "only execute availabe output methods", false)
+  .option("-a --available", "only execute availabe output/arch combintions", false)
   .option("--continue", "continue on error")
   .option(
     "-c --content <dir>",

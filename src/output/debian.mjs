@@ -47,9 +47,13 @@ export class DEBIAN extends Packager {
     return fields;
   }
 
-  static async prepare() {
+  static async prepare(options,variant) {
     try {
       await execa("dpkg", ["--version"]);
+      if (variant?.arch) {
+        const uname = await execa("uname", ["-m"]);
+        return uname.stdout.match(variant.arch);
+      }
       return true;
     } catch {}
 

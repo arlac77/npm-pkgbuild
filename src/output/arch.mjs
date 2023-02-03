@@ -86,7 +86,7 @@ export class ARCH extends Packager {
         }
 
         function getValue(key) {
-          const i = cfg.indexOf(`${key}='`);
+          const i = cfg.indexOf(`${key}=`);
           if (i > 0) {
             const m = cfg
               .substring(i)

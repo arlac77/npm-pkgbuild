@@ -80,9 +80,13 @@ export class RPM extends Packager {
    * Check for rpmbuild presence.
    * @returns {boolean} true when rpmbuild is present
    */
-  static async prepare() {
+  static async prepare(options, variant) {
     try {
       await execa("rpmbuild", ["--version"]);
+      if (variant?.arch) {
+        const uname = await execa("uname", ["-m"]);
+        return uname.stdout.match(variant.arch);
+      }
       return true;
     } catch {}
 
@@ -184,10 +188,13 @@ export class RPM extends Packager {
       }
 
       await cp(
-        join(tmpdir, "RPMS",
+        join(
+          tmpdir,
+          "RPMS",
           // TODO handle arrays ?
           Array.isArray(properties.arch) ? properties.arch[0] : properties.arch,
-          this.packageFileName),
+          this.packageFileName
+        ),
         packageFile,
         { preserveTimestamps: true }
       );

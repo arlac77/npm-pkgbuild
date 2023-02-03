@@ -80,7 +80,7 @@ program
             options.available &&
             !(await outputFactory.prepare(options, variant))
           ) {
-            continute;
+            continue;
           }
 
           try {

@@ -322,9 +322,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       yield result;
     } else {
       for (const a of [...arch].sort()) {
-        if (variant.restrictArch.size && !variant.restrictArch.has(a)) {
-          console.log("RESTRICT", a);
-        } else {
+        if (variant.restrictArch.size === 0 || variant.restrictArch.has(a)) {
           result.variant.arch = a;
           result.properties.arch = [a];
           yield result;

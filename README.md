@@ -127,6 +127,7 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [execute](#execute)
         *   [Parameters](#parameters-10)
 *   [prepare](#prepare)
+    *   [Parameters](#parameters-11)
 
 ## ContentProvider
 
@@ -325,6 +326,11 @@ Execute package generation
 ## prepare
 
 Check for rpmbuild presence.
+
+### Parameters
+
+*   `options` &#x20;
+*   `variant` &#x20;
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true when rpmbuild is present
 

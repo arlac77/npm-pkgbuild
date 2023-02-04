@@ -259,8 +259,6 @@ function normalizeExpression(e) {
 function makeDepends(dependencies) {
   return Object.entries(dependencies).map(
     ([name, version]) =>
-      `${
-        packageNameMapping[name] ? packageNameMapping[name] : name
-      }${normalizeExpression(version)}`
+      `${packageNameMapping[name] || name}${normalizeExpression(version)}`
   );
 }

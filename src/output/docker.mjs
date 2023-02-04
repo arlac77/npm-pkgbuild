@@ -44,7 +44,7 @@ export class DOCKER extends Packager {
 
     async function* trailingLines() {
       yield `
-FROM node-18
+FROM node-${dependencies.nodejs.replace(/[>=]/,'')}
 ENTRYPOINT ["node", ""]
 `;
     }

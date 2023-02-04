@@ -92,18 +92,21 @@ export class ARCH extends Packager {
               .substring(i)
               .split(/\n/)[0]
               .match(/='([^'"]+)['"]/);
-            return m[1];
+            return m && m[1];
           }
         }
         _ext = getValue("PKGEXT");
         _architecture = getValue("CARCH");
         _prepared = true;
-      } catch {
+      } catch(e) {
         _prepared = false;
       }
     }
+ //   console.log("ARCH", variant.arch, _architecture,
+ //    _prepared, (variant.arch === undefined || variant.arch === _architecture));
+     
     return _prepared && (variant.arch === undefined || variant.arch === _architecture);
-  }
+    }
 
   get packageFileName() {
     const p = this.properties;

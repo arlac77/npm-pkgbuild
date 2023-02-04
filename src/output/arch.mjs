@@ -75,7 +75,7 @@ export class ARCH extends Packager {
     return fields;
   }
 
-  static async prepare(options, variant) {
+  static async prepare(options={}, variant={}) {
     if (_prepared === undefined) {
       try {
         await execa("makepkg", ["-V"]);
@@ -102,7 +102,7 @@ export class ARCH extends Packager {
         _prepared = false;
       }
     }
-    return _prepared && !variant || variant.arch === _architecture;
+    return _prepared && (variant.arch === undefined || variant.arch === _architecture);
   }
 
   get packageFileName() {

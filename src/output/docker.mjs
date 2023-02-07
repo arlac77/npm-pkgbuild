@@ -43,10 +43,17 @@ export class DOCKER extends Packager {
     );
 
     async function* trailingLines() {
-      yield `
-FROM node:${dependencies.node.replace(/[>=]*/,'')}
-ENTRYPOINT ["node", ""]
+      if (dependencies.node) {
+        yield `
+FROM node:${dependencies.node.replace(/[>=]*/, "")}
 `;
+      }
+
+      if (options.entrypoints) {
+        yield `
+ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
+`;
+      }
     }
 
     const fp = fieldProvider(properties, fields);

@@ -229,6 +229,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
           properties.bugs = packageContent.bugs.url;
         }
 
+        if (packageContent.bin) {
+          properties.entrypoints = packageContent.bin;
+        }
+
         if (packageContent.contributors) {
           properties.maintainer = packageContent.contributors.map(
             c => `${c.name} <${c.email}>`

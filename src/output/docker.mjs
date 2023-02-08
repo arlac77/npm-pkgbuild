@@ -28,7 +28,7 @@ export class DOCKER extends Packager {
   }
 
   static get description() {
-    return "generate container image with docker or podman";
+    return `generate container image with ${this.name}`;
   }
 
   async execute(
@@ -87,7 +87,7 @@ ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
     }
 
     if (!options.dry) {
-      const docker = await execa("docker", ["build", staging], {
+      const docker = await execa(this.constructor.name, ["build", staging], {
         cwd: staging
       });
 
@@ -105,5 +105,6 @@ ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
  */
 const fields = {
   version: { type: "string", mandatory: true },
+  description: { type: "string" },
   author: { alias: "maintainer", type: "string" }
 };

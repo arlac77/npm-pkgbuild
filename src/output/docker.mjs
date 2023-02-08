@@ -92,17 +92,23 @@ ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
       console.log(await readFile(join(staging, DOCKERFILE), utf8StreamOptions));
     }
 
+    let image = "";
+    
     if (!options.dry) {
       const docker = await execa(this.constructor.name, ["build", staging], {
         cwd: staging
       });
 
+      const lines = docker.stdout.split(/\n/);
+      image = lines[lines.length - 1];
+ 
       if (options.verbose) {
         console.log(docker.stdout);
       }
     }
 
-    return join(destination, this.packageFileName);
+    //console.log("IMAGE",image);
+    return image;
   }
 }
 

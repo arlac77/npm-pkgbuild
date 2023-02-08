@@ -49,6 +49,12 @@ FROM node:${dependencies.node.replace(/[>=]*/, "")}
 `;
       }
 
+      if (dependencies['nginx-mainline']) {
+        yield `
+FROM nginx:${dependencies['nginx-mainline'].replace(/[>=]*/, "")}
+`;
+      }
+
       if (options.entrypoints) {
         yield `
 ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]

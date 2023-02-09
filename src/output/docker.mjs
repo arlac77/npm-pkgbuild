@@ -44,31 +44,23 @@ export class DOCKER extends Packager {
     options,
     expander = v => v
   ) {
-    const { properties, staging, destination } = await this.prepareExecute(
-      options
-    );
+    const { properties, staging } = await this.prepareExecute(options);
 
     async function* trailingLines() {
-      for (const [k, v] of Object.entries(dependencies)) {
-        if (dependenciesToFrom[k]) {
-          yield `
-FROM ${dependenciesToFrom[k]}:${v.replace(/[>=]*/, "")}
-`;
-        }
+      for (const [k, v] of Object.entries({
+        ...options.from,
+        ...Object.fromEntries(
+          Object.entries(dependencies).map(([k, v]) => [
+            dependenciesToFrom[k],
+            v.replace(/[>=]*/, "")
+          ])
+        )
+      })) {
+        yield `FROM ${k}:${v}\n`;
       }
 
-      if (options.from) {
-        for (const [k, v] of Object.entries(options.from)) {
-          yield `
-FROM ${k}:${v}
-`;
-        }
-
-        if (options.entrypoints) {
-          yield `
-ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
-`;
-        }
+      if (options.entrypoints) {
+        yield `ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]\n`;
       }
     }
 

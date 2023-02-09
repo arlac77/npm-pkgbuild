@@ -84,16 +84,16 @@ async function* asLines(source) {
   }
 }
 
-export function quote(v) {
+export function quote(v, qc = "'") {
   if (v === undefined) return "";
 
   if (Array.isArray(v)) {
-    return "(" + v.map(x => quote(x)).join(" ") + ")";
+    return "(" + v.map(x => quote(x, qc)).join(" ") + ")";
   }
   if (typeof v === "number" || v instanceof Number) return v;
 
   if (typeof v === "string" || v instanceof String)
-    return v.match(/^\w+$/) ? v : "'" + v + "'";
+    return v.match(/^\w+$/) ? v : qc + v + qc;
 }
 
 export function asArray(o) {
@@ -159,7 +159,7 @@ export async function* copyEntries(
 
     const name = expander(
       d === undefined ? entry.name : d.endsWith("/") ? join(d, entry.name) : d
-    ).replace(/^\//,'');
+    ).replace(/^\//, "");
 
     entry.destination = name;
     const destination = join(destinationDirectory, name);

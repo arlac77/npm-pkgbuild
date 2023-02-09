@@ -9,12 +9,17 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { fieldProvider, copyEntries, utf8StreamOptions } from "../util.mjs";
+import {
+  fieldProvider,
+  copyEntries,
+  utf8StreamOptions,
+  quote
+} from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
 
 function* keyValueLines(key, value, options) {
-  yield `LABEL ${key}="${value}"${options.lineEnding}`;
+  yield `LABEL ${quote(key, '"')}=${quote(value, '"')}${options.lineEnding}`;
 }
 
 const labelKeyValuePairs = {

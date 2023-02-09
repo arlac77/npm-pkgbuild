@@ -162,8 +162,8 @@ test(
       v7: {
         pkgbuild: {
           output: {
-            arch: {},
-            debian: {}
+            arch: { key: "is arch" },
+            debian: { key: "is debian" }
           },
           install: "/v7",
           arch: ["x86_64", "aarch64", "armv7"],
@@ -180,6 +180,10 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4"
+      },
+      output: {
+        arch: { key: "is arch" },
+        debian: { key: "is debian" }
       }
     },
     {
@@ -189,6 +193,10 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4"
+      },
+      output: {
+        arch: { key: "is arch" },
+        debian: { key: "is debian" }
       }
     }
   ]

@@ -31,7 +31,7 @@ allInputs.forEach(i => program.option(`--${i.name}`, i.description));
 
 program
   .option("--verbose", "be more verbose", false)
-  .option("--dry", "do not execut, only print definitions", false)
+  .option("--dry", "do not execute, only print definitions", false)
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
@@ -86,6 +86,7 @@ program
           try {
             Object.assign(
               properties,
+              output,
               {
                 type: outputFactory.name,
                 "user-agent": `npm-pkgbuild-${version}`
@@ -112,7 +113,7 @@ program
                 })
             );
 
-            const output = new outputFactory(properties);
+            const o = new outputFactory(properties);
             const transformer = [
               createExpressionTransformer(
                 nameExtensionMatcher([
@@ -142,7 +143,7 @@ program
               console.log(kv(output.properties));
             }
 
-            const fileName = await output.execute(
+            const fileName = await o.execute(
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
               dependencies,
@@ -152,7 +153,7 @@ program
 
             if (!options.dry) {
               for (const p of options.publish) {
-                await publish(fileName, p, output.properties);
+                await publish(fileName, p, o.properties);
               }
             }
           } catch (e) {

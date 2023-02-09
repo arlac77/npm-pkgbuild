@@ -22,6 +22,12 @@ const labelKeyValuePairs = {
   keyValueLines
 };
 
+const dependenciesToFrom = {
+  node: "node",
+  "nginx-mainline": "nginx",
+  nginx: "nginx"
+};
+
 export class DOCKER extends Packager {
   static get name() {
     return "docker";
@@ -43,22 +49,26 @@ export class DOCKER extends Packager {
     );
 
     async function* trailingLines() {
-      if (dependencies.node) {
-        yield `
-FROM node:${dependencies.node.replace(/[>=]*/, "")}
+      for (const [k, v] of Object.entries(dependencies)) {
+        if (dependenciesToFrom[k]) {
+          yield `
+FROM ${dependenciesToFrom[k]}:${v.replace(/[>=]*/, "")}
 `;
+        }
       }
 
-      if (dependencies['nginx-mainline']) {
-        yield `
-FROM nginx:${dependencies['nginx-mainline'].replace(/[>=]*/, "")}
+      if (options.from) {
+        for (const [k, v] of Object.entries(options.from)) {
+          yield `
+FROM ${k}:${v}
 `;
-      }
+        }
 
-      if (options.entrypoints) {
-        yield `
+        if (options.entrypoints) {
+          yield `
 ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
 `;
+        }
       }
     }
 
@@ -93,7 +103,7 @@ ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
     }
 
     let image = "";
-    
+
     if (!options.dry) {
       const docker = await execa(this.constructor.name, ["build", staging], {
         cwd: staging
@@ -101,7 +111,7 @@ ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]
 
       const lines = docker.stdout.split(/\n/);
       image = lines[lines.length - 1];
- 
+
       if (options.verbose) {
         console.log(docker.stdout);
       }

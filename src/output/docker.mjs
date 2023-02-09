@@ -50,10 +50,9 @@ export class DOCKER extends Packager {
       for (const [k, v] of Object.entries({
         ...options.from,
         ...Object.fromEntries(
-          Object.entries(dependencies).map(([k, v]) => [
-            dependenciesToFrom[k],
-            v.replace(/[>=]*/, "")
-          ])
+          Object.entries(dependencies)
+            .filter(([k, v]) => dependenciesToFrom[k])
+            .map(([k, v]) => [dependenciesToFrom[k], v.replace(/[>=]*/, "")])
         )
       })) {
         yield `FROM ${k}:${v}\n`;

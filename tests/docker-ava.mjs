@@ -23,7 +23,7 @@ test.skip("docker", async t => {
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = { node: ">=18", "nginx-mainline": "1.2.3" };
+  const dependencies = { node: ">=18", "nginx-mainline": "1.2.3", "other": "2.3.4" };
   
   const fileName = await out.execute(sources, transformer, dependencies, {
     destination,

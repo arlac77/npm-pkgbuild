@@ -86,7 +86,7 @@ program
           try {
             Object.assign(
               properties,
-              output,
+              output[outputFactory.name],
               {
                 type: outputFactory.name,
                 "user-agent": `npm-pkgbuild-${version}`

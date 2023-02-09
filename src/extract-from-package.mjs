@@ -69,6 +69,7 @@ function* content2Sources(content, dir) {
       if (definition.type) {
         const type = allInputs.find(i => i.name === definition.type);
         if (type) {
+          Object.assign(definition, definition.type);
           delete definition.type;
           yield new type({ ...definition, dir }, entryProperties);
         } else {

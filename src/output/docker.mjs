@@ -48,7 +48,7 @@ export class DOCKER extends Packager {
 
     async function* trailingLines() {
       for (const [k, v] of Object.entries({
-        ...options.from,
+        ...properties.from,
         ...Object.fromEntries(
           Object.entries(dependencies)
             .filter(([k, v]) => dependenciesToFrom[k])

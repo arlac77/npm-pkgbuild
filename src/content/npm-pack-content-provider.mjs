@@ -1,5 +1,5 @@
 import { pipeline } from "node:stream/promises";
-import { createGunzip } from "zlib";
+import { createGunzip } from "node:zlib";
 import pacote from "pacote";
 import Arborist from "@npmcli/arborist";
 import { extract } from "tar-stream";

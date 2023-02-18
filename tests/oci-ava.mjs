@@ -7,7 +7,6 @@ import { createGunzip } from "node:zlib";
 import { pipeline } from "node:stream/promises";
 import { extract } from "tar-stream";
 import { execa } from "execa";
-
 import { FileContentProvider, OCI } from "npm-pkgbuild";
 
 test("oci", async t => {

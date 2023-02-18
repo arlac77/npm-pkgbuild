@@ -1,4 +1,4 @@
-import { join, dirname } from "node:path";
+import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { analysePublish } from "../publish.mjs";

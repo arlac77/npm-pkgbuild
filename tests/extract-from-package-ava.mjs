@@ -1,7 +1,7 @@
 import test from "ava";
-import { arch as hostArch } from "process";
-import { join } from "path";
-import { mkdir, writeFile } from "fs/promises";
+import { arch as hostArch } from "node:process";
+import { join } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 import {
   FileContentProvider,
   NPMPackContentProvider,

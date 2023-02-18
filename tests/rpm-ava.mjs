@@ -1,7 +1,7 @@
 import test from "ava";
-import { join } from "path";
-import { stat, mkdtemp } from "fs/promises";
-import { tmpdir } from "os";
+import { join } from "node:path";
+import { stat, mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { FileContentProvider, RPM } from "npm-pkgbuild";
 import { requiresFromDependencies } from "../src/output/rpm.mjs";
 

@@ -1,8 +1,8 @@
 import test from "ava";
-import { access, mkdtemp, readFile } from "fs/promises";
-import { constants } from "fs";
-import { join } from "path";
-import { tmpdir } from "os";
+import { access, mkdtemp, readFile } from "node:fs/promises";
+import { constants } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { ReadableStreamContentEntry, StringContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";

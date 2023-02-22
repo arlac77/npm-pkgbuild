@@ -31,6 +31,28 @@ test("arch default properties", async t => {
   });
 });
 
+test("arch aarch64 default properties", async t => {
+  const properties = {
+    name: "abc",
+    arch: ["aarch64"],
+    version: "1.0.0",
+    description: "a description",
+  };
+
+  const out = new ARCH(properties);
+
+  t.deepEqual(out.properties, {
+    ...properties,
+    epoch: 0,
+    arch: ["aarch64"],
+    pkgdesc: properties.description,
+    pkgver: properties.version,
+    pkgname: properties.name,
+    release: 1
+  });
+});
+
+
 test("arch", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({

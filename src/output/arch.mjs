@@ -140,7 +140,7 @@ package() {
 `;
     }
 
-    if (properties.backup && properties.backup[0] === "/") {
+    if (properties.backup?.[0] === "/") {
       properties.backup = properties.backup.replace(/\//, "");
     }
 

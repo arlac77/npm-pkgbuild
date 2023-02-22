@@ -92,7 +92,7 @@ export class ARCH extends Packager {
               .substring(i)
               .split(/\n/)[0]
               .match(/='([^'"]+)['"]/);
-            return m && m[1];
+            return m?.[1];
           }
         }
         _ext = getValue("PKGEXT");

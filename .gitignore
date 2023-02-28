@@ -1,5 +1,6 @@
 tests/fixtures/pkg/package-lock.json
 tests/fixtures/pkg/node_modules
+bun.lockb
 /node_modules/**
 build
 *.log

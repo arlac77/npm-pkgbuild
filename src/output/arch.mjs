@@ -91,7 +91,7 @@ export class ARCH extends Packager {
             const m = cfg
               .substring(i)
               .split(/\n/)[0]
-              .match(/='([^'"]+)['"]/);
+              .match(/=['"]([^'"]+)['"]/);
             return m?.[1];
           }
         }
@@ -102,8 +102,8 @@ export class ARCH extends Packager {
         _prepared = false;
       }
     }
- //   console.log("ARCH", variant.arch, _architecture,
- //    _prepared, (variant.arch === undefined || variant.arch === _architecture));
+   // console.log("ARCH", variant.arch, _architecture,
+   //  _prepared, (variant.arch === undefined || variant.arch === _architecture));
      
     return _prepared && (variant.arch === undefined || variant.arch === _architecture);
     }

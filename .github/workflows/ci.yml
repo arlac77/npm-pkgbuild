@@ -8,7 +8,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 16.19.0
+          - 16.19.1
           - 18.14.2
           - 19.4.0
     steps:

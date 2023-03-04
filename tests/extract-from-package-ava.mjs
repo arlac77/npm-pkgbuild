@@ -329,7 +329,8 @@ test(
             debian: {}
           },
           arch: ["x86_64", "aarch64", "armv7"],
-          variant: "mf"
+          variant: "mf",
+          content: { "/usr/lib/systemd/system/myservice.service": "a.service"}
         }
       }
     }
@@ -348,6 +349,16 @@ test(
         variant: "mf"
       },
       sources: [
+        new FileContentProvider(
+          {
+            base: new URL(
+              "../build/efpt-konsum-frontend/node_modules/hosting",
+              import.meta.url
+            ).pathname,
+            pattern: ["a.service"]
+          },
+          { destination: "/usr/lib/systemd/system/myservice.service" }
+        ),
         new NPMPackContentProvider(
           {
             dir: new URL("../build/efpt-konsum-frontend", import.meta.url)

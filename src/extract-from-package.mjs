@@ -114,11 +114,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
   await packageWalker(async (packageContent, dir, modulePath) => {
     let i = 0;
-    for (const pkgbuild of Array.isArray(packageContent.pkgbuild)
-      ? packageContent.pkgbuild
-      : packageContent.pkgbuild
-      ? [packageContent.pkgbuild]
-      : []) {
+    for (const pkgbuild of asArray(packageContent.pkgbuild)) {
       if (modulePath.length > 0 && !pkgbuild.variant) {
         continue;
       }
@@ -320,8 +316,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       sources.map(s => s.toString()).join("\n"),
       output,
       arch
-    );
-*/
+    );*/
 
     if (arch.size === 0) {
       yield result;

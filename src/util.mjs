@@ -97,7 +97,7 @@ export function quote(v, qc = "'") {
 }
 
 export function asArray(o) {
-  return Array.isArray(o) ? o : [o];
+  return Array.isArray(o) ? o : o ? [o] : [];
 }
 
 /**

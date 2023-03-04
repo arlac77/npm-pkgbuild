@@ -127,7 +127,8 @@ program
                   ".socket",
                   ".path",
                   ".timer",
-                  ".rules"
+                  ".rules",
+                  ".backup"
                 ]),
                 properties
               )

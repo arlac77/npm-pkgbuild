@@ -102,8 +102,6 @@ export class ARCH extends Packager {
         _prepared = false;
       }
     }
-   // console.log("ARCH", variant.arch, _architecture,
-   //  _prepared, (variant.arch === undefined || variant.arch === _architecture));
      
     return _prepared && (variant.arch === undefined || variant.arch === _architecture);
     }
@@ -191,7 +189,7 @@ package() {
         PACKAGER = person(properties.contributors);
       }
 
-      const makepkg = await execa("makepkg", ["-f", "-e"], {
+      const makepkg = await execa("makepkg", ["-c", "-f", "-e"], {
         cwd: staging,
         env: { PKGDEST: destination, PACKAGER }
       });

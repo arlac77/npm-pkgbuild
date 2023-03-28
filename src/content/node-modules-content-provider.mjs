@@ -230,7 +230,7 @@ const toBeSkipped = new RegExp(
       "\\.jscs\\.json",
       "sauce-labs\\.svg",
       "PATENTS(\\.md)?",
-      "release-notes\\.md",
+      "release(-notes)?\\.md",
       "NOTICE(\\.md)?",
       "SUMMARY\\.md",
       "MIGRAT.*\\.md",

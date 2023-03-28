@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { FileContentProvider, DOCKER } from "npm-pkgbuild";
 
 test.skip("docker", async t => {
-  const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
+  const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
     })[Symbol.asyncIterator]()
@@ -15,15 +15,14 @@ test.skip("docker", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT",
-    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
+    license: "MIT"
   };
 
   const out = new DOCKER(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = { node: ">=18", "nginx-mainline": "1.2.3", "other": "2.3.4" };
+  const dependencies = { node: ">=18" };
   
   const fileName = await out.execute(sources, transformer, dependencies, {
     destination,

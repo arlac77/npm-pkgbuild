@@ -127,6 +127,7 @@ const toBeSkipped = new RegExp(
   "(" +
     [
       "python3",
+      "\\.musl\\.node",
       "package-lock.json",
       "~",
       "\\.\\d",

@@ -128,6 +128,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (requires) {
         let fullfilled = true;
 
+/* TODO check dependencies later ?
+        if(required.dependencies) {
+        }
+*/
+      
         if (requires.properties) {
           for (const [k, v] of Object.entries(requires.properties)) {
             if (root.properties[k] !== v && options[k] !== v) {

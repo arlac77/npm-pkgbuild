@@ -29,7 +29,7 @@ test("docker", async t => {
     verbose: true
   });
 
-  t.truthy(fileName);
+  t.true(fileName != undefined);
   
 //  t.is(fileName, "sha256:f20abce055cd18ef7fd72bdc062720c266b27ba0c6e56bd07248811a6c2b455d");
 });

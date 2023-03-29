@@ -4,7 +4,7 @@ import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { FileContentProvider, DOCKER } from "npm-pkgbuild";
 
-test.skip("docker", async t => {
+test("docker", async t => {
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -23,14 +23,11 @@ test.skip("docker", async t => {
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
   const dependencies = { node: ">=18" };
-  
+
   const fileName = await out.execute(sources, transformer, dependencies, {
     destination,
     verbose: true
   });
 
-  t.is(fileName, join(destination, "abc-1.0.0-1.noarch.rpm"));
-
-  const s = await stat(fileName);
-  t.true(s.size >= 5000, `package file size ${s.size}`);
+  t.is(fileName, "sha256:f20abce055cd18ef7fd72bdc062720c266b27ba0c6e56bd07248811a6c2b455d");
 });

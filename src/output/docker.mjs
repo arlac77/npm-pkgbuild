@@ -109,15 +109,18 @@ export class DOCKER extends Packager {
         cwd: staging
       });
 
-      const lines = docker.stdout.split(/\n/);
-      image = lines[lines.length - 1];
-
+      const lines = docker.stderr.split(/\n/);
+      const wl = lines.filter(l=>l.match(/writing\s+image/));
+      if(wl?.[0]) {
+      	image = wl[0].split(/\s+/)[3];
+      }
+      
       if (options.verbose) {
+        console.log(docker.stderr);
         console.log(docker.stdout);
       }
     }
 
-    //console.log("IMAGE",image);
     return image;
   }
 }

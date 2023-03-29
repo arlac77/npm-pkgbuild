@@ -14,10 +14,10 @@
     "aur",
     "deb",
     "debian",
+    "makepkg",
     "package",
     "pacman",
     "pkgbuild",
-    "makepkg",
     "rpm",
     "rpmspec"
   ],

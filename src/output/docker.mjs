@@ -51,7 +51,7 @@ export class DOCKER extends Packager {
   ) {
     const { properties, staging } = await this.prepareExecute(options);
 
-    async function* trailingLines() {
+    async function* headLines() {
       for (const [k, v] of Object.entries({
         ...properties.from,
         ...Object.fromEntries(
@@ -62,7 +62,9 @@ export class DOCKER extends Packager {
       })) {
         yield `FROM ${k}:${v}\n`;
       }
+    }
 
+    async function* trailingLines() {
       if (options.entrypoints) {
         yield `ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]\n`;
       }
@@ -78,6 +80,7 @@ export class DOCKER extends Packager {
           entry.name,
           keyValueTransformer(await entry.readStream, fp, {
             ...labelKeyValuePairs,
+            headLines,
             trailingLines
           })
         ),

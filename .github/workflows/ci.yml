@@ -10,7 +10,7 @@ jobs:
         node-version:
           - 16.19.1
           - 18.15.0
-          - 19.4.0
+          - 19.8.1
     steps:
       - name: Dependencies
         run: >

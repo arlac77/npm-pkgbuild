@@ -101,10 +101,11 @@ export class DOCKER extends Packager {
       console.log(await readFile(join(staging, DOCKERFILE), utf8StreamOptions));
     }
 
+    let tag = `${properties.name}:${properties.version}`;
     let image = "";
 
     if (!options.dry) {
-      const docker = await execa(this.constructor.name, ["build", staging], {
+      const docker = await execa(this.constructor.name, ["build", "--tag", tag, staging], {
         cwd: staging
       });
 

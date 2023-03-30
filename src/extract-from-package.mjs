@@ -290,21 +290,21 @@ export async function* extractFromPackage(options = {}, env = {}) {
       let requirementsMet = true;
 
       const requires = fragment.requires;
-      if(requires) {
-        if(requires.output && !output[requires.output] ) {
-        	requirementMet = false;
-        	console.log("skipping output");
+      if (requires) {
+        if (requires.output && !output[requires.output]) {
+          requirementsMet = false;
+          console.log("skipping output", requires.output, output);
         }
         if (requires.dependencies) {
-        for (const [p, v] of Object.entries(requires.dependencies)) {
-          const pkgVersion = packages.get(p);
+          for (const [p, v] of Object.entries(requires.dependencies)) {
+            const pkgVersion = packages.get(p);
 
-          if (pkgVersion === undefined || !satisfies(pkgVersion, v)) {
-            requirementsMet = false;
-            break;
+            if (pkgVersion === undefined || !satisfies(pkgVersion, v)) {
+              requirementsMet = false;
+              break;
+            }
           }
         }
-      }
       }
 
       if (requirementsMet) {

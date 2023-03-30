@@ -170,7 +170,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
       const fragment = {
         name,
-        requires, // check remaining requirements later
+        requires,
         priority,
         depends: packageContent.engines || {},
         arch: new Set(),

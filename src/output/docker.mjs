@@ -109,16 +109,20 @@ export class DOCKER extends Packager {
     let image = "";
 
     if (!options.dry) {
-      const docker = await execa(this.constructor.name, ["build", "--tag", tag, staging], {
-        cwd: staging
-      });
+      const docker = await execa(
+        this.constructor.name,
+        ["build", "--tag", tag, staging],
+        {
+          cwd: staging
+        }
+      );
 
       const lines = docker.stderr.split(/\n/);
-      const wl = lines.filter(l=>l.match(/writing\s+image/));
-      if(wl?.[0]) {
-      	image = wl[0].split(/\s+/)[3];
+      const wl = lines.filter(l => l.match(/writing\s+image/));
+      if (wl?.[0]) {
+        image = wl[0].split(/\s+/)[3];
       }
-      
+
       if (options.verbose) {
         console.log(docker.stderr);
         console.log(docker.stdout);

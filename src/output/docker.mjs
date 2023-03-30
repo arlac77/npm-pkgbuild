@@ -65,13 +65,12 @@ export class DOCKER extends Packager {
     }
 
     async function* trailingLines() {
-      yield "WORKDIR /app";
-      yield "COPY . .";
-      if (options.entrypoints) {
-        yield `ENTRYPOINT ["node", ${Object.values(options.entrypoints)[0]}]\n`;
+      yield "WORKDIR /app\n";
+      yield "COPY . .\n";
+      if (properties.entrypoints) {
+        yield `ENTRYPOINT ["node", ${Object.values(properties.entrypoints)[0]}]\n`;
+        yield `CMD [ "node", ${Object.values(properties.entrypoints)[0]} ]\n`;
       }
-
-      yield `CMD [ "node", "server.js" ]`;
     }
 
     const fp = fieldProvider(properties, fields);

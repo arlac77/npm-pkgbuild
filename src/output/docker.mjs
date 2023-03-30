@@ -68,8 +68,7 @@ export class DOCKER extends Packager {
       yield "WORKDIR /app\n";
       yield "COPY . .\n";
       if (properties.entrypoints) {
-        yield `ENTRYPOINT ["node", ${Object.values(properties.entrypoints)[0]}]\n`;
-        yield `CMD [ "node", ${Object.values(properties.entrypoints)[0]} ]\n`;
+        yield `ENTRYPOINT ["node", "${Object.values(properties.entrypoints)[0]}"]\n`;
       }
     }
 

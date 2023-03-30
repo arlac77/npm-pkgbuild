@@ -44,6 +44,7 @@
     "@vercel/nft": "^0.22.5",
     "aggregate-async-iterator": "^1.1.16",
     "commander": "^10.0.0",
+    "compare-versions": "^6.0.0-rc.1",
     "content-entry": "^6.0.0",
     "content-entry-filesystem": "^5.2.13",
     "content-entry-transform": "^1.4.28",

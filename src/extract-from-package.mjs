@@ -2,6 +2,7 @@ import { join, resolve } from "node:path";
 import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
+import { satisfies } from "compare-versions";
 import { asArray } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
@@ -112,8 +113,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
   const fragments = {};
   let root, parent;
 
+  const packages = new Map();
+
   await packageWalker(async (packageContent, dir, modulePath) => {
     let i = 0;
+
+    packages.set(packageContent.name, packageContent.version);
+
     for (const pkgbuild of asArray(packageContent.pkgbuild)) {
       if (modulePath.length > 0 && !pkgbuild.variant) {
         continue;
@@ -128,11 +134,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (requires) {
         let fullfilled = true;
 
-/* TODO check dependencies later ?
-        if(required.dependencies) {
-        }
-*/
-      
         if (requires.properties) {
           for (const [k, v] of Object.entries(requires.properties)) {
             if (root.properties[k] !== v && options[k] !== v) {
@@ -152,23 +153,24 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
 
         if (fullfilled) {
-          if(options.verbose) {
+          if (options.verbose) {
             console.log(`${name}: requirement fullfilled`, requires);
           }
         } else {
-          if(options.verbose) {
+          if (options.verbose) {
             console.log(`${name}: requirement not fullfilled`, requires);
           }
           continue;
         }
       } else {
-        if(options.verbose) {
+        if (options.verbose) {
           console.log(`${name}: load`);
         }
       }
 
       const fragment = {
         name,
+        requires, // check remaining requirements later
         priority,
         depends: packageContent.engines || {},
         arch: new Set(),
@@ -285,12 +287,29 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragment;
       fragment = fragments[fragment.parent]
     ) {
-      arch = new Set([...arch, ...fragment.arch]);
-      properties = Object.assign({}, fragment.properties, properties);
-      Object.assign(depends, fragment.depends);
-      Object.assign(output, fragment.output);
-      if (fragment.content) {
-        content.push([fragment.content, fragment.dir]);
+      let requirementsMet = true;
+
+      if (fragment?.requires?.dependencies) {
+        for (const [p, v] of Object.entries(fragment.requires.dependencies)) {
+          const pkgVersion = packages.get(p);
+
+          if (pkgVersion === undefined || !satisfies(pkgVersion, v)) {
+            requirementsMet = false;
+            break;
+          }
+        }
+      }
+
+      if (requirementsMet) {
+        arch = new Set([...arch, ...fragment.arch]);
+        properties = Object.assign({}, fragment.properties, properties);
+        Object.assign(depends, fragment.depends);
+        Object.assign(output, fragment.output);
+        if (fragment.content) {
+          content.push([fragment.content, fragment.dir]);
+        }
+      } else {
+        console.log("requirements not met", fragment.name);
       }
     }
 
@@ -313,7 +332,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       properties: context.expand(properties)
     };
 
-/*
+    /*
     console.log(
       "RESULT",
       result.variant,

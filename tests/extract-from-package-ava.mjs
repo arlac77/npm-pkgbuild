@@ -481,3 +481,36 @@ test(
     }
   ]
 );
+
+test.skip(
+  efpt,
+  {
+    name: "n15",
+    pkgbuild: {
+      p1: false
+    },
+    node_modules: {
+      hosting: {
+        version: "1.0.0",
+        pkgbuild: {
+          variant: "v12",
+          requires: {
+            dependencies: {
+              hosting : ">=1.0.0"
+            }
+          }
+        }
+      }
+    }
+  },
+  [
+    {
+      properties: {
+        access: "private",
+        name: "n15",
+        variant: "v12",
+        p1: false
+      }
+    }
+  ]
+);

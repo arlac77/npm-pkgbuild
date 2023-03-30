@@ -289,8 +289,14 @@ export async function* extractFromPackage(options = {}, env = {}) {
     ) {
       let requirementsMet = true;
 
-      if (fragment?.requires?.dependencies) {
-        for (const [p, v] of Object.entries(fragment.requires.dependencies)) {
+      const requires = fragment.requires;
+      if(requires) {
+        if(requires.output && !output[requires.output] ) {
+        	requirementMet = false;
+        	console.log("skipping output");
+        }
+        if (requires.dependencies) {
+        for (const [p, v] of Object.entries(requires.dependencies)) {
           const pkgVersion = packages.get(p);
 
           if (pkgVersion === undefined || !satisfies(pkgVersion, v)) {
@@ -298,6 +304,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
             break;
           }
         }
+      }
       }
 
       if (requirementsMet) {

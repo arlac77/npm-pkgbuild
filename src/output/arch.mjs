@@ -207,6 +207,8 @@ function person(contributors) {
   return contributors[0].name + " " + contributors[0].email;
 }
 
+const default_attribute = { type: "string" };
+
 /**
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
@@ -223,26 +225,26 @@ const fields = {
   license: { type: "string[]", mandatory: true },
   install: { type: "string" },
   changelog: { type: "string" },
-  source: { type: "string[]" },
-  validpgpkeys: { type: "string[]" },
-  noextract: { type: "string[]" },
-  cksums: { type: "string[]" },
-  md5sums: { type: "string[]" },
-  sha1sums: { type: "string[]" },
-  sha256sums: { type: "string[]" },
-  sha384sums: { type: "string[]" },
-  sha512sums: { type: "string[]" },
-  groups: { type: "string[]" },
+  source: default_attribute,
+  validpgpkeys: default_attribute,
+  noextract: default_attribute,
+  cksums: default_attribute,
+  md5sums: default_attribute,
+  sha1sums: default_attribute,
+  sha256sums: default_attribute,
+  sha384sums: default_attribute,
+  sha512sums: default_attribute,
+  groups: default_attribute,
   arch: { default: ["any"], type: "string[]", mandatory: true },
-  backup: { type: "string[]" },
-  depends: { type: "string[]" },
-  makedepends: { /*default: ["nodejs>=16.13.1"],*/ type: "string[]" },
-  checkdepends: { type: "string[]" },
-  optdepends: { type: "string[]" },
-  conflicts: { type: "string[]" },
-  provides: { type: "string[]" },
-  replaces: { type: "string[]" },
-  options: { type: "string[]" }
+  backup: default_attribute,
+  depends: default_attribute,
+  makedepends: default_attribute,
+  checkdepends: default_attribute,
+  optdepends: default_attribute,
+  conflicts: default_attribute,
+  provides: default_attribute,
+  replaces: default_attribute,
+  options: default_attribute
 };
 
 function normalizeExpression(e) {

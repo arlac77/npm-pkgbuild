@@ -208,6 +208,7 @@ function person(contributors) {
 }
 
 const default_attribute = { type: "string" };
+const default_array_attribute = { type: "string[]" };
 
 /**
  * well known package properties
@@ -225,19 +226,19 @@ const fields = {
   license: { type: "string[]", mandatory: true },
   install: { type: "string" },
   changelog: { type: "string" },
-  source: default_attribute,
-  validpgpkeys: default_attribute,
+  source: default_array_attribute,
+  validpgpkeys: default_array_attribute,
   noextract: default_attribute,
-  cksums: default_attribute,
-  md5sums: default_attribute,
-  sha1sums: default_attribute,
-  sha256sums: default_attribute,
-  sha384sums: default_attribute,
-  sha512sums: default_attribute,
-  groups: default_attribute,
-  arch: { default: ["any"], type: "string[]", mandatory: true },
+  cksums: default_array_attribute,
+  md5sums: default_array_attribute,
+  sha1sums: default_array_attribute,
+  sha256sums: default_array_attribute,
+  sha384sums: default_array_attribute,
+  sha512sums: default_array_attribute,
+  groups: default_array_attribute,
+  arch: { ...default_array_attribute, default: ["any"], mandatory: true },
   backup: default_attribute,
-  depends: default_attribute,
+  depends: default_array_attribute,
   makedepends: default_attribute,
   checkdepends: default_attribute,
   optdepends: default_attribute,

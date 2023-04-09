@@ -8,6 +8,7 @@ import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs"
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
 import { NFTContentProvider } from "./content/nft-content-provider.mjs";
+import { ContentProvider } from "./content/content-provider.mjs";
 import { DEBIAN } from "./output/debian.mjs";
 import { ARCH } from "./output/arch.mjs";
 import { RPM } from "./output/rpm.mjs";

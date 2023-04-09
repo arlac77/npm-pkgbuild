@@ -132,7 +132,7 @@ export class DOCKER extends Packager {
 }
 
 /**
- * @see {https://docs.docker.com/engine/reference/builder/}
+ * @see {@link https://docs.docker.com/engine/reference/builder/}
  */
 const fields = {
   version: { type: "string", mandatory: true },

@@ -2,7 +2,12 @@ import { join, dirname } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
+import { ContentEntry } from "content-entry";
 
+/**
+ * @type {Object}
+ * @property {BufferEncoding} encoding
+ */
 export const utf8StreamOptions = { encoding: "utf8" };
 
 /**

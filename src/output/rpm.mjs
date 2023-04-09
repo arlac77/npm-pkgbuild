@@ -82,7 +82,8 @@ export class RPM extends Packager {
   /**
    * Check for rpmbuild presence.
    * @param {Object} options
-   * @param {string} variant
+   * @param {Object} variant
+   * @param {string} variant.arch
    * @returns {Promise<boolean>} true when rpmbuild executable is present
    */
   static async prepare(options, variant) {

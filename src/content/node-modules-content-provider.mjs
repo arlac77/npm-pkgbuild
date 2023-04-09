@@ -12,6 +12,8 @@ import { shrinkNPM } from "../npm-shrink.mjs";
 
 /**
  * Content from node_modules
+ * 
+ * @property {boolean} withoutDevelpmentDependencies
  */
 export class NodeModulesContentProvider extends ContentProvider {
   /**

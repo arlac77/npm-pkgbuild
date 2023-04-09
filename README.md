@@ -88,10 +88,13 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 ### Table of Contents
 
 *   [ContentProvider](#contentprovider)
+    *   [Properties](#properties)
     *   [asyncIterator](#asynciterator)
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters)
     *   [name](#name)
+*   [utf8StreamOptions](#utf8streamoptions)
+    *   [Properties](#properties-1)
 *   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-1)
@@ -108,6 +111,7 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [name](#name-1)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-7)
+    *   [Properties](#properties-2)
     *   [name](#name-2)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
     *   [Parameters](#parameters-8)
@@ -120,24 +124,29 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
 *   [Field](#field)
-    *   [Properties](#properties)
+    *   [Properties](#properties-3)
 *   [Packager](#packager)
     *   [Parameters](#parameters-9)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
         *   [Parameters](#parameters-10)
-*   [prepare](#prepare)
-    *   [Parameters](#parameters-11)
+*   [RPM](#rpm)
+    *   [prepare](#prepare)
+        *   [Parameters](#parameters-11)
 
 ## ContentProvider
 
 Source of package content.
 
+### Properties
+
+*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
 ### asyncIterator
 
 List all entries.
 
-Returns **asyncIterator\<ContentEntry>** all entries
+Returns **AsyncIterator\<ContentEntry>** all entries
 
 ## FileContentProvider
 
@@ -156,6 +165,14 @@ Content provided form the file system.
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## utf8StreamOptions
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+*   `encoding` **BufferEncoding**&#x20;
 
 ## packageNameMapping
 
@@ -210,7 +227,6 @@ Destination paths a generated without leading '/' (as for entry names too).
 *   `source` **AsyncIterator\<ContentEntry>**&#x20;
 *   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
-*   `attributes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<ContentEntryAttribute>**&#x20;
 
 ## NFTContentProvider
 
@@ -241,6 +257,10 @@ Content from node\_modules
 *   `definitions` &#x20;
 *   `entryProperties` &#x20;
 
+### Properties
+
+*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
@@ -262,6 +282,8 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ## pkgKeyValuePairOptions
 
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
 ## fields
 
 well known package properties
@@ -274,7 +296,7 @@ well known package properties
 
 ## fields
 
-*   **See**: {<https://docs.docker.com/engine/reference/builder/}>
+*   **See**: <https://docs.docker.com/engine/reference/builder/>
 
 ## fields
 
@@ -323,16 +345,24 @@ Execute package generation
 *   `options` &#x20;
 *   `expander` &#x20;
 
-## prepare
+## RPM
+
+**Extends Packager**
+
+produce rpm packages
+
+### prepare
 
 Check for rpmbuild presence.
 
-### Parameters
+#### Parameters
 
-*   `options` &#x20;
-*   `variant` &#x20;
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
-Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true when rpmbuild is present
+    *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when rpmbuild executable is present
 
 # install
 

@@ -1,6 +1,6 @@
 const nameAndVersion = ["name", "version"];
 
-export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDefaults: flase }) {
+export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDefaults: false }) {
   const toBeRemoved = [
     "dependencies",
     "sideEffects",

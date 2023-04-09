@@ -147,7 +147,6 @@ export function fieldProvider(properties, fields) {
  * @param {AsyncIterator<ContentEntry>} source
  * @param {string} destinationDirectory
  * @param {Expander} expander
- * @param {ContentEntryAttribute[]} attributes
  */
 export async function* copyEntries(
   source,

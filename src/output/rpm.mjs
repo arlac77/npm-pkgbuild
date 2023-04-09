@@ -45,6 +45,9 @@ export function requiresFromDependencies(dependencies) {
   );
 }
 
+/**
+ * produce rpm packages
+ */
 export class RPM extends Packager {
   static get name() {
     return "rpm";
@@ -78,7 +81,9 @@ export class RPM extends Packager {
 
   /**
    * Check for rpmbuild presence.
-   * @returns {boolean} true when rpmbuild is present
+   * @param {Object} options
+   * @param {string} variant
+   * @returns {Promise<boolean>} true when rpmbuild executable is present
    */
   static async prepare(options, variant) {
     try {

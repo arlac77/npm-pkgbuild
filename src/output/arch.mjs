@@ -32,7 +32,7 @@ function* keyValueLines(key, value, options) {
 }
 
 /**
- * @type KeyValueTransformOptions
+ * @type {Object} KeyValueTransformOptions
  * Options to describe key value pair separated by an equal sign '='
  */
 export const pkgKeyValuePairOptions = {

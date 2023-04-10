@@ -105,7 +105,7 @@ function* content2Sources(content, dir) {
  * - architectures are taken from cpu (node arch ids) and from pkgbuild.arch (raw arch ids)
  * - architecture given in a variant definition are used to restrict the set of avaliable architectures
  * @param {Object} options
- * @param {string} options.dir where to look for package.json
+ * @param {string} [options.dir] where to look for package.json
  * @param {Object} env as delared in process.env
  * @returns {AsyncIterator<PackageDefinition>}
  */

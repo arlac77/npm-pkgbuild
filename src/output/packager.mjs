@@ -28,7 +28,12 @@ export class Packager {
     };
   }
 
-  static prepare() {
+  /**
+   * @param {Object} options
+   * @param {Object} variant
+   * @return {Promise<boolean>}
+   */
+  static async prepare(options,variant) {
     return false;
   }
 
@@ -114,7 +119,8 @@ export class Packager {
   }
 
   /**
-   * Execute package generation
+   * Execute package generation.
+   * @return {Promise<string>} location of the resulting package
    */
   async execute(sources, transformer, dependencies, options, expander) {}
 }

@@ -47,6 +47,12 @@ export class DEBIAN extends Packager {
     return fields;
   }
 
+  /**
+   * @param {Object} options
+   * @param {Object} variant
+   * @param {string} variant.arch
+   * @return {Promise<boolean>}
+   */
   static async prepare(options,variant) {
     try {
       await execa("dpkg", ["--version"]);

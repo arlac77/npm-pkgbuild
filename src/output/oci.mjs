@@ -64,7 +64,7 @@ export class OCI extends Packager {
     return ".oci.tar.gz";
   }
 
-  static prepare() {
+  static async prepare(options, variant) {
     return true;
   }
 

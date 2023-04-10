@@ -123,16 +123,20 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [fields](#fields-3)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
+*   [prepare](#prepare)
+    *   [Parameters](#parameters-9)
 *   [Field](#field)
     *   [Properties](#properties-3)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-9)
+    *   [Parameters](#parameters-10)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-10)
-*   [RPM](#rpm)
-    *   [prepare](#prepare)
         *   [Parameters](#parameters-11)
+    *   [prepare](#prepare-1)
+        *   [Parameters](#parameters-12)
+*   [RPM](#rpm)
+    *   [prepare](#prepare-2)
+        *   [Parameters](#parameters-13)
 
 ## ContentProvider
 
@@ -310,6 +314,17 @@ map install hook named from arch to deb
 
 map install hook named from arch to rpm
 
+## prepare
+
+### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+    *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
 ## Field
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
@@ -335,7 +350,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### execute
 
-Execute package generation
+Execute package generation.
 
 #### Parameters
 
@@ -344,6 +359,17 @@ Execute package generation
 *   `dependencies` &#x20;
 *   `options` &#x20;
 *   `expander` &#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** location of the resulting package
+
+### prepare
+
+#### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
 
 ## RPM
 

@@ -237,7 +237,7 @@ const fields = {
   sha512sums: default_array_attribute,
   groups: default_array_attribute,
   arch: { ...default_array_attribute, default: ["any"], mandatory: true },
-  backup: default_attribute,
+  backup: default_array_attribute,
   depends: default_array_attribute,
   makedepends: default_attribute,
   checkdepends: default_attribute,

@@ -10,7 +10,6 @@ jobs:
         node-version:
           - 16.20.0
           - 18.16.0
-          - 19.8.1
           - 20.0.0
     steps:
       - name: Dependencies

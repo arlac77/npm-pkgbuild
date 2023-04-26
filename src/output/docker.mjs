@@ -52,6 +52,7 @@ export class DOCKER extends Packager {
     const { properties, staging } = await this.prepareExecute(options);
 
     async function* headLines() {
+      let scratch = true;
       for (const [k, v] of Object.entries({
         ...properties.from,
         ...Object.fromEntries(
@@ -60,12 +61,17 @@ export class DOCKER extends Packager {
             .map(([k, v]) => [dependenciesToFrom[k], v.replace(/[>=]*/, "")])
         )
       })) {
+        scratch = false;
         yield `FROM ${k}:${v}\n`;
+      }
+
+      if(scratch) {
+      	yield "FROM scratch\n";
       }
     }
 
     async function* trailingLines() {
-      yield "WORKDIR /app\n";
+      yield `WORKDIR ${properties.workdir}\n`;
       yield "COPY . .\n";
       if (properties.entrypoints) {
         yield `ENTRYPOINT ["node", "${Object.values(properties.entrypoints)[0]}"]\n`;
@@ -137,5 +143,6 @@ export class DOCKER extends Packager {
 const fields = {
   version: { type: "string", mandatory: true },
   description: { type: "string" },
-  author: { alias: "maintainer", type: "string" }
+  author: { alias: "maintainer", type: "string" },
+  workdir: { type: "string", default: "/", mandatory: true }
 };

@@ -42,7 +42,7 @@
     "tsc:types": "tsc -d --allowJs --declarationDir dist --emitDeclarationOnly ./src/extract-from-package.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^6.2.8",
+    "@npmcli/arborist": "^6.2.9",
     "@vercel/nft": "^0.22.5",
     "aggregate-async-iterator": "^1.1.16",
     "commander": "^10.0.1",

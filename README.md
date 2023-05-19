@@ -98,6 +98,8 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-1)
+*   [FunctionDecl](#functiondecl)
+    *   [Properties](#properties-2)
 *   [extractFunctions](#extractfunctions)
     *   [Parameters](#parameters-2)
 *   [fieldProvider](#fieldprovider)
@@ -111,10 +113,11 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [name](#name-1)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-7)
-    *   [Properties](#properties-2)
+    *   [Properties](#properties-3)
     *   [name](#name-2)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
     *   [Parameters](#parameters-8)
+    *   [Properties](#properties-4)
     *   [name](#name-3)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [fields](#fields)
@@ -126,7 +129,7 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [prepare](#prepare)
     *   [Parameters](#parameters-9)
 *   [Field](#field)
-    *   [Properties](#properties-3)
+    *   [Properties](#properties-5)
 *   [Packager](#packager)
     *   [Parameters](#parameters-10)
     *   [tmpdir](#tmpdir)
@@ -192,6 +195,15 @@ Decode a password
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** plaintext password
 
+## FunctionDecl
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `body` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
+
 ## extractFunctions
 
 Extract shell functions from a given text.
@@ -200,7 +212,7 @@ Extract shell functions from a given text.
 
 *   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
 
-Returns **AsyncIterator\<FunctionDecl>**&#x20;
+Returns **AsyncIterator<[FunctionDecl](#functiondecl)>**&#x20;
 
 ## fieldProvider
 
@@ -279,6 +291,10 @@ Content from npm pack.
 
 *   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
+
+### Properties
+
+*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ### name
 

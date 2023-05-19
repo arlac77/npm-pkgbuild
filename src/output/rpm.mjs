@@ -19,6 +19,11 @@ import {
   packageNameMapping
 } from "../util.mjs";
 
+
+function quoteFile(name) {
+  return name.match(/\s/) ? "\"" + name + "\"" : name;
+}
+
 /**
  * map install hook named from arch to rpm
  */
@@ -132,7 +137,7 @@ export class RPM extends Packager {
 
       yield `%files\n\n`;
       for (const file of files) {
-        yield "/" + file + "\n";
+        yield quoteFile("/" + file) + "\n";
       }
 
       for await (const file of copyEntries(

@@ -36,6 +36,12 @@ export function decodePassword(password) {
 }
 
 /**
+ * @typedef {Object} FunctionDecl
+ * @property {string} name
+ * @property {string[]} body
+ */
+
+/**
  * Extract shell functions from a given text.
  * @param {AsyncIterator<string>} source
  * @return {AsyncIterator<FunctionDecl>}

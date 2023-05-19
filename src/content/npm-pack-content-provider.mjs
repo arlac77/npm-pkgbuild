@@ -11,6 +11,7 @@ import { ContentProvider } from "./content-provider.mjs";
  *
  * @param {Object} definitions
  * @param {Object} entryProperties to be set for each entry
+ * @property {string} dir
  */
 export class NPMPackContentProvider extends ContentProvider {
   /**

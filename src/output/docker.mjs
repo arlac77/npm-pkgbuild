@@ -141,6 +141,7 @@ export class DOCKER extends Packager {
  * @see {@link https://docs.docker.com/engine/reference/builder/}
  */
 const fields = {
+  name: { type: "string", set: value => value.toLowerCase() },
   version: { type: "string", mandatory: true },
   description: { type: "string" },
   author: { alias: "maintainer", type: "string" },

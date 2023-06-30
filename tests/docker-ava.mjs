@@ -12,7 +12,7 @@ test("docker", async t => {
   );
 
   const properties = {
-    name: "abc",
+    name: "ABC",
     version: "1.0.0",
     description: "a description",
     license: "MIT",

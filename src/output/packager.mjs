@@ -19,6 +19,9 @@ export class Packager {
     return {};
   }
 
+  /**
+   * @return {Object}
+   */
   static get workspaceLayout() {
     return {
       named: {
@@ -56,7 +59,7 @@ export class Packager {
     Object.entries(this.fields).forEach(([k, v]) => {
       const e = properties[v.alias];
       if (e !== undefined) {
-        properties[k] = e;
+        properties[k] = v.set ? v.set(e) : e;
       } else {
         const vak = v.alias || k;
         if (v.default !== undefined) {

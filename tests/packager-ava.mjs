@@ -3,7 +3,7 @@ import { Packager } from "npm-pkgbuild";
 
 class MyPackager extends Packager {
   static get fields() {
-    return { a: { detault: "av", mandatory: true }, b: { default: "bv" } };
+    return { a: { detault: "av", mandatory: true }, b: { default: "bv", set: value => value.toLowerCase() } };
   }
 
   static get workspaceLayout() {
@@ -19,6 +19,11 @@ class MyPackager extends Packager {
 test("packager fields", t => {
   const p = new MyPackager();
   t.truthy(p.fields.a);
+});
+
+test("packager property set", t => {
+  const p = new MyPackager({ b: "ABC" });
+  t.is(p.properties.b, "abc");
 });
 
 test("packager properties", t => {

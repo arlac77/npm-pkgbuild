@@ -135,6 +135,7 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
         *   [Parameters](#parameters-11)
+    *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-12)
 *   [RPM](#rpm)
@@ -377,6 +378,10 @@ Execute package generation.
 *   `expander` &#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** location of the resulting package
+
+### workspaceLayout
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ### prepare
 

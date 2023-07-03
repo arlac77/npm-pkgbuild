@@ -59,13 +59,14 @@ export class Packager {
     const properties = this.#properties;
 
     Object.entries(this.fields).forEach(([k, v]) => {
+      if(v.set && properties[k] !== undefined) {
+        properties[k] = v.set(properties[k]);
+      }
+
       const e = properties[v.alias];
       if (e !== undefined) {
         properties[k] = v.set ? v.set(e) : e;
       } else {
-        if(v.set && properties[k] !== undefined) {
-          properties[k] = v.set(properties[k]);
-        }
 
         const vak = v.alias || k;
         if (v.default !== undefined) {

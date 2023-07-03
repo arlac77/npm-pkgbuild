@@ -42,6 +42,10 @@ export class DOCKER extends Packager {
     return `generate container image with ${this.name}`;
   }
 
+  static get fields() {
+    return fields;
+  }
+
   async execute(
     sources,
     transformer,
@@ -50,7 +54,7 @@ export class DOCKER extends Packager {
     expander = v => v
   ) {
     const { properties, staging } = await this.prepareExecute(options);
-
+    
     async function* headLines() {
       let scratch = true;
       for (const [k, v] of Object.entries({
@@ -141,7 +145,7 @@ export class DOCKER extends Packager {
  * @see {@link https://docs.docker.com/engine/reference/builder/}
  */
 const fields = {
-  name: { type: "string", set: value => value.toLowerCase() },
+  name: { type: "string", mandatory: true, set: value => value.toLowerCase() },
   version: { type: "string", mandatory: true },
   description: { type: "string" },
   author: { alias: "maintainer", type: "string" },

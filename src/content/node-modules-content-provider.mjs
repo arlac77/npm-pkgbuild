@@ -219,6 +219,7 @@ const toBeSkipped = new RegExp(
       "verb\\.md",
       "\\.nvmrc",
       "bower\\.json",
+      "nodemon\\.json",
       "\\.bash_completion.*",
       "\\.coveralls\\.yml",
       "\\.istanbul\\.yml",

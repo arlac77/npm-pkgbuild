@@ -28,9 +28,8 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   constructor(definitions, entryProperties) {
-    super();
+    super(definitions, entryProperties);
     Object.assign(this, { withoutDevelpmentDependencies: true }, definitions);
-    this.entryProperties = entryProperties;
   }
 
   toString() {

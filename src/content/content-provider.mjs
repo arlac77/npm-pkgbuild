@@ -3,8 +3,30 @@ import { ContentEntry } from "content-entry";
 /**
  * Source of package content.
  * @property {string} dir
+ * @property {Transformer[]} transformer 
  */
 export class ContentProvider {
+
+  transformers = [];
+  entryProperties;
+  dir;
+  
+  constructor(definitions, entryProperties) {
+    if (entryProperties) {
+      this.entryProperties = entryProperties;
+
+      for (const a of ["mode"]) {
+        if (this.entryProperties[a] !== undefined) {
+          if (!this.baseProperties) {
+            this.baseProperties = {};
+          }
+          this.baseProperties[a] = { value: this.entryProperties[a] };
+          delete this.entryProperties[a];
+        }
+      }
+    }
+  }
+
   /**
    * List all entries.
    * @return {AsyncIterator<ContentEntry>} all entries

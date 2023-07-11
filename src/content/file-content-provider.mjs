@@ -21,7 +21,7 @@ export class FileContentProvider extends ContentProvider {
   }
 
   constructor(definitions, entryProperties) {
-    super();
+    super(definitions, entryProperties);
 
     if (typeof definitions === "string") {
       if (definitions.endsWith("/")) {
@@ -39,20 +39,6 @@ export class FileContentProvider extends ContentProvider {
     } else {
       this.definitions = { pattern: DEFAULT_PATTERN, ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
-    }
-
-    this.entryProperties = entryProperties;
-
-    if (this.entryProperties) {
-      for (const a of ["mode"]) {
-        if (this.entryProperties[a] !== undefined) {
-          if (!this.baseProperties) {
-            this.baseProperties = {};
-          }
-          this.baseProperties[a] = { value: this.entryProperties[a] };
-          delete this.entryProperties[a];
-        }
-      }
     }
   }
 

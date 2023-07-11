@@ -24,27 +24,13 @@ export class NFTContentProvider extends ContentProvider {
   }
   
   constructor(definitions, entryProperties) {
-    super();
+    super(definitions, entryProperties);
 
     if (typeof definitions === "string") {
       this.definitions = { start: [definitions] };
     } else {
       this.definitions = definitions;
       this.definitions.start = asArray(this.definitions.start);
-    }
-
-    this.entryProperties = entryProperties;
-
-    if (this.entryProperties) {
-      for (const a of ["mode"]) {
-        if (this.entryProperties[a] !== undefined) {
-          if (!this.baseProperties) {
-            this.baseProperties = {};
-          }
-          this.baseProperties[a] = { value: this.entryProperties[a] };
-          delete this.entryProperties[a];
-        }
-      }
     }
   }
 

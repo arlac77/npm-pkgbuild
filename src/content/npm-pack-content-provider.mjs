@@ -26,10 +26,8 @@ export class NPMPackContentProvider extends ContentProvider {
   }
 
   constructor(definitions, entryProperties) {
-    super();
+    super(definitions, entryProperties);
     Object.assign(this, definitions);
-
-    this.entryProperties = entryProperties;
   }
 
   toString() {

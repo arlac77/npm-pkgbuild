@@ -88,35 +88,36 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 ### Table of Contents
 
 *   [ContentProvider](#contentprovider)
+    *   [Parameters](#parameters)
     *   [Properties](#properties)
     *   [asyncIterator](#asynciterator)
 *   [FileContentProvider](#filecontentprovider)
-    *   [Parameters](#parameters)
+    *   [Parameters](#parameters-1)
     *   [name](#name)
 *   [utf8StreamOptions](#utf8streamoptions)
     *   [Properties](#properties-1)
 *   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-1)
+    *   [Parameters](#parameters-2)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-2)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-2)
-*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-3)
-*   [Expander](#expander)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-4)
-*   [copyEntries](#copyentries)
+*   [Expander](#expander)
     *   [Parameters](#parameters-5)
-*   [NFTContentProvider](#nftcontentprovider)
+*   [copyEntries](#copyentries)
     *   [Parameters](#parameters-6)
+*   [NFTContentProvider](#nftcontentprovider)
+    *   [Parameters](#parameters-7)
     *   [name](#name-1)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-8)
     *   [Properties](#properties-3)
     *   [name](#name-2)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-8)
+    *   [Parameters](#parameters-9)
     *   [Properties](#properties-4)
     *   [name](#name-3)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
@@ -127,28 +128,34 @@ see [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
 *   [prepare](#prepare)
-    *   [Parameters](#parameters-9)
+    *   [Parameters](#parameters-10)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-10)
+    *   [Parameters](#parameters-11)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-12)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-1)
-        *   [Parameters](#parameters-12)
+        *   [Parameters](#parameters-13)
 *   [RPM](#rpm)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-13)
+        *   [Parameters](#parameters-14)
 
 ## ContentProvider
 
 Source of package content.
 
+### Parameters
+
+*   `definitions` &#x20;
+*   `entryProperties` &#x20;
+
 ### Properties
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<Transformer>**&#x20;
 
 ### asyncIterator
 

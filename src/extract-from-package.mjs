@@ -50,7 +50,7 @@ export const npmArchMapping = {
 const entryAttributeNames = ["owner", "group", "mode"];
 
 /**
- * Delivers ContentProviders from pkgbuild.content
+ * Delivers ContentProviders from pkgbuild.content definition.
  * @param {Object} content from pkgbuild.content
  * @returns {Iterator<ContentProvider>}
  */

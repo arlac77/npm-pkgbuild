@@ -4,9 +4,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
 import {
-  createExpressionTransformer,
-  nameExtensionMatcher
+  createExpressionTransformer
 } from "content-entry-transform";
+import { UTIController } from "uti";
 import { utf8StreamOptions } from "./util.mjs";
 import {
   FileContentProvider,
@@ -57,6 +57,8 @@ program
   )
   .action(async options => {
     try {
+      const uc = new UTIController();
+
       options.publish = preparePublish(options.publish, process.env);
 
       for await (const {
@@ -116,20 +118,10 @@ program
             const o = new outputFactory(properties);
             const transformer = [
               createExpressionTransformer(
-                nameExtensionMatcher([
-                  ".conf",
-                  ".json",
-                  ".html",
-                  ".css",
-                  ".txt",
-                  ".webmanifest",
-                  ".service",
-                  ".socket",
-                  ".path",
-                  ".timer",
-                  ".rules",
-                  ".backup"
-                ]),
+                (entry) => {
+                  const flag = uc.fileNameConformsTo(entry.name, "public.text");
+                  console.log("UTI", entry.name, flag);
+                  return flag; },
                 properties
               )
             ];

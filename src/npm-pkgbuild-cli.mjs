@@ -118,10 +118,7 @@ program
             const o = new outputFactory(properties);
             const transformer = [
               createExpressionTransformer(
-                (entry) => {
-                  const flag = uc.fileNameConformsTo(entry.name, "public.text");
-                  console.log("UTI", entry.name, flag);
-                  return flag; },
+                (entry) => uc.fileNameConformsTo(entry.name, "public.text"),
                 properties
               )
             ];

@@ -3,11 +3,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
-import {
-  createExpressionTransformer
-} from "content-entry-transform";
+import { createExpressionTransformer } from "content-entry-transform";
 import { UTIController } from "uti";
 import { utf8StreamOptions } from "./util.mjs";
+import additionalUTIs from "./utis.mjs";
 import {
   FileContentProvider,
   allInputs,
@@ -58,6 +57,7 @@ program
   .action(async options => {
     try {
       const uc = new UTIController();
+      uc.register(additionalUTIs);
 
       options.publish = preparePublish(options.publish, process.env);
 
@@ -118,7 +118,7 @@ program
             const o = new outputFactory(properties);
             const transformer = [
               createExpressionTransformer(
-                (entry) => uc.fileNameConformsTo(entry.name, "public.text"),
+                entry => uc.fileNameConformsTo(entry.name, "public.text"),
                 properties
               )
             ];

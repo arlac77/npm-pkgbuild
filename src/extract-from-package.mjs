@@ -106,6 +106,7 @@ function* content2Sources(content, dir) {
  * - architecture given in a variant definition are used to restrict the set of avaliable architectures
  * @param {Object} options
  * @param {string} [options.dir] where to look for package.json
+ * @param {boolean} [options.verbose] log
  * @param {Object} env as delared in process.env
  * @returns {AsyncIterator<PackageDefinition>}
  */

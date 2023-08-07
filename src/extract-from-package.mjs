@@ -215,7 +215,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         fragment.parent =
           modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
       } else {
-        properties.access = packageContent.publishConfig?.access || "private";
+        properties.access = packageContent?.publishConfig?.access || "private";
 
         Object.assign(
           properties,

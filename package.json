@@ -59,13 +59,13 @@
     "node-fetch": "^3.3.2",
     "npm-package-walker": "^6.2.4",
     "npm-packlist": "^7.0.4",
-    "pacote": "^15.2.0",
+    "pacote": "^16.0.0",
     "pkg-dir": "^7.0.0",
     "tar-stream": "^3.1.6",
-    "uti": "^7.7.0"
+    "uti": "^7.7.1"
   },
   "devDependencies": {
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.4.10",
     "ava": "^5.3.1",
     "c8": "^8.0.1",
     "documentation": "^14.0.2",

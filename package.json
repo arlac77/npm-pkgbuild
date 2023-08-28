@@ -67,7 +67,7 @@
     "uti": "^7.7.2"
   },
   "devDependencies": {
-    "@types/node": "^20.5.6",
+    "@types/node": "^20.5.7",
     "ava": "^5.3.1",
     "c8": "^8.0.1",
     "documentation": "^14.0.2",

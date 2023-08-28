@@ -19,7 +19,9 @@
     "pacman",
     "pkgbuild",
     "rpm",
-    "rpmspec"
+    "rpmspec",
+    "docker",
+    "buildah"
   ],
   "contributors": [
     {
@@ -74,7 +76,7 @@
     "typescript": "^5.2.2"
   },
   "engines": {
-    "node": ">=16.20.2"
+    "node": ">=18.17.1"
   },
   "repository": {
     "type": "git",

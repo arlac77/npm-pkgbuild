@@ -1,6 +1,11 @@
 import test from "ava";
 import { analysePublish, publish, preparePublish } from "../src/publish.mjs";
 
+const DESTINATION = {
+  url:
+    process.env["PKGBUILD_PUBLISH"] || "http://myserver.com/{{access}}/{{arch}}"
+};
+
 test("analysePublish", t => {
   const destination = { url: "http://myserver.com/{{access}}/{{arch}}" };
 
@@ -23,37 +28,26 @@ test("publish twice", async t => {
   const file = new URL("fixtures/content/file1.txt", import.meta.url).pathname;
 
   const properties = { arch: "aarch64", access: "private" };
-  const destination = {
-    url: "http://myserver.com/{{type}}/{{access}}/{{arch}}"
-  };
+  const [destination] = preparePublish([DESTINATION.url], process.env);
 
-  try {
-    properties.type = "debian";
-    await publish(file, destination, properties);
-  } catch (e) {
-    t.true(
-      e
-        .toString()
-        .indexOf("http://myserver.com/debian/private/aarch64/file1.txt") >= 0
-    );
-  }
+  let url = "";
 
-  try {
-    properties.type = "arch";
-    await publish(file, destination, properties);
-  } catch (e) {
-    t.true(
-      e
-        .toString()
-        .indexOf("http://myserver.com/arch/private/aarch64/file1.txt") >= 0
-    );
-  }
+  properties.type = "debian";
+  await publish(file, destination, properties, message => {
+    url = message;
+  });
+  t.log(url);
+  t.truthy(url.match(/\/debian\/.*\/aarch64\/file1.txt/));
+
+  properties.type = "arch";
+  await publish(file, destination, properties, message => {
+    url = message;
+  });
+  t.truthy(url.match(/\/arch\/.*\/aarch64\/file1.txt/));
 });
 
 test("preparePublish path only", t => {
-  t.deepEqual(preparePublish(["/path/to"]), [
-    { url: "/path/to" }
-  ]);
+  t.deepEqual(preparePublish(["/path/to"]), [{ url: "/path/to" }]);
 });
 
 test("preparePublish simple", t => {
@@ -74,6 +68,12 @@ test("preparePublish with url credentials", t => {
       USER: "myUser",
       PASSWORD: "{BASE64}bXlQYXNzd29yZA=="
     }),
-    [{ username: "myUser", password: "myPassword", url: "http://somewhere.com/" }]
+    [
+      {
+        username: "myUser",
+        password: "myPassword",
+        url: "http://somewhere.com/"
+      }
+    ]
   );
 });

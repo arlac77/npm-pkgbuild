@@ -1,7 +1,6 @@
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
 import { mkdir, copyFile } from "node:fs/promises";
-import fetch from "node-fetch";
 import { decodePassword } from "./util.mjs";
 
 export function analysePublish(publish, properties) {
@@ -19,16 +18,15 @@ export function analysePublish(publish, properties) {
   return publish;
 }
 
-export async function publish(fileName, destination, properties) {
+export async function publish(fileName, destination, properties, logger=console.log) {
   if (!destination) {
     return;
   }
 
   const publish = analysePublish(destination, properties);
-
   const url = publish.url + "/" + basename(fileName);
 
-  console.log(`Publishing to ${url}`);
+  logger(`Publishing to ${url}`);
 
   switch (publish.scheme) {
     case "file:":
@@ -54,6 +52,7 @@ export async function publish(fileName, destination, properties) {
       const response = await fetch(url, {
         method: "PUT",
         headers,
+        duplex: 'half',
         body: createReadStream(fileName)
       });
 

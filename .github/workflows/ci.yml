@@ -17,7 +17,7 @@ jobs:
           - ubuntu-latest
         node-version:
           - 18.18.0
-          - 20.7.0
+          - 20.8.0
     steps:
       - name: Dependencies
         run: >

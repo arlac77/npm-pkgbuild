@@ -3,7 +3,6 @@ import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
-
 /**
  * Content provided form the file system.
  * @param {Object|string} definitions

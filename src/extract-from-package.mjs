@@ -311,7 +311,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
       if (requirementsMet) {
         arch = new Set([...arch, ...fragment.arch]);
-        properties = Object.assign({}, fragment.properties, properties);
+        properties = { ...fragment.properties, ...properties };
         Object.assign(depends, fragment.depends);
         Object.assign(output, fragment.output);
         if (fragment.content) {

@@ -63,7 +63,7 @@
     "pacote": "^17.0.4",
     "pkg-dir": "^7.0.0",
     "tar-stream": "^3.1.6",
-    "uti": "^8.2.0"
+    "uti": "^8.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.6",

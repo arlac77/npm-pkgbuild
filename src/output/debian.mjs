@@ -19,7 +19,8 @@ import {
   fieldProvider,
   extractFunctions,
   utf8StreamOptions,
-  packageNameMapping
+  packageNameMapping,
+  filterOutUnwantedDependencies
 } from "../util.mjs";
 
 /**
@@ -53,7 +54,7 @@ export class DEBIAN extends Packager {
    * @param {string} variant.arch
    * @return {Promise<boolean>}
    */
-  static async prepare(options,variant) {
+  static async prepare(options, variant) {
     try {
       await execa("dpkg", ["--version"]);
       if (variant?.arch) {
@@ -105,10 +106,14 @@ export class DEBIAN extends Packager {
     );
 
     if (Object.keys(dependencies).length > 0) {
-      properties.Depends = Object.entries(dependencies).map(
-        ([name, e]) =>
-          `${packageNameMapping[name] ? packageNameMapping[name] : name} (${e})`
-      );
+      properties.Depends = Object.entries(dependencies)
+        .filter(filterOutUnwantedDependencies())
+        .map(
+          ([name, e]) =>
+            `${
+              packageNameMapping[name] ? packageNameMapping[name] : name
+            } (${e})`
+        );
     }
 
     const fp = fieldProvider(properties, fields);

@@ -13,7 +13,8 @@ import {
   fieldProvider,
   copyEntries,
   utf8StreamOptions,
-  quote
+  quote,
+  filterOutUnwantedDependencies
 } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
@@ -54,13 +55,14 @@ export class DOCKER extends Packager {
     expander = v => v
   ) {
     const { properties, staging } = await this.prepareExecute(options);
-    
+
     async function* headLines() {
       let scratch = true;
       for (const [k, v] of Object.entries({
         ...properties.from,
         ...Object.fromEntries(
           Object.entries(dependencies)
+            .filter(filterOutUnwantedDependencies())
             .filter(([k, v]) => dependenciesToFrom[k])
             .map(([k, v]) => [dependenciesToFrom[k], v.replace(/[>=]*/, "")])
         )
@@ -69,8 +71,8 @@ export class DOCKER extends Packager {
         yield `FROM ${k}:${v}\n`;
       }
 
-      if(scratch) {
-      	yield "FROM scratch\n";
+      if (scratch) {
+        yield "FROM scratch\n";
       }
     }
 
@@ -78,7 +80,9 @@ export class DOCKER extends Packager {
       yield `WORKDIR ${properties.workdir}\n`;
       yield "COPY . .\n";
       if (properties.entrypoints) {
-        yield `ENTRYPOINT ["node", "${Object.values(properties.entrypoints)[0]}"]\n`;
+        yield `ENTRYPOINT ["node", "${
+          Object.values(properties.entrypoints)[0]
+        }"]\n`;
       }
     }
 

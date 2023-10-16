@@ -16,12 +16,12 @@ import {
   fieldProvider,
   utf8StreamOptions,
   extractFunctions,
-  packageNameMapping
+  packageNameMapping,
+  filterOutUnwantedDependencies
 } from "../util.mjs";
 
-
 function quoteFile(name) {
-  return name.match(/\s/) ? "\"" + name + "\"" : name;
+  return name.match(/\s/) ? '"' + name + '"' : name;
 }
 
 /**
@@ -38,16 +38,18 @@ const hookMapping = {
 };
 
 export function requiresFromDependencies(dependencies) {
-  return Object.entries(dependencies).map(
-    ([name, e]) =>
-      `${packageNameMapping[name] ? packageNameMapping[name] : name}${e
-        .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
-        .replace(/^\s*$/, "")
-        .replace(
-          /^\s*(<|<=|>|>=|=)\s*(\w+)/,
-          (match, p1, p2) => ` ${p1} ${p2}`
-        )}`
-  );
+  return Object.entries(dependencies)
+    .filter(filterOutUnwantedDependencies())
+    .map(
+      ([name, e]) =>
+        `${packageNameMapping[name] ? packageNameMapping[name] : name}${e
+          .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+          .replace(/^\s*$/, "")
+          .replace(
+            /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+            (match, p1, p2) => ` ${p1} ${p2}`
+          )}`
+    );
 }
 
 /**

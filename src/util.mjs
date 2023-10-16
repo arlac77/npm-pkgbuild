@@ -17,6 +17,11 @@ export const packageNameMapping = {
   node: "nodejs"
 };
 
+export function filterOutUnwantedDependencies()
+{
+  return ([name, version]) => version !== "-";
+}
+
 /**
  * Decode a password
  * @param {string} password

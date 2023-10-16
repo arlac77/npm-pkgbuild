@@ -20,7 +20,8 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  packageNameMapping
+  packageNameMapping,
+  filterOutUnwantedDependencies
 } from "../util.mjs";
 
 function* keyValueLines(key, value, options) {
@@ -75,7 +76,7 @@ export class ARCH extends Packager {
     return fields;
   }
 
-  static async prepare(options={}, variant={}) {
+  static async prepare(options = {}, variant = {}) {
     if (_prepared === undefined) {
       try {
         await execa("makepkg", ["-V"]);
@@ -98,13 +99,16 @@ export class ARCH extends Packager {
         _ext = getValue("PKGEXT");
         _architecture = getValue("CARCH");
         _prepared = true;
-      } catch(e) {
+      } catch (e) {
         _prepared = false;
       }
     }
-     
-    return _prepared && (variant.arch === undefined || variant.arch === _architecture);
-    }
+
+    return (
+      _prepared &&
+      (variant.arch === undefined || variant.arch === _architecture)
+    );
+  }
 
   get packageFileName() {
     const p = this.properties;
@@ -258,8 +262,10 @@ function normalizeExpression(e) {
 }
 
 function makeDepends(dependencies) {
-  return Object.entries(dependencies).map(
-    ([name, version]) =>
-      `${packageNameMapping[name] || name}${normalizeExpression(version)}`
-  );
+  return Object.entries(dependencies)
+    .filter(filterOutUnwantedDependencies())
+    .map(
+      ([name, version]) =>
+        `${packageNameMapping[name] || name}${normalizeExpression(version)}`
+    );
 }

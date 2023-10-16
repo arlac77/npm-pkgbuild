@@ -17,9 +17,22 @@ export const packageNameMapping = {
   node: "nodejs"
 };
 
-export function filterOutUnwantedDependencies()
-{
+export function filterOutUnwantedDependencies() {
   return ([name, version]) => version !== "-";
+}
+
+export function mergeDependencies(a, b) {
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+
+  const result = {};
+
+  for (const key of keys) {
+    if (a[key] !== "-" && b[key] !== "-") {
+      result[key] = a[key] || b[key];
+    }
+  }
+
+  return result;
 }
 
 /**

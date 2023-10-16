@@ -3,7 +3,7 @@ import { packageDirectory } from "pkg-dir";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
 import { satisfies } from "compare-versions";
-import { asArray } from "./util.mjs";
+import { asArray, mergeDependencies } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";
@@ -280,7 +280,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   )) {
     let arch = variant.arch;
     let properties = {};
-    const depends = {};
+    let depends = {};
     const output = {};
     const content = [];
 
@@ -312,7 +312,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (requirementsMet) {
         arch = new Set([...arch, ...fragment.arch]);
         properties = { ...fragment.properties, ...properties };
-        Object.assign(depends, fragment.depends);
+        depends = mergeDependencies(depends, fragment.depends);
         Object.assign(output, fragment.output);
         if (fragment.content) {
           content.push([fragment.content, fragment.dir]);

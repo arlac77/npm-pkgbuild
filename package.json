@@ -61,7 +61,7 @@
     "npm-package-walker": "^6.2.4",
     "npm-packlist": "^8.0.0",
     "pacote": "^17.0.4",
-    "pkg-dir": "^7.0.0",
+    "pkg-dir": "^8.0.0",
     "tar-stream": "^3.1.6",
     "uti": "^8.2.1"
   },

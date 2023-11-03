@@ -289,27 +289,26 @@ export async function* extractFromPackage(options = {}, env = {}) {
       fragment;
       fragment = fragments[fragment.parent]
     ) {
-      let requirementsMet = true;
+      const missedRequirements = [];
 
       const requires = fragment.requires;
       if (requires) {
         if (requires.output && !output[requires.output]) {
-          requirementsMet = false;
-          console.log("skipping output", requires.output, output);
+          missedRequirements.push(`output ${requires.output} not avaliable`);
         }
         if (requires.dependencies) {
           for (const [p, v] of Object.entries(requires.dependencies)) {
             const pkgVersion = packages.get(p);
 
             if (pkgVersion === undefined || !satisfies(pkgVersion, v)) {
-              requirementsMet = false;
+              missedRequirements.push(`package not present ${p} ${v}`);
               break;
             }
           }
         }
       }
 
-      if (requirementsMet) {
+      if (missedRequirements.length === 0) {
         arch = new Set([...arch, ...fragment.arch]);
         properties = { ...fragment.properties, ...properties };
         depends = mergeDependencies(depends, fragment.depends);
@@ -318,7 +317,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           content.push([fragment.content, fragment.dir]);
         }
       } else {
-        console.log("requirements not met", fragment.name);
+        console.log("requirements not met", fragment.name, missedRequirements);
       }
     }
 

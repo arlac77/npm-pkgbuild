@@ -68,7 +68,7 @@
   "devDependencies": {
     "@types/node": "^20.10.5",
     "ava": "^6.0.1",
-    "c8": "^8.0.1",
+    "c8": "^9.0.0",
     "documentation": "^14.0.2",
     "semantic-release": "^22.0.12",
     "stream-buffers": "^3.0.2",

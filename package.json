@@ -62,7 +62,7 @@
     "npm-packlist": "^8.0.2",
     "pacote": "^17.0.6",
     "pkg-dir": "^8.0.0",
-    "tar-stream": "^3.1.6",
+    "tar-stream": "^3.1.7",
     "uti": "^8.2.1"
   },
   "devDependencies": {

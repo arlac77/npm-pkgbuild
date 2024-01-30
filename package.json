@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.10",
-    "ava": "^6.1.0",
+    "ava": "^6.1.1",
     "c8": "^9.1.0",
     "documentation": "^14.0.2",
     "semantic-release": "^23.0.0",

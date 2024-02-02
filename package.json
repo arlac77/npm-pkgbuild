@@ -40,7 +40,7 @@
     "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs && npm run lint:tsc",
     "lint:docs": "documentation lint ./src/**/*.mjs",
-    "lint:tsc": "tsc --allowJs --checkJs --noEmit -t esnext -m esnext --moduleResolution nodenext ./src/*.mjs",
+    "lint:tsc": "tsc --allowJs --checkJs --noEmit -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src/**/*.mjs",
     "tsc:types": "tsc -d --allowJs --declarationDir dist --emitDeclarationOnly ./src/extract-from-package.mjs"
   },
   "dependencies": {

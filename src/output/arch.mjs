@@ -87,6 +87,11 @@ export class ARCH extends Packager {
         }
 
         function getValue(key) {
+          const v = process.env[key];
+          if(v !== undefined) {
+            return v;
+          }
+
           const i = cfg.indexOf(`${key}=`);
           if (i > 0) {
             const m = cfg

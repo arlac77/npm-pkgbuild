@@ -71,7 +71,7 @@
     "ava": "^6.1.1",
     "c8": "^9.1.0",
     "documentation": "^14.0.3",
-    "semantic-release": "^23.0.0",
+    "semantic-release": "^23.0.1",
     "stream-buffers": "^3.0.2",
     "typescript": "^5.3.3"
   },

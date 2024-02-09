@@ -6,8 +6,8 @@ build
 *.log
 *.dump
 .DS_Store
-dist
 *.node
 .test
 .tmp
 bin
+types

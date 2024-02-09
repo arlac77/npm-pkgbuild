@@ -164,7 +164,7 @@ Source of package content.
 
 List all entries.
 
-Returns **AsyncIterator\<ContentEntry>** all entries
+Returns **AsyncIterable\<ContentEntry>** all entries
 
 ## FileContentProvider
 
@@ -221,9 +221,9 @@ Extract shell functions from a given text.
 
 ### Parameters
 
-*   `source` **AsyncIterator<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
+*   `source` **AsyncIterable<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
 
-Returns **AsyncIterator<[FunctionDecl](#functiondecl)>**&#x20;
+Returns **AsyncIterable<[FunctionDecl](#functiondecl)>**&#x20;
 
 ## fieldProvider
 
@@ -251,7 +251,7 @@ Destination paths a generated without leading '/' (as for entry names too).
 
 ### Parameters
 
-*   `source` **AsyncIterator\<ContentEntry>**&#x20;
+*   `source` **AsyncIterable\<ContentEntry>**&#x20;
 *   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
 

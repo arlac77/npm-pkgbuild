@@ -61,8 +61,8 @@ export function decodePassword(password) {
 
 /**
  * Extract shell functions from a given text.
- * @param {AsyncIterator<string>} source
- * @return {AsyncIterator<FunctionDecl>}
+ * @param {AsyncIterable<string>} source
+ * @return {AsyncIterable<FunctionDecl>}
  */
 export async function* extractFunctions(source) {
   let name;
@@ -173,7 +173,7 @@ export function fieldProvider(properties, fields) {
 /**
  * Copy content from source into destinationDirectory.
  * Destination paths a generated without leading '/' (as for entry names too).
- * @param {AsyncIterator<ContentEntry>} source
+ * @param {AsyncIterable<ContentEntry>} source
  * @param {string} destinationDirectory
  * @param {Expander} expander
  */

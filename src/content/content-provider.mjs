@@ -29,7 +29,7 @@ export class ContentProvider {
 
   /**
    * List all entries.
-   * @return {AsyncIterator<ContentEntry>} all entries
+   * @return {AsyncIterable<ContentEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
   }

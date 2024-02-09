@@ -108,7 +108,7 @@ function* content2Sources(content, dir) {
  * @param {string} [options.dir] where to look for package.json
  * @param {boolean} [options.verbose] log
  * @param {Object} env as delared in process.env
- * @returns {AsyncIterator<PackageDefinition>}
+ * @returns {AsyncIterable<PackageDefinition>}
  */
 export async function* extractFromPackage(options = {}, env = {}) {
   const variants = {};

@@ -52,7 +52,7 @@ const entryAttributeNames = ["owner", "group", "mode"];
 /**
  * Delivers ContentProviders from pkgbuild.content definition.
  * @param {Object} content from pkgbuild.content
- * @returns {Iterator<ContentProvider>}
+ * @returns {Iterable<ContentProvider>}
  */
 function* content2Sources(content, dir) {
   for (const [destination, definitions] of Object.entries(content)) {

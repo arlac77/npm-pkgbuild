@@ -31,6 +31,9 @@ const hookMapping = {
   post_remove: "DEBIAN/postrm"
 };
 
+/**
+ * Create .deb packages
+ */
 export class DEBIAN extends Packager {
   static get name() {
     return "debian";

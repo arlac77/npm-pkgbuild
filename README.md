@@ -130,8 +130,9 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [fields](#fields-3)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
-*   [prepare](#prepare)
-    *   [Parameters](#parameters-10)
+*   [DEBIAN](#debian)
+    *   [prepare](#prepare)
+        *   [Parameters](#parameters-10)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
@@ -341,9 +342,15 @@ map install hook named from arch to deb
 
 map install hook named from arch to rpm
 
-## prepare
+## DEBIAN
 
-### Parameters
+**Extends Packager**
+
+Create .deb packages
+
+### prepare
+
+#### Parameters
 
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;

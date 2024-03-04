@@ -134,20 +134,22 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DEBIAN](#debian)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-10)
+*   [prepare](#prepare-1)
+    *   [Parameters](#parameters-11)
 *   [OCI](#oci)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-11)
+    *   [Parameters](#parameters-12)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-12)
-    *   [workspaceLayout](#workspacelayout)
-    *   [prepare](#prepare-1)
         *   [Parameters](#parameters-13)
-*   [RPM](#rpm)
+    *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-14)
+*   [RPM](#rpm)
+    *   [prepare](#prepare-3)
+        *   [Parameters](#parameters-15)
 
 ## ContentProvider
 
@@ -367,6 +369,19 @@ Create .deb packages
     *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
+## prepare
+
+Check for docker presence.
+
+### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+    *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
 
 ## OCI
 

@@ -11,8 +11,8 @@ import { utf8StreamOptions } from "../util.mjs";
 import { shrinkNPM } from "../npm-shrink.mjs";
 
 /**
- * Content from node_modules
- * 
+ * Content from node_modules.
+ * Requires .npmrc or NPM_TOKEN environment
  * @property {boolean} withoutDevelpmentDependencies
  */
 export class NodeModulesContentProvider extends ContentProvider {
@@ -71,7 +71,7 @@ export class NodeModulesContentProvider extends ContentProvider {
           if (process.env.NPM_TOKEN) {
             npmrc["_authToken"] = process.env.NPM_TOKEN;
           } else {
-            throw new Error(`.npmrc not found in ${searchDirs}`);
+            throw new Error(`.npmrc not found in ${searchDirs} (neither NPM_TOKEN in envinronment)`);
           }
         }
 

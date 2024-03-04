@@ -12,6 +12,7 @@ import { analysePublish } from "../publish.mjs";
  */
 
 /**
+ * Base Packager
  * @param {Object} properties
  */
 export class Packager {

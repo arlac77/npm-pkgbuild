@@ -51,6 +51,9 @@ function chksum(header) {
   return chksum;
 }
 
+/**
+ * Low level OCI compatible packager
+ */
 export class OCI extends Packager {
   static get name() {
     return "oci";

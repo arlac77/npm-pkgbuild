@@ -134,6 +134,7 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DEBIAN](#debian)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-10)
+*   [OCI](#oci)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
@@ -279,7 +280,8 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 **Extends ContentProvider**
 
-Content from node\_modules
+Content from node\_modules.
+Requires .npmrc or NPM\_TOKEN environment
 
 ### Parameters
 
@@ -366,6 +368,12 @@ Create .deb packages
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
 
+## OCI
+
+**Extends Packager**
+
+Low level OCI compatible packager
+
 ## Field
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
@@ -378,6 +386,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
 
 ## Packager
+
+Base Packager
 
 ### Parameters
 

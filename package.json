@@ -5,8 +5,12 @@
     "access": "public",
     "provenance": true
   },
+  "types": "./types/module.d.mts",
   "exports": {
-    ".": "./src/module.mjs"
+    ".": {
+      "default": "./src/module.mjs",
+      "types": "./types/module.d.mts"
+    }
   },
   "description": "create ArchLinux, RPM and Debian packages from npm packages",
   "keywords": [
@@ -35,7 +39,7 @@
     "npm-pkgbuild": "src/npm-pkgbuild-cli.mjs"
   },
   "scripts": {
-    "prepare": "tsc --allowJs --declaration --emitDeclarationOnly --declarationDir types -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs",
+    "prepare": "tsc --allowJs --declaration --emitDeclarationOnly --declarationDir types -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs --rootDir src",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
@@ -51,8 +55,8 @@
     "aggregate-async-iterator": "^1.2.0",
     "commander": "^12.0.0",
     "compare-versions": "^6.1.0",
-    "content-entry": "^9.0.1",
-    "content-entry-filesystem": "^7.0.2",
+    "content-entry": "^6.0.0",
+    "content-entry-filesystem": "^6.0.0",
     "content-entry-transform": "^1.4.29",
     "execa": "^8.0.1",
     "expression-expander": "^7.1.3",

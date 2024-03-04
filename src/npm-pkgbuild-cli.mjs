@@ -88,7 +88,7 @@ program
           try {
             Object.assign(
               properties,
-              output[outputFactory.name],
+              output[outputFactory.name].properties,
               {
                 type: outputFactory.name,
                 "user-agent": `npm-pkgbuild-${version}`
@@ -130,7 +130,7 @@ program
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
               console.log(kv(dependencies, "  "));
-              console.log(kv(output.properties));
+              console.log(kv(output));
             }
 
             const fileName = await o.execute(

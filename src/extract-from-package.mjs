@@ -350,14 +350,29 @@ export async function* extractFromPackage(options = {}, env = {}) {
       arch
     );*/
 
+    function* forEachOutput(result) {
+      if (Object.entries(result.output).length === 0) {
+        yield result;
+      }
+
+      for (const [name, output] of Object.entries(result.output)) {
+        yield {
+          ...result,
+          variant: { ...result.variant, output: name },
+          output: { [name]: output },
+          properties: { ...result.properties, ...output.properties }
+        };
+      }
+    }
+
     if (arch.size === 0) {
-      yield result;
+      yield* forEachOutput(result);
     } else {
       for (const a of [...arch].sort()) {
         if (variant.restrictArch.size === 0 || variant.restrictArch.has(a)) {
           result.variant.arch = a;
           result.properties.arch = [a];
-          yield result;
+          yield* forEachOutput(result);
         }
       }
     }

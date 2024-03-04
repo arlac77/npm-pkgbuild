@@ -58,15 +58,11 @@ export async function publish(fileName, destination, properties, logger=console.
 
       if (!response.ok) {
         throw new Error(
-          `Unable to publish to ${url}: ${response.statusText}(${response.statusCode})`
+          `Unable to publish to ${url}: ${response.statusText}(${response.status})`
         );
       }
     }
   }
-
-  /*
-    console.log(`#<CI>publish ${fileName}`);
-    */
 }
 
 export function preparePublish(publish = [], env = {}) {

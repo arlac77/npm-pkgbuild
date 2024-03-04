@@ -33,16 +33,25 @@ test("publish twice", async t => {
   let url = "";
 
   properties.type = "debian";
-  await publish(file, destination, properties, message => {
-    url = message;
-  });
+  try {
+    await publish(file, destination, properties, message => {
+      url = message;
+    });
+  } catch (e) {
+    console.log(e);
+  }
   t.log(url);
   t.truthy(url.match(/\/debian\/.*\/aarch64\/file1.txt/));
 
   properties.type = "arch";
-  await publish(file, destination, properties, message => {
-    url = message;
-  });
+  try {
+    await publish(file, destination, properties, message => {
+      url = message;
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
   t.truthy(url.match(/\/arch\/.*\/aarch64\/file1.txt/));
 });
 

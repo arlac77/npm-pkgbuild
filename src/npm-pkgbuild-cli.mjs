@@ -130,7 +130,6 @@ program
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
               console.log(kv(dependencies, "  "));
-              console.log(kv(output));
             }
 
             const fileName = await o.execute(

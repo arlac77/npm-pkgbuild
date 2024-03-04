@@ -82,6 +82,7 @@ program
             options.available &&
             !(await outputFactory.prepare(options, variant))
           ) {
+            console.warn(`output format ${outputFactory.name} not avaliable`);
             continue;
           }
 

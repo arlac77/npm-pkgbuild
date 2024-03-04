@@ -47,6 +47,22 @@ export class DOCKER extends Packager {
     return fields;
   }
 
+  /**
+   * Check for docker presence.
+   * @param {Object} options
+   * @param {Object} variant
+   * @param {string} variant.arch
+   * @returns {Promise<boolean>} true when docker executable is present
+   */
+  static async prepare(options, variant) {
+    try {
+      await execa(this.constructor.name, ["--version"]);
+      return true;
+    } catch {}
+
+    return false;
+  }
+
   async execute(
     sources,
     transformer,

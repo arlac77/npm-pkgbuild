@@ -2,7 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { program } from "commander";
+import { program, Option } from "commander";
 import { createExpressionTransformer } from "content-entry-transform";
 import { UTIController } from "uti";
 import { utf8StreamOptions } from "./util.mjs";
@@ -49,7 +49,7 @@ program
   )
   .option("-m --meta <dir>", "meta directory", (c, a) => a.concat([c]), [])
   .addOption(
-    new program.Option(
+    new Option(
       "--publish <url...>",
       "publishing urls (or directories) of the package"
     )

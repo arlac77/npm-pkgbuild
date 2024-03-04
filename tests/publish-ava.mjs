@@ -34,6 +34,7 @@ test("publish twice", async t => {
 
   properties.type = "debian";
   try {
+    url = "not set";
     await publish(file, destination, properties, message => {
       url = message;
     });
@@ -45,13 +46,14 @@ test("publish twice", async t => {
 
   properties.type = "arch";
   try {
+    url = "not set again";
     await publish(file, destination, properties, message => {
       url = message;
     });
   } catch (e) {
     console.log(e);
   }
-
+  t.log(url);
   t.truthy(url.match(/\/arch\/.*\/aarch64\/file1.txt/));
 });
 

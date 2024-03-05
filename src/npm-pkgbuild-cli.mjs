@@ -12,7 +12,6 @@ import {
   allInputs,
   allOutputs,
   extractFromPackage,
-  publish,
   preparePublish
 } from "npm-pkgbuild";
 
@@ -139,7 +138,7 @@ program
               console.log(kv(dependencies, "  "));
             }
 
-            const fileName = await o.execute(
+            const artifact = await o.execute(
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
               dependencies,
@@ -149,7 +148,7 @@ program
 
             if (!options.dry) {
               for (const p of options.publish) {
-                await publish(fileName, p, o.properties);
+                await o.publish(artifact, p, o.properties);
               }
             }
           } catch (e) {

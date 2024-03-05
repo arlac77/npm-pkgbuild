@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
-import { analysePublish } from "../publish.mjs";
+import { analysePublish, publish } from "../publish.mjs";
 
 /**
  * @typedef {Object} Field
@@ -37,7 +37,7 @@ export class Packager {
    * @param {Object} variant
    * @return {Promise<boolean>}
    */
-  static async prepare(options,variant) {
+  static async prepare(options, variant) {
     return false;
   }
 
@@ -47,11 +47,10 @@ export class Packager {
     this.#properties = { ...properties };
   }
 
-  get fileNameExtension()
-  {
-  	return this.constructor.fileNameExtension;
+  get fileNameExtension() {
+    return this.constructor.fileNameExtension;
   }
-  
+
   get fields() {
     return this.constructor.fields;
   }
@@ -60,7 +59,7 @@ export class Packager {
     const properties = this.#properties;
 
     Object.entries(this.fields).forEach(([k, v]) => {
-      if(v.set && properties[k] !== undefined) {
+      if (v.set && properties[k] !== undefined) {
         properties[k] = v.set(properties[k]);
       }
 
@@ -68,7 +67,6 @@ export class Packager {
       if (e !== undefined) {
         properties[k] = v.set ? v.set(e) : e;
       } else {
-
         const vak = v.alias || k;
         if (v.default !== undefined) {
           if (
@@ -109,11 +107,11 @@ export class Packager {
     }
 
     if (options.publish) {
-      for(const op of options.publish) {
+      for (const op of options.publish) {
         const publish = analysePublish(op, out.properties);
 
         out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
-  
+
         await mkdir(out.destination, { recursive: true });
       }
     }
@@ -134,4 +132,8 @@ export class Packager {
    * @return {Promise<string>} location of the resulting package
    */
   async execute(sources, transformer, dependencies, options, expander) {}
+
+  async publish(artifact, destination, properties, logger) {
+    return publish(artifact, destination, properties, logger);
+  }
 }

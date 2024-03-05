@@ -1,6 +1,6 @@
 import test from "ava";
 import { join } from "node:path";
-import { stat, mkdtemp } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { FileContentProvider, DOCKER } from "npm-pkgbuild";
 
@@ -25,12 +25,17 @@ test("docker", async t => {
   const transformer = [];
   const dependencies = { node: ">=18" };
 
-  const fileName = await out.execute(sources, transformer, dependencies, {
+  const artifact = await out.execute(sources, transformer, dependencies, {
     destination,
     verbose: true
   });
 
-  t.true(fileName != undefined);
-  
-//  t.is(fileName, "sha256:f20abce055cd18ef7fd72bdc062720c266b27ba0c6e56bd07248811a6c2b455d");
+  t.true(artifact != undefined);
+
+  const messages = [];
+  await out.publish(artifact, { url: "myregistry.com" }, properties, message =>
+    messages.push(message)
+  );
+
+  t.truthy(messages.find(m => m.match(/Publishing to/)));
 });

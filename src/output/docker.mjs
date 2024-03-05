@@ -9,6 +9,7 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
+import { analysePublish } from "../publish.mjs";
 import {
   fieldProvider,
   copyEntries,
@@ -139,7 +140,12 @@ export class DOCKER extends Packager {
     if (!options.dry) {
       const docker = await execa(
         this.constructor.name,
-        ["build", "--tag", tag, staging],
+        [
+          "build",
+          "--tag",
+          tag,
+          /*"--output","type=tar,dest=out.tar",*/ staging
+        ],
         {
           cwd: staging
         }
@@ -158,6 +164,17 @@ export class DOCKER extends Packager {
     }
 
     return image;
+  }
+
+  async publish(artifact, destination, properties,logger) {
+
+    const publish = analysePublish(destination, properties);
+  
+    logger(`Publishing to ${publish.url}`);
+  
+    const name = `${properties.name}:${properties.version}`;
+    console.log(`docker tag ${artifact} ${publish.url}/${name}`);
+    console.log(`docker push ${name}`);
   }
 }
 

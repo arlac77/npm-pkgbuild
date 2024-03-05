@@ -1,11 +1,8 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --no-warnings
 
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { program, Option } from "commander";
 import { createExpressionTransformer } from "content-entry-transform";
 import { UTIController } from "uti";
-import { utf8StreamOptions } from "./util.mjs";
 import additionalUTIs from "./utis.mjs";
 import {
   FileContentProvider,
@@ -14,15 +11,10 @@ import {
   extractFromPackage,
   preparePublish
 } from "npm-pkgbuild";
+import pkg from "../package.json" assert { type: "json" };
 
-const { version, description } = JSON.parse(
-  readFileSync(
-    fileURLToPath(new URL("../package.json", import.meta.url)),
-    utf8StreamOptions
-  )
-);
 
-program.description(description).version(version);
+program.description(pkg.description).version(pkg.version);
 
 allOutputs.forEach(o => {
   program.option(`--${o.name}`, o.description);

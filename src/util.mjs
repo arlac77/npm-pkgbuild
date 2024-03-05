@@ -22,6 +22,13 @@ export function filterOutUnwantedDependencies() {
 }
 
 export function mergeDependencies(a, b) {
+  if (!b) {
+    return a;
+  }
+  if (!a) {
+    return b;
+  }
+
   const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
 
   const result = {};

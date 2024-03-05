@@ -113,7 +113,10 @@ test(
       arch: ["aarch64", "x86_64"],
       name: "n3",
       other: "o1",
-      output: { deb: { properties: { deb1: "a" } } }
+      dependencies: { dep2: ">=2" },
+      output: {
+        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+      }
     }
   },
   [
@@ -126,12 +129,16 @@ test(
         license: "BSD",
         access: "private",
         arch: ["aarch64"],
+        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a"
       },
-      output: { deb: { properties: { deb1: "a" } } }
+      dependencies: { dep1: ">=1" },
+      output: {
+        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+      }
     },
     {
       properties: {
@@ -142,12 +149,16 @@ test(
         license: "BSD",
         access: "private",
         arch: ["x86_64"],
+        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a"
       },
-      output: { deb: { properties: { deb1: "a" } } }
+      dependencies: { dep1: ">=1" },
+      output: {
+        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+      }
     }
   ]
 );
@@ -164,8 +175,8 @@ test(
       v7: {
         pkgbuild: {
           output: {
-            arch: { key: "is arch" },
-            debian: { key: "is debian" }
+            arch: { properties: { key: "is arch" } },
+            debian: { properties: { key: "is debian" } }
           },
           install: "/v7",
           arch: ["x86_64", "aarch64", "armv7"],
@@ -181,10 +192,11 @@ test(
         arch: ["aarch64"],
         access: "private",
         variant: "v7",
-        install: "/n4"
+        install: "/n4",
+        key: "is arch"
       },
       output: {
-        arch: { key: "is arch" }
+        arch: { properties: { key: "is arch" } }
       }
     },
     {
@@ -193,10 +205,11 @@ test(
         arch: ["aarch64"],
         access: "private",
         variant: "v7",
-        install: "/n4"
+        install: "/n4",
+        key: "is debian"
       },
       output: {
-        debian: { key: "is debian" }
+        debian: { properties: { key: "is debian" } }
       }
     },
     {
@@ -205,10 +218,11 @@ test(
         arch: ["x86_64"],
         access: "private",
         variant: "v7",
-        install: "/n4"
+        install: "/n4",
+        key: "is arch"
       },
       output: {
-        arch: { key: "is arch" }
+        arch: { properties: { key: "is arch" } }
       }
     },
     {
@@ -217,10 +231,11 @@ test(
         arch: ["x86_64"],
         access: "private",
         variant: "v7",
-        install: "/n4"
+        install: "/n4",
+        key: "is debian"
       },
       output: {
-        debian: { key: "is debian" }
+        debian: { properties: { key: "is debian" } }
       }
     }
   ]

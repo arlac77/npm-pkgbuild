@@ -360,6 +360,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
           ...result,
           variant: { ...result.variant, output: name },
           output: { [name]: output },
+          // sources: [...result.sources, ...output.sources],
+          dependencies: mergeDependencies(
+            result.dependencies,
+            output.dependencies
+          ),
           properties: { ...result.properties, ...output.properties }
         };
       }

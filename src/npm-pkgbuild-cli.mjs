@@ -25,8 +25,14 @@ const { version, description } = JSON.parse(
 
 program.description(description).version(version);
 
-allOutputs.forEach(o => program.option(`--${o.name}`, o.description));
-allInputs.forEach(i => program.option(`--${i.name}`, i.description));
+allOutputs.forEach(o => {
+  program.option(`--${o.name}`, o.description);
+  program.option(`--no-${o.name}`, `do not ${o.description} output`);
+});
+
+allInputs.forEach(i => {
+  program.option(`--${i.name}`, i.description);
+});
 
 program
   .option("--verbose", "be more verbose", false)
@@ -76,7 +82,7 @@ program
         }
 
         for (const outputFactory of allOutputs.filter(
-          o => options[o.name] === true || output[o.name] !== undefined
+          o => (options[o.name] === true || output[o.name] !== undefined) && options[o.name] !== false
         )) {
           if (
             options.available &&

@@ -64,8 +64,6 @@ program
       const uc = new UTIController();
       uc.register(additionalUTIs);
 
-      options.publish = preparePublish(options.publish, process.env);
-
       for await (const {
         properties,
         sources,
@@ -147,9 +145,7 @@ program
             );
 
             if (!options.dry) {
-              for (const p of options.publish) {
-                await o.publish(artifact, p, o.properties);
-              }
+              await Promise.all(preparePublish(options.publish, process.env).map(pl => o.publish(artifact, pl, o.properties)));
             }
           } catch (e) {
             handleError(e, options);

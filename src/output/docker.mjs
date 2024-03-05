@@ -166,7 +166,7 @@ export class DOCKER extends Packager {
     return image;
   }
 
-  async publish(artifact, destination, properties,logger) {
+  async publish(artifact, destination, properties,logger=console.log) {
 
     const publish = analysePublish(destination, properties);
   

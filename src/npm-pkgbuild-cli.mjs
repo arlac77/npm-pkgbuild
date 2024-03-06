@@ -87,7 +87,7 @@ program
               output?.[outputFactory.name]?.properties,
               {
                 type: outputFactory.name,
-                "user-agent": `npm-pkgbuild-${version}`
+                "user-agent": `npm-pkgbuild-${pkg.version}`
               },
               options.define
             );

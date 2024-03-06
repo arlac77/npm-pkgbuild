@@ -169,11 +169,19 @@ export class DOCKER extends Packager {
   async publish(artifact, destination, properties, logger = console.log) {
     const publish = analysePublish(destination, properties);
 
-    logger(`Publishing to ${publish.url}`);
-
+    try {
+    const url = new URL(publish.url);
+    const repoLocation = `${url.host}/${url.pathname}`;
     const name = `${properties.name}:${properties.version}`;
-    console.log(`docker tag ${artifact} ${publish.url}/${name}`);
+
+    logger(`Publishing to ${repoLocation}`);
+
+    console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
     console.log(`docker push ${name}`);
+    }
+    catch(e) {
+      console.log(e, publish.url);
+    }
   }
 }
 

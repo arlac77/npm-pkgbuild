@@ -57,7 +57,7 @@ export class DOCKER extends Packager {
    */
   static async prepare(options, variant) {
     try {
-      await execa(this.constructor.name, ["--version"]);
+      await execa(this.name, ["--version"]);
       return true;
     } catch {}
 
@@ -166,12 +166,11 @@ export class DOCKER extends Packager {
     return image;
   }
 
-  async publish(artifact, destination, properties,logger=console.log) {
-
+  async publish(artifact, destination, properties, logger = console.log) {
     const publish = analysePublish(destination, properties);
-  
+
     logger(`Publishing to ${publish.url}`);
-  
+
     const name = `${properties.name}:${properties.version}`;
     console.log(`docker tag ${artifact} ${publish.url}/${name}`);
     console.log(`docker push ${name}`);

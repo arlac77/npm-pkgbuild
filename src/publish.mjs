@@ -4,7 +4,7 @@ import { mkdir, copyFile } from "node:fs/promises";
 import { decodePassword } from "./util.mjs";
 
 export function analysePublish(publish, properties) {
-  publish = Object.assign({}, publish);
+  publish = { ...publish };
 
   publish.url = publish.url.replace(
     /\{\{(\w+)\}\}/gm,
@@ -18,7 +18,12 @@ export function analysePublish(publish, properties) {
   return publish;
 }
 
-export async function publish(fileName, destination, properties, logger=console.log) {
+export async function publish(
+  fileName,
+  destination,
+  properties,
+  logger = console.log
+) {
   if (!destination) {
     return;
   }
@@ -52,7 +57,7 @@ export async function publish(fileName, destination, properties, logger=console.
       const response = await fetch(url, {
         method: "PUT",
         headers,
-        duplex: 'half',
+        duplex: "half",
         body: createReadStream(fileName)
       });
 
@@ -66,14 +71,12 @@ export async function publish(fileName, destination, properties, logger=console.
 }
 
 export function preparePublish(publish = [], env = {}) {
-  function vm(k) {
-    return env[k] || k;
-  }
-
   const e = env["PKGBUILD_PUBLISH"];
   if (e) {
     publish.push(e);
   }
+
+  const vm = k => env[k] || k;
 
   return publish.map(value => {
     let values = value.split(/,/);

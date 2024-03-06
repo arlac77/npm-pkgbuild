@@ -112,7 +112,7 @@ export class Packager {
 
         out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
 
-        await mkdir(out.destination, { recursive: true });
+        await mkdir(out.destination, mdo);
       }
     }
 

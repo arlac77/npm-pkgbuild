@@ -13,7 +13,6 @@ import {
 } from "npm-pkgbuild";
 import pkg from "../package.json" assert { type: "json" };
 
-
 program.description(pkg.description).version(pkg.version);
 
 allOutputs.forEach(o => {
@@ -55,6 +54,8 @@ program
     try {
       const uc = new UTIController();
       uc.register(additionalUTIs);
+
+      options.publish = preparePublish(options.publish, process.env);
 
       for await (const {
         properties,
@@ -137,7 +138,7 @@ program
             );
 
             if (!options.dry) {
-              await Promise.all(preparePublish(options.publish, process.env).map(pl => o.publish(artifact, pl, o.properties)));
+              await Promise.all(options.publish.map(pl => o.publish(artifact, pl, o.properties)));
             }
           } catch (e) {
             handleError(e, options);

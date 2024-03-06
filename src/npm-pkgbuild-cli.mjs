@@ -31,11 +31,6 @@ program
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
   .option("-p --dir <dir>", "which package to use", process.cwd())
-  .option(
-    "-a --available",
-    "only execute availabe output/arch combintions",
-    false
-  )
   .option("--continue", "continue on error")
   .option(
     "-c --content <dir>",
@@ -75,7 +70,6 @@ program
           o => (options[o.name] === true || output[o.name] !== undefined) && options[o.name] !== false
         )) {
           if (
-            options.available &&
             !(await outputFactory.prepare(options, variant))
           ) {
             console.warn(`output format ${outputFactory.name} not avaliable`);

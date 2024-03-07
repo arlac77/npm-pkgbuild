@@ -35,6 +35,9 @@ const dependenciesToFrom = {
   nginx: "nginx"
 };
 
+/**
+ * docker image build
+ */
 export class DOCKER extends Packager {
   static get name() {
     return "docker";

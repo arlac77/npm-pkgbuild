@@ -18,6 +18,13 @@ export function analysePublish(publish, properties) {
   return publish;
 }
 
+/**
+ * 
+ * @param {string} fileName 
+ * @param {*} destination 
+ * @param {Object} properties 
+ * @param {function(any):void} logger 
+ */
 export async function publish(
   fileName,
   destination,

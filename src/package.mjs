@@ -179,6 +179,12 @@ const skipPattern = [
 
 const defaultOptions = { dry: false };
 
+/**
+ * 
+ * @param {string} source 
+ * @param {string} dest 
+ * @param {Object} options 
+ */
 export async function* copyNodeModules(source, dest, options = defaultOptions) {
   for await (const name of globbyStream(["node_modules/**/package.json"], {
     cwd: source

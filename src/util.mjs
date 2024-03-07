@@ -63,7 +63,7 @@ export function decodePassword(password) {
 /**
  * @typedef {Object} FunctionDecl
  * @property {string} name
- * @property {string[]} body
+ * @property {string} body
  */
 
 /**

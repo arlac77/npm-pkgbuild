@@ -3,19 +3,24 @@ import { createReadStream } from "node:fs";
 import { mkdir, copyFile } from "node:fs/promises";
 import { decodePassword } from "./util.mjs";
 
+/**
+ * @param {Object} publish
+ * @param {Object} properties
+ * @return {{scheme: string, url: string }}
+ */
 export function analysePublish(publish, properties) {
-  publish = { ...publish };
+  const result = { ...publish };
 
-  publish.url = publish.url.replace(
+  result.url = result.url.replace(
     /\{\{(\w+)\}\}/gm,
     (match, key, offset, string) => properties[key] || "{{" + key + "}}"
   );
 
-  const m = publish.url.match(/^([^:]+:)\/\/(.*)/);
+  const m = result.url.match(/^([^:]+:)\/\/(.*)/);
 
-  publish.scheme = m ? m[1] : "file:";
+  result.scheme = m ? m[1] : "file:";
 
-  return publish;
+  return result;
 }
 
 /**
@@ -77,6 +82,12 @@ export async function publish(
   }
 }
 
+/**
+ * 
+ * @param {*} publish 
+ * @param {*} env 
+ * @returns {{url:string, password:string|undefined, username:string|undefined}}
+ */
 export function preparePublish(publish = [], env = {}) {
   const e = env["PKGBUILD_PUBLISH"];
   if (e) {

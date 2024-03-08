@@ -97,28 +97,28 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-1)
     *   [name](#name)
-*   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-2)
-    *   [name](#name-1)
-*   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-3)
-    *   [Properties](#properties-1)
-    *   [name](#name-2)
 *   [utf8StreamOptions](#utf8streamoptions)
-    *   [Properties](#properties-2)
+    *   [Properties](#properties-1)
 *   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-4)
+    *   [Parameters](#parameters-2)
 *   [FunctionDecl](#functiondecl)
-    *   [Properties](#properties-3)
+    *   [Properties](#properties-2)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-5)
+    *   [Parameters](#parameters-3)
 *   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-6)
+    *   [Parameters](#parameters-4)
 *   [Expander](#expander)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-5)
 *   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-6)
+*   [NFTContentProvider](#nftcontentprovider)
+    *   [Parameters](#parameters-7)
+    *   [name](#name-1)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-8)
+    *   [Properties](#properties-3)
+    *   [name](#name-2)
 *   [NPMPackContentProvider](#npmpackcontentprovider)
     *   [Parameters](#parameters-9)
     *   [Properties](#properties-4)
@@ -137,22 +137,26 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DOCKER](#docker)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-11)
-*   [publish](#publish)
+*   [analysePublish](#analysepublish)
     *   [Parameters](#parameters-12)
+*   [publish](#publish)
+    *   [Parameters](#parameters-13)
+*   [preparePublish](#preparepublish)
+    *   [Parameters](#parameters-14)
 *   [OCI](#oci)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-13)
+    *   [Parameters](#parameters-15)
     *   [tmpdir](#tmpdir)
     *   [execute](#execute)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-16)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-17)
 *   [RPM](#rpm)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-18)
 
 ## ContentProvider
 
@@ -187,44 +191,6 @@ Content provided form the file system.
     *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)**&#x20;
     *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
 *   `entryProperties` &#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## NFTContentProvider
-
-**Extends ContentProvider**
-
-Content provided form the file system.
-
-### Parameters
-
-*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
-
-    *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)**&#x20;
-    *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
-*   `entryProperties` &#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## NodeModulesContentProvider
-
-**Extends ContentProvider**
-
-Content from node\_modules.
-Requires .npmrc or NPM\_TOKEN environment
-
-### Parameters
-
-*   `definitions` &#x20;
-*   `entryProperties` &#x20;
-
-### Properties
-
-*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
 
 ### name
 
@@ -300,6 +266,44 @@ Destination paths a generated without leading '/' (as for entry names too).
 *   `source` **AsyncIterable\<ContentEntry>**&#x20;
 *   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
+
+## NFTContentProvider
+
+**Extends ContentProvider**
+
+Content provided form the file system.
+
+### Parameters
+
+*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
+
+    *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)**&#x20;
+    *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
+*   `entryProperties` &#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## NodeModulesContentProvider
+
+**Extends ContentProvider**
+
+Content from node\_modules.
+Requires .npmrc or NPM\_TOKEN environment
+
+### Parameters
+
+*   `definitions` &#x20;
+*   `entryProperties` &#x20;
+
+### Properties
+
+*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## NPMPackContentProvider
 
@@ -392,6 +396,15 @@ Check for docker presence.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
 
+## analysePublish
+
+### Parameters
+
+*   `publish` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+Returns **{scheme: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), url: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}**&#x20;
+
 ## publish
 
 ### Parameters
@@ -400,6 +413,13 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 *   `destination` **any**&#x20;
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `logger` **function (any): void**  (optional, default `console.log`)
+
+## preparePublish
+
+### Parameters
+
+*   `publish` **any**  (optional, default `[]`)
+*   `env` **any**  (optional, default `{}`)
 
 ## OCI
 

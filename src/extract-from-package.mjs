@@ -96,6 +96,7 @@ function* content2Sources(content, dir) {
  * @property {Object} output package type
  * @property {Object} variant identifier of the variant
  * @property {string} variant.name name of the variant
+ * @property {string} variant.arch name of the architecture
  */
 
 /**

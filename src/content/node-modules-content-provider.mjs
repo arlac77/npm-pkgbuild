@@ -2,6 +2,7 @@ import { tmpdir, homedir } from "node:os";
 import { join } from "node:path";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { globby } from "globby";
+import { execa } from "execa";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";
 import { StringContentEntry } from "content-entry";
@@ -71,7 +72,9 @@ export class NodeModulesContentProvider extends ContentProvider {
           if (process.env.NPM_TOKEN) {
             npmrc["_authToken"] = process.env.NPM_TOKEN;
           } else {
-            throw new Error(`.npmrc not found in ${searchDirs} (neither NPM_TOKEN in envinronment)`);
+            throw new Error(
+              `.npmrc not found in ${searchDirs} (neither NPM_TOKEN in envinronment)`
+            );
           }
         }
 
@@ -110,6 +113,13 @@ export class NodeModulesContentProvider extends ContentProvider {
               console.error(e, name);
             }
           }
+          /*if (name.endsWith(".node")) {
+            const proc = await execa("file", ["-b", name], {
+              cwd: pkgSourceDir
+            });
+            const arch = proc.stdout.split(/\s*,\s*/)[1];
+            console.log(name, arch);
+          }*/
 
           yield Object.assign(
             new FileSystemEntry(name, pkgSourceDir),

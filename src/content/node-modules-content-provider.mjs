@@ -113,13 +113,13 @@ export class NodeModulesContentProvider extends ContentProvider {
               console.error(e, name);
             }
           }
-          /*if (name.endsWith(".node")) {
+          if (name.endsWith(".node")) {
             const proc = await execa("file", ["-b", name], {
               cwd: pkgSourceDir
             });
             const arch = proc.stdout.split(/\s*,\s*/)[1];
             console.log(name, arch);
-          }*/
+          }
 
           yield Object.assign(
             new FileSystemEntry(name, pkgSourceDir),

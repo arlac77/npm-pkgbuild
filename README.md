@@ -149,14 +149,16 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [Packager](#packager)
     *   [Parameters](#parameters-15)
     *   [tmpdir](#tmpdir)
-    *   [execute](#execute)
-        *   [Parameters](#parameters-16)
-    *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-2)
+        *   [Parameters](#parameters-16)
+    *   [create](#create)
         *   [Parameters](#parameters-17)
-*   [RPM](#rpm)
+    *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-3)
         *   [Parameters](#parameters-18)
+*   [RPM](#rpm)
+    *   [prepare](#prepare-4)
+        *   [Parameters](#parameters-19)
 
 ## ContentProvider
 
@@ -452,19 +454,29 @@ Create tmp directory.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** directory path
 
-### execute
+### prepare
+
+Prepares artifact generation
+
+#### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<{properties: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), destination: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), tmpdir: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}>**&#x20;
+
+### create
 
 Execute package generation.
 
 #### Parameters
 
-*   `sources` &#x20;
-*   `transformer` &#x20;
-*   `dependencies` &#x20;
-*   `options` &#x20;
-*   `expander` &#x20;
+*   `sources` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
+*   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** location of the resulting package
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** identifier of the resulting package
 
 ### workspaceLayout
 

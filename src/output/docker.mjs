@@ -173,16 +173,15 @@ export class DOCKER extends Packager {
     const publish = analysePublish(destination, properties);
 
     try {
-    const url = new URL(publish.url);
-    const repoLocation = `${url.host}/${url.pathname}`;
-    const name = `${properties.name}:${properties.version}`;
+      const url = new URL(publish.url);
+      const repoLocation = `${url.host}/${url.pathname}`;
+      const name = `${properties.name}:${properties.version}`;
 
-    logger(`Publishing to ${repoLocation}`);
+      logger(`Publishing to ${repoLocation}`);
 
-    console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
-    console.log(`docker push ${name}`);
-    }
-    catch(e) {
+      console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
+      console.log(`docker push ${name}`);
+    } catch (e) {
       console.log(e, publish.url);
     }
   }

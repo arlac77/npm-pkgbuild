@@ -85,7 +85,8 @@ export async function publish(
 /**
  * 
  * @param {*} publish 
- * @param {*} env 
+ * @param {Object} env
+ * @param {string} [env.PKGBUILD_PUBLISH]
  * @returns {{url:string, password:string|undefined, username:string|undefined}}
  */
 export function preparePublish(publish = [], env = {}) {

@@ -144,6 +144,7 @@ export class DOCKER extends Packager {
       const docker = await execa(
         this.constructor.name,
         [
+          "buildx",
           "build",
           "--tag",
           tag,
@@ -179,8 +180,18 @@ export class DOCKER extends Packager {
 
       logger(`Publishing to ${repoLocation}`);
 
-      console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
-      console.log(`docker push ${repoLocation}/${name}`);
+      let p1 = await execa(this.constructor.name, [
+        "tag",
+        artifact,
+        `${repoLocation}/${name}`
+      ]);
+      let p2 = await execa(this.constructor.name, [
+        "push",
+        `${repoLocation}/${name}`
+      ]);
+
+      //console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
+      //console.log(`docker push ${repoLocation}/${name}`);
     } catch (e) {
       console.log(e, publish.url);
     }

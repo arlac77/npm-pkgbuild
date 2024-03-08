@@ -12,7 +12,7 @@ test("docker", async t => {
   );
 
   const properties = {
-    name: "ABC",
+    name: "abc",
     version: "1.0.0",
     description: "a description",
     license: "MIT",
@@ -33,7 +33,7 @@ test("docker", async t => {
   t.true(artifact != undefined);
 
   const messages = [];
-  await out.publish(artifact, { url: "myregistry.com" }, properties, message =>
+  await out.publish(artifact, { url: "https://myregistry.com" }, properties, message =>
     messages.push(message)
   );
 

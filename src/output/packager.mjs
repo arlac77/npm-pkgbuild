@@ -21,7 +21,7 @@ export class Packager {
   }
 
   /**
-   * @return {Object}
+   * @return {{named:object,others:[]}}
    */
   static get workspaceLayout() {
     return {

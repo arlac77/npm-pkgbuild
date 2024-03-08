@@ -106,9 +106,9 @@ export class RPM extends Packager {
     return false;
   }
 
-  async execute(sources, transformer, dependencies, options, expander) {
+  async create(sources, transformer, dependencies, options, expander) {
     const { properties, tmpdir, staging, destination } =
-      await this.prepareExecute(options);
+      await this.prepare(options);
 
     properties.Requires = requiresFromDependencies(dependencies);
 

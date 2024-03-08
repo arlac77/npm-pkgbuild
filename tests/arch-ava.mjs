@@ -75,7 +75,7 @@ test("arch", async t => {
     "nginx-mainline": ">=1.21.4",
     konsum: ">=4.3.8"
   };
-  const fileName = await out.execute(sources, transformer, dependencies, {
+  const fileName = await out.create(sources, transformer, dependencies, {
     destination
   });
   t.is(fileName, join(destination, "abc-1.0.0-1-any" + ARCH.fileNameExtension));

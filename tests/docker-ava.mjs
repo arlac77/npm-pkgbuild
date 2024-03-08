@@ -25,7 +25,7 @@ test("docker", async t => {
   const transformer = [];
   const dependencies = { node: ">=18" };
 
-  const artifact = await out.execute(sources, transformer, dependencies, {
+  const artifact = await out.create(sources, transformer, dependencies, {
     destination,
     verbose: true
   });

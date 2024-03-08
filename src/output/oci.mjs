@@ -76,14 +76,14 @@ export class OCI extends Packager {
     return `${p.name}-${p.version}${this.fileNameExtension}`;
   }
 
-  async execute(
+  async create(
     sources,
     transformer,
     dependencies,
     options,
     expander = v => v
   ) {
-    const { properties, destination } = await this.prepareExecute(options);
+    const { properties, destination } = await this.prepare(options);
     const packageFile = join(destination, this.packageFileName);
 
     const meta = {

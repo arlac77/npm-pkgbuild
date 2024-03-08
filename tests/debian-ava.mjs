@@ -24,7 +24,7 @@ async function preparePacker(sourceDirs = [], dependencies = {}) {
 
   const transformer = [];
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.execute(sources, transformer, dependencies, {
+  const fileName = await out.create(sources, transformer, dependencies, {
     destination,
     verbose: false
   });

@@ -43,15 +43,21 @@ export class Packager {
 
   #properties;
 
+  /**
+   * Base Packager
+   * @param {Object} properties
+   */
   constructor(properties) {
     this.#properties = { ...properties };
   }
 
   get fileNameExtension() {
+    // @ts-ignore
     return this.constructor.fileNameExtension;
   }
 
   get fields() {
+    // @ts-ignore
     return this.constructor.fields;
   }
 
@@ -82,7 +88,20 @@ export class Packager {
     return properties;
   }
 
-  async prepareExecute(options) {
+  /**
+   * Create tmp directory.
+   * @return {Promise<string>} directory path
+   */
+  get tmpdir() {
+    return mkdtemp(join(tmpdir(), this.constructor.name));
+  }
+
+  /**
+   * Prepares artifact generation
+   * @param {Object} options
+   * @returns {Promise<{properties:Object, destination:string, tmpdir:string}>}
+   */
+  async prepare(options) {
     const tmpdir = await this.tmpdir;
 
     const out = {
@@ -91,6 +110,7 @@ export class Packager {
       tmpdir
     };
 
+    // @ts-ignore
     const l = this.constructor.workspaceLayout;
 
     const mdo = { recursive: true };
@@ -120,18 +140,17 @@ export class Packager {
   }
 
   /**
-   * Create tmp directory.
-   * @return {Promise<string>} directory path
-   */
-  get tmpdir() {
-    return mkdtemp(join(tmpdir(), this.constructor.name));
-  }
-
-  /**
    * Execute package generation.
-   * @return {Promise<string>} location of the resulting package
+   * @param {Object} sources
+   * @param {Object[]} transformer
+   * @param {Object} dependencies
+   * @param {Object} options
+   * @param {function(string):string} expander
+   * @return {Promise<string>} identifier of the resulting package
    */
-  async execute(sources, transformer, dependencies, options, expander) {}
+  async create(sources, transformer, dependencies, options, expander) {
+    throw new Error("not implemented");
+  }
 
   async publish(artifact, destination, properties, logger) {
     return publish(artifact, destination, properties, logger);

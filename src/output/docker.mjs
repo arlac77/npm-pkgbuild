@@ -67,14 +67,14 @@ export class DOCKER extends Packager {
     return false;
   }
 
-  async execute(
+  async create(
     sources,
     transformer,
     dependencies,
     options,
     expander = v => v
   ) {
-    const { properties, staging } = await this.prepareExecute(options);
+    const { properties, staging } = await this.prepare(options);
 
     async function* headLines() {
       let scratch = true;

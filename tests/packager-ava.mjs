@@ -34,7 +34,7 @@ test("packager properties", t => {
 
 test("packager prepareExecute", async t => {
   const p = new MyPackager({ a: 1 });
-  const out = await p.prepareExecute({});
+  const out = await p.prepare({});
   t.true(out.tmpdir.length > 4);
   t.is(out.tmpdir, out.destination);
 });

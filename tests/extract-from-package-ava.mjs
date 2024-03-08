@@ -115,7 +115,11 @@ test(
       other: "o1",
       dependencies: { dep2: ">=2" },
       output: {
-        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+        deb: {
+          dependencies: { dep1: ">=1" },
+          properties: { deb1: "a" },
+          arch: ["x86_64"]
+        }
       }
     }
   },
@@ -137,7 +141,11 @@ test(
       },
       dependencies: { dep1: ">=1" },
       output: {
-        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+        deb: {
+          dependencies: { dep1: ">=1" },
+          properties: { deb1: "a" },
+          arch: ["x86_64"]
+        }
       }
     },
     {
@@ -157,7 +165,11 @@ test(
       },
       dependencies: { dep1: ">=1" },
       output: {
-        deb: { dependencies: { dep1: ">=1" }, properties: { deb1: "a" } }
+        deb: {
+          dependencies: { dep1: ">=1" },
+          properties: { deb1: "a" },
+          arch: ["x86_64"]
+        }
       }
     }
   ]

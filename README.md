@@ -421,7 +421,9 @@ Returns **{scheme: [string](https://developer.mozilla.org/docs/Web/JavaScript/Re
 ### Parameters
 
 *   `publish` **any**  (optional, default `[]`)
-*   `env` **any**  (optional, default `{}`)
+*   `env` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
+
+    *   `env.PKGBUILD_PUBLISH` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 
 ## OCI
 
@@ -480,7 +482,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### workspaceLayout
 
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+Returns **{named: [object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), others: \[]}**&#x20;
 
 ### prepare
 

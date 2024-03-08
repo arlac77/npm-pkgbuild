@@ -123,7 +123,7 @@ program
               console.log(kv(dependencies, "  "));
             }
 
-            const artifact = await o.execute(
+            const artifact = await o.create(
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
               dependencies,

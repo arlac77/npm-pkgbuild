@@ -64,7 +64,7 @@
     "globby": "^14.0.1",
     "ini": "^4.1.2",
     "iterable-string-interceptor": "^2.3.1",
-    "key-value-transformer": "^3.2.2",
+    "key-value-transformer": "^3.2.3",
     "npm-package-walker": "^6.2.4",
     "npm-packlist": "^8.0.2",
     "pacote": "^17.0.6",

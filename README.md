@@ -134,6 +134,7 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DEBIAN](#debian)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-10)
+*   [staging](#staging)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-11)
@@ -391,6 +392,10 @@ Create .deb packages
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
 
+## staging
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 ## DOCKER
 
 **Extends Packager**
@@ -436,6 +441,8 @@ Prepares artifact generation
 
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<{properties: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), destination: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), tmpdir: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), staging: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}>**&#x20;
 
 ### create
 
@@ -487,6 +494,8 @@ Prepares artifact generation
 
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<{properties: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), destination: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), tmpdir: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), staging: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}>**&#x20;
 
 ### create
 

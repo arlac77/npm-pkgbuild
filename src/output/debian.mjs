@@ -95,10 +95,15 @@ export class DEBIAN extends Packager {
     }
   }
 
-  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
-    const { properties, staging, destination } = await this.prepare(
-      options
-    );
+  async create(
+    sources,
+    transformer,
+    dependencies,
+    publishingDetails,
+    options,
+    expander
+  ) {
+    const { properties, staging, destination } = await this.prepare(options);
 
     transformer.push(
       createPropertiesTransformer(

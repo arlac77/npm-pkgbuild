@@ -134,7 +134,6 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DEBIAN](#debian)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-10)
-*   [staging](#staging)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-11)
@@ -392,10 +391,6 @@ Create .deb packages
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
 
-## staging
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
 ## DOCKER
 
 **Extends Packager**
@@ -543,6 +538,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 ### Properties
 
 *   `url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `scheme` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 *   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;

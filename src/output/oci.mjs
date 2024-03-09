@@ -80,6 +80,7 @@ export class OCI extends Packager {
     sources,
     transformer,
     dependencies,
+    publishingDetails,
     options,
     expander = v => v
   ) {

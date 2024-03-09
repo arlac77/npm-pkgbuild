@@ -98,7 +98,7 @@ export class RPM extends Packager {
       await execa("rpmbuild", ["--version"]);
       if (variant?.arch) {
         const uname = await execa("uname", ["-m"]);
-        return uname.stdout.match(variant.arch);
+        return uname.stdout.match(variant.arch) ? true : false;
       }
       return true;
     } catch {}
@@ -106,7 +106,7 @@ export class RPM extends Packager {
     return false;
   }
 
-  async create(sources, transformer, dependencies, options, expander) {
+  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
     const { properties, tmpdir, staging, destination } =
       await this.prepare(options);
 

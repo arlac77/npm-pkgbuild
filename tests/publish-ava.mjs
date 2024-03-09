@@ -1,20 +1,24 @@
 import test from "ava";
-import { analysePublish, publish, preparePublish } from "../src/publish.mjs";
+import { createPublishingDetails, publish } from "../src/publish.mjs";
 
-const DESTINATION = {
-  url:
-    process.env["PKGBUILD_PUBLISH"] || "http://myserver.com/{{access}}/{{arch}}"
-};
+const DESTINATION =
+  process.env["PKGBUILD_PUBLISH"] || "http://myserver.com/{{access}}/{{arch}}";
 
-test("analysePublish", t => {
-  const destination = { url: "http://myserver.com/{{access}}/{{arch}}" };
-
-  const publish = analysePublish(destination, {
+test("createPublishingDetails", t => {
+  const properties = {
     arch: "aarch64",
     access: "private"
-  });
+  };
 
-  t.is(publish.url, "http://myserver.com/private/aarch64");
+  const pds = createPublishingDetails(
+    ["http://myserver.com/{{access}}/{{arch}}"],
+    properties
+  );
+
+  t.is(pds[0].url, "http://myserver.com/private/aarch64");
+
+  properties.arch = "x86_64";
+  t.is(pds[0].url, "http://myserver.com/private/x86_64");
 });
 
 test("publish nowhere", async t => {
@@ -28,7 +32,7 @@ test("publish twice", async t => {
   const file = new URL("fixtures/content/file1.txt", import.meta.url).pathname;
 
   const properties = { arch: "aarch64", access: "private" };
-  const [destination] = preparePublish([DESTINATION.url], process.env);
+  const [destination] = createPublishingDetails([DESTINATION], properties);
 
   let url = "";
 
@@ -57,30 +61,33 @@ test("publish twice", async t => {
   t.truthy(url.match(/\/arch\/.*\/aarch64\/file1.txt/));
 });
 
-test("preparePublish path only", t => {
-  t.deepEqual(preparePublish(["/path/to"]), [{ url: "/path/to" }]);
-});
-
-test("preparePublish simple", t => {
-  t.deepEqual(preparePublish(["http://somewhere.com/"]), [
-    { url: "http://somewhere.com/" }
+test("createPublishingDetails path only", t => {
+  t.deepEqual(createPublishingDetails(["/path/to"]), [
+    { url: "/path/to", scheme: "file:" }
   ]);
 });
 
-test("preparePublish simple placeholders", t => {
-  t.deepEqual(preparePublish(["http://somewhere.com/{{type}}"]), [
-    { url: "http://somewhere.com/{{type}}" }
+test("createPublishingDetails simple", t => {
+  t.deepEqual(createPublishingDetails(["http://somewhere.com/"]), [
+    { url: "http://somewhere.com/", scheme: "http:" }
   ]);
 });
 
-test("preparePublish with url credentials", t => {
+test("createPublishingDetails simple placeholders", t => {
+  t.deepEqual(createPublishingDetails(["http://somewhere.com/{{type}}"]), [
+    { url: "http://somewhere.com/{{type}}", scheme: "http:" }
+  ]);
+});
+
+test("createPublishingDetails with url credentials", t => {
   t.deepEqual(
-    preparePublish(["http://USER:PASSWORD@somewhere.com/"], {
+    createPublishingDetails(["http://USER:PASSWORD@somewhere.com/"], {
       USER: "myUser",
       PASSWORD: "{BASE64}bXlQYXNzd29yZA=="
     }),
     [
       {
+        scheme: "http:",
         username: "myUser",
         password: "myPassword",
         url: "http://somewhere.com/"

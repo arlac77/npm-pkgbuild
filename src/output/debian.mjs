@@ -95,7 +95,7 @@ export class DEBIAN extends Packager {
     }
   }
 
-  async create(sources, transformer, dependencies, options, expander) {
+  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(
       options
     );

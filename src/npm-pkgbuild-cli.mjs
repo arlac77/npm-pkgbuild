@@ -9,7 +9,7 @@ import {
   allInputs,
   allOutputs,
   extractFromPackage,
-  preparePublish
+  createPublishingDetails
 } from "npm-pkgbuild";
 import pkg from "../package.json" assert { type: "json" };
 
@@ -50,7 +50,7 @@ program
       const uc = new UTIController();
       uc.register(additionalUTIs);
 
-      options.publish = preparePublish(options.publish, process.env);
+      const publishingDetails = createPublishingDetails(options.publish, process.env);
 
       for await (const {
         properties,
@@ -60,6 +60,7 @@ program
         dependencies,
         context
       } of extractFromPackage(options, process.env)) {
+
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true
         )) {
@@ -127,12 +128,13 @@ program
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
               dependencies,
+              publishingDetails,
               options,
               context.expand
             );
 
             if (!options.dry) {
-              await Promise.all(options.publish.map(pl => o.publish(artifact, pl, o.properties)));
+              await Promise.all(publishingDetails.map(publishDetail => o.publish(artifact, publishDetail, o.properties)));
             }
           } catch (e) {
             handleError(e, options);

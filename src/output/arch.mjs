@@ -120,7 +120,7 @@ export class ARCH extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
-  async create(sources, transformer, dependencies, options, expander) {
+  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(
       options
     );

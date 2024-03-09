@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
-import { analysePublish, publish } from "../publish.mjs";
+import { publish } from "../publish.mjs";
 
 /**
  * @typedef {Object} Field
@@ -99,9 +99,10 @@ export class Packager {
   /**
    * Prepares artifact generation
    * @param {Object} options
+   * @param {Object} publishingDetail
    * @returns {Promise<{properties:Object, destination:string, tmpdir:string}>}
    */
-  async prepare(options) {
+  async prepare(options, publishingDetail) {
     const tmpdir = await this.tmpdir;
 
     const out = {
@@ -126,14 +127,10 @@ export class Packager {
       out[nd[0]] = nd[1];
     }
 
-    if (options.publish) {
-      for (const op of options.publish) {
-        const publish = analysePublish(op, out.properties);
-
-        out.destination = publish.scheme === "file:" ? publish.url : tmpdir;
-
-        await mkdir(out.destination, mdo);
-      }
+    if (publishingDetail) {
+      out.destination =
+      publishingDetail.scheme === "file:" ? publishingDetail.url : tmpdir;
+      await mkdir(out.destination, mdo);
     }
 
     return out;
@@ -144,15 +141,16 @@ export class Packager {
    * @param {Object} sources
    * @param {Object[]} transformer
    * @param {Object} dependencies
+   * @param {PublishingDetail[]} publishingDetails
    * @param {Object} options
    * @param {function(string):string} expander
    * @return {Promise<string>} identifier of the resulting package
    */
-  async create(sources, transformer, dependencies, options, expander) {
+  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
     throw new Error("not implemented");
   }
 
-  async publish(artifact, destination, properties, logger) {
-    return publish(artifact, destination, properties, logger);
+  async publish(artifact, publishingDetails, properties, logger) {
+    return publish(artifact, publishingDetails, properties, logger);
   }
 }

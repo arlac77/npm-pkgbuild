@@ -9,7 +9,6 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { Packager } from "./packager.mjs";
-import { analysePublish } from "../publish.mjs";
 import {
   fieldProvider,
   copyEntries,
@@ -72,9 +71,10 @@ export class DOCKER extends Packager {
     transformer,
     dependencies,
     options,
+    publishingDetails,
     expander = v => v
   ) {
-    const { properties, staging } = await this.prepare(options);
+    const { properties, staging } = await this.prepare(options, publishingDetails);
 
     async function* headLines() {
       let scratch = true;
@@ -170,12 +170,10 @@ export class DOCKER extends Packager {
     return image;
   }
 
-  async publish(artifact, destination, properties, logger = console.log) {
-    const publish = analysePublish(destination, properties);
-
+  async publish(artifact, publishingDetails, properties, logger = console.log) {
     try {
-      const url = new URL(publish.url);
-      const repoLocation = `${url.host}/${publish.username}`;
+      const url = new URL(publishingDetails.url);
+      const repoLocation = `${url.host}/${publishingDetails.username}`;
       const name = `${properties.name}:${properties.version}`;
 
       logger(`Publishing to ${repoLocation}`);
@@ -193,7 +191,7 @@ export class DOCKER extends Packager {
       //console.log(`docker tag ${artifact} ${repoLocation}/${name}`);
       //console.log(`docker push ${repoLocation}/${name}`);
     } catch (e) {
-      console.log(e, publish.url);
+      console.log(e, publishingDetails.url);
     }
   }
 }

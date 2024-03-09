@@ -4,52 +4,96 @@ import { mkdir, copyFile } from "node:fs/promises";
 import { decodePassword } from "./util.mjs";
 
 /**
- * @param {Object} publish
- * @param {Object} properties
- * @return {{scheme: string, url: string }}
+ * @typedef {Object} PublishingDetail
+ * @property {string} url
+ * @property {string} scheme
+ * @property {string} [username]
+ * @property {string} [password]
  */
-export function analysePublish(publish, properties) {
-  const result = { ...publish };
 
-  result.url = result.url.replace(
-    /\{\{(\w+)\}\}/gm,
-    (match, key, offset, string) => properties[key] || "{{" + key + "}}"
-  );
+/**
+ * @param {string[]} locations
+ * @param {Object} [properties]
+ * @param {string} [properties.PKGBUILD_PUBLISH]
+ * @param {string} [properties.arch]
+ * @param {string} [properties.access]
+ * @return {PublishingDetail[]}
+ */
+export function createPublishingDetails(locations, properties) {
+  const vm = k => properties?.[k] || k;
 
-  const m = result.url.match(/^([^:]+:)\/\/(.*)/);
+  const e = properties?.PKGBUILD_PUBLISH;
+  if (e) {
+    locations.push(e);
+  }
 
-  result.scheme = m ? m[1] : "file:";
+  return locations.map(location => {
 
-  return result;
+    let url = location;
+
+    const result = {
+      get url() {
+        return url.replace(
+          /\{\{(\w+)\}\}/gm,
+          (match, key, offset, string) => properties?.[key] || "{{" + key + "}}"
+        );
+      }
+    };
+
+    let values = location.split(/,/);
+
+    if (values.length > 1) {
+      values = values.map(v => vm(v));
+      url = values[0];
+      result.username = values[1];
+      result.password = decodePassword(vm(values[2]));
+    }
+
+    try {
+      const l = new URL(location);
+      const username = vm(l.username);
+      if (username) {
+        result.username = username;
+        result.password = decodePassword(vm(l.password));
+        l.username = "";
+        l.password = "";
+        url = l.href.replace(/%7B/g, "{").replace(/%7D/g, "}");
+      }
+    } catch {}
+
+    const m = url.match(/^([^:]+:)\/\/(.*)/);
+    result.scheme = m ? m[1] : "file:";
+
+    return result;
+  });
 }
 
 /**
- * 
- * @param {string} fileName 
- * @param {*} destination 
- * @param {Object} properties 
- * @param {function(any):void} logger 
+ *
+ * @param {string} artifactIdentifier
+ * @param {PublishingDetail} publishingDetail
+ * @param {Object} properties
+ * @param {function(any):void} logger
  */
 export async function publish(
-  fileName,
-  destination,
+  artifactIdentifier,
+  publishingDetail,
   properties,
   logger = console.log
 ) {
-  if (!destination) {
+  if (!publishingDetail) {
     return;
   }
 
-  const publish = analysePublish(destination, properties);
-  const url = publish.url + "/" + basename(fileName);
+  const url = publishingDetail.url + "/" + basename(artifactIdentifier);
 
   logger(`Publishing to ${url}`);
 
-  switch (publish.scheme) {
+  switch (publishingDetail.scheme) {
     case "file:":
-      if (url.pathname !== fileName) {
-        await mkdir(publish.url, { recursive: true });
-        await copyFile(fileName, url);
+      if (url.pathname !== artifactIdentifier) {
+        await mkdir(url, { recursive: true });
+        await copyFile(artifactIdentifier, url);
       }
       break;
     case "http:":
@@ -58,19 +102,19 @@ export async function publish(
         "user-agent": properties["user-agent"] || "npm-pkgbuild"
       };
 
-      if (publish.username) {
+      if (publishingDetail.username) {
         headers.authorization =
           "Basic " +
-          Buffer.from(publish.username + ":" + publish.password).toString(
-            "base64"
-          );
+          Buffer.from(
+            publishingDetail.username + ":" + publishingDetail.password
+          ).toString("base64");
       }
 
       const response = await fetch(url, {
         method: "PUT",
         headers,
         duplex: "half",
-        body: createReadStream(fileName)
+        body: createReadStream(artifactIdentifier)
       });
 
       if (!response.ok) {
@@ -80,47 +124,4 @@ export async function publish(
       }
     }
   }
-}
-
-/**
- * 
- * @param {*} publish 
- * @param {Object} env
- * @param {string} [env.PKGBUILD_PUBLISH]
- * @returns {{url:string, password:string|undefined, username:string|undefined}}
- */
-export function preparePublish(publish = [], env = {}) {
-  const e = env["PKGBUILD_PUBLISH"];
-  if (e) {
-    publish.push(e);
-  }
-
-  const vm = k => env[k] || k;
-
-  return publish.map(value => {
-    let values = value.split(/,/);
-    if (values.length > 1) {
-      values = values.map(v => vm(v));
-      return {
-        url: values[0],
-        user: vm(values[1]),
-        password: decodePassword(vm(values[2]))
-      };
-    }
-
-    try {
-      const url = new URL(value);
-      let password = decodePassword(vm(url.password));
-      let username = vm(url.username);
-      url.username = "";
-      url.password = "";
-
-      return {
-        url: url.href.replace(/%7B/g, "{").replace(/%7D/g, "}"),
-        ...(username.length ? { username, password } : {})
-      };
-    } catch {
-      return { url: value };
-    }
-  });
 }

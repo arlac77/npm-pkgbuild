@@ -2,7 +2,7 @@ import test from "ava";
 import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, ARCH } from "npm-pkgbuild";
+import { FileContentProvider, createPublishingDetails, ARCH } from "npm-pkgbuild";
 
 test("arch extension", async t => {
   await ARCH.prepare({ verbose: false }, { arch: "aarch64" });
@@ -54,6 +54,7 @@ test("arch aarch64 default properties", async t => {
 
 
 test("arch", async t => {
+  const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -75,7 +76,7 @@ test("arch", async t => {
     "nginx-mainline": ">=1.21.4",
     konsum: ">=4.3.8"
   };
-  const fileName = await out.create(sources, transformer, dependencies, {
+  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination
   });
   t.is(fileName, join(destination, "abc-1.0.0-1-any" + ARCH.fileNameExtension));

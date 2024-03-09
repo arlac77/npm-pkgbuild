@@ -7,9 +7,11 @@ import { createGunzip } from "node:zlib";
 import { pipeline } from "node:stream/promises";
 import { extract } from "tar-stream";
 import { execa } from "execa";
-import { FileContentProvider, OCI } from "npm-pkgbuild";
+import { FileContentProvider, createPublishingDetails, OCI } from "npm-pkgbuild";
 
 test("oci", async t => {
+  const publishingDetails = createPublishingDetails(["https://myregistry.com"]);
+
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -29,7 +31,7 @@ test("oci", async t => {
   const transformer = [];
   const dependencies = {};
 
-  const fileName = await out.create(sources, transformer, dependencies, {
+  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination
   });
 

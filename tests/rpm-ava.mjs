@@ -2,7 +2,7 @@ import test from "ava";
 import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, RPM } from "npm-pkgbuild";
+import { FileContentProvider, createPublishingDetails, RPM } from "npm-pkgbuild";
 import { requiresFromDependencies } from "../src/output/rpm.mjs";
 
 test("requiresFromDependencies", t => {
@@ -31,6 +31,8 @@ test("requiresFromDependencies", t => {
 });
 
 test("rpm", async t => {
+  const publishingDetails = createPublishingDetails(["https://myregistry.com"]);
+
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -53,7 +55,7 @@ test("rpm", async t => {
     "nginx-mainline": ">=1.21.4",
     konsum: ">=4.3.8"
   };
-  const fileName = await out.create(sources, transformer, dependencies, {
+  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination,
     verbose: true
   });

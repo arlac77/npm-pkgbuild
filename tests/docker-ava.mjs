@@ -2,9 +2,11 @@ import test from "ava";
 import { join } from "node:path";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, DOCKER } from "npm-pkgbuild";
+import { FileContentProvider, createPublishingDetails, DOCKER } from "npm-pkgbuild";
 
 test("docker", async t => {
+  const publishingDetails = createPublishingDetails(["https://myregistry.com"]);
+
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -25,7 +27,7 @@ test("docker", async t => {
   const transformer = [];
   const dependencies = { node: ">=18" };
 
-  const artifact = await out.create(sources, transformer, dependencies, {
+  const artifact = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination,
     verbose: true
   });
@@ -33,7 +35,7 @@ test("docker", async t => {
   t.true(artifact != undefined);
 
   const messages = [];
-  await out.publish(artifact, { url: "https://myregistry.com" }, properties, message =>
+  await out.publish(artifact, publishingDetails[0] , properties, message =>
     messages.push(message)
   );
 

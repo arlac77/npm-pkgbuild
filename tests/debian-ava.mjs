@@ -2,9 +2,15 @@ import test from "ava";
 import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, DEBIAN } from "npm-pkgbuild";
+import {
+  FileContentProvider,
+  createPublishingDetails,
+  DEBIAN
+} from "npm-pkgbuild";
 
 async function preparePacker(sourceDirs = [], dependencies = {}) {
+  const publishingDetails = createPublishingDetails([], process.env);
+
   const sources = sourceDirs.map(source =>
     new FileContentProvider({
       base: new URL(source, import.meta.url).pathname
@@ -24,10 +30,16 @@ async function preparePacker(sourceDirs = [], dependencies = {}) {
 
   const transformer = [];
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.create(sources, transformer, dependencies, {
-    destination,
-    verbose: false
-  });
+  const fileName = await out.create(
+    sources,
+    transformer,
+    dependencies,
+    publishingDetails,
+    {
+      destination,
+      verbose: false
+    }
+  );
 
   return { fileName, destination };
 }

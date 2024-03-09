@@ -20,13 +20,13 @@ import { decodePassword } from "./util.mjs";
  * @param {string} [properties.access]
  * @return {PublishingDetail[]}
  */
-export function createPublishingDetails(locations, properties) {
-  const vm = k => properties?.[k] || k;
-
+export function createPublishingDetails(locations=[], properties) {
   const e = properties?.PKGBUILD_PUBLISH;
   if (e) {
     locations.push(e);
   }
+
+  const vm = k => properties?.[k] || k;
 
   return locations.map(location => {
 

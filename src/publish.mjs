@@ -97,7 +97,7 @@ export async function publish(
     case "file:":
       //console.log(typeof url, publishingDetail.url, url, artifactIdentifier);
       if (url.pathname !== artifactIdentifier) {
-        await mkdir(url, { recursive: true });
+        await mkdir(publishingDetail.url, { recursive: true });
         await copyFile(artifactIdentifier, url);
       }
       break;

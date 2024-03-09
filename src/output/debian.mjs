@@ -62,7 +62,7 @@ export class DEBIAN extends Packager {
       await execa("dpkg", ["--version"]);
       if (variant?.arch) {
         const uname = await execa("uname", ["-m"]);
-        return uname.stdout.match(variant.arch);
+        return uname.stdout.match(variant.arch) ? true : false;
       }
       return true;
     } catch {}

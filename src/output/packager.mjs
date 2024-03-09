@@ -4,6 +4,10 @@ import { mkdtemp, mkdir } from "node:fs/promises";
 import { publish } from "../publish.mjs";
 
 /**
+ * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
+ */
+
+/**
  * @typedef {Object} Field
  * @property {string} alias interchangeable field name
  * @property {string} type
@@ -99,8 +103,8 @@ export class Packager {
   /**
    * Prepares artifact generation
    * @param {Object} options
-   * @param {Object} publishingDetail
-   * @returns {Promise<{properties:Object, destination:string, tmpdir:string}>}
+   * @param {Object} [publishingDetail]
+   * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string|undefined}>}
    */
   async prepare(options, publishingDetail) {
     const tmpdir = await this.tmpdir;

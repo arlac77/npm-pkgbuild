@@ -180,15 +180,16 @@ const skipPattern = [
 const defaultOptions = { dry: false };
 
 /**
- * 
- * @param {string} source 
- * @param {string} dest 
- * @param {Object} options 
+ *
+ * @param {string} source
+ * @param {string} dest
+ * @param {Object} options
  */
 export async function* copyNodeModules(source, dest, options = defaultOptions) {
   for await (const name of globbyStream(["node_modules/**/package.json"], {
     cwd: source
   })) {
+    // @ts-ignore
     const pkgDir = dirname(name);
     copyNodeModule(join(source, pkgDir), join(dest, pkgDir), options);
   }
@@ -196,6 +197,7 @@ export async function* copyNodeModules(source, dest, options = defaultOptions) {
 
 export async function* copyNodeModule(source, dest, options = defaultOptions) {
   const pkgFile = join(source, "package.json");
+  // @ts-ignore
   const pkg = JSON.parse(await readFile(pkgFile, utf8StreamOptions));
 
   for (const key of Object.keys(pkg)) {
@@ -223,15 +225,16 @@ export async function* copyNodeModule(source, dest, options = defaultOptions) {
   for await (const f of globbyStream(["**", ...skip], {
     cwd: dirname(pkgFile)
   })) {
-    if (
-      f.match(/(readme|changelog|history|licen[sc]e(-\w+)?)(\.\w*)?$/i)
-    ) {
+    // @ts-ignore
+    if (f.match(/(readme|changelog|history|licen[sc]e(-\w+)?)(\.\w*)?$/i)) {
       continue;
     }
 
+    // @ts-ignore
     const d = join(dest, f);
     if (!options.dry) {
       await mkdir(dest, { recursive: true });
+      // @ts-ignore
       await copyFile(join(source, f), d, constants.COPYFILE_FICLONE);
     }
     yield d;

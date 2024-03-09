@@ -28,9 +28,11 @@ export class NodeModulesContentProvider extends ContentProvider {
     return "use node_modules as source";
   }
 
+  withoutDevelpmentDependencies = true;
+
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
-    Object.assign(this, { withoutDevelpmentDependencies: true }, definitions);
+    Object.assign(this, definitions);
   }
 
   toString() {
@@ -45,6 +47,7 @@ export class NodeModulesContentProvider extends ContentProvider {
         pkgSourceDir = await mkdtemp(join(tmpdir(), "node-modules"));
 
         const json = JSON.parse(
+          //@ts-ignore
           await readFile(join(this.dir, "package.json"), utf8StreamOptions)
         );
         delete json.devDependencies;
@@ -96,9 +99,9 @@ export class NodeModulesContentProvider extends ContentProvider {
             try {
               const json = shrinkNPM(
                 JSON.parse(
+                  //@ts-ignore
                   await readFile(join(pkgSourceDir, name), utf8StreamOptions)
-                ),
-                {}
+                )
               );
 
               if (json) {

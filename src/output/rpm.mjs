@@ -20,6 +20,10 @@ import {
   filterOutUnwantedDependencies
 } from "../util.mjs";
 
+/**
+ * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
+ */
+
 function quoteFile(name) {
   return name.match(/\s/) ? '"' + name + '"' : name;
 }

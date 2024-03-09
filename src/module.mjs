@@ -1,14 +1,18 @@
 export * from "./util.mjs";
 export { createPublishingDetails, publish } from "./publish.mjs";
-export * from "./extract-from-package.mjs";
-export * from "./content/content-provider.mjs";
-export * from "./content/file-content-provider.mjs";
-export * from "./content/node-modules-content-provider.mjs";
-export * from "./content/npm-pack-content-provider.mjs";
-export * from "./content/nft-content-provider.mjs";
-export * from "./output/debian.mjs";
+export {
+  extractFromPackage,
+  allInputs,
+  allOutputs
+} from "./extract-from-package.mjs";
+export { ContentProvider } from "./content/content-provider.mjs";
+export { FileContentProvider } from "./content/file-content-provider.mjs";
+export { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
+export { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
+export { NFTContentProvider } from "./content/nft-content-provider.mjs";
+export { DEBIAN } from "./output/debian.mjs";
 export { RPM } from "./output/rpm.mjs";
-export * from "./output/arch.mjs";
-export * from "./output/oci.mjs";
+export { ARCH } from "./output/arch.mjs";
+export { OCI } from "./output/oci.mjs";
 export { DOCKER } from "./output/docker.mjs";
 export { Packager } from "./output/packager.mjs";

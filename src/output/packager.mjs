@@ -104,7 +104,7 @@ export class Packager {
    * Prepares artifact generation
    * @param {Object} options
    * @param {Object} [publishingDetail]
-   * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string|undefined}>}
+   * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string}>}
    */
   async prepare(options, publishingDetail) {
     const tmpdir = await this.tmpdir;
@@ -112,7 +112,8 @@ export class Packager {
     const out = {
       properties: this.properties,
       destination: options.destination || tmpdir,
-      tmpdir
+      tmpdir,
+      staging: tmpdir
     };
 
     // @ts-ignore

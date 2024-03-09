@@ -72,6 +72,7 @@ export class DEBIAN extends Packager {
 
   get packageFileName() {
     const p = this.properties;
+    // @ts-ignore
     return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
   }
 
@@ -103,7 +104,7 @@ export class DEBIAN extends Packager {
     options,
     expander
   ) {
-    const { properties, staging, destination } = await this.prepare(options);
+    const { properties, /** @type {string} */ staging, destination } = await this.prepare(options);
 
     transformer.push(
       createPropertiesTransformer(
@@ -146,6 +147,7 @@ export class DEBIAN extends Packager {
       expander
     )) {
       if (options.verbose) {
+        // @ts-ignore
         console.log(file.destination, `mode=${file.mode}`);
       }
     }

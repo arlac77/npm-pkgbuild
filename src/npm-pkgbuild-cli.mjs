@@ -60,7 +60,6 @@ program
         dependencies,
         context
       } of extractFromPackage(options, process.env)) {
-
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true
         )) {

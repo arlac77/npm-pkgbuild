@@ -6,6 +6,7 @@ import { decodePassword } from "./util.mjs";
 /**
  * @typedef {Object} PublishingDetail
  * @property {string} url
+ * @property {Object} properties
  * @property {string} scheme
  * @property {string} [username]
  * @property {string} [password]
@@ -32,6 +33,7 @@ export function createPublishingDetails(locations, properties) {
     let url = location;
 
     const result = {
+      set properties(p) { properties = p;},
       get url() {
         return url.replace(
           /\{\{(\w+)\}\}/gm,
@@ -84,6 +86,8 @@ export async function publish(
   if (!publishingDetail) {
     return;
   }
+  
+  publishingDetail.properties = properties;
 
   const url = publishingDetail.url + "/" + basename(artifactIdentifier);
 
@@ -91,6 +95,7 @@ export async function publish(
 
   switch (publishingDetail.scheme) {
     case "file:":
+      //console.log(typeof url, publishingDetail.url, url, artifactIdentifier);
       if (url.pathname !== artifactIdentifier) {
         await mkdir(url, { recursive: true });
         await copyFile(artifactIdentifier, url);

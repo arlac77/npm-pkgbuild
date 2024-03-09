@@ -3,7 +3,8 @@ export { createPublishingDetails, publish } from "./publish.mjs";
 export {
   extractFromPackage,
   allInputs,
-  allOutputs
+  allOutputs,
+  npmArchMapping
 } from "./extract-from-package.mjs";
 export { ContentProvider } from "./content/content-provider.mjs";
 export { FileContentProvider } from "./content/file-content-provider.mjs";

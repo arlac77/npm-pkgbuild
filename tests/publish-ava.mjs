@@ -63,19 +63,23 @@ test("publish twice", async t => {
 
 test("createPublishingDetails path only", t => {
   t.deepEqual(createPublishingDetails(["/path/to"]), [
-    { url: "/path/to", scheme: "file:" }
+    { url: "/path/to", scheme: "file:", properties: undefined }
   ]);
 });
 
 test("createPublishingDetails simple", t => {
   t.deepEqual(createPublishingDetails(["http://somewhere.com/"]), [
-    { url: "http://somewhere.com/", scheme: "http:" }
+    { url: "http://somewhere.com/", scheme: "http:", properties: undefined }
   ]);
 });
 
 test("createPublishingDetails simple placeholders", t => {
   t.deepEqual(createPublishingDetails(["http://somewhere.com/{{type}}"]), [
-    { url: "http://somewhere.com/{{type}}", scheme: "http:" }
+    {
+      url: "http://somewhere.com/{{type}}",
+      scheme: "http:",
+      properties: undefined
+    }
   ]);
 });
 
@@ -90,7 +94,8 @@ test("createPublishingDetails with url credentials", t => {
         scheme: "http:",
         username: "myUser",
         password: "myPassword",
-        url: "http://somewhere.com/"
+        url: "http://somewhere.com/",
+        properties: undefined
       }
     ]
   );

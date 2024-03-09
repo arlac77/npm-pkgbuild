@@ -138,8 +138,6 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-11)
 *   [OCI](#oci)
-*   [Field](#field)
-    *   [Properties](#properties-5)
 *   [Packager](#packager)
     *   [Parameters](#parameters-12)
     *   [tmpdir](#tmpdir)
@@ -150,15 +148,29 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-3)
         *   [Parameters](#parameters-15)
+*   [Packager](#packager-1)
+    *   [Parameters](#parameters-16)
+    *   [tmpdir](#tmpdir-1)
+    *   [prepare](#prepare-4)
+        *   [Parameters](#parameters-17)
+    *   [create](#create-1)
+        *   [Parameters](#parameters-18)
+    *   [workspaceLayout](#workspacelayout-1)
+    *   [prepare](#prepare-5)
+        *   [Parameters](#parameters-19)
+*   [Field](#field)
+    *   [Properties](#properties-5)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-6)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-16)
+    *   [Parameters](#parameters-20)
 *   [publish](#publish)
-    *   [Parameters](#parameters-17)
+    *   [Parameters](#parameters-21)
+*   [quoteFile](#quotefile)
+    *   [Parameters](#parameters-22)
 *   [RPM](#rpm)
-    *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-18)
+    *   [prepare](#prepare-6)
+        *   [Parameters](#parameters-23)
 
 ## ContentProvider
 
@@ -404,24 +416,11 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Low level OCI compatible packager
 
-## Field
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-### Properties
-
-*   `alias` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** interchangeable field name
-*   `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-*   `default` **any**&#x20;
-*   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
-
 ## Packager
-
-Base Packager
 
 ### Parameters
 
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `properties` &#x20;
 
 ### tmpdir
 
@@ -436,9 +435,7 @@ Prepares artifact generation
 #### Parameters
 
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<{properties: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), destination: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), tmpdir: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}>**&#x20;
+*   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
 
 ### create
 
@@ -467,6 +464,68 @@ Returns **{named: [object](https://developer.mozilla.org/docs/Web/JavaScript/Ref
 *   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
+## Packager
+
+Base Packager
+
+### Parameters
+
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+### tmpdir
+
+Create tmp directory.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** directory path
+
+### prepare
+
+Prepares artifact generation
+
+#### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+
+### create
+
+Execute package generation.
+
+#### Parameters
+
+*   `sources` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
+*   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `publishingDetails` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[PublishingDetail](#publishingdetail)>**&#x20;
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** identifier of the resulting package
+
+### workspaceLayout
+
+Returns **{named: [object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), others: \[]}**&#x20;
+
+### prepare
+
+#### Parameters
+
+*   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
+## Field
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+*   `alias` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** interchangeable field name
+*   `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `default` **any**&#x20;
+*   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
 
 ## PublishingDetail
 
@@ -500,6 +559,12 @@ Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Gl
 *   `publishingDetail` **[PublishingDetail](#publishingdetail)**&#x20;
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `logger` **function (any): void**  (optional, default `console.log`)
+
+## quoteFile
+
+### Parameters
+
+*   `name` &#x20;
 
 ## RPM
 

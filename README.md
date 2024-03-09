@@ -137,28 +137,28 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [DOCKER](#docker)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-11)
-*   [analysePublish](#analysepublish)
-    *   [Parameters](#parameters-12)
-*   [publish](#publish)
-    *   [Parameters](#parameters-13)
-*   [preparePublish](#preparepublish)
-    *   [Parameters](#parameters-14)
 *   [OCI](#oci)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-15)
+    *   [Parameters](#parameters-12)
     *   [tmpdir](#tmpdir)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-13)
     *   [create](#create)
-        *   [Parameters](#parameters-17)
+        *   [Parameters](#parameters-14)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-18)
+        *   [Parameters](#parameters-15)
+*   [PublishingDetail](#publishingdetail)
+    *   [Properties](#properties-6)
+*   [createPublishingDetails](#createpublishingdetails)
+    *   [Parameters](#parameters-16)
+*   [publish](#publish)
+    *   [Parameters](#parameters-17)
 *   [RPM](#rpm)
     *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-19)
+        *   [Parameters](#parameters-18)
 
 ## ContentProvider
 
@@ -398,33 +398,6 @@ Check for docker presence.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
 
-## analysePublish
-
-### Parameters
-
-*   `publish` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-
-Returns **{scheme: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), url: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}**&#x20;
-
-## publish
-
-### Parameters
-
-*   `fileName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-*   `destination` **any**&#x20;
-*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `logger` **function (any): void**  (optional, default `console.log`)
-
-## preparePublish
-
-### Parameters
-
-*   `publish` **any**  (optional, default `[]`)
-*   `env` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{}`)
-
-    *   `env.PKGBUILD_PUBLISH` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
-
 ## OCI
 
 **Extends Packager**
@@ -463,6 +436,7 @@ Prepares artifact generation
 #### Parameters
 
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `publishingDetail` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<{properties: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object), destination: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), tmpdir: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}>**&#x20;
 
@@ -475,6 +449,7 @@ Execute package generation.
 *   `sources` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
 *   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `publishingDetails` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[PublishingDetail](#publishingdetail)>**&#x20;
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
@@ -492,6 +467,39 @@ Returns **{named: [object](https://developer.mozilla.org/docs/Web/JavaScript/Ref
 *   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
+## PublishingDetail
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+*   `url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `scheme` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
+*   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
+
+## createPublishingDetails
+
+### Parameters
+
+*   `locations` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+
+    *   `properties.PKGBUILD_PUBLISH` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
+    *   `properties.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
+    *   `properties.access` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
+
+Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[PublishingDetail](#publishingdetail)>**&#x20;
+
+## publish
+
+### Parameters
+
+*   `artifactIdentifier` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `publishingDetail` **[PublishingDetail](#publishingdetail)**&#x20;
+*   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `logger` **function (any): void**  (optional, default `console.log`)
 
 ## RPM
 

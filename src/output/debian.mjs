@@ -104,7 +104,7 @@ export class DEBIAN extends Packager {
     options,
     expander
   ) {
-    const { properties, /** @type {string} */ staging, destination } = await this.prepare(options);
+    const { properties, staging, destination } = await this.prepare(options);
 
     transformer.push(
       createPropertiesTransformer(

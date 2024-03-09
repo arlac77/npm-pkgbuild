@@ -13,7 +13,7 @@ test("cli --debian", async t => {
       "--verbose",
       "--debian",
       "-c",
-      '/myservice:' + new URL("fixtures/content", import.meta.url).pathname,
+      "/myservice:" + new URL("fixtures/content", import.meta.url).pathname,
       "-p",
       new URL("fixtures/pkg", import.meta.url).pathname,
       "--publish",
@@ -21,10 +21,7 @@ test("cli --debian", async t => {
     ]
   );
 
-  const fileName = join(
-    destination,
-    "myservice_1.2.3_all.deb"
-  );
+  const fileName = join(destination, "myservice_1.2.3_all.deb");
 
   const s = await stat(fileName);
   t.true(s.size >= 600, `package file size ${s.size}`);

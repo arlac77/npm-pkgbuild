@@ -3,7 +3,7 @@ import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
-import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
@@ -172,7 +172,7 @@ export class RPM extends Packager {
                 trailingLines
               })
             ),
-          createEntryWhenMissing: () => new EmptyContentEntry(specFileName)
+          createEntryWhenMissing: () => new ContentEntry(specFileName)
         }
       ]),
       staging,

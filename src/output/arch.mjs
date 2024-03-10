@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { execa } from "execa";
-import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
   transform,
   createPropertiesInterceptor
@@ -174,7 +174,7 @@ package() {
             trailingLines
           })
         ),
-      createEntryWhenMissing: () => new EmptyContentEntry(PKGBUILD)
+      createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
     for await (const file of copyEntries(

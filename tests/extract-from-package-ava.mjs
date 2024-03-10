@@ -115,7 +115,7 @@ test(
       other: "o1",
       dependencies: { dep2: ">=2" },
       output: {
-        deb: {
+        debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
           arch: ["x86_64"]
@@ -137,11 +137,12 @@ test(
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
-        deb1: "a"
+        deb1: "a",
+        output: "debian"
       },
       dependencies: { dep1: ">=1" },
       output: {
-        deb: {
+        debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
           arch: ["x86_64"]
@@ -161,11 +162,12 @@ test(
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
-        deb1: "a"
+        deb1: "a",
+        output: "debian"
       },
       dependencies: { dep1: ">=1" },
       output: {
-        deb: {
+        debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
           arch: ["x86_64"]
@@ -205,7 +207,8 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is arch"
+        key: "is arch",
+        output: "arch"
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -218,7 +221,8 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is debian"
+        key: "is debian",
+        output: "debian"
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -231,7 +235,8 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is arch"
+        key: "is arch",
+        output: "arch"
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -244,7 +249,8 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is debian"
+        key: "is debian",
+        output: "debian"
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -339,65 +345,70 @@ test(
   []
 );
 
-const expected = {
-  properties: {
-    access: "public",
-    groups: "home automation",
-    hooks: new URL(
-      "../build/efpt-konsum-frontend/pkgbuild/hooks.sh",
-      import.meta.url
-    ).pathname,
-    installdir: "/services/konsum/frontend/",
-    name: "konsum-frontend",
-    variant: "mf"
-  },
-  sources: [
-    new FileContentProvider(
-      {
-        base: new URL(
-          "../build/efpt-konsum-frontend/node_modules/hosting",
-          import.meta.url
-        ).pathname,
-        pattern: ["a.service"]
-      },
-      { destination: "/usr/lib/systemd/system/myservice.service" }
-    ),
-    new NPMPackContentProvider(
-      {
-        dir: new URL("../build/efpt-konsum-frontend", import.meta.url).pathname
-      },
-      { destination: "/services/konsum/frontend/" }
-    ),
-    new FileContentProvider(
-      {
-        base: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
-          .pathname
-      },
-      { destination: "/services/konsum/frontend/" }
-    ),
-    new FileContentProvider(
-      {
-        base: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
-          .pathname
-      },
-      { destination: "/services/konsum/frontend/" }
-    ),
-    new FileContentProvider(
-      {
-        name: "pkgbuild/nginx.conf",
-        base: new URL("../build/efpt-konsum-frontend", import.meta.url).pathname
-      },
-      {
-        destination: "/etc/nginx/sites/common/konsum-frontend.conf",
-        owner: "root"
-      }
-    )
-  ],
-  dependencies: {
-    "nginx-mainline": ">=1.21.1",
-    konsum: ">=4.1.0"
-  }
-};
+function expected(properties) {
+  return {
+    properties: {
+      ...properties,
+      access: "public",
+      groups: "home automation",
+      hooks: new URL(
+        "../build/efpt-konsum-frontend/pkgbuild/hooks.sh",
+        import.meta.url
+      ).pathname,
+      installdir: "/services/konsum/frontend/",
+      name: "konsum-frontend",
+      variant: "mf"
+    },
+    sources: [
+      new FileContentProvider(
+        {
+          base: new URL(
+            "../build/efpt-konsum-frontend/node_modules/hosting",
+            import.meta.url
+          ).pathname,
+          pattern: ["a.service"]
+        },
+        { destination: "/usr/lib/systemd/system/myservice.service" }
+      ),
+      new NPMPackContentProvider(
+        {
+          dir: new URL("../build/efpt-konsum-frontend", import.meta.url)
+            .pathname
+        },
+        { destination: "/services/konsum/frontend/" }
+      ),
+      new FileContentProvider(
+        {
+          base: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
+            .pathname
+        },
+        { destination: "/services/konsum/frontend/" }
+      ),
+      new FileContentProvider(
+        {
+          base: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
+            .pathname
+        },
+        { destination: "/services/konsum/frontend/" }
+      ),
+      new FileContentProvider(
+        {
+          name: "pkgbuild/nginx.conf",
+          base: new URL("../build/efpt-konsum-frontend", import.meta.url)
+            .pathname
+        },
+        {
+          destination: "/etc/nginx/sites/common/konsum-frontend.conf",
+          owner: "root"
+        }
+      )
+    ],
+    dependencies: {
+      "nginx-mainline": ">=1.21.1",
+      konsum: ">=4.1.0"
+    }
+  };
+}
 
 test(
   efpt,
@@ -447,8 +458,8 @@ test(
     }
   },
   [
-    { ...expected, output: { arch: {} } },
-    { ...expected, output: { debian: {} } }
+    { ...expected({ output: "arch" }), output: { arch: {} } },
+    { ...expected({ output: "debian" }), output: { debian: {} } }
   ]
 );
 

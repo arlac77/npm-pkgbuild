@@ -20,20 +20,39 @@ import { decodePassword } from "./util.mjs";
  * @param {string} [properties.access]
  * @return {PublishingDetail[]}
  */
-export function createPublishingDetails(locations=[], properties) {
-  const e = properties?.PKGBUILD_PUBLISH;
-  if (e) {
-    locations.push(e);
+export function createPublishingDetails(locations = [], properties) {
+  locations = [...locations];
+
+  let publishPropertyFound = false;
+
+  for (const s of ["output"]) {
+    let key = properties?.[s];
+    if (key !== undefined) {
+        const envKey = `PKGBUILD_PUBLISH_${key.toUpperCase()}`;  
+        const e = properties[envKey];
+        if (e) {
+          locations.push(e);
+        }
+        publishPropertyFound = true;
+    }
+  }
+
+  if (!publishPropertyFound) {
+    const e = properties?.PKGBUILD_PUBLISH;
+    if (e) {
+      locations.push(e);
+    }
   }
 
   const vm = k => properties?.[k] || k;
 
   return locations.map(location => {
-
     let url = location;
 
     const result = {
-      set properties(p) { properties = p;},
+      set properties(p) {
+        properties = p;
+      },
       get url() {
         return url.replace(
           /\{\{(\w+)\}\}/gm,
@@ -86,7 +105,7 @@ export async function publish(
   if (!publishingDetail) {
     return;
   }
-  
+
   publishingDetail.properties = properties;
 
   const url = publishingDetail.url + "/" + basename(artifactIdentifier);

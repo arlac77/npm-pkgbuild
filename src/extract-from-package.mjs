@@ -366,7 +366,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
             result.dependencies,
             output.dependencies
           ),
-          properties: { ...result.properties, ...output.properties }
+          properties: { output: name, ...result.properties, ...output.properties }
         };
       }
     }

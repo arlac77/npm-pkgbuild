@@ -21,6 +21,17 @@ test("createPublishingDetails", t => {
   t.is(pds[0].url, "http://myserver.com/private/x86_64");
 });
 
+test.only("createPublishingDetails env output", t => {
+  const properties = {
+    PKGBUILD_PUBLISH_DEBIAN: "https://debian.org",
+    output: "debian"
+  };
+
+  const pds = createPublishingDetails(undefined, properties);
+
+  t.is(pds[0].url, "https://debian.org");
+});
+
 test("publish nowhere", async t => {
   await publish(
     new URL("fixtures/content/file1.txt", import.meta.url).pathname

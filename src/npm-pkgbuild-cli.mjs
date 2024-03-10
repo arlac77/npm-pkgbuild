@@ -50,8 +50,6 @@ program
       const uc = new UTIController();
       uc.register(additionalUTIs);
 
-      const publishingDetails = createPublishingDetails(options.publish, process.env);
-
       for await (const {
         properties,
         sources,
@@ -67,11 +65,11 @@ program
         }
 
         for (const outputFactory of allOutputs.filter(
-          o => (options[o.name] === true || output[o.name] !== undefined) && options[o.name] !== false
+          o =>
+            (options[o.name] === true || output[o.name] !== undefined) &&
+            options[o.name] !== false
         )) {
-          if (
-            !(await outputFactory.prepare(options, variant))
-          ) {
+          if (!(await outputFactory.prepare(options, variant))) {
             console.warn(`output format ${outputFactory.name} not avaliable`);
             continue;
           }
@@ -123,6 +121,11 @@ program
               console.log(kv(dependencies, "  "));
             }
 
+            const publishingDetails = createPublishingDetails(options.publish, {
+              ...properties,
+              ...process.env
+            });
+
             const artifact = await o.create(
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
@@ -133,7 +136,11 @@ program
             );
 
             if (!options.dry) {
-              await Promise.all(publishingDetails.map(publishDetail => o.publish(artifact, publishDetail, o.properties)));
+              await Promise.all(
+                publishingDetails.map(publishDetail =>
+                  o.publish(artifact, publishDetail, o.properties)
+                )
+              );
             }
           } catch (e) {
             handleError(e, options);

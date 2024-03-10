@@ -49,6 +49,16 @@ export const npmArchMapping = {
 
 const entryAttributeNames = ["owner", "group", "mode"];
 
+function mergeArchs(a, b) {
+  if (a) {
+    if (b) {
+      return [...a, ...b];
+    }
+    return a;
+  }
+  return b || 'noarch';
+}
+
 /**
  * Delivers ContentProviders from pkgbuild.content definition.
  * @param {Object} content from pkgbuild.content
@@ -366,7 +376,12 @@ export async function* extractFromPackage(options = {}, env = {}) {
             result.dependencies,
             output.dependencies
           ),
-          properties: { output: name, ...result.properties, ...output.properties }
+          properties: {
+            output: name,
+            ...result.properties,
+            ...output.properties,
+            arch: mergeArchs(result.properties?.arch, output.properties?.arch)
+          }
         };
       }
     }

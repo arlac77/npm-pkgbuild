@@ -56,7 +56,7 @@ function mergeArchs(a, b) {
     }
     return a;
   }
-  return b || 'noarch';
+  return b;
 }
 
 /**
@@ -367,6 +367,12 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       for (const [name, output] of Object.entries(result.output)) {
+
+        const arch = mergeArchs(result.properties?.arch, output.properties?.arch);
+        if(arch !== undefined) {
+          result.properties.arch = arch;
+        }
+
         yield {
           ...result,
           variant: { ...result.variant, output: name },
@@ -379,8 +385,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           properties: {
             type: name,
             ...result.properties,
-            ...output.properties,
-            arch: mergeArchs(result.properties?.arch, output.properties?.arch)
+            ...output.properties
           }
         };
       }

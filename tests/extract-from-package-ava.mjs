@@ -357,8 +357,7 @@ function expected(properties) {
       ).pathname,
       installdir: "/services/konsum/frontend/",
       name: "konsum-frontend",
-      variant: "mf",
-      arch: "noarch"
+      variant: "mf"
     },
     sources: [
       new FileContentProvider(

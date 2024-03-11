@@ -21,7 +21,7 @@ test("createPublishingDetails", t => {
   t.is(pds[0].url, "http://myserver.com/private/x86_64");
 });
 
-test("createPublishingDetails env output", t => {
+test("createPublishingDetails env type", t => {
   const properties = {
     PKGBUILD_PUBLISH_DEBIAN: "https://debian.org",
     type: "debian"

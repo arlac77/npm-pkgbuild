@@ -377,7 +377,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
             output.dependencies
           ),
           properties: {
-            output: name,
+            type: name,
             ...result.properties,
             ...output.properties,
             arch: mergeArchs(result.properties?.arch, output.properties?.arch)

@@ -60,7 +60,7 @@
     "content-entry-filesystem": "^6.0.0",
     "content-entry-transform": "^1.4.29",
     "execa": "^8.0.1",
-    "expression-expander": "^7.2.2",
+    "expression-expander": "^7.2.3",
     "globby": "^14.0.1",
     "ini": "^4.1.2",
     "iterable-string-interceptor": "^3.0.0",

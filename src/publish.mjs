@@ -35,8 +35,8 @@ export function createPublishingDetails(locations = [], properties) {
       const e = properties[envKey];
       if (e) {
         locations.push(e);
+        publishPropertyFound = true;
       }
-      publishPropertyFound = true;
     }
   }
 

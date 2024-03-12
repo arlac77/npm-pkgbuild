@@ -18,6 +18,8 @@ import { decodePassword } from "./util.mjs";
  * @param {string} [properties.PKGBUILD_PUBLISH]
  * @param {string} [properties.arch]
  * @param {string} [properties.access]
+ * @param {string} [properties.type]
+ * @param {string} [properties.username]
  * @return {PublishingDetail[]}
  */
 export function createPublishingDetails(locations = [], properties) {
@@ -28,12 +30,13 @@ export function createPublishingDetails(locations = [], properties) {
   for (const s of ["type"]) {
     let key = properties?.[s];
     if (key !== undefined) {
-        const envKey = `PKGBUILD_PUBLISH_${key.toUpperCase()}`;  
-        const e = properties[envKey];
-        if (e) {
-          locations.push(e);
-        }
-        publishPropertyFound = true;
+      const envKey = `PKGBUILD_PUBLISH_${key.toUpperCase()}`;
+      // @ts-ignore
+      const e = properties[envKey];
+      if (e) {
+        locations.push(e);
+      }
+      publishPropertyFound = true;
     }
   }
 
@@ -82,6 +85,10 @@ export function createPublishingDetails(locations = [], properties) {
       }
     } catch {}
 
+    if (result.username === undefined && properties?.username !== undefined) {
+      result.username = properties.username;
+    }
+
     const m = url.match(/^([^:]+:)\/\/(.*)/);
     result.scheme = m ? m[1] : "file:";
 
@@ -92,8 +99,8 @@ export function createPublishingDetails(locations = [], properties) {
 /**
  *
  * @param {string} artifactIdentifier
- * @param {PublishingDetail} publishingDetail
- * @param {Object} properties
+ * @param {PublishingDetail} [publishingDetail]
+ * @param {Object} [properties]
  * @param {function(any):void} logger
  */
 export async function publish(

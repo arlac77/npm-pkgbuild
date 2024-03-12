@@ -543,7 +543,7 @@ test(
   ]
 );
 
-test.skip(
+test(
   efpt,
   {
     name: "n15",

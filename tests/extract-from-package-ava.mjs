@@ -114,11 +114,13 @@ test(
       name: "n3",
       other: "o1",
       dependencies: { dep2: ">=2" },
+      content: { "/service/myservice": "*" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+       //   content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
       }
     }
@@ -133,19 +135,19 @@ test(
         license: "BSD",
         access: "private",
         arch: ["aarch64"],
-        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
         type: "debian"
       },
-      dependencies: { dep1: ">=1" },
+      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
       }
     },
@@ -158,21 +160,33 @@ test(
         license: "BSD",
         access: "private",
         arch: ["x86_64"],
-        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
         type: "debian"
       },
-      dependencies: { dep1: ">=1" },
+      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
-      }
+      },
+      sources: [
+        new FileContentProvider(
+          {
+            base: new URL(
+              "../build/efpt-n2",
+              import.meta.url
+            ).pathname,
+            pattern: ["*"]
+          },
+          { destination: "/service/myservice" }
+        )  
+      ]
     }
   ]
 );
@@ -357,8 +371,7 @@ function expected(properties) {
       ).pathname,
       installdir: "/services/konsum/frontend/",
       name: "konsum-frontend",
-      variant: "mf",
-      arch: "noarch"
+      variant: "mf"
     },
     sources: [
       new FileContentProvider(
@@ -436,7 +449,7 @@ test(
           owner: "root"
         }
       },
-      depends: {
+      dependencies: {
         "nginx-mainline": ">=1.21.1",
         konsum: ">=4.1.0"
       },
@@ -544,7 +557,7 @@ test(
   ]
 );
 
-test.skip(
+test(
   efpt,
   {
     name: "n15",

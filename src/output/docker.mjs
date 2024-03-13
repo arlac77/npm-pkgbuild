@@ -129,6 +129,7 @@ export class DOCKER extends Packager {
       expander
     )) {
       if (options.verbose) {
+        // @ts-ignore
         console.log(file.destination);
       }
     }

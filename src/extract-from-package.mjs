@@ -56,7 +56,7 @@ function mergeArchs(a, b) {
     }
     return a;
   }
-  return b || 'noarch';
+  return b;
 }
 
 /**
@@ -185,7 +185,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         name,
         requires,
         priority,
-        depends: packageContent.engines || {},
+        dependencies: packageContent.engines || {},
         arch: new Set(),
         restrictArch: new Set()
       };
@@ -213,7 +213,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
       }
 
-      for (const k of ["output", "content", "depends"]) {
+      for (const k of ["output", "content", "dependencies"]) {
         if (pkgbuild[k]) {
           fragment[k] = pkgbuild[k];
           delete pkgbuild[k];
@@ -283,6 +283,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   }, await packageDirectory({ cwd: options.dir }));
 
   if (root && Object.keys(variants).length === 0) {
+    // @ts-ignore
     variants.default = root;
   }
 
@@ -291,7 +292,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   )) {
     let arch = variant.arch;
     let properties = {};
-    let depends = {};
+    let dependencies = {};
     const output = {};
     const content = [];
 
@@ -322,7 +323,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       if (missedRequirements.length === 0) {
         arch = new Set([...arch, ...fragment.arch]);
         properties = { ...fragment.properties, ...properties };
-        depends = mergeDependencies(depends, fragment.depends);
+        dependencies = mergeDependencies(dependencies, fragment.dependencies);
         Object.assign(output, fragment.output);
         if (fragment.content) {
           content.push([fragment.content, fragment.dir]);
@@ -332,7 +333,10 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
     }
 
+
+    // @ts-ignore
     Object.assign(properties, root.properties);
+    delete properties.dependencies;
 
     properties.variant = name;
 
@@ -342,12 +346,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
       return a;
     }, []);
 
+
     const result = {
       context,
       variant: { name, priority: variant.priority },
       sources,
       output,
-      dependencies: depends,
+      dependencies,
       properties: context.expand(properties)
     };
 
@@ -367,6 +372,14 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       for (const [name, output] of Object.entries(result.output)) {
+        const arch = mergeArchs(
+          result.properties.arch,
+          output.properties?.arch
+        );
+        if (arch !== undefined) {
+          result.properties.arch = arch;
+        }
+
         yield {
           ...result,
           variant: { ...result.variant, output: name },
@@ -379,8 +392,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           properties: {
             type: name,
             ...result.properties,
-            ...output.properties,
-            arch: mergeArchs(result.properties?.arch, output.properties?.arch)
+            ...output.properties
           }
         };
       }

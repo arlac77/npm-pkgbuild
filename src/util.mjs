@@ -109,7 +109,8 @@ async function* asLines(source) {
   for await (let chunk of source) {
     buffer += chunk.toString();
     const lines = buffer.split(/\n\r?/);
-    buffer = lines.pop();
+    // @ts-ignore
+    buffer = lines.length ? lines.pop() : "";
     for (const line of lines) {
       yield line;
     }
@@ -190,12 +191,14 @@ export async function* copyEntries(
   expander = v => v
 ) {
   for await (const entry of source) {
+    // @ts-ignore
     const d = entry.destination;
 
     const name = expander(
       d === undefined ? entry.name : d.endsWith("/") ? join(d, entry.name) : d
     ).replace(/^\//, "");
 
+    // @ts-ignore
     entry.destination = name;
     const destination = join(destinationDirectory, name);
     await mkdir(dirname(destination), { recursive: true });

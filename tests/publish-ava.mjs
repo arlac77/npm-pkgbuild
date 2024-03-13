@@ -21,15 +21,16 @@ test("createPublishingDetails", t => {
   t.is(pds[0].url, "http://myserver.com/private/x86_64");
 });
 
-test.only("createPublishingDetails env output", t => {
+test("createPublishingDetails env type", t => {
   const properties = {
-    PKGBUILD_PUBLISH_DEBIAN: "https://debian.org",
-    output: "debian"
+    PKGBUILD_PUBLISH_DEBIAN: "https://myUser@debian.org",
+    type: "debian"
   };
 
   const pds = createPublishingDetails(undefined, properties);
 
-  t.is(pds[0].url, "https://debian.org");
+  t.is(pds[0].url, "https://debian.org/");
+  t.is(pds[0].username, "myUser");
 });
 
 test("publish nowhere", async t => {

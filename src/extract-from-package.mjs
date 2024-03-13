@@ -367,7 +367,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       for (const [name, output] of Object.entries(result.output)) {
-
         const arch = mergeArchs(result.properties?.arch, output.properties?.arch);
         if(arch !== undefined) {
           result.properties.arch = arch;

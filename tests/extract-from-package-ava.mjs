@@ -138,7 +138,7 @@ test(
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
-        output: "debian"
+        type: "debian"
       },
       dependencies: { dep1: ">=1" },
       output: {
@@ -163,7 +163,7 @@ test(
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
-        output: "debian"
+        type: "debian"
       },
       dependencies: { dep1: ">=1" },
       output: {
@@ -208,7 +208,7 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is arch",
-        output: "arch"
+        type: "arch"
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -222,7 +222,7 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is debian",
-        output: "debian"
+        type: "debian"
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -236,7 +236,7 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is arch",
-        output: "arch"
+        type: "arch"
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -250,7 +250,7 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is debian",
-        output: "debian"
+        type: "debian"
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -357,7 +357,8 @@ function expected(properties) {
       ).pathname,
       installdir: "/services/konsum/frontend/",
       name: "konsum-frontend",
-      variant: "mf"
+      variant: "mf",
+      arch: "noarch"
     },
     sources: [
       new FileContentProvider(
@@ -458,8 +459,8 @@ test(
     }
   },
   [
-    { ...expected({ output: "arch" }), output: { arch: {} } },
-    { ...expected({ output: "debian" }), output: { debian: {} } }
+    { ...expected({ type: "arch" }), output: { arch: {} } },
+    { ...expected({ type: "debian" }), output: { debian: {} } }
   ]
 );
 

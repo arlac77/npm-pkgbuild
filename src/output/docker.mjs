@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { EmptyContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
@@ -120,7 +120,7 @@ export class DOCKER extends Packager {
             trailingLines
           })
         ),
-      createEntryWhenMissing: () => new EmptyContentEntry(DOCKERFILE)
+      createEntryWhenMissing: () => new ContentEntry(DOCKERFILE)
     });
 
     for await (const file of copyEntries(

@@ -3,7 +3,7 @@ import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
 import {
-  EmptyContentEntry,
+  ContentEntry,
   ReadableStreamContentEntry,
   StringContentEntry
 } from "content-entry";
@@ -135,7 +135,7 @@ export class DEBIAN extends Packager {
           entry.name,
           keyValueTransformer(await entry.readStream, fp)
         ),
-      createEntryWhenMissing: () => new EmptyContentEntry(debianControlName)
+      createEntryWhenMissing: () => new ContentEntry(debianControlName)
     });
 
     for await (const file of copyEntries(

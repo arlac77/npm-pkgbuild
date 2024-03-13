@@ -120,7 +120,7 @@ test(
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
           arch: ["x86_64"],
-       //   content: { "/etc/myconfig.json": "pkg/myconfig.json" }
+          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
       }
     }

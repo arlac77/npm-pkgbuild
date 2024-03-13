@@ -133,14 +133,13 @@ test(
         license: "BSD",
         access: "private",
         arch: ["aarch64"],
-        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
         type: "debian"
       },
-      dependencies: { dep1: ">=1" },
+      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
@@ -158,14 +157,13 @@ test(
         license: "BSD",
         access: "private",
         arch: ["x86_64"],
-        dependencies: { dep2: ">=2" },
         c1: "value1",
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
         type: "debian"
       },
-      dependencies: { dep1: ">=1" },
+      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
@@ -435,7 +433,7 @@ test(
           owner: "root"
         }
       },
-      depends: {
+      dependencies: {
         "nginx-mainline": ">=1.21.1",
         konsum: ">=4.1.0"
       },

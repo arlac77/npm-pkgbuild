@@ -283,6 +283,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
   }, await packageDirectory({ cwd: options.dir }));
 
   if (root && Object.keys(variants).length === 0) {
+    // @ts-ignore
     variants.default = root;
   }
 
@@ -332,6 +333,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
     }
 
+    // @ts-ignore
     Object.assign(properties, root.properties);
 
     properties.variant = name;
@@ -367,8 +369,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       for (const [name, output] of Object.entries(result.output)) {
-        const arch = mergeArchs(result.properties?.arch, output.properties?.arch);
-        if(arch !== undefined) {
+        const arch = mergeArchs(
+          result.properties.arch,
+          output.properties?.arch
+        );
+        if (arch !== undefined) {
           result.properties.arch = arch;
         }
 

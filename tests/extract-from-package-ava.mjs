@@ -114,11 +114,13 @@ test(
       name: "n3",
       other: "o1",
       dependencies: { dep2: ">=2" },
+      content: { "/service/myservice": "*" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+       //   content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
       }
     }
@@ -144,7 +146,8 @@ test(
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
       }
     },
@@ -168,9 +171,22 @@ test(
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"]
+          arch: ["x86_64"],
+          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
         }
-      }
+      },
+      sources: [
+        new FileContentProvider(
+          {
+            base: new URL(
+              "../build/efpt-n2",
+              import.meta.url
+            ).pathname,
+            pattern: ["*"]
+          },
+          { destination: "/service/myservice" }
+        )  
+      ]
     }
   ]
 );

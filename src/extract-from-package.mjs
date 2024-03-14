@@ -325,6 +325,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         properties = { ...fragment.properties, ...properties };
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
         Object.assign(output, fragment.output);
+
         if (fragment.content) {
           content.push([fragment.content, fragment.dir]);
         }
@@ -332,7 +333,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
         console.log("requirements not met", fragment.name, missedRequirements);
       }
     }
-
 
     // @ts-ignore
     Object.assign(properties, root.properties);
@@ -345,7 +345,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       a.push(...content2Sources(c[0], c[1]));
       return a;
     }, []);
-
 
     const result = {
       context,
@@ -380,11 +379,22 @@ export async function* extractFromPackage(options = {}, env = {}) {
           result.properties.arch = arch;
         }
 
+        let sources = [];
+
+        if (output.content) {
+          sources = context
+            .expand([[output.content, root.dir]])
+            .reduce((a, c) => {
+              a.push(...content2Sources(c[0], c[1]));
+              return a;
+            }, []);
+        }
+
         yield {
           ...result,
           variant: { ...result.variant, output: name },
           output: { [name]: output },
-          // sources: [...result.sources, ...output.sources],
+          sources: [...result.sources, ...sources],
           dependencies: mergeDependencies(
             result.dependencies,
             output.dependencies

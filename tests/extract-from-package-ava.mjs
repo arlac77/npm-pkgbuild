@@ -178,14 +178,18 @@ test(
       sources: [
         new FileContentProvider(
           {
-            base: new URL(
-              "../build/efpt-n2",
-              import.meta.url
-            ).pathname,
+            base: new URL("../build/efpt-n2", import.meta.url).pathname,
             pattern: ["*"]
           },
           { destination: "/service/myservice" }
-        )  
+        ),
+        new FileContentProvider(
+          {
+            base: new URL("../build/efpt-n2/pkg", import.meta.url).pathname,
+            pattern: ["myconfig.json"]
+          },
+          { destination: "/etc/myconfig.json" }
+        )
       ]
     }
   ]

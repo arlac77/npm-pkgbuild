@@ -113,6 +113,7 @@ test(
       arch: ["aarch64", "x86_64"],
       name: "n3",
       other: "o1",
+      deb1: "base",
       dependencies: { dep2: ">=2" },
       content: { "/service/myservice": "*" },
       output: {

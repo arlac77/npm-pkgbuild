@@ -97,24 +97,24 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-1)
     *   [name](#name)
-*   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-2)
-    *   [name](#name-1)
 *   [utf8StreamOptions](#utf8streamoptions)
     *   [Properties](#properties-1)
 *   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-3)
+    *   [Parameters](#parameters-2)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-2)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-4)
+    *   [Parameters](#parameters-3)
 *   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-5)
+    *   [Parameters](#parameters-4)
 *   [Expander](#expander)
-    *   [Parameters](#parameters-6)
+    *   [Parameters](#parameters-5)
 *   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-6)
+*   [NFTContentProvider](#nftcontentprovider)
     *   [Parameters](#parameters-7)
+    *   [name](#name-1)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-8)
     *   [Properties](#properties-3)
@@ -210,24 +210,6 @@ Content provided form the file system.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
-## NFTContentProvider
-
-**Extends ContentProvider**
-
-Content provided form the file system.
-
-### Parameters
-
-*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
-
-    *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)**&#x20;
-    *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
-*   `entryProperties` &#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
 ## utf8StreamOptions
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
@@ -298,6 +280,24 @@ Destination paths a generated without leading '/' (as for entry names too).
 *   `source` **AsyncIterable\<ContentEntry>**&#x20;
 *   `destinationDirectory` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `expander` **[Expander](#expander)**  (optional, default `v=>v`)
+
+## NFTContentProvider
+
+**Extends ContentProvider**
+
+Content provided form the file system.
+
+### Parameters
+
+*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
+
+    *   `definitions.pattern` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>)**&#x20;
+    *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
+*   `entryProperties` &#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## NodeModulesContentProvider
 

@@ -182,6 +182,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       const fragment = {
+        dir,
         name,
         requires,
         priority,
@@ -266,7 +267,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       }
 
       fragment.properties = Object.assign(properties, pkgbuild);
-      fragment.dir = dir;
       fragments[fragment.name] = fragment;
 
       if (pkgbuild.variant) {
@@ -325,7 +325,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
         properties = { ...fragment.properties, ...properties };
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
         Object.assign(output, fragment.output);
-
         if (fragment.content) {
           content.push([fragment.content, fragment.dir]);
         }
@@ -383,7 +382,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
         if (output.content) {
           sources = context
-            .expand([[output.content, root.dir]])
+            .expand([[output.content, variant.dir]])
             .reduce((a, c) => {
               a.push(...content2Sources(c[0], c[1]));
               return a;

@@ -72,7 +72,7 @@ export class DOCKER extends Packager {
     dependencies,
     options,
     publishingDetails,
-    expander = v => v
+    expander
   ) {
     const { properties, staging } = await this.prepare(options, publishingDetails);
 
@@ -97,7 +97,7 @@ export class DOCKER extends Packager {
     }
 
     async function* trailingLines() {
-      yield `WORKDIR ${properties.workdir}\n`;
+      yield `WORKDIR ${expander(properties.workdir)}\n`;
       yield "COPY . .\n";
       if (properties.entrypoints) {
         yield `ENTRYPOINT ["node", "${

@@ -30,7 +30,7 @@ test("docker", async t => {
   const artifact = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination,
     verbose: true
-  });
+  }, (x)=> x);
 
   t.true(artifact != undefined);
 

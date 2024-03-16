@@ -354,16 +354,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
       properties: context.expand(properties)
     };
 
-    /*
-    console.log(
-      "RESULT",
-      result.variant,
-      result.properties,
-      sources.map(s => s.toString()).join("\n"),
-      output,
-      arch
-    );*/
-
     function* forEachOutput(result) {
       if (Object.entries(result.output).length === 0) {
         yield result;
@@ -389,7 +379,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
             }, []);
         }
 
-        yield {
+        const outputResult = {
           ...result,
           variant: { ...result.variant, output: name },
           output: { [name]: output },
@@ -404,6 +394,17 @@ export async function* extractFromPackage(options = {}, env = {}) {
             ...output.properties
           }
         };
+
+        /*
+        console.log(
+          "RESULT",
+          outputResult.variant,
+          outputResult.properties,
+          sources.map(s => s.toString()).join("\n"),
+          outputResult.output
+        );*/
+
+          yield outputResult;
       }
     }
 

@@ -25,14 +25,14 @@ test("docker", async t => {
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = { node: ">=18" };
+  const dependencies = { node: "lts-slim" };
 
   const artifact = await out.create(sources, transformer, dependencies, publishingDetails, {
     destination,
     verbose: true
   }, (x)=> x);
 
-  t.true(artifact != undefined);
+  t.true(artifact !== undefined);
 
   const messages = [];
   await out.publish(artifact, publishingDetails[0] , properties, message =>

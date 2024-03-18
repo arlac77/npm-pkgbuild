@@ -404,7 +404,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           outputResult.output
         );*/
 
-          yield outputResult;
+        yield outputResult;
       }
     }
 

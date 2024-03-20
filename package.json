@@ -79,7 +79,7 @@
     "documentation": "^14.0.3",
     "semantic-release": "^23.0.5",
     "stream-buffers": "^3.0.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "engines": {
     "node": ">=20.11.1",

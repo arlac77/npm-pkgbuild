@@ -102,7 +102,7 @@ program
                 })
             );
 
-            const o = new outputFactory(properties);
+            const o = new outputFactory(context.expand(properties));
             const transformer = [
               createExpressionTransformer(
                 entry => uc.fileNameConformsTo(entry.name, "public.text"),

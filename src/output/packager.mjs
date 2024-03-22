@@ -77,8 +77,8 @@ export class Packager {
       if (e !== undefined) {
         properties[k] = v.set ? v.set(e) : e;
       } else {
-        const vak = v.alias || k;
         if (v.default !== undefined) {
+          const vak = v.alias || k;
           if (
             (Array.isArray(properties[vak]) && properties[vak].length === 0) ||
             properties[vak] === undefined

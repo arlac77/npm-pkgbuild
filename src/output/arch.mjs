@@ -82,9 +82,6 @@ export class ARCH extends Packager {
         await execa("makepkg", ["-V"]);
 
         const cfg = await readFile("/etc/makepkg.conf", utf8StreamOptions);
-        if (options.verbose) {
-          console.log(cfg);
-        }
 
         function getValue(key) {
           const v = process.env[key];

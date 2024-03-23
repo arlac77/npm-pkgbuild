@@ -110,6 +110,11 @@ program
               )
             ];
 
+            const publishingDetails = createPublishingDetails(options.publish, {
+              ...properties,
+              ...process.env
+            });
+
             if (options.verbose) {
               console.log("variant:");
               console.log(kv(variant, "  "));
@@ -117,12 +122,8 @@ program
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
               console.log(kv(dependencies, "  "));
+              console.log("publish:", publishingDetails.map(pd=>pd.url));
             }
-
-            const publishingDetails = createPublishingDetails(options.publish, {
-              ...properties,
-              ...process.env
-            });
 
             const artifact = await o.create(
               sources.map(c => c[Symbol.asyncIterator]()),

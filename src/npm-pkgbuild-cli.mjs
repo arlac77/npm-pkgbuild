@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --no-warnings
+#!/usr/bin/env -S node --no-warnings --title npm-pkgbuild
 
 import { program, Option } from "commander";
 import { createExpressionTransformer } from "content-entry-transform";

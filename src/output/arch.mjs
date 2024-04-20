@@ -221,8 +221,8 @@ const default_array_attribute = { type: "string[]" };
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
 const fields = {
-  Maintainer: { alias: "maintainer", type: "string", prefix: "# " },
-
+  Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
+  packager: { alias: "maintainer", type: "string[]" },
   pkgname: { alias: "name", type: "string[]", mandatory: true },
   pkgver: { alias: "version", type: "string", mandatory: true },
   pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },

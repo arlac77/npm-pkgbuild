@@ -65,7 +65,8 @@ test("arch", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT"
+    license: "MIT",
+    maintainer: ["Herber Müller <herber.mueller@mail.com>"]
   };
 
   const out = new ARCH(properties);

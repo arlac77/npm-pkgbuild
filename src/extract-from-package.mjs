@@ -252,9 +252,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
 
         if (packageContent.contributors) {
-          properties.maintainer = packageContent.contributors.map(
-            c => `${c.name} <${c.email}>`
-          )[0];
+          properties.maintainer = packageContent.contributors.map(c => `${c.name} <${c.email}>`);
         }
 
         if (typeof packageContent.repository === "string") {

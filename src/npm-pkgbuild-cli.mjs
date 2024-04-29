@@ -11,7 +11,7 @@ import {
   extractFromPackage,
   createPublishingDetails
 } from "npm-pkgbuild";
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 
 program.description(pkg.description).version(pkg.version);
 

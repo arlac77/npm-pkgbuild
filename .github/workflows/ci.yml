@@ -19,7 +19,6 @@ jobs:
           - ubuntu-latest
         node-version:
           - 20.12.2
-          - 22.0.0
           - 22.1.0
     steps:
       - name: Dependencies

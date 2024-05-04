@@ -44,7 +44,8 @@ test("rpm", async t => {
     version: "1.0.0",
     description: "a description",
     license: "MIT",
-    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
+    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
+    maintainer: ["a <a>","b <b>"]
   };
 
   const out = new RPM(properties);

@@ -116,6 +116,10 @@ export class RPM extends Packager {
 
     properties.Requires = requiresFromDependencies(dependencies);
 
+    if(properties.Packager?.length > 1) { // TODO how to write several Packages ?
+      properties.Packager.length = 1;
+    }
+
     const specFileName = `${properties.name}.spec`;
 
     const files = [];

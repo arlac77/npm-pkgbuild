@@ -20,6 +20,9 @@ import {
 const DOCKERFILE = "Dockerfile";
 
 function* keyValueLines(key, value, options) {
+  if (Array.isArray(value)) {
+    value = value.join(".");
+  }
   yield `LABEL ${quote(key, '"')}=${quote(value, '"')}${options.lineEnding}`;
 }
 
@@ -74,7 +77,10 @@ export class DOCKER extends Packager {
     publishingDetails,
     expander
   ) {
-    const { properties, staging } = await this.prepare(options, publishingDetails);
+    const { properties, staging } = await this.prepare(
+      options,
+      publishingDetails
+    );
 
     async function* headLines() {
       let scratch = true;

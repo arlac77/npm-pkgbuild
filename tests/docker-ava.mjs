@@ -18,7 +18,8 @@ test("docker", async t => {
     version: "1.0.0",
     description: "a description",
     license: "MIT",
-    workdir: "/abc"
+    workdir: "/abc",
+    maintainer: ["a <a>","b <b>"]
   };
 
   const out = new DOCKER(properties);

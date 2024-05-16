@@ -105,7 +105,7 @@ program
             const o = new outputFactory(context.expand(properties));
             const transformer = [
               createExpressionTransformer(
-                entry => uc.fileNameConformsTo(entry.name, "public.text"),
+                entry => uc.fileNameConformsTo(entry.name, "public.text") && !uc.fileNameConformsTo(entry.name, "com.netscape.javascript-source"),
                 properties
               )
             ];

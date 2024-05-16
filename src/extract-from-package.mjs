@@ -22,7 +22,8 @@ import { BUILDAH } from "./output/buildah.mjs";
 export const allInputs = [
   NPMPackContentProvider,
   NodeModulesContentProvider,
-  NFTContentProvider
+  NFTContentProvider,
+  FileContentProvider
 ];
 
 /**

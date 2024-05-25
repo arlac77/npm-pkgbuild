@@ -85,13 +85,20 @@ function* content2Sources(content, dir) {
           delete definition.type;
           yield new type({ ...definition, dir }, entryProperties);
         } else {
-          console.error(`Unknown content provider '${type}'`);
+          throw new Error(`Unknown content provider '${type}'`);
         }
       } else {
-        if (typeof definition === "object") {
-          definition.base = definition.base ? join(dir, definition.base) : dir;
-        } else {
-          definition = join(dir, definition);
+        switch (typeof definition) {
+          case "object":
+            definition.base = definition.base
+              ? join(dir, definition.base)
+              : dir;
+            break;
+          case "string":
+            definition = join(dir, definition);
+            break;
+          default:
+            throw new Error(`Unsupported content value '${definition}'`);
         }
         yield new FileContentProvider(definition, entryProperties);
       }
@@ -253,7 +260,9 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }
 
         if (packageContent.contributors) {
-          properties.maintainer = packageContent.contributors.map(c => `${c.name} <${c.email}>`);
+          properties.maintainer = packageContent.contributors.map(
+            c => `${c.name} <${c.email}>`
+          );
         }
 
         if (typeof packageContent.repository === "string") {

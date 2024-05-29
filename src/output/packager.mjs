@@ -52,7 +52,7 @@ export class Packager {
    * @param {Object} properties
    */
   constructor(properties) {
-    this.#properties = { ...properties };
+    this.#properties = { ...properties, type: this.constructor.name };
   }
 
   get fileNameExtension() {
@@ -134,7 +134,7 @@ export class Packager {
 
     if (publishingDetail) {
       out.destination =
-      publishingDetail.scheme === "file:" ? publishingDetail.url : tmpdir;
+        publishingDetail.scheme === "file:" ? publishingDetail.url : tmpdir;
       await mkdir(out.destination, mdo);
     }
 
@@ -151,7 +151,14 @@ export class Packager {
    * @param {function(string):string} expander
    * @return {Promise<string>} identifier of the resulting package
    */
-  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
+  async create(
+    sources,
+    transformer,
+    dependencies,
+    publishingDetails,
+    options,
+    expander
+  ) {
     throw new Error("not implemented");
   }
 

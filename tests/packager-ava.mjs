@@ -30,6 +30,7 @@ test("packager properties", t => {
   const p = new MyPackager({ a: 1 });
   t.is(p.properties.a, 1);
   t.is(p.properties.b, "bv");
+  t.is(p.properties.type, "MyPackager");
 });
 
 test("packager prepareExecute", async t => {

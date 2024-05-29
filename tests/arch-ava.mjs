@@ -21,6 +21,7 @@ test("arch default properties", async t => {
   const out = new ARCH(properties);
 
   t.deepEqual(out.properties, {
+    type: "arch",
     ...properties,
     epoch: 0,
     arch: ["any"],
@@ -42,6 +43,7 @@ test("arch aarch64 default properties", async t => {
   const out = new ARCH(properties);
 
   t.deepEqual(out.properties, {
+    type: "arch",
     ...properties,
     epoch: 0,
     arch: ["aarch64"],

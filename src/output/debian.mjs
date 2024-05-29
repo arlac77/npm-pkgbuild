@@ -154,7 +154,7 @@ export class DEBIAN extends Packager {
 
     if (options.verbose) {
       console.log(
-        await readFile(join(staging, debianControlName), { encoding: "utf8" })
+        await readFile(join(staging, debianControlName), "utf8")
       );
     }
 

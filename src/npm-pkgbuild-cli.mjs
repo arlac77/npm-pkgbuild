@@ -1,6 +1,7 @@
 #!/usr/bin/env -S node --no-warnings --title npm-pkgbuild
 
 import { program, Option } from "commander";
+import { execa } from "execa";
 import { createExpressionTransformer } from "content-entry-transform";
 import { UTIController } from "uti";
 import additionalUTIs from "./utis.mjs";
@@ -104,6 +105,23 @@ program
 
             const o = new outputFactory(context.expand(properties));
             const transformer = [
+              {
+                name: "skip-architecutes",
+                match: (entry) => entry.name.endsWith(".node"),
+                async transform(entry) {                  
+                  const proc = await execa("file", ["-b", entry.name], {
+                    cwd: options.dir
+                  });
+                  const arch = proc.stdout.split(/\s*,\s*/)[1];
+      
+                  if(arch === 'ARM aarch64') {
+                    return entry;
+                  }
+
+                  console.log('skip',entry.name, arch);
+                  return entry;
+                }
+              },
               createExpressionTransformer(
                 entry => uc.fileNameConformsTo(entry.name, "public.text") && !uc.fileNameConformsTo(entry.name, "com.netscape.javascript-source"),
                 properties

@@ -82,8 +82,8 @@
     "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=20.12.2",
-    "bun": ">=1.0"
+    "node": ">=20.14.0",
+    "bun": ">=1.1"
   },
   "repository": {
     "type": "git",

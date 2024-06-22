@@ -82,7 +82,7 @@
     "typescript": "^5.5.2"
   },
   "engines": {
-    "node": ">=20.14.0",
+    "node": ">=20.15.0",
     "bun": ">=1.1"
   },
   "repository": {

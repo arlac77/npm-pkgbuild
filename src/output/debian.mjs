@@ -85,8 +85,8 @@ export class DEBIAN extends Packager {
         if (name) {
           yield new StringContentEntry(
             name,
-            f.body.replace(
-              /\{\{(\w+)\}\}/m,
+            f.body.replaceAll(
+              /\{\{(\w+)\}\}/mg,
               (match, key, offset, string) =>
                 properties[key] || "{{" + key + "}}"
             )

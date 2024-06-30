@@ -110,13 +110,22 @@ export class RPM extends Packager {
     return false;
   }
 
-  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
-    const { properties, tmpdir, staging, destination } =
-      await this.prepare(options);
+  async create(
+    sources,
+    transformer,
+    dependencies,
+    publishingDetails,
+    options,
+    expander
+  ) {
+    const { properties, tmpdir, staging, destination } = await this.prepare(
+      options
+    );
 
     properties.Requires = requiresFromDependencies(dependencies);
 
-    if(properties.Packager?.length > 1) { // TODO how to write several Packages ?
+    if (properties.Packager?.length > 1) {
+      // TODO how to write several Packages ?
       properties.Packager.length = 1;
     }
 
@@ -136,8 +145,8 @@ export class RPM extends Packager {
           if (name) {
             yield `%${name}\n`;
 
-            yield f.body.replace(
-              /\{\{(\w+)\}\}/m,
+            yield f.body.replaceAll(
+              /\{\{(\w+)\}\}/gm,
               (match, key, offset, string) =>
                 properties[key] || "{{" + key + "}}"
             ) + "\n\n";

@@ -61,7 +61,7 @@
     "content-entry-transform": "^1.4.29",
     "execa": "^9.3.0",
     "expression-expander": "^7.2.5",
-    "globby": "^14.0.1",
+    "globby": "^14.0.2",
     "ini": "^4.1.3",
     "iterable-string-interceptor": "^3.0.0",
     "key-value-transformer": "^3.2.3",

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { FileContentProvider, createPublishingDetails, DOCKER } from "npm-pkgbuild";
 
 test("docker", async t => {
-  const publishingDetails = createPublishingDetails(["https://myregistry.com"]);
+  const publishingDetails = createPublishingDetails(["https://unknown-registry.com"]);
 
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({

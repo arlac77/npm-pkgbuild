@@ -141,6 +141,7 @@ const toBeSkipped = new RegExp(
       "\\.ts",
       "\\.mts",
       "\\.d\\.ts",
+      "\\.d\\.cts",
       "\\.debug\\.js",
       "\\.coffee",
       "tsdoc-metadata\\.json",

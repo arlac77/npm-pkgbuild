@@ -32,7 +32,8 @@ jobs:
           sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
       - name: checkout
         uses: actions/checkout@v4.1.7
-      - uses: actions/setup-node@v4.0.3
+      - name: prepare node
+        uses: actions/setup-node@v4.0.3
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -42,7 +43,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PKGBUILD_PUBLISH: ${{ secrets.PKGBUILD_PUBLISH }}
-      - name: Coveralls Parallel
+      - name: coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -64,7 +65,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4.1.7
-      - uses: actions/setup-node@v4.0.3
+      - name: prepare node
+        uses: actions/setup-node@v4.0.3
         with:
           node-version: 22.6.0
           cache: npm
@@ -82,7 +84,7 @@ jobs:
       - test-node
     runs-on: ubuntu-latest
     steps:
-      - name: Coveralls Finished
+      - name: finish coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

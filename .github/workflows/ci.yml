@@ -38,6 +38,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
           cache-dependency-path: package-lock.json
+      - name: install
+        run: npm ci
       - name: test and coverage
         run: npm run cover --if-present
         env:

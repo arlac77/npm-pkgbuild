@@ -59,7 +59,7 @@
     "content-entry": "^10.0.1",
     "content-entry-filesystem": "^6.0.0",
     "content-entry-transform": "^1.4.29",
-    "execa": "^9.3.1",
+    "execa": "^9.4.0",
     "expression-expander": "^7.2.5",
     "globby": "^14.0.2",
     "ini": "^5.0.0",

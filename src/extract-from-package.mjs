@@ -403,7 +403,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
             result.dependencies,
             output.dependencies
           ),
-          properties
+          properties : context.expand(properties)
         };
       }
     }

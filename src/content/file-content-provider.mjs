@@ -20,6 +20,10 @@ export class FileContentProvider extends ContentProvider {
     return "files";
   }
 
+  static get description() {
+    return "use plain files source";
+  }
+
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
 

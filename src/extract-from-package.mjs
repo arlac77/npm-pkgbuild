@@ -362,6 +362,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
     function* forEachOutput(result) {      
       if (Object.entries(result.output).length === 0) {
+        result.context = createContext({ properties: result.properties });
+        result.sources = [];
         yield result;
       }
 
@@ -386,7 +388,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
         };
 
         const context = createContext({ properties });
-
         const sources = [];
         context.expand(content).reduce((a, { content, dir }) => {
           a.push(...content2Sources(content, dir));
@@ -394,6 +395,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         }, sources);
 
         yield {
+          context,
           variant: { ...result.variant, output: name },
           output: { [name]: output },
           sources,

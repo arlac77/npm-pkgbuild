@@ -146,13 +146,23 @@ export async function* extractFromPackage(options = {}, env = {}) {
         continue;
       }
 
-      const requires = pkgbuild.requires;
-      delete pkgbuild.requires;
-
       let name = `${packageContent.name}[${i++}]`;
-      let priority = 1;
+
+      const fragment = {
+        dir,
+        name,
+        priority: 1,
+        dependencies: packageContent.engines || {},
+        arch: new Set(),
+        restrictArch: new Set()
+      };
+
+      const requires = pkgbuild.requires;
 
       if (requires) {
+        fragment.requires = requires;
+        delete pkgbuild.requires;
+
         let fullfilled = true;
 
         if (requires.properties) {
@@ -162,7 +172,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
               break;
             }
 
-            priority += 1;
+            fragment.priority += 1;
           }
         }
 
@@ -170,7 +180,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           if (env[requires.environment.has] === undefined) {
             fullfilled = false;
           }
-          priority += 10;
+          fragment.priority += 10;
         }
 
         if (fullfilled) {
@@ -188,16 +198,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
           console.log(`${name}: load`);
         }
       }
-
-      const fragment = {
-        dir,
-        name,
-        requires,
-        priority,
-        dependencies: packageContent.engines || {},
-        arch: new Set(),
-        restrictArch: new Set()
-      };
 
       if (packageContent.cpu) {
         for (const a of asArray(packageContent.cpu)) {
@@ -333,8 +333,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
         properties = { ...fragment.properties, ...properties };
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
         Object.assign(output, fragment.output);
+        for (const def of Object.values(output)) {
+          if (def.content) {
+            def.dir = fragment.dir;
+          }
+        }
         if (fragment.content) {
-          content.push([fragment.content, fragment.dir]);
+          content.push(fragment);
         }
       } else {
         console.log("requirements not met", fragment.name, missedRequirements);
@@ -347,27 +352,21 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
     properties.variant = name;
 
-    const context = createContext({ properties });
-    const sources = context.expand(content).reduce((a, c) => {
-      a.push(...content2Sources(c[0], c[1]));
-      return a;
-    }, []);
-
     const result = {
-      context,
       variant: { name, priority: variant.priority },
-      sources,
+      content,
       output,
       dependencies,
-      properties: context.expand(properties)
+      properties
     };
 
-    function* forEachOutput(result) {
+    function* forEachOutput(result) {      
       if (Object.entries(result.output).length === 0) {
         yield result;
       }
 
       for (const [name, output] of Object.entries(result.output)) {
+        const content = [...result.content];
         const arch = mergeArchs(
           result.properties.arch,
           output.properties?.arch
@@ -376,43 +375,34 @@ export async function* extractFromPackage(options = {}, env = {}) {
           result.properties.arch = arch;
         }
 
-        let sources = [];
-
         if (output.content) {
-          sources = context
-            .expand([[output.content, variant.dir]])
-            .reduce((a, c) => {
-              a.push(...content2Sources(c[0], c[1]));
-              return a;
-            }, []);
+          content.push(output);
         }
 
-        const outputResult = {
-          ...result,
+        const properties = {
+          type: name,
+          ...result.properties,
+          ...output.properties
+        };
+
+        const context = createContext({ properties });
+
+        const sources = [];
+        context.expand(content).reduce((a, { content, dir }) => {
+          a.push(...content2Sources(content, dir));
+          return a;
+        }, sources);
+
+        yield {
           variant: { ...result.variant, output: name },
           output: { [name]: output },
-          sources: [...result.sources, ...sources],
+          sources,
           dependencies: mergeDependencies(
             result.dependencies,
             output.dependencies
           ),
-          properties: {
-            type: name,
-            ...result.properties,
-            ...output.properties
-          }
+          properties
         };
-
-        /*
-        console.log(
-          "RESULT",
-          outputResult.variant,
-          outputResult.properties,
-          sources.map(s => s.toString()).join("\n"),
-          outputResult.output
-        );*/
-
-        yield outputResult;
       }
     }
 

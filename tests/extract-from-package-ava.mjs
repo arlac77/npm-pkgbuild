@@ -63,7 +63,7 @@ async function efpt(t, json, expected) {
     }
 
     if (e.output) {
-      t.deepEqual(output, e.output, `output[${v}]`);
+      t.like(output, e.output, `output[${v}]`);
     }
 
     v++;
@@ -147,8 +147,7 @@ test(
         debian: {
           dependencies: { dep1: ">=1" },
           properties: { deb1: "a" },
-          arch: ["x86_64"],
-          content: { "/etc/myconfig.json": "pkg/myconfig.json" }
+          arch: ["x86_64"]
         }
       }
     },

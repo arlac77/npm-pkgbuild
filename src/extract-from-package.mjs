@@ -17,7 +17,7 @@ import { DOCKER } from "./output/docker.mjs";
 import { BUILDAH } from "./output/buildah.mjs";
 
 /**
- * All content providers
+ * All content providers (input)
  */
 export const allInputs = [
   NPMPackContentProvider,

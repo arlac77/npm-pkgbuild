@@ -3,11 +3,13 @@ import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { FileContentProvider, createPublishingDetails, RPM } from "npm-pkgbuild";
-import { requiresFromDependencies } from "../src/output/rpm.mjs";
 
 test("requiresFromDependencies", t => {
+
+  const out = new RPM({});
+
   t.deepEqual(
-    requiresFromDependencies({
+    out.requiresFromDependencies({
       A0: "1.2.3",
       A1: "=1.2.3",
       A2: "<=1.2.3",

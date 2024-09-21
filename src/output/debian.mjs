@@ -19,7 +19,6 @@ import {
   fieldProvider,
   extractFunctions,
   utf8StreamOptions,
-  packageNameMapping,
   filterOutUnwantedDependencies
 } from "../util.mjs";
 
@@ -86,7 +85,7 @@ export class DEBIAN extends Packager {
           yield new StringContentEntry(
             name,
             f.body.replaceAll(
-              /\{\{(\w+)\}\}/mg,
+              /\{\{(\w+)\}\}/gm,
               (match, key, offset, string) =>
                 properties[key] || "{{" + key + "}}"
             )
@@ -117,12 +116,7 @@ export class DEBIAN extends Packager {
     if (Object.keys(dependencies).length > 0) {
       properties.Depends = Object.entries(dependencies)
         .filter(filterOutUnwantedDependencies())
-        .map(
-          ([name, e]) =>
-            `${
-              packageNameMapping[name] ? packageNameMapping[name] : name
-            } (${e})`
-        );
+        .map(([name, e]) => `${this.packageName(name)} (${e})`);
     }
 
     const fp = fieldProvider(properties, fields);
@@ -153,9 +147,7 @@ export class DEBIAN extends Packager {
     }
 
     if (options.verbose) {
-      console.log(
-        await readFile(join(staging, debianControlName), "utf8")
-      );
+      console.log(await readFile(join(staging, debianControlName), "utf8"));
     }
 
     if (!options.dry) {

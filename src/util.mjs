@@ -10,13 +10,6 @@ import { ContentEntry } from "content-entry";
  */
 export const utf8StreamOptions = { encoding: "utf8" };
 
-/**
- * What is the node name in the package eco-system
- */
-export const packageNameMapping = {
-  node: "nodejs"
-};
-
 export function filterOutUnwantedDependencies() {
   return ([name, version]) => version !== "-";
 }

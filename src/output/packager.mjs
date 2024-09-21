@@ -55,6 +55,18 @@ export class Packager {
     this.#properties = { ...properties, type: this.constructor.name };
   }
 
+  /**
+   * What is the package name in the package eco-system.
+   * @param {string} name
+   * @return {string} package name in the target eco-system
+   */
+  packageName(name) {
+    const mapping = {
+      node: "nodejs"
+    };
+    return mapping[name] || name;
+  }
+
   get fileNameExtension() {
     // @ts-ignore
     return this.constructor.fileNameExtension;

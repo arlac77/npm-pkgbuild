@@ -20,7 +20,6 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  packageNameMapping,
   filterOutUnwantedDependencies
 } from "../util.mjs";
 
@@ -85,7 +84,7 @@ export class ARCH extends Packager {
 
         function getValue(key) {
           const v = process.env[key];
-          if(v !== undefined) {
+          if (v !== undefined) {
             return v;
           }
 
@@ -117,10 +116,24 @@ export class ARCH extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
-  async create(sources, transformer, dependencies, publishingDetails, options, expander) {
-    const { properties, staging, destination } = await this.prepare(
-      options
-    );
+  makeDepends(dependencies) {
+    return Object.entries(dependencies)
+      .filter(filterOutUnwantedDependencies())
+      .map(
+        ([name, version]) =>
+          `${this.packageName(name)}${normalizeExpression(version)}`
+      );
+  }
+
+  async create(
+    sources,
+    transformer,
+    dependencies,
+    publishingDetails,
+    options,
+    expander
+  ) {
+    const { properties, staging, destination } = await this.prepare(options);
 
     if (properties.source) {
       properties.md5sums = ["SKIP"];
@@ -129,10 +142,11 @@ export class ARCH extends Packager {
       properties.install = `${properties.name}.install`;
     }
 
+    const self = this;
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${makeDepends(dependencies)
+  depends=(${self.makeDepends(dependencies)
     .map(v => quote(v))
     .join(" ")})
 
@@ -261,13 +275,4 @@ function normalizeExpression(e) {
   }
 
   return e;
-}
-
-function makeDepends(dependencies) {
-  return Object.entries(dependencies)
-    .filter(filterOutUnwantedDependencies())
-    .map(
-      ([name, version]) =>
-        `${packageNameMapping[name] || name}${normalizeExpression(version)}`
-    );
 }

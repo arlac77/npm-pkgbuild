@@ -16,7 +16,6 @@ import {
   fieldProvider,
   utf8StreamOptions,
   extractFunctions,
-  packageNameMapping,
   filterOutUnwantedDependencies
 } from "../util.mjs";
 
@@ -40,21 +39,6 @@ const hookMapping = {
   pre_upgrade:
   post_upgrade:*/
 };
-
-export function requiresFromDependencies(dependencies) {
-  return Object.entries(dependencies)
-    .filter(filterOutUnwantedDependencies())
-    .map(
-      ([name, e]) =>
-        `${packageNameMapping[name] ? packageNameMapping[name] : name}${e
-          .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
-          .replace(/^\s*$/, "")
-          .replace(
-            /^\s*(<|<=|>|>=|=)\s*(\w+)/,
-            (match, p1, p2) => ` ${p1} ${p2}`
-          )}`
-    );
-}
 
 /**
  * produce rpm packages
@@ -110,6 +94,21 @@ export class RPM extends Packager {
     return false;
   }
 
+  requiresFromDependencies(dependencies) {
+    return Object.entries(dependencies)
+      .filter(filterOutUnwantedDependencies())
+      .map(
+        ([name, e]) =>
+          `${this.packageName(name)}${e
+            .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+            .replace(/^\s*$/, "")
+            .replace(
+              /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+              (match, p1, p2) => ` ${p1} ${p2}`
+            )}`
+      );
+  }
+
   async create(
     sources,
     transformer,
@@ -122,7 +121,7 @@ export class RPM extends Packager {
       options
     );
 
-    properties.Requires = requiresFromDependencies(dependencies);
+    properties.Requires = this.requiresFromDependencies(dependencies);
 
     if (properties.Packager?.length > 1) {
       // TODO how to write several Packages ?

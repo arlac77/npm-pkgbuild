@@ -261,7 +261,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
         if (packageContent.contributors) {
           properties.maintainer = packageContent.contributors.map(
-            c => `${c.name} <${c.email}>`
+            c => c.name + (c.email ? ` <${c.email}>` : '')
           );
         }
 

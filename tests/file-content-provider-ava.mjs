@@ -8,8 +8,18 @@ async function fcpt(t, definition, destination, list) {
   );
 
   const entries = [];
-  for await (const entry of content) {
-    entries.push(entry);
+
+  try {
+    for await (const entry of content) {
+      entries.push(entry);
+    }
+  } catch (e) {
+    if (Array.isArray(list)) {
+      throw e;
+    }
+
+    t.is(e.message, list, "expected error");
+    return;
   }
 
   t.deepEqual(
@@ -28,6 +38,7 @@ async function fcpt(t, definition, destination, list) {
   const exists = await Promise.all(entries.map(e => e.isExistent));
   t.is(exists.filter(e => e).length, entries.length);
 }
+
 fcpt.title = (
   providedTitle = "FileContentProvider list",
   definition,
@@ -82,13 +93,23 @@ test(
   []
 );
 
-test(fcpt, "pacman/tmpfiles.conf", "dest", []);
+test(
+  fcpt,
+  "pacman/tmpfiles.conf",
+  "dest",
+  "File not found pacman/tmpfiles.conf"
+);
 test(fcpt, new URL("fixtures/content/", import.meta.url).pathname, "dest", [
   { name: "file1.txt", mode: 0o644, destination: "dest" },
   { name: "file2 with spaces.txt", mode: 0o644, destination: "dest" },
   { name: "file2.json", mode: 0o644, destination: "dest" }
 ]);
-test(fcpt, new URL("fixtures/content/*.txt", import.meta.url).pathname, "dest", [
-  { name: "file1.txt", mode: 0o644, destination: "dest" },
-  { name: "file2 with spaces.txt", mode: 0o644, destination: "dest" },
-]);
+test(
+  fcpt,
+  new URL("fixtures/content/*.txt", import.meta.url).pathname,
+  "dest",
+  [
+    { name: "file1.txt", mode: 0o644, destination: "dest" },
+    { name: "file2 with spaces.txt", mode: 0o644, destination: "dest" }
+  ]
+);

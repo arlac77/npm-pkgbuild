@@ -1,4 +1,4 @@
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { globby } from "globby";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
@@ -46,6 +46,10 @@ export class FileContentProvider extends ContentProvider {
     }
   }
 
+  get isPatternMatch() {
+    return this.definitions.pattern.find(p => p.match(/[\*\?]/));
+  }
+
   toString() {
     return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties.destination}`;
   }
@@ -54,6 +58,7 @@ export class FileContentProvider extends ContentProvider {
     const definitions = this.definitions;
     const base = definitions.base;
 
+    let count = 0;
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
@@ -65,6 +70,15 @@ export class FileContentProvider extends ContentProvider {
       yield this.baseProperties
         ? Object.create(entry, this.baseProperties)
         : entry;
+
+      count++;
+    }
+
+    if (!this.isPatternMatch && count < 1) {
+      const file = join(base, this.definitions.pattern[0]);
+      const error = new Error(`File not found ${file}`);
+      error.file = file;
+      throw error;
     }
   }
 }

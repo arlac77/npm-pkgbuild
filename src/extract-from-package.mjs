@@ -334,7 +334,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
         Object.assign(output, fragment.output);
         for (const def of Object.values(output)) {
-          if (def.content) {
+          if (def.content && !def.dir) {
             def.dir = fragment.dir;
           }
         }

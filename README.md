@@ -99,7 +99,6 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [name](#name)
 *   [utf8StreamOptions](#utf8streamoptions)
     *   [Properties](#properties-1)
-*   [packageNameMapping](#packagenamemapping)
 *   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-2)
 *   [FunctionDecl](#functiondecl)
@@ -140,37 +139,41 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [OCI](#oci)
 *   [Packager](#packager)
     *   [Parameters](#parameters-12)
+    *   [packageName](#packagename)
+        *   [Parameters](#parameters-13)
     *   [tmpdir](#tmpdir)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-13)
-    *   [create](#create)
         *   [Parameters](#parameters-14)
+    *   [create](#create)
+        *   [Parameters](#parameters-15)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-16)
 *   [Packager](#packager-1)
-    *   [Parameters](#parameters-16)
+    *   [Parameters](#parameters-17)
+    *   [packageName](#packagename-1)
+        *   [Parameters](#parameters-18)
     *   [tmpdir](#tmpdir-1)
     *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-17)
+        *   [Parameters](#parameters-19)
     *   [create](#create-1)
-        *   [Parameters](#parameters-18)
+        *   [Parameters](#parameters-20)
     *   [workspaceLayout](#workspacelayout-1)
     *   [prepare](#prepare-5)
-        *   [Parameters](#parameters-19)
+        *   [Parameters](#parameters-21)
 *   [Field](#field)
     *   [Properties](#properties-5)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-6)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-20)
-*   [publish](#publish)
-    *   [Parameters](#parameters-21)
-*   [quoteFile](#quotefile)
     *   [Parameters](#parameters-22)
+*   [publish](#publish)
+    *   [Parameters](#parameters-23)
+*   [quoteFile](#quotefile)
+    *   [Parameters](#parameters-24)
 *   [RPM](#rpm)
     *   [prepare](#prepare-6)
-        *   [Parameters](#parameters-23)
+        *   [Parameters](#parameters-25)
 
 ## ContentProvider
 
@@ -217,10 +220,6 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 ### Properties
 
 *   `encoding` **BufferEncoding**&#x20;
-
-## packageNameMapping
-
-What is the node name in the package eco-system
 
 ## decodePassword
 
@@ -422,6 +421,16 @@ Low level OCI compatible packager
 
 *   `properties` &#x20;
 
+### packageName
+
+What is the package name in the package eco-system.
+
+#### Parameters
+
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
+
 ### tmpdir
 
 Create tmp directory.
@@ -474,6 +483,16 @@ Base Packager
 ### Parameters
 
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+
+### packageName
+
+What is the package name in the package eco-system.
+
+#### Parameters
+
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
 
 ### tmpdir
 

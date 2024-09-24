@@ -208,7 +208,7 @@ const toBeSkipped = new RegExp(
       "\\.in",
       "\\.vc",
       "\\.m4",
-      "Makefile(\\.am|\\.fallback|\\.msc)?",
+      "Makefile(\\.am|\\.fallback|\\.msc|\\.targ)?",
       "\\.cmake",
       "\\.mk",
       "\\.patch",
@@ -256,7 +256,9 @@ const toBeSkipped = new RegExp(
       "Porting-Buffer\\.md",
       "chains and topics\\.md",
       "build_detect_platform",
-      "install_daemon_node.node"
+      "install_daemon_node.node",
+      "tsconfig.build.json",
+      "typedoc.json"
     ].join("|") +
     ")$|(node_modules/(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"

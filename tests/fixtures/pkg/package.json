@@ -29,7 +29,7 @@
     "content": {
       "${install.dir}": [
         "npm-pack",
-        "node_modules"
+        "node-modules"
       ],
       "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"
     }

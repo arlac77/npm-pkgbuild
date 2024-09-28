@@ -251,14 +251,19 @@ const toBeSkipped = new RegExp(
       "SECURITY\\.md",
       "SFTPStream\\.md",
       "LIMITS\\.md",
+      "[\\d\\-]+\\.md",
       "DEPS",
       "__tests__",
+      "\\.test\\.js",
+      "__snapshots__",
       "Porting-Buffer\\.md",
       "chains and topics\\.md",
       "build_detect_platform",
+      "\\.snap",
       "install_daemon_node.node",
       "tsconfig.build.json",
-      "typedoc.json"
+      "typedoc.json",
+      "webpack.config.js"
     ].join("|") +
     ")$|(node_modules/(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"

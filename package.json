@@ -65,7 +65,7 @@
     "ini": "^5.0.0",
     "iterable-string-interceptor": "^3.0.0",
     "key-value-transformer": "^3.2.3",
-    "npm-package-walker": "^7.0.6",
+    "npm-package-walker": "^7.0.7",
     "npm-packlist": "^9.0.0",
     "pacote": "^19.0.0",
     "pkg-dir": "^8.0.0",

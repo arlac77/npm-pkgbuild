@@ -43,7 +43,7 @@ export class NodeModulesContentProvider extends ContentProvider {
       let pkgSourceDir = this.dir;
 
       if (this.withoutDevelpmentDependencies) {
-        pkgSourceDir = await mkdtemp(join(tmpdir(), "node-modules"));
+        pkgSourceDir = await mkdtemp(join(tmpdir(), "modules"));
 
         const json = JSON.parse(
           //@ts-ignore

@@ -9,9 +9,8 @@ import { keyValueTransformer } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, copyEntries } from "npm-pkgbuild";
 
-
 test("copyEntries destination base dir", async t => {
-  async function * files() {
+  async function* files() {
     const a = new StringContentEntry("a");
     a.destination = "/d1/d11/";
     yield a;
@@ -27,13 +26,16 @@ test("copyEntries destination base dir", async t => {
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
 
   for await (const entry of copyEntries(files(), tmp)) {
-    switch(entry.name) {
-      case 'a': t.is(entry.destination,"d1/d11/a");
-      break;
-      case 'b': t.is(entry.destination,"d2/d21");
-      break;
-      case 'c': t.is(entry.destination,"c");
-      break;
+    switch (entry.name) {
+      case "a":
+        t.is(entry.destination, "d1/d11/a");
+        break;
+      case "b":
+        t.is(entry.destination, "d2/d21");
+        break;
+      case "c":
+        t.is(entry.destination, "c");
+        break;
     }
   }
 
@@ -87,6 +89,6 @@ test("copyEntries with transform", async t => {
   )) {
   }
 
-  const content = await readFile(join(tmp, "file1.txt"), { encoding: "utf8" });
+  const content = await readFile(join(tmp, "file1.txt"), "utf8");
   t.truthy(content.match(/value1value1/));
 });

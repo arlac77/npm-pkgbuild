@@ -14,6 +14,7 @@ import { shrinkNPM } from "../npm-shrink.mjs";
  * Content from node_modules.
  * Requires .npmrc or NPM_TOKEN environment
  * @property {boolean} withoutDevelpmentDependencies
+ * @property {string} prefix base name out output
  */
 export class NodeModulesContentProvider extends ContentProvider {
   /**
@@ -28,6 +29,7 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   withoutDevelpmentDependencies = true;
+  prefix = "node_modules";
 
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
@@ -90,8 +92,10 @@ export class NodeModulesContentProvider extends ContentProvider {
         await arb.reify({ save: true });
       }
 
-      for (const name of await globby("node_modules/**/*", {
-        cwd: pkgSourceDir
+      const nodeModulesDir = join(pkgSourceDir, "node_modules");
+
+      for (const name of await globby("**/*", {
+        cwd: nodeModulesDir
       })) {
         if (!toBeSkipped.test(name)) {
           if (name.endsWith("package.json")) {
@@ -99,13 +103,16 @@ export class NodeModulesContentProvider extends ContentProvider {
               const json = shrinkNPM(
                 JSON.parse(
                   //@ts-ignore
-                  await readFile(join(pkgSourceDir, name), utf8StreamOptions)
+                  await readFile(join(nodeModulesDir, name), utf8StreamOptions)
                 )
               );
 
               if (json) {
                 yield Object.assign(
-                  new StringContentEntry(name, JSON.stringify(json)),
+                  new StringContentEntry(
+                    join(this.prefix, name),
+                    JSON.stringify(json)
+                  ),
                   this.entryProperties
                 );
               }
@@ -115,8 +122,9 @@ export class NodeModulesContentProvider extends ContentProvider {
               console.error(e, name);
             }
           }
+          console.log("FSE",join(this.prefix, name), pkgSourceDir);
           yield Object.assign(
-            new FileSystemEntry(name, pkgSourceDir),
+            new FileSystemEntry(join(this.prefix, name), pkgSourceDir),
             this.entryProperties
           );
         }

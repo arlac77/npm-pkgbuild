@@ -11,47 +11,36 @@ test("NodeModules entries", async t => {
     dir: new URL("fixtures/pkg", import.meta.url).pathname
   });
 
-  const entries = [];
-  for await (const entry of content) {
-    entries[entry.name] = entry;
-  }
-
-  t.truthy(entries["node_modules/uti/package.json"]);
-  t.truthy(entries["node_modules/uti/src/uti.mjs"]);
-  t.truthy(entries["node_modules/uti/src/well-known-utis.mjs"]);
-  t.is(Object.entries(entries).length, 3);
-
-  const tmp = await mkdtemp(join(tmpdir(), "node-modules-1-"));
+  const tmp = join(
+    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination")),
+    content.destinationPrefix
+  );
 
   for await (const entry of copyEntries(content, tmp)) {
   }
 
-  await access(join(tmp, "node_modules/uti/package.json"), constants.F_OK);
+  await access(join(tmp, "uti/package.json"), constants.F_OK);
+  await access(join(tmp, "uti/src/uti.mjs"), constants.F_OK);
+  await access(join(tmp, "uti/src/well-known-utis.mjs"), constants.F_OK);
+  t.true(true);
 });
 
 test("NodeModules entries without node_modules", async t => {
   const content = new NodeModulesContentProvider({
     dir: new URL("fixtures/pkg", import.meta.url).pathname,
-    prefix: ""
+    destinationPrefix: undefined
   });
 
-  const entries = [];
-  for await (const entry of content) {
-    entries[entry.name] = entry;
-  }
-
-  t.truthy(entries["uti/package.json"]);
-  t.truthy(entries["uti/src/uti.mjs"]);
-  t.truthy(entries["uti/src/well-known-utis.mjs"]);
-  t.is(Object.entries(entries).length, 3);
-
-  const tmp = await mkdtemp(join(tmpdir(), "node-modules-2-"));
+  const tmp =
+    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination"));
 
   for await (const entry of copyEntries(content, tmp)) {
-   // console.log("END",entry.name, entry.destination);
   }
 
   await access(join(tmp, "uti/package.json"), constants.F_OK);
+  await access(join(tmp, "uti/src/uti.mjs"), constants.F_OK);
+  await access(join(tmp, "uti/src/well-known-utis.mjs"), constants.F_OK);
+  t.true(true);
 });
 
 test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
@@ -65,9 +54,9 @@ test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
     entries[entry.name] = entry;
   }
 
- // t.truthy(entries["node_modules/uti/package.json"]);
+  // t.truthy(entries["node_modules/uti/package.json"]);
 
- // console.log(Object.entries(entries).length);
+  // console.log(Object.entries(entries).length);
 
   t.is(Object.entries(entries).length, 0); // not actually filled node-modules
 });

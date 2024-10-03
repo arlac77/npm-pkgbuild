@@ -28,6 +28,14 @@ export class ContentProvider {
   }
 
   /**
+   * @return {string|undefined}
+   */
+  get destinationPrefix()
+  {
+    return undefined;
+  }
+
+  /**
    * List all entries.
    * @return {AsyncIterable<ContentEntry>} all entries
    */

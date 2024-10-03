@@ -118,7 +118,7 @@ program
                     return entry;
                   }
 
-                  console.log('skip',entry.name, arch);
+                  console.log('skip', entry.name, arch);
                   return entry;
                 }
               },

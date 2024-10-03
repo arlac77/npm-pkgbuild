@@ -193,7 +193,9 @@ export async function* copyEntries(
 
     // @ts-ignore
     entry.destination = name;
-    const destination = join(destinationDirectory, name);
+    const destination = entry.destinationPrefix
+      ? join(destinationDirectory, entry.destinationPrefix, name)
+      : join(destinationDirectory, name);
     await mkdir(dirname(destination), { recursive: true });
 
     const options = { mode: entry.mode };

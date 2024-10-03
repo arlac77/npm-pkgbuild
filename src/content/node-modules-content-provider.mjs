@@ -14,7 +14,7 @@ import { shrinkNPM } from "../npm-shrink.mjs";
  * Content from node_modules.
  * Requires .npmrc or NPM_TOKEN environment
  * @property {boolean} withoutDevelpmentDependencies
- * @property {string} prefix base name out output
+ * @property {string} destinationPrefix base name out output
  */
 export class NodeModulesContentProvider extends ContentProvider {
   /**
@@ -29,7 +29,7 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   withoutDevelpmentDependencies = true;
-  prefix = "node_modules";
+  destinationPrefix = "node_modules";
 
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
@@ -109,10 +109,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 
               if (json) {
                 yield Object.assign(
-                  new StringContentEntry(
-                    join(this.prefix, name),
-                    JSON.stringify(json)
-                  ),
+                  new StringContentEntry(name, JSON.stringify(json)),
                   this.entryProperties
                 );
               }
@@ -122,9 +119,8 @@ export class NodeModulesContentProvider extends ContentProvider {
               console.error(e, name);
             }
           }
-          console.log("FSE",join(this.prefix, name), pkgSourceDir);
           yield Object.assign(
-            new FileSystemEntry(join(this.prefix, name), pkgSourceDir),
+            new FileSystemEntry(name, nodeModulesDir),
             this.entryProperties
           );
         }

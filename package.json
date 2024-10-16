@@ -40,14 +40,14 @@
   },
   "scripts": {
     "prepare": "npm run prepare:typescript",
-    "prepare:typescript": "tsc --allowJs --declaration --emitDeclarationOnly --declarationDir types --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext --rootDir src ./src**/*.mjs",
+    "prepare:typescript": "tsc --allowJs --declaration --emitDeclarationOnly --declarationDir types --resolveJsonModule --target es2024 --lib es2024 --lib dom -m esnext --module nodenext --moduleResolution nodenext --rootDir src ./src**/*.mjs",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 4m tests/*-ava.mjs tests/*-ava-node.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs && npm run lint:typescript",
     "lint:docs": "documentation lint ./src/**/*.mjs",
-    "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs",
+    "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule --target es2024 --lib es2024 --lib dom -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs",
     "tsc:types": "tsc -d --allowJs --declarationDir dist --emitDeclarationOnly ./src/extract-from-package.mjs"
   },
   "dependencies": {
@@ -79,7 +79,7 @@
     "documentation": "^14.0.3",
     "semantic-release": "^24.1.2",
     "stream-buffers": "^3.0.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.0-beta"
   },
   "engines": {
     "node": ">=20.18.0",

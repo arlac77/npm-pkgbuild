@@ -67,7 +67,7 @@
     "key-value-transformer": "^3.2.3",
     "npm-package-walker": "^7.0.7",
     "npm-packlist": "^9.0.0",
-    "pacote": "^19.0.1",
+    "pacote": "^20.0.0",
     "pkg-dir": "^8.0.0",
     "tar-stream": "^3.1.7",
     "uti": "^8.7.0"

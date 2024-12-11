@@ -8,7 +8,7 @@ import {
   DEBIAN
 } from "npm-pkgbuild";
 
-async function preparePacker(sourceDirs = [], dependencies = {}) {
+async function preparePacker(sourceDirs = [], dependencies = {}, props) {
   const publishingDetails = createPublishingDetails([], process.env);
 
   const sources = sourceDirs.map(source =>
@@ -23,7 +23,8 @@ async function preparePacker(sourceDirs = [], dependencies = {}) {
     description: "a description",
     license: "MIT",
     maintainer: "hugo",
-    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname
+    hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
+    ...props
   };
 
   const out = new DEBIAN(properties);
@@ -69,4 +70,16 @@ test("debian without dependencies", async t => {
 
   const s = await stat(fileName);
   t.true(s.size >= 620, `package file size ${s.size}`);
+});
+
+test.only("debian aarch64 -> arm64", async t => {
+  const { fileName, destination } = await preparePacker(
+    ["fixtures/content"],
+    {},
+    {
+      arch: "aarch64"
+    }
+  );
+
+  t.is(fileName, join(destination, "abc_1.0.0_arm64.deb"));
 });

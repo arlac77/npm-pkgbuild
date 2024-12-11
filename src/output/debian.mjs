@@ -71,8 +71,12 @@ export class DEBIAN extends Packager {
 
   get packageFileName() {
     const p = this.properties;
+
+    // TODO utility to provide final values
+    const arch = fields.Architecture.mapping[p.arch] || p.arch;
+
     // @ts-ignore
-    return `${p.name}_${p.version}_${p.arch}${this.constructor.fileNameExtension}`;
+    return `${p.name}_${p.version}_${arch}${this.constructor.fileNameExtension}`;
   }
 
   async *hookFiles(properties) {
@@ -180,7 +184,8 @@ const fields = {
     alias: "arch",
     type: "string",
     default: "all",
-    mandatory: true
+    mandatory: true,
+    mapping: { aarch64: "arm64" }
   },
   Homepage: { alias: "homepage", type: "string" },
   Bugs: { alias: "bugs", type: "string" },

@@ -145,7 +145,7 @@ export function fieldProvider(properties, fields) {
     if (k === undefined) {
       for (const [name, field] of Object.entries(fields)) {
         if (!presentKeys.has(name)) {
-          const value = properties[field.alias || name];
+          let value = properties[field.alias || name];
           if (value === undefined) {
             if (field.default === undefined) {
               if (field.mandatory) {
@@ -155,6 +155,13 @@ export function fieldProvider(properties, fields) {
               yield [name, field.default];
             }
           } else {
+            if(field.mapping) {
+              const mappedValue = field.mapping[value];
+              if(mappedValue) {
+                value = mappedValue;
+              }
+            }
+
             yield [name, av(field, value)];
           }
         }

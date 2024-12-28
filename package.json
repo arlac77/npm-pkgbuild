@@ -8,8 +8,8 @@
   "types": "./types/module.d.mts",
   "exports": {
     ".": {
-      "default": "./src/module.mjs",
-      "types": "./types/module.d.mts"
+      "types": "./types/module.d.mts",
+      "default": "./src/module.mjs"
     }
   },
   "description": "create ArchLinux, RPM and Debian packages from npm packages",

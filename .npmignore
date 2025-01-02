@@ -5,3 +5,4 @@ doc
 *.tmp
 .vscode
 .github
+tsconfig.json

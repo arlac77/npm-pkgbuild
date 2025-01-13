@@ -146,7 +146,8 @@ export class ARCH extends Packager {
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${self.makeDepends(dependencies)
+  depends=(${self
+    .makeDepends(dependencies)
     .map(v => quote(v))
     .join(" ")})
 
@@ -238,7 +239,12 @@ const fields = {
   Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
   packager: { alias: "maintainer", type: "string[]" },
   pkgname: { alias: "name", type: "string[]", mandatory: true },
-  pkgver: { alias: "version", type: "string", mandatory: true },
+  pkgver: {
+    alias: "version",
+    type: "string",
+    mandatory: true,
+    set: v => v.replace("-semantic-release", "")
+  },
   pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
   epoch: { type: "integer", default: 0 },
   pkgdesc: { alias: "description", type: "string", mandatory: true },

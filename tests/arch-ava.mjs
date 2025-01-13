@@ -13,7 +13,7 @@ test("arch default properties", async t => {
   const properties = {
     name: "abc",
     arch: [],
-    version: "1.0.0",
+    version: "1.0.0-semantic-release",
     description: "a description",
     license: "MIT"
   };
@@ -26,7 +26,7 @@ test("arch default properties", async t => {
     epoch: 0,
     arch: ["any"],
     pkgdesc: properties.description,
-    pkgver: properties.version,
+    pkgver: "1.0.0",
     pkgname: properties.name,
     release: 1
   });

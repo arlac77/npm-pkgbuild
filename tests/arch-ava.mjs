@@ -54,7 +54,6 @@ test("arch aarch64 default properties", async t => {
   });
 });
 
-
 test("arch", async t => {
   const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
@@ -80,7 +79,8 @@ test("arch", async t => {
     konsum: ">=4.3.8"
   };
   const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
-    destination
+    destination,
+    verbose: true
   });
   t.is(fileName, join(destination, "abc-1.0.0-1-any" + ARCH.fileNameExtension));
 

@@ -201,8 +201,10 @@ package() {
 
     if (options.verbose) {
       console.log(await readFile(join(staging, PKGBUILD), utf8StreamOptions));
+      console.log("***", staging, "***");
       const ls = await execa("ls", ["-lR"], { cwd: staging });
       console.log(ls.stdout);
+      console.log("*** end ***");
     }
 
     if (!options.dry) {

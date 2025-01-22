@@ -18,7 +18,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 22.13.0
+          - 22.13.1
     steps:
       - name: install dependencies
         run: |
@@ -67,7 +67,7 @@ jobs:
       - name: prepare node
         uses: actions/setup-node@v4.1.0
         with:
-          node-version: 22.13.0
+          node-version: 22.13.1
           cache: npm
           cache-dependency-path: package-lock.json
       - name: install

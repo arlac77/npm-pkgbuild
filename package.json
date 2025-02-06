@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@npmcli/arborist": "^9.0.0",
-    "@vercel/nft": "^0.29.0",
+    "@vercel/nft": "^0.29.1",
     "aggregate-async-iterator": "^1.2.1",
     "commander": "^13.1.0",
     "compare-versions": "^6.1.1",

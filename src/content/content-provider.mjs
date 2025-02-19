@@ -4,13 +4,15 @@ import { ContentEntry } from "content-entry";
  * Source of package content.
  * @property {string} dir
  * @property {Transformer[]} transformer 
+ * @property {string} destinationPrefix base name out output
  */
 export class ContentProvider {
 
   transformers = [];
   entryProperties;
   dir;
-  
+  /** @typedef {string?} */ destinationPrefix;
+
   constructor(definitions, entryProperties) {
     if (entryProperties) {
       this.entryProperties = entryProperties;
@@ -25,14 +27,6 @@ export class ContentProvider {
         }
       }
     }
-  }
-
-  /**
-   * @return {string|undefined}
-   */
-  get destinationPrefix()
-  {
-    return undefined;
   }
 
   /**

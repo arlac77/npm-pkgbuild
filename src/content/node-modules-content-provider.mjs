@@ -14,7 +14,6 @@ import { shrinkNPM } from "../npm-shrink.mjs";
  * Content from node_modules.
  * Requires .npmrc or NPM_TOKEN environment
  * @property {boolean} withoutDevelpmentDependencies
- * @property {string} destinationPrefix base name out output
  */
 export class NodeModulesContentProvider extends ContentProvider {
   /**
@@ -29,11 +28,10 @@ export class NodeModulesContentProvider extends ContentProvider {
   }
 
   withoutDevelpmentDependencies = true;
-  destinationPrefix = "node_modules";
 
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
-    Object.assign(this, definitions);
+    Object.assign(this, { destinationPrefix: "node_modules" }, definitions);
   }
 
   toString() {

@@ -103,16 +103,18 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
     *   [name](#name)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+    *   [Properties](#properties-2)
+    *   [name](#name-1)
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-3)
-    *   [name](#name-1)
+    *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
     *   [Parameters](#parameters-4)
-    *   [name](#name-2)
+    *   [name](#name-3)
 *   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-5)
-    *   [Properties](#properties-2)
-    *   [destinationPrefix](#destinationprefix)
+    *   [Properties](#properties-3)
     *   [asyncIterator](#asynciterator)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
@@ -134,58 +136,54 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-9)
 *   [BUILDAH](#buildah)
-*   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-10)
-    *   [Properties](#properties-3)
-    *   [name](#name-3)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-11)
+    *   [Parameters](#parameters-10)
     *   [packageName](#packagename)
-        *   [Parameters](#parameters-12)
+        *   [Parameters](#parameters-11)
     *   [tmpdir](#tmpdir)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-13)
+        *   [Parameters](#parameters-12)
     *   [create](#create)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-13)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-14)
 *   [Packager](#packager-1)
-    *   [Parameters](#parameters-16)
+    *   [Parameters](#parameters-15)
     *   [packageName](#packagename-1)
-        *   [Parameters](#parameters-17)
+        *   [Parameters](#parameters-16)
     *   [tmpdir](#tmpdir-1)
     *   [prepare](#prepare-5)
-        *   [Parameters](#parameters-18)
+        *   [Parameters](#parameters-17)
     *   [create](#create-1)
-        *   [Parameters](#parameters-19)
+        *   [Parameters](#parameters-18)
     *   [workspaceLayout](#workspacelayout-1)
     *   [prepare](#prepare-6)
-        *   [Parameters](#parameters-20)
+        *   [Parameters](#parameters-19)
 *   [Field](#field)
     *   [Properties](#properties-4)
 *   [copyNodeModules](#copynodemodules)
-    *   [Parameters](#parameters-21)
+    *   [Parameters](#parameters-20)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-5)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-22)
+    *   [Parameters](#parameters-21)
 *   [publish](#publish)
-    *   [Parameters](#parameters-23)
+    *   [Parameters](#parameters-22)
 *   [utf8StreamOptions](#utf8streamoptions)
     *   [Properties](#properties-6)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-24)
+    *   [Parameters](#parameters-23)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-7)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-25)
+    *   [Parameters](#parameters-24)
 *   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-26)
+    *   [Parameters](#parameters-25)
 *   [Expander](#expander)
-    *   [Parameters](#parameters-27)
+    *   [Parameters](#parameters-26)
 *   [copyEntries](#copyentries)
-    *   [Parameters](#parameters-28)
+    *   [Parameters](#parameters-27)
 
 ## allInputs
 
@@ -264,6 +262,21 @@ Content from npm pack.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
+## NodeModulesContentProvider
+
+**Extends ContentProvider**
+
+Content from node\_modules.
+Requires .npmrc or NPM\_TOKEN environment
+
+### Properties
+
+*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
 ## FileContentProvider
 
 **Extends ContentProvider**
@@ -313,10 +326,6 @@ Source of package content.
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<Transformer>**&#x20;
-
-### destinationPrefix
-
-Returns **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))**&#x20;
 
 ### asyncIterator
 
@@ -426,27 +435,6 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 **Extends DOCKER**
 
 Use buildah @see <https://buildah.io>
-
-## NodeModulesContentProvider
-
-**Extends ContentProvider**
-
-Content from node\_modules.
-Requires .npmrc or NPM\_TOKEN environment
-
-### Parameters
-
-*   `definitions` &#x20;
-*   `entryProperties` &#x20;
-
-### Properties
-
-*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
-*   `destinationPrefix` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base name out output
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## Packager
 

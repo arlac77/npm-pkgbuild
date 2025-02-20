@@ -3,15 +3,12 @@ import { ContentEntry } from "content-entry";
 /**
  * Source of package content.
  * @property {string} dir
- * @property {Transformer[]} transformer 
- * @property {string} destinationPrefix base name out output
+ * @property {Transformer[]} transformer
  */
 export class ContentProvider {
-
   transformers = [];
   entryProperties;
   dir;
-  /** @typedef {string?} */ destinationPrefix;
 
   constructor(definitions, entryProperties) {
     if (entryProperties) {
@@ -33,6 +30,5 @@ export class ContentProvider {
    * List all entries.
    * @return {AsyncIterable<ContentEntry>} all entries
    */
-  async *[Symbol.asyncIterator]() {
-  }
+  async *[Symbol.asyncIterator]() {}
 }

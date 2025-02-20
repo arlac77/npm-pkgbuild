@@ -12,27 +12,8 @@ test("NodeModules entries", async t => {
   });
 
   const tmp = join(
-    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination")),
-    content.destinationPrefix
+    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination"))
   );
-
-  for await (const entry of copyEntries(content, tmp)) {
-  }
-
-  await access(join(tmp, "uti/package.json"), constants.F_OK);
-  await access(join(tmp, "uti/src/uti.mjs"), constants.F_OK);
-  await access(join(tmp, "uti/src/well-known-utis.mjs"), constants.F_OK);
-  t.true(true);
-});
-
-test("NodeModules entries without node_modules", async t => {
-  const content = new NodeModulesContentProvider({
-    dir: new URL("fixtures/pkg", import.meta.url).pathname,
-    destinationPrefix: undefined
-  });
-
-  const tmp =
-    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination"));
 
   for await (const entry of copyEntries(content, tmp)) {
   }

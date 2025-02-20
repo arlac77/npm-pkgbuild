@@ -28,7 +28,9 @@
     "hooks": "pacman.install",
     "content": {
       "${install.dir}": [
-        "npm-pack",
+        "npm-pack"
+      ],
+      "${install.dir}/node_modules": [
         "node-modules"
       ],
       "/usr/lib/tmpfiles.d/${name}.conf": "tmpfiles.conf"

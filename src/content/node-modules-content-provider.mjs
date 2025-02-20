@@ -29,10 +29,7 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   withoutDevelpmentDependencies = true;
 
-  constructor(definitions, entryProperties) {
-    super(definitions, entryProperties);
-    Object.assign(this, { destinationPrefix: "node_modules" }, definitions);
-  }
+
 
   toString() {
     return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;

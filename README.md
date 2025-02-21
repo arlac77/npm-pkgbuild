@@ -103,21 +103,21 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
-    *   [asyncIterator](#asynciterator)
-*   [FileContentProvider](#filecontentprovider)
-    *   [Parameters](#parameters-3)
     *   [name](#name)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-4)
+    *   [Parameters](#parameters-3)
     *   [Properties](#properties-2)
     *   [name](#name-1)
-*   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-5)
-    *   [Properties](#properties-3)
+*   [FileContentProvider](#filecontentprovider)
+    *   [Parameters](#parameters-4)
     *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-6)
+    *   [Parameters](#parameters-5)
     *   [name](#name-3)
+*   [ContentProvider](#contentprovider)
+    *   [Parameters](#parameters-6)
+    *   [Properties](#properties-3)
+    *   [asyncIterator](#asynciterator)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
 *   [DEBIAN](#debian)
@@ -132,11 +132,11 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [RPM](#rpm)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
-*   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-10)
+*   [BUILDAH](#buildah)
 *   [Packager](#packager)
     *   [Parameters](#parameters-10)
     *   [packageName](#packagename)
@@ -285,6 +285,26 @@ Requires .npmrc or NPM\_TOKEN environment
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
+## NodeModulesContentProvider
+
+**Extends ContentProvider**
+
+Content from node\_modules.
+Requires .npmrc or NPM\_TOKEN environment
+
+### Parameters
+
+*   `definitions` &#x20;
+*   `entryProperties` &#x20;
+
+### Properties
+
+*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
 ## FileContentProvider
 
 **Extends ContentProvider**
@@ -338,11 +358,7 @@ Content from npm pack.
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## NFTContentProvider
+### asyncIterator
 
 **Extends ContentProvider**
 
@@ -456,6 +472,12 @@ Check for docker presence.
     *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
+
+## BUILDAH
+
+**Extends DOCKER**
+
+Use buildah @see <https://buildah.io>
 
 ## Packager
 

@@ -3,7 +3,7 @@
   "version": "0.0.0-semantic-release",
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": false
   },
   "types": "./types/module.d.mts",
   "exports": {

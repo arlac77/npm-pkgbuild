@@ -29,7 +29,13 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   withoutDevelpmentDependencies = true;
 
-
+  constructor(definitions, entryProperties) {
+    if (entryProperties?.destination && !entryProperties.destination.endsWith("/")) {
+      entryProperties.destination += "/";
+    }
+    super(definitions, entryProperties);
+    Object.assign(this, definitions);
+  }
 
   toString() {
     return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;

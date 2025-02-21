@@ -26,6 +26,9 @@ export class NPMPackContentProvider extends ContentProvider {
   }
 
   constructor(definitions, entryProperties) {
+    if (entryProperties?.destination && !entryProperties.destination.endsWith("/")) {
+      entryProperties.destination += "/";
+    }
     super(definitions, entryProperties);
     Object.assign(this, definitions);
   }

@@ -11,12 +11,13 @@ test("NodeModules entries", async t => {
     dir: new URL("fixtures/pkg", import.meta.url).pathname
   });
 
-  const tmp = join(
-    await mkdtemp(join(tmpdir(), "NodeModulesContentProvider-destination"))
+  t.is(content.dir, new URL("fixtures/pkg", import.meta.url).pathname);
+
+  const tmp = await mkdtemp(
+    join(tmpdir(), "NodeModulesContentProvider-destination")
   );
 
-  for await (const entry of copyEntries(content, tmp)) {
-  }
+  const entries = await Array.fromAsync(copyEntries(content, tmp));
 
   await access(join(tmp, "uti/package.json"), constants.F_OK);
   await access(join(tmp, "uti/src/uti.mjs"), constants.F_OK);
@@ -30,14 +31,9 @@ test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
     dir: new URL("fixtures/pkg", import.meta.url).pathname
   });
 
-  const entries = [];
-  for await (const entry of content) {
-    entries[entry.name] = entry;
-  }
+  const entries = await Array.fromAsync(content);
 
-  // t.truthy(entries["node_modules/uti/package.json"]);
+  console.log(entries);
 
-  // console.log(Object.entries(entries).length);
-
-  t.is(Object.entries(entries).length, 0); // not actually filled node-modules
+  t.is(entries.length, 0); // not actually filled node-modules
 });

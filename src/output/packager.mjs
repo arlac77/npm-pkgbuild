@@ -160,7 +160,7 @@ export class Packager {
    * @param {Object} dependencies
    * @param {PublishingDetail[]} publishingDetails
    * @param {Object} options
-   * @param {function(string):string} expander
+   * @param {function(string):string?} expander
    * @return {Promise<string>} identifier of the resulting package
    */
   async create(

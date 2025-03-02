@@ -5,10 +5,9 @@ import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
 
 /**
- * @type {Object}
- * @property {BufferEncoding} encoding
+ * @type {BufferEncoding}
  */
-export const utf8StreamOptions = { encoding: "utf8" };
+export const utf8StreamOptions = "utf8";
 
 export function filterOutUnwantedDependencies() {
   return ([name, version]) => version !== "-";

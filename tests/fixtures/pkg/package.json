@@ -22,7 +22,7 @@
   "pkgbuild": {
     "install.dir": "/services/${name}/",
     "groups": "webhook",
-    "depends": {
+    "dependencies": {
       "redis": ">=5.0.3"
     },
     "hooks": "pacman.install",

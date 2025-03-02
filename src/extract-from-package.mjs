@@ -109,8 +109,8 @@ function* content2Sources(content, dir) {
 /**
  * @typedef {Object} PackageDefinition
  * @property {Object} properties values describing the package attributes
+ * @property {Object} properties.dependencies
  * @property {ContentProvider[]} sources content providers
- * @property {Object} dependencies
  * @property {Object} output package type
  * @property {Object} variant identifier of the variant
  * @property {string} variant.name name of the variant
@@ -261,7 +261,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
         if (packageContent.contributors) {
           properties.maintainer = packageContent.contributors.map(
-            c => c.name + (c.email ? ` <${c.email}>` : '')
+            c => c.name + (c.email ? ` <${c.email}>` : "")
           );
         }
 
@@ -360,7 +360,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       properties
     };
 
-    function* forEachOutput(result) {      
+    function* forEachOutput(result) {
       if (Object.entries(result.output).length === 0) {
         result.context = createContext({ properties: result.properties });
         result.sources = [];
@@ -384,7 +384,11 @@ export async function* extractFromPackage(options = {}, env = {}) {
         const properties = {
           type: name,
           ...result.properties,
-          ...output.properties
+          ...output.properties,
+          dependencies: mergeDependencies(
+            result.dependencies,
+            output.dependencies
+          )
         };
 
         const context = createContext({ properties });
@@ -399,11 +403,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           variant: { ...result.variant, output: name },
           output: { [name]: output },
           sources,
-          dependencies: mergeDependencies(
-            result.dependencies,
-            output.dependencies
-          ),
-          properties : context.expand(properties)
+          properties: context.expand(properties)
         };
       }
     }

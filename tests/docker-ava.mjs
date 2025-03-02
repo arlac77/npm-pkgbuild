@@ -19,16 +19,16 @@ test("docker", async t => {
     description: "a description",
     license: "MIT",
     workdir: "/abc",
-    maintainer: ["a <a>","b <b>"]
+    maintainer: ["a <a>","b <b>"],
+    dependencies: { node: "lts-slim" }
   };
 
   const out = new DOCKER(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = { node: "lts-slim" };
 
-  const artifact = await out.create(sources, transformer, dependencies, publishingDetails, {
+  const artifact = await out.create(sources, transformer, publishingDetails, {
     destination,
     verbose: true
   }, (x)=> x);

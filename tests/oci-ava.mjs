@@ -22,16 +22,16 @@ test("oci", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT"
+    license: "MIT",
+    dependencies: {}
   };
 
   const out = new OCI(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = {};
 
-  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
+  const fileName = await out.create(sources, transformer, publishingDetails, {
     destination
   });
 

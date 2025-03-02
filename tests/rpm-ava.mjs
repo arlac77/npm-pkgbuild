@@ -47,18 +47,18 @@ test("rpm", async t => {
     description: "a description",
     license: "MIT",
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
-    maintainer: ["a <a>","b <b>"]
+    maintainer: ["a <a>","b <b>"],
+    dependencies: {
+      "nginx-mainline": ">=1.21.4",
+      konsum: ">=4.3.8"
+    }
   };
 
   const out = new RPM(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = {
-    "nginx-mainline": ">=1.21.4",
-    konsum: ">=4.3.8"
-  };
-  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
+  const fileName = await out.create(sources, transformer, publishingDetails, {
     destination,
     verbose: true
   });

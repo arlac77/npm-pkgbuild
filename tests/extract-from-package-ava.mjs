@@ -40,12 +40,9 @@ async function efpt(t, json, expected) {
   await mkdir(dir, { recursive: true });
   await writeFile(join(dir, "package.json"), JSON.stringify(json), "utf8");
 
-  for await (const {
-    properties,
-    sources,
-    dependencies,
-    output
-  } of extractFromPackage({ dir })) {
+  for await (const { properties, sources, output } of extractFromPackage({
+    dir
+  })) {
     const e = expected[v];
 
     t.truthy(e, `expected ${v}`);
@@ -56,10 +53,6 @@ async function efpt(t, json, expected) {
 
     if (e.sources) {
       t.deepEqual(sources, e.sources, `sources[${v}]`);
-    }
-
-    if (e.dependencies) {
-      t.deepEqual(dependencies, e.dependencies, `dependencies[${v}]`);
     }
 
     if (e.output) {
@@ -140,9 +133,9 @@ test(
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
-        type: "debian"
+        type: "debian",
+        dependencies: { dep1: ">=1", dep2: ">=2" }
       },
-      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
@@ -164,9 +157,9 @@ test(
         source: "github:/arlac77/npm-pkgbuild",
         variant: "default",
         deb1: "a",
-        type: "debian"
+        type: "debian",
+        dependencies: { dep1: ">=1", dep2: ">=2" }
       },
-      dependencies: { dep1: ">=1", dep2: ">=2" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
@@ -226,7 +219,8 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is arch",
-        type: "arch"
+        type: "arch",
+        dependencies: {}
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -240,7 +234,8 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is debian",
-        type: "debian"
+        type: "debian",
+        dependencies: {}
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -254,7 +249,8 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is arch",
-        type: "arch"
+        type: "arch",
+        dependencies: {}
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -268,7 +264,8 @@ test(
         variant: "v7",
         install: "/n4",
         key: "is debian",
-        type: "debian"
+        type: "debian",
+        dependencies: {}
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -375,7 +372,11 @@ function expected(properties) {
       ).pathname,
       installdir: "/services/konsum/frontend/",
       name: "konsum-frontend",
-      variant: "mf"
+      variant: "mf",
+      dependencies: {
+        "nginx-mainline": ">=1.21.1",
+        konsum: ">=4.1.0"
+      }
     },
     sources: [
       new FileContentProvider(
@@ -420,11 +421,7 @@ function expected(properties) {
           owner: "root"
         }
       )
-    ],
-    dependencies: {
-      "nginx-mainline": ">=1.21.1",
-      konsum: ">=4.1.0"
-    }
+    ]
   };
 }
 

@@ -56,7 +56,6 @@ program
         sources,
         output,
         variant,
-        dependencies,
         context
       } of extractFromPackage(options, process.env)) {
         for (const inputFactory of allInputs.filter(
@@ -139,14 +138,13 @@ program
               console.log("sources:");
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
-              console.log(kv(dependencies, "  "));
+              console.log(kv(properties.dependencies, "  "));
               console.log("publish:", publishingDetails.map(pd=>pd.url));
             }
 
             const artifact = await o.create(
               sources.map(c => c[Symbol.asyncIterator]()),
               transformer,
-              dependencies,
               publishingDetails,
               options,
               context.expand

@@ -94,7 +94,7 @@ export class RPM extends Packager {
     return false;
   }
 
-  requiresFromDependencies(dependencies) {
+  requiresFromDependencies(dependencies={}) {
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(
@@ -112,7 +112,6 @@ export class RPM extends Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     options,
     expander
@@ -121,7 +120,7 @@ export class RPM extends Packager {
       options
     );
 
-    properties.Requires = this.requiresFromDependencies(dependencies);
+    properties.Requires = this.requiresFromDependencies(properties.dependencies);
 
     if (properties.Packager?.length > 1) {
       // TODO how to write several Packages ?

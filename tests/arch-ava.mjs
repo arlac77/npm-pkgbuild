@@ -2,7 +2,11 @@ import test from "ava";
 import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, createPublishingDetails, ARCH } from "npm-pkgbuild";
+import {
+  FileContentProvider,
+  createPublishingDetails,
+  ARCH
+} from "npm-pkgbuild";
 
 test("arch extension", async t => {
   await ARCH.prepare({ verbose: false }, { arch: "aarch64" });
@@ -37,7 +41,7 @@ test("arch aarch64 default properties", async t => {
     name: "abc",
     arch: ["aarch64"],
     version: "1.0.0",
-    description: "a description",
+    description: "a description"
   };
 
   const out = new ARCH(properties);
@@ -67,18 +71,18 @@ test("arch", async t => {
     version: "1.0.0",
     description: "a description",
     license: "MIT",
-    maintainer: ["Herber Müller <herber.mueller@mail.com>"]
+    maintainer: ["Herber Müller <herber.mueller@mail.com>"],
+    dependencies: {
+      "nginx-mainline": ">=1.21.4",
+      konsum: ">=4.3.8"
+    }
   };
 
   const out = new ARCH(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
-  const dependencies = {
-    "nginx-mainline": ">=1.21.4",
-    konsum: ">=4.3.8"
-  };
-  const fileName = await out.create(sources, transformer, dependencies, publishingDetails, {
+  const fileName = await out.create(sources, transformer, publishingDetails, {
     destination,
     verbose: true
   });

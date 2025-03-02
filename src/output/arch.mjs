@@ -116,7 +116,7 @@ export class ARCH extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
-  makeDepends(dependencies) {
+  makeDepends(dependencies={}) {
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(
@@ -128,7 +128,6 @@ export class ARCH extends Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     options,
     expander
@@ -147,7 +146,7 @@ export class ARCH extends Packager {
       yield `
 package() {
   depends=(${self
-    .makeDepends(dependencies)
+    .makeDepends(properties.dependencies)
     .map(v => quote(v))
     .join(" ")})
 

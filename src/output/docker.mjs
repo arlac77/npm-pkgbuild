@@ -72,7 +72,6 @@ export class DOCKER extends Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     options,
     publishingDetails,
     expander
@@ -87,7 +86,7 @@ export class DOCKER extends Packager {
       for (const [k, v] of Object.entries({
         ...properties.from,
         ...Object.fromEntries(
-          Object.entries(dependencies)
+          Object.entries(properties.dependencies)
             .filter(filterOutUnwantedDependencies())
             .filter(([k, v]) => dependenciesToFrom[k])
             .map(([k, v]) => [dependenciesToFrom[k], v.replace(/[>=]*/, "")])

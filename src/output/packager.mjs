@@ -157,7 +157,6 @@ export class Packager {
    * Execute package generation.
    * @param {Object} sources
    * @param {Object[]} transformer
-   * @param {Object} dependencies
    * @param {PublishingDetail[]} publishingDetails
    * @param {Object} options
    * @param {function(string):string?} expander
@@ -166,7 +165,6 @@ export class Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     options,
     expander

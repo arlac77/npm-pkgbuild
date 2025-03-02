@@ -79,7 +79,6 @@ export class OCI extends Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     options,
     expander = v => v

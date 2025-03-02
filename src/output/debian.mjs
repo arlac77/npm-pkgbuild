@@ -102,7 +102,6 @@ export class DEBIAN extends Packager {
   async create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     options,
     expander
@@ -117,8 +116,8 @@ export class DEBIAN extends Packager {
       )
     );
 
-    if (Object.keys(dependencies).length > 0) {
-      properties.Depends = Object.entries(dependencies)
+    if (properties.dependencies && Object.keys(properties.dependencies).length > 0) {
+      properties.Depends = Object.entries(properties.dependencies)
         .filter(filterOutUnwantedDependencies())
         .map(([name, e]) => `${this.packageName(name)} (${e})`);
     }

@@ -24,6 +24,7 @@ async function preparePacker(sourceDirs = [], dependencies = {}, props) {
     license: "MIT",
     maintainer: "hugo",
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
+    dependencies,
     ...props
   };
 
@@ -34,7 +35,6 @@ async function preparePacker(sourceDirs = [], dependencies = {}, props) {
   const fileName = await out.create(
     sources,
     transformer,
-    dependencies,
     publishingDetails,
     {
       destination,

@@ -172,11 +172,10 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [publish](#publish)
     *   [Parameters](#parameters-23)
 *   [utf8StreamOptions](#utf8streamoptions)
-    *   [Properties](#properties-6)
 *   [decodePassword](#decodepassword)
     *   [Parameters](#parameters-24)
 *   [FunctionDecl](#functiondecl)
-    *   [Properties](#properties-7)
+    *   [Properties](#properties-6)
 *   [extractFunctions](#extractfunctions)
     *   [Parameters](#parameters-25)
 *   [fieldProvider](#fieldprovider)
@@ -622,11 +621,7 @@ Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Gl
 
 ## utf8StreamOptions
 
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-### Properties
-
-*   `encoding` **BufferEncoding**&#x20;
+Type: BufferEncoding
 
 ## decodePassword
 

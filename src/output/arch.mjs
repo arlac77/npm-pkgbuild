@@ -117,6 +117,12 @@ export class ARCH extends Packager {
   }
 
   makeDepends(dependencies={}) {
+    if(Array.isArray(dependencies)) {
+      dependencies = Object.fromEntries(dependencies.map(d => {
+        const m = d.match(/^([^=<>]+)(.*)/)
+        return [m[1],m[2]];
+      }));
+    }
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(
@@ -146,7 +152,7 @@ export class ARCH extends Packager {
       yield `
 package() {
   depends=(${self
-    .makeDepends(properties.dependencies)
+    .makeDepends(properties.depends)
     .map(v => quote(v))
     .join(" ")})
 
@@ -267,7 +273,7 @@ const fields = {
   groups: default_array_attribute,
   arch: { ...default_array_attribute, default: ["any"], mandatory: true },
   backup: default_array_attribute,
-  depends: default_array_attribute,
+  //depends: default_array_attribute,
   makedepends: default_attribute,
   checkdepends: default_attribute,
   optdepends: default_attribute,

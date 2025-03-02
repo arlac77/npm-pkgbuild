@@ -103,21 +103,21 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
+    *   [asyncIterator](#asynciterator)
+*   [FileContentProvider](#filecontentprovider)
+    *   [Parameters](#parameters-3)
     *   [name](#name)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-3)
+    *   [Parameters](#parameters-4)
     *   [Properties](#properties-2)
     *   [name](#name-1)
-*   [FileContentProvider](#filecontentprovider)
-    *   [Parameters](#parameters-4)
+*   [NPMPackContentProvider](#npmpackcontentprovider)
+    *   [Parameters](#parameters-5)
+    *   [Properties](#properties-3)
     *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-5)
-    *   [name](#name-3)
-*   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-6)
-    *   [Properties](#properties-3)
-    *   [asyncIterator](#asynciterator)
+    *   [name](#name-3)
 *   [hookMapping](#hookmapping)
 *   [hookMapping](#hookmapping-1)
 *   [DEBIAN](#debian)
@@ -132,59 +132,59 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [RPM](#rpm)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
+*   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-10)
-*   [BUILDAH](#buildah)
 *   [Packager](#packager)
-    *   [Parameters](#parameters-10)
+    *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
-        *   [Parameters](#parameters-11)
+        *   [Parameters](#parameters-12)
     *   [tmpdir](#tmpdir)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-12)
-    *   [create](#create)
         *   [Parameters](#parameters-13)
+    *   [create](#create)
+        *   [Parameters](#parameters-14)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-14)
+        *   [Parameters](#parameters-15)
 *   [Packager](#packager-1)
-    *   [Parameters](#parameters-15)
+    *   [Parameters](#parameters-16)
     *   [packageName](#packagename-1)
-        *   [Parameters](#parameters-16)
+        *   [Parameters](#parameters-17)
     *   [tmpdir](#tmpdir-1)
     *   [prepare](#prepare-5)
-        *   [Parameters](#parameters-17)
-    *   [create](#create-1)
         *   [Parameters](#parameters-18)
+    *   [create](#create-1)
+        *   [Parameters](#parameters-19)
     *   [workspaceLayout](#workspacelayout-1)
     *   [prepare](#prepare-6)
-        *   [Parameters](#parameters-19)
+        *   [Parameters](#parameters-20)
 *   [Field](#field)
     *   [Properties](#properties-4)
 *   [copyNodeModules](#copynodemodules)
-    *   [Parameters](#parameters-20)
+    *   [Parameters](#parameters-21)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-5)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-21)
-*   [publish](#publish)
     *   [Parameters](#parameters-22)
+*   [publish](#publish)
+    *   [Parameters](#parameters-23)
 *   [utf8StreamOptions](#utf8streamoptions)
     *   [Properties](#properties-6)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-23)
+    *   [Parameters](#parameters-24)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-7)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-24)
-*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-25)
-*   [Expander](#expander)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-26)
-*   [copyEntries](#copyentries)
+*   [Expander](#expander)
     *   [Parameters](#parameters-27)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-28)
 
 ## allInputs
 
@@ -217,8 +217,9 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 ### Properties
 
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** values describing the package attributes
+
+    *   `properties.dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `sources` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[ContentProvider](#contentprovider)>** content providers
-*   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `output` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** package type
 *   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** identifier of the variant
 
@@ -269,41 +270,6 @@ Source of package content.
 List all entries.
 
 Returns **AsyncIterable\<ContentEntry>** all entries
-
-## NodeModulesContentProvider
-
-**Extends ContentProvider**
-
-Content from node\_modules.
-Requires .npmrc or NPM\_TOKEN environment
-
-### Properties
-
-*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## NodeModulesContentProvider
-
-**Extends ContentProvider**
-
-Content from node\_modules.
-Requires .npmrc or NPM\_TOKEN environment
-
-### Parameters
-
-*   `definitions` &#x20;
-*   `entryProperties` &#x20;
-
-### Properties
-
-*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## FileContentProvider
 
@@ -358,7 +324,11 @@ Content from npm pack.
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
-### asyncIterator
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## NFTContentProvider
 
 **Extends ContentProvider**
 
@@ -473,12 +443,6 @@ Check for docker presence.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
 
-## BUILDAH
-
-**Extends DOCKER**
-
-Use buildah @see <https://buildah.io>
-
 ## Packager
 
 ### Parameters
@@ -520,10 +484,9 @@ Execute package generation.
 
 *   `sources` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
-*   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `publishingDetails` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[PublishingDetail](#publishingdetail)>**&#x20;
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** identifier of the resulting package
 
@@ -583,10 +546,9 @@ Execute package generation.
 
 *   `sources` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `transformer` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**&#x20;
-*   `dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `publishingDetails` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[PublishingDetail](#publishingdetail)>**&#x20;
 *   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `expander` **function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)): [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** identifier of the resulting package
 

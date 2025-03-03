@@ -172,7 +172,7 @@ export class Packager {
     throw new Error("not implemented");
   }
 
-  async publish(artifact, publishingDetails, properties, logger) {
-    return publish(artifact, publishingDetails, properties, logger);
+  async publish(artifact, publishingDetails, logger) {
+    return publish(artifact, publishingDetails, this.properties, logger);
   }
 }

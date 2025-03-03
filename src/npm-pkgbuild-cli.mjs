@@ -153,7 +153,7 @@ program
             if (!options.dry) {
               await Promise.all(
                 publishingDetails.map(publishDetail =>
-                  o.publish(artifact, publishDetail, o.properties)
+                  o.publish(artifact, publishDetail)
                 )
               );
             }

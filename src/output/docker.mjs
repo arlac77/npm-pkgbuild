@@ -176,11 +176,11 @@ export class DOCKER extends Packager {
     return image;
   }
 
-  async publish(artifact, publishingDetails, properties, logger = console.log) {
+  async publish(artifact, publishingDetails, logger = console.log) {
     try {
       const url = new URL(publishingDetails.url);
       const repoLocation = `${url.host}/${publishingDetails.username}`;
-      const name = `${properties.name}:${properties.version}`;
+      const name = `${this.properties.name}:${this.properties.version}`;
 
       logger(`Publishing to ${repoLocation}`);
 

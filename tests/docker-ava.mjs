@@ -2,10 +2,16 @@ import test from "ava";
 import { join } from "node:path";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, createPublishingDetails, DOCKER } from "npm-pkgbuild";
+import {
+  FileContentProvider,
+  createPublishingDetails,
+  DOCKER
+} from "npm-pkgbuild";
 
 test("docker", async t => {
-  const publishingDetails = createPublishingDetails(["https://unknown-registry.com"]);
+  const publishingDetails = createPublishingDetails([
+    "https://unknown-registry.com"
+  ]);
 
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
@@ -19,7 +25,7 @@ test("docker", async t => {
     description: "a description",
     license: "MIT",
     workdir: "/abc",
-    maintainer: ["a <a>","b <b>"],
+    maintainer: ["a <a>", "b <b>"],
     dependencies: { node: "lts-slim" }
   };
 
@@ -28,15 +34,21 @@ test("docker", async t => {
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
 
-  const artifact = await out.create(sources, transformer, publishingDetails, {
-    destination,
-    verbose: true
-  }, (x)=> x);
+  const artifact = await out.create(
+    sources,
+    transformer,
+    publishingDetails,
+    {
+      destination,
+      verbose: true
+    },
+    x => x
+  );
 
   t.true(artifact !== undefined);
 
   const messages = [];
-  await out.publish(artifact, publishingDetails[0] , properties, message =>
+  await out.publish(artifact, publishingDetails[0], message =>
     messages.push(message)
   );
 

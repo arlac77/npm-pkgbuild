@@ -466,7 +466,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### prepare
 
-Prepares artifact generation
+Prepares artifact generation.
 
 #### Parameters
 
@@ -528,7 +528,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### prepare
 
-Prepares artifact generation
+Prepares artifact generation.
 
 #### Parameters
 

@@ -19,7 +19,8 @@ import {
   fieldProvider,
   extractFunctions,
   utf8StreamOptions,
-  filterOutUnwantedDependencies
+  filterOutUnwantedDependencies,
+  compileFields
 } from "../util.mjs";
 
 /**
@@ -99,13 +100,7 @@ export class DEBIAN extends Packager {
     }
   }
 
-  async create(
-    sources,
-    transformer,
-    publishingDetails,
-    options,
-    expander
-  ) {
+  async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
     transformer.push(
@@ -116,7 +111,10 @@ export class DEBIAN extends Packager {
       )
     );
 
-    if (properties.dependencies && Object.keys(properties.dependencies).length > 0) {
+    if (
+      properties.dependencies &&
+      Object.keys(properties.dependencies).length > 0
+    ) {
       properties.Depends = Object.entries(properties.dependencies)
         .filter(filterOutUnwantedDependencies())
         .map(([name, e]) => `${this.packageName(name)} (${e})`);
@@ -170,8 +168,13 @@ export class DEBIAN extends Packager {
  * @see https://linux.die.net/man/5/deb-control
  */
 
-const fields = {
-  Package: { alias: "name", type: "string", mandatory: true },
+const fields = compileFields({
+  Package: {
+    alias: "name",
+    type: "string",
+    mandatory: true,
+    set: v => v.toLowerCase()
+  },
   Version: { alias: "version", type: "string", mandatory: true },
   Maintainer: { alias: "maintainer", type: "string", mandatory: true },
   Description: { alias: "description", type: "string", mandatory: true },
@@ -201,7 +204,7 @@ const fields = {
   Source: { alias: "source", type: "string" },
   Uploaders: { mandatory: false },
   "Installed-Size": {}
-};
+});
 
 /*
 @see https://www.debian.org/doc/debian-policy/ch-archive.html#sections

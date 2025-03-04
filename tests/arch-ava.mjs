@@ -30,6 +30,7 @@ test("arch default properties", async t => {
     epoch: 0,
     arch: ["any"],
     pkgdesc: properties.description,
+    version: "1.0.0",
     pkgver: "1.0.0",
     pkgname: properties.name,
     release: 1

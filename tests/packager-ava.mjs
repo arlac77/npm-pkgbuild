@@ -1,9 +1,10 @@
 import test from "ava";
 import { Packager } from "npm-pkgbuild";
+import { compileFields } from "../src/util.mjs";
 
 class MyPackager extends Packager {
   static get fields() {
-    return { a: { detault: "av", mandatory: true }, b: { default: "bv", set: value => value.toLowerCase() } };
+    return compileFields({ a: { detault: "av", mandatory: true }, b: { default: "bv", set: value => value.toLowerCase() } });
   }
 
   static get workspaceLayout() {

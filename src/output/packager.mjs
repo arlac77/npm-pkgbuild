@@ -81,26 +81,31 @@ export class Packager {
   get properties() {
     const properties = this.#properties;
 
-    Object.entries(this.fields).forEach(([k, v]) => {
-      if (v.set && properties[k] !== undefined) {
-        properties[k] = v.set(properties[k]);
+    for (const field of Object.values(this.fields)) {
+      if (field.set) {
+        if (properties[field.name] !== undefined) {
+          properties[field.name] = field.set(properties[field.name]);
+        } else if (properties[field.alias] !== undefined) {
+          properties[field.alias] = field.set(properties[field.alias]);
+        }
       }
 
-      const e = properties[v.alias];
+      const e = properties[field.alias];
+
       if (e !== undefined) {
-        properties[k] = v.set ? v.set(e) : e;
+        properties[field.name] = field.set ? field.set(e) : e;
       } else {
-        if (v.default !== undefined) {
-          const vak = v.alias || k;
+        if (field.default !== undefined) {
+          const vak = field.alias || field.name;
           if (
             (Array.isArray(properties[vak]) && properties[vak].length === 0) ||
             properties[vak] === undefined
           ) {
-            properties[vak] = v.default;
+            properties[vak] = field.default;
           }
         }
       }
-    });
+    }
 
     return properties;
   }
@@ -120,8 +125,7 @@ export class Packager {
    * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string}>}
    */
   async prepare(options, publishingDetail) {
-
-    if(this.#prepared) {
+    if (this.#prepared) {
       return this.#prepared;
     }
 
@@ -169,13 +173,7 @@ export class Packager {
    * @param {function(string):string?} expander
    * @return {Promise<string>} identifier of the resulting package
    */
-  async create(
-    sources,
-    transformer,
-    publishingDetails,
-    options,
-    expander
-  ) {
+  async create(sources, transformer, publishingDetails, options, expander) {
     throw new Error("not implemented");
   }
 

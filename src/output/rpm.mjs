@@ -16,7 +16,8 @@ import {
   fieldProvider,
   utf8StreamOptions,
   extractFunctions,
-  filterOutUnwantedDependencies
+  filterOutUnwantedDependencies,
+  compileFields
 } from "../util.mjs";
 
 /**
@@ -235,7 +236,7 @@ const pkglist = { type: "string[]" };
 /**
  * @see https://rpm-packaging-guide.github.io
  */
-const fields = {
+const fields = compileFields({
   Name: { alias: "name", type: "string", mandatory: true },
   Summary: { alias: "description", type: "string", mandatory: true },
   License: { alias: "license", type: "string", mandatory: true },
@@ -255,4 +256,4 @@ const fields = {
   Requires: pkglist,
   Obsoletes: pkglist,
   Conflicts: pkglist
-};
+});

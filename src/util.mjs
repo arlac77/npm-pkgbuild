@@ -4,6 +4,14 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
 
+export function compileFields(fields) {
+  for(const [k,v] of Object.entries(fields)) {
+    v.name = k;
+  }
+
+  return fields;
+}
+
 /**
  * @type {BufferEncoding}
  */

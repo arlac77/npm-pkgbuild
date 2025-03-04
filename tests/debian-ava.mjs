@@ -8,6 +8,19 @@ import {
   DEBIAN
 } from "npm-pkgbuild";
 
+test("debian lowercase names", t => {
+  const out = new DEBIAN({
+    name: "ABC",
+    license: "MIT",
+    version: "1.0.0",
+    maintainer: "hugo"
+  });
+
+  t.is(out.properties.name, "abc");
+
+  t.is(out.packageFileName, "abc_1.0.0_all.deb");
+});
+
 async function preparePacker(sourceDirs = [], dependencies = {}, props) {
   const publishingDetails = createPublishingDetails([], process.env);
 
@@ -32,15 +45,10 @@ async function preparePacker(sourceDirs = [], dependencies = {}, props) {
 
   const transformer = [];
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
-  const fileName = await out.create(
-    sources,
-    transformer,
-    publishingDetails,
-    {
-      destination,
-      verbose: false
-    }
-  );
+  const fileName = await out.create(sources, transformer, publishingDetails, {
+    destination,
+    verbose: false
+  });
 
   return { fileName, destination };
 }
@@ -72,7 +80,7 @@ test("debian without dependencies", async t => {
   t.true(s.size >= 620, `package file size ${s.size}`);
 });
 
-test.only("debian aarch64 -> arm64", async t => {
+test("debian aarch64 -> arm64", async t => {
   const { fileName, destination } = await preparePacker(
     ["fixtures/content"],
     {},

@@ -20,7 +20,8 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  filterOutUnwantedDependencies
+  filterOutUnwantedDependencies,
+  compileFields
 } from "../util.mjs";
 
 function* keyValueLines(key, value, options) {
@@ -244,7 +245,7 @@ const default_array_attribute = { type: "string[]" };
  * well known package properties
  * https://www.archlinux.org/pacman/PKGBUILD.5.html
  */
-const fields = {
+const fields = compileFields({
   Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
   packager: { alias: "maintainer", type: "string[]" },
   pkgname: { alias: "name", type: "string[]", mandatory: true },
@@ -281,7 +282,7 @@ const fields = {
   provides: default_attribute,
   replaces: default_attribute,
   options: default_attribute
-};
+});
 
 function normalizeExpression(e) {
   e = e.replace(/\-([\w\d]+)$/, "");

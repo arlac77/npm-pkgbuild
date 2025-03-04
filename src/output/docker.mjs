@@ -14,7 +14,8 @@ import {
   copyEntries,
   utf8StreamOptions,
   quote,
-  filterOutUnwantedDependencies
+  filterOutUnwantedDependencies,
+  compileFields
 } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
@@ -205,10 +206,10 @@ export class DOCKER extends Packager {
 /**
  * @see {@link https://docs.docker.com/engine/reference/builder/}
  */
-const fields = {
+const fields = compileFields({
   name: { type: "string", mandatory: true, set: value => value.toLowerCase() },
   version: { type: "string", mandatory: true },
   description: { type: "string" },
   author: { alias: "maintainer", type: "string" },
   workdir: { type: "string", default: "/", mandatory: true }
-};
+});

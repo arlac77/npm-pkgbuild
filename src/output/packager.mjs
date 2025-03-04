@@ -46,6 +46,7 @@ export class Packager {
   }
 
   #properties;
+  #prepared;
 
   /**
    * Base Packager
@@ -113,12 +114,17 @@ export class Packager {
   }
 
   /**
-   * Prepares artifact generation
+   * Prepares artifact generation.
    * @param {Object} options
    * @param {Object} [publishingDetail]
    * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string}>}
    */
   async prepare(options, publishingDetail) {
+
+    if(this.#prepared) {
+      return this.#prepared;
+    }
+
     const tmpdir = await this.tmpdir;
 
     const out = {
@@ -150,6 +156,7 @@ export class Packager {
       await mkdir(out.destination, mdo);
     }
 
+    this.#prepared = out;
     return out;
   }
 

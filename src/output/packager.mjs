@@ -25,7 +25,7 @@ export class Packager {
   }
 
   /**
-   * @return {{named:object,others:[]}}
+   * @return {{named:object,others:string[]}}
    */
   static get workspaceLayout() {
     return {

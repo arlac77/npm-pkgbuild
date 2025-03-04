@@ -41,7 +41,7 @@ const hookMapping = {
 };
 
 /**
- * produce rpm packages
+ * Produce rpm packages.
  */
 export class RPM extends Packager {
   static get name() {

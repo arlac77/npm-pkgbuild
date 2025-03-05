@@ -70,13 +70,17 @@ export class Packager {
   }
 
   makeDepends(dependencies, exp=(name,expression)=>`${name}${expression}`) {
+    if(!dependencies) {
+      return [];
+    }
+    
     if(Array.isArray(dependencies)) {
       dependencies = Object.fromEntries(dependencies.map(d => {
         const m = d.match(/^([^=<>]+)(.*)/)
         return [m[1],m[2]];
       }));
     }
-    return dependencies && Object.entries(dependencies)
+    return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(([name, expression]) => exp(name,expression)
       );

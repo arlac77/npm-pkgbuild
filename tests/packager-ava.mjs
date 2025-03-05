@@ -4,7 +4,10 @@ import { compileFields } from "../src/util.mjs";
 
 class MyPackager extends Packager {
   static get fields() {
-    return compileFields({ a: { detault: "av", mandatory: true }, b: { default: "bv", set: value => value.toLowerCase() } });
+    return compileFields({
+      a: { detault: "av", mandatory: true },
+      b: { default: "bv", set: value => value.toLowerCase() }
+    });
   }
 
   static get workspaceLayout() {
@@ -39,4 +42,12 @@ test("packager prepareExecute", async t => {
   const out = await p.prepare({});
   t.true(out.tmpdir.length > 4);
   t.is(out.tmpdir, out.destination);
+});
+
+test("makeDepends", t => {
+  const out = new MyPackager({});
+
+  t.deepEqual([], out.makeDepends({}));
+  t.deepEqual([], out.makeDepends([]));
+  t.deepEqual([], out.makeDepends());
 });

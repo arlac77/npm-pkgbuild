@@ -2,12 +2,15 @@ import test from "ava";
 import { join } from "node:path";
 import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { FileContentProvider, createPublishingDetails, RPM } from "npm-pkgbuild";
+import {
+  FileContentProvider,
+  createPublishingDetails,
+  RPM
+} from "npm-pkgbuild";
 
 test("makeDepends", t => {
-
   const out = new RPM({});
-
+    
   t.deepEqual(
     out.makeDepends({
       A0: "1.2.3",
@@ -47,7 +50,7 @@ test("rpm", async t => {
     description: "a description",
     license: "MIT",
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
-    maintainer: ["a <a>","b <b>"],
+    maintainer: ["a <a>", "b <b>"],
     dependencies: {
       "nginx-mainline": ">=1.21.4",
       konsum: ">=4.3.8"

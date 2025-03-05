@@ -99,6 +99,13 @@ export class DEBIAN extends Packager {
     }
   }
 
+  makeDepends(deps) {
+    return super.makeDepends(
+      deps,
+      (name, expression) => expression ? `${this.packageName(name)} (${expression})` : this.packageName(name)
+    );
+  }
+
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
@@ -114,10 +121,7 @@ export class DEBIAN extends Packager {
       properties.dependencies &&
       Object.keys(properties.dependencies).length > 0
     ) {
-      properties.Depends = this.makeDepends(
-        properties.dependencies,
-        (name, expression) => `${this.packageName(name)} (${expression})`
-      );
+      properties.Depends = this.makeDepends(properties.dependencies);
     }
 
     const fp = fieldProvider(properties, fields);

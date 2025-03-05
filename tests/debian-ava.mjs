@@ -8,6 +8,12 @@ import {
   DEBIAN
 } from "npm-pkgbuild";
 
+test("makeDepends", t => {
+  const out = new DEBIAN({});
+
+  t.deepEqual(["d1", "d2 (1.0.0)"], out.makeDepends({ d1: "", d2: "1.0.0" }));
+});
+
 test("debian lowercase names", t => {
   const out = new DEBIAN({
     name: "ABC",

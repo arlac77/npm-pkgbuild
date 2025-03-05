@@ -16,7 +16,6 @@ import {
   fieldProvider,
   utf8StreamOptions,
   extractFunctions,
-  filterOutUnwantedDependencies,
   compileFields
 } from "../util.mjs";
 
@@ -95,33 +94,23 @@ export class RPM extends Packager {
     return false;
   }
 
-  requiresFromDependencies(dependencies={}) {
-    return Object.entries(dependencies)
-      .filter(filterOutUnwantedDependencies())
-      .map(
-        ([name, e]) =>
-          `${this.packageName(name)}${e
-            .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
-            .replace(/^\s*$/, "")
-            .replace(
-              /^\s*(<|<=|>|>=|=)\s*(\w+)/,
-              (match, p1, p2) => ` ${p1} ${p2}`
-            )}`
-      );
+  makeDepends(deps) {
+    return super.makeDepends(deps,(name, expression) =>
+      `${this.packageName(name)}${expression
+        .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+        .replace(/^\s*$/, "")
+        .replace(
+          /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+          (match, p1, p2) => ` ${p1} ${p2}`
+        )}`);
   }
 
-  async create(
-    sources,
-    transformer,
-    publishingDetails,
-    options,
-    expander
-  ) {
+  async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, tmpdir, staging, destination } = await this.prepare(
       options
     );
 
-    properties.Requires = this.requiresFromDependencies(properties.dependencies);
+    properties.Requires = this.makeDepends(properties.dependencies);
 
     if (properties.Packager?.length > 1) {
       // TODO how to write several Packages ?

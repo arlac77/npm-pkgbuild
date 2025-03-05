@@ -4,12 +4,12 @@ import { stat, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { FileContentProvider, createPublishingDetails, RPM } from "npm-pkgbuild";
 
-test("requiresFromDependencies", t => {
+test("makeDepends", t => {
 
   const out = new RPM({});
 
   t.deepEqual(
-    out.requiresFromDependencies({
+    out.makeDepends({
       A0: "1.2.3",
       A1: "=1.2.3",
       A2: "<=1.2.3",

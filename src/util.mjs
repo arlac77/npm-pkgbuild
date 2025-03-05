@@ -21,6 +21,15 @@ export function filterOutUnwantedDependencies() {
   return ([name, version]) => version !== "-";
 }
 
+export function normalizeExpression(e) {
+  e = e.replace(/\-([\w\d]+)$/, "");
+  if (e.match(/^\d+/)) {
+    return `>=${e}`;
+  }
+
+  return e;
+}
+
 export function mergeDependencies(a, b) {
   if (!b) {
     return a;

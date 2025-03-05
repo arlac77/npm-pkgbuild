@@ -20,8 +20,8 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  filterOutUnwantedDependencies,
-  compileFields
+  compileFields,
+  normalizeExpression
 } from "../util.mjs";
 
 function* keyValueLines(key, value, options) {
@@ -117,28 +117,7 @@ export class ARCH extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
-  makeDepends(dependencies={}) {
-    if(Array.isArray(dependencies)) {
-      dependencies = Object.fromEntries(dependencies.map(d => {
-        const m = d.match(/^([^=<>]+)(.*)/)
-        return [m[1],m[2]];
-      }));
-    }
-    return Object.entries(dependencies)
-      .filter(filterOutUnwantedDependencies())
-      .map(
-        ([name, version]) =>
-          `${this.packageName(name)}${normalizeExpression(version)}`
-      );
-  }
-
-  async create(
-    sources,
-    transformer,
-    publishingDetails,
-    options,
-    expander
-  ) {
+  async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
     if (properties.source) {
@@ -153,8 +132,9 @@ export class ARCH extends Packager {
       yield `
 package() {
   depends=(${self
-    .makeDepends(properties.dependencies)
-    .map(v => quote(v))
+    .makeDepends(properties.dependencies, (name, expression) =>
+      quote(`${self.packageName(name)}${normalizeExpression(expression)}`)
+    )
     .join(" ")})
 
   if [ "$(ls -A $srcdir)" ]
@@ -283,12 +263,3 @@ const fields = compileFields({
   replaces: default_attribute,
   options: default_attribute
 });
-
-function normalizeExpression(e) {
-  e = e.replace(/\-([\w\d]+)$/, "");
-  if (e.match(/^\d+/)) {
-    return `>=${e}`;
-  }
-
-  return e;
-}

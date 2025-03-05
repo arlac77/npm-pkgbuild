@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { publish } from "../publish.mjs";
+import { filterOutUnwantedDependencies } from "../util.mjs";
 
 /**
  * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
@@ -66,6 +67,19 @@ export class Packager {
       node: "nodejs"
     };
     return mapping[name] || name;
+  }
+
+  makeDepends(dependencies, exp=(name,expression)=>`${name}${expression}`) {
+    if(Array.isArray(dependencies)) {
+      dependencies = Object.fromEntries(dependencies.map(d => {
+        const m = d.match(/^([^=<>]+)(.*)/)
+        return [m[1],m[2]];
+      }));
+    }
+    return dependencies && Object.entries(dependencies)
+      .filter(filterOutUnwantedDependencies())
+      .map(([name, expression]) => exp(name,expression)
+      );
   }
 
   get fileNameExtension() {

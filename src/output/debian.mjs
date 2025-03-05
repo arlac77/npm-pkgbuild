@@ -19,7 +19,6 @@ import {
   fieldProvider,
   extractFunctions,
   utf8StreamOptions,
-  filterOutUnwantedDependencies,
   compileFields
 } from "../util.mjs";
 
@@ -115,9 +114,10 @@ export class DEBIAN extends Packager {
       properties.dependencies &&
       Object.keys(properties.dependencies).length > 0
     ) {
-      properties.Depends = Object.entries(properties.dependencies)
-        .filter(filterOutUnwantedDependencies())
-        .map(([name, e]) => `${this.packageName(name)} (${e})`);
+      properties.Depends = this.makeDepends(
+        properties.dependencies,
+        (name, expression) => `${this.packageName(name)} (${expression})`
+      );
     }
 
     const fp = fieldProvider(properties, fields);

@@ -28,7 +28,7 @@ export function createPublishingDetails(locations = [], properties) {
   let publishPropertyFound = false;
 
   for (const s of ["type"]) {
-    let key = properties?.[s];
+    const key = properties?.[s];
     if (key !== undefined) {
       const envKey = `PKGBUILD_PUBLISH_${key.toUpperCase()}`;
       // @ts-ignore

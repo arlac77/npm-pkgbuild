@@ -8,7 +8,12 @@ import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
-import { Packager, VERSION_FIELD } from "./packager.mjs";
+import {
+  Packager,
+  VERSION_FIELD,
+  DESCRIPTION_FIELD,
+  NAME_FIELD
+} from "./packager.mjs";
 import {
   fieldProvider,
   copyEntries,
@@ -70,13 +75,7 @@ export class DOCKER extends Packager {
     return false;
   }
 
-  async create(
-    sources,
-    transformer,
-    options,
-    publishingDetails,
-    expander
-  ) {
+  async create(sources, transformer, options, publishingDetails, expander) {
     const { properties, staging } = await this.prepare(
       options,
       publishingDetails
@@ -207,9 +206,9 @@ export class DOCKER extends Packager {
  * @see {@link https://docs.docker.com/engine/reference/builder/}
  */
 const fields = compileFields({
-  name: { type: "string", mandatory: true, set: value => value.toLowerCase() },
+  name: { ...NAME_FIELD, set: value => value.toLowerCase() },
   version: { ...VERSION_FIELD },
-  description: { type: "string" },
+  description: { ...DESCRIPTION_FIELD },
   author: { alias: "maintainer", type: "string" },
   workdir: { type: "string", default: "/", mandatory: true }
 });

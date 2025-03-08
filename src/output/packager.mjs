@@ -69,21 +69,25 @@ export class Packager {
     return mapping[name] || name;
   }
 
-  makeDepends(dependencies, exp=(name,expression)=>`${name}${expression}`) {
-    if(!dependencies) {
+  makeDepends(
+    dependencies,
+    exp = (name, expression) => `${name}${expression}`
+  ) {
+    if (!dependencies) {
       return [];
     }
-    
-    if(Array.isArray(dependencies)) {
-      dependencies = Object.fromEntries(dependencies.map(d => {
-        const m = d.match(/^([^=<>]+)(.*)/)
-        return [m[1],m[2]];
-      }));
+
+    if (Array.isArray(dependencies)) {
+      dependencies = Object.fromEntries(
+        dependencies.map(d => {
+          const m = d.match(/^([^=<>]+)(.*)/);
+          return [m[1], m[2]];
+        })
+      );
     }
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
-      .map(([name, expression]) => exp(name,expression)
-      );
+      .map(([name, expression]) => exp(name, expression));
   }
 
   get fileNameExtension() {
@@ -200,10 +204,21 @@ export class Packager {
   }
 }
 
+export const NAME_FIELD = {
+  alias: "name",
+  type: "string",
+  mandatory: true
+};
 
 export const VERSION_FIELD = {
   alias: "version",
   type: "string",
   mandatory: true,
   set: v => v.replace("-semantic-release", "")
+};
+
+export const DESCRIPTION_FIELD = {
+  alias: "description",
+  type: "string",
+  mandatory: true
 };

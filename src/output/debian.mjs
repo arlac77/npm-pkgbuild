@@ -13,7 +13,12 @@ import {
 } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { keyValueTransformer } from "key-value-transformer";
-import { Packager, VERSION_FIELD } from "./packager.mjs";
+import {
+  Packager,
+  VERSION_FIELD,
+  DESCRIPTION_FIELD,
+  NAME_FIELD
+} from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -100,9 +105,10 @@ export class DEBIAN extends Packager {
   }
 
   makeDepends(deps) {
-    return super.makeDepends(
-      deps,
-      (name, expression) => expression ? `${this.packageName(name)} (${expression})` : this.packageName(name)
+    return super.makeDepends(deps, (name, expression) =>
+      expression
+        ? `${this.packageName(name)} (${expression})`
+        : this.packageName(name)
     );
   }
 
@@ -174,14 +180,12 @@ export class DEBIAN extends Packager {
 
 const fields = compileFields({
   Package: {
-    alias: "name",
-    type: "string",
-    mandatory: true,
+    ...NAME_FIELD,
     set: v => v.toLowerCase()
   },
   Version: { ...VERSION_FIELD },
   Maintainer: { alias: "maintainer", type: "string", mandatory: true },
-  Description: { alias: "description", type: "string", mandatory: true },
+  Description: { ...DESCRIPTION_FIELD },
   Section: { alias: "groups", type: "string" },
   Priority: { type: "string" },
   Essential: { type: "boolean" },

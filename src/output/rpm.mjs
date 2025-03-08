@@ -10,7 +10,7 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { Packager, VERSION_FIELD } from "./packager.mjs";
+import { Packager, VERSION_FIELD, DESCRIPTION_FIELD, NAME_FIELD } from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -95,14 +95,17 @@ export class RPM extends Packager {
   }
 
   makeDepends(deps) {
-    return super.makeDepends(deps,(name, expression) =>
-      `${this.packageName(name)}${expression
-        .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
-        .replace(/^\s*$/, "")
-        .replace(
-          /^\s*(<|<=|>|>=|=)\s*(\w+)/,
-          (match, p1, p2) => ` ${p1} ${p2}`
-        )}`);
+    return super.makeDepends(
+      deps,
+      (name, expression) =>
+        `${this.packageName(name)}${expression
+          .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+          .replace(/^\s*$/, "")
+          .replace(
+            /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+            (match, p1, p2) => ` ${p1} ${p2}`
+          )}`
+    );
   }
 
   async create(sources, transformer, publishingDetails, options, expander) {
@@ -226,8 +229,8 @@ const pkglist = { type: "string[]" };
  * @see https://rpm-packaging-guide.github.io
  */
 const fields = compileFields({
-  Name: { alias: "name", type: "string", mandatory: true },
-  Summary: { alias: "description", type: "string", mandatory: true },
+  Name: { ...NAME_FIELD },
+  Summary: { ...DESCRIPTION_FIELD },
   License: { alias: "license", type: "string", mandatory: true },
   Version: { ...VERSION_FIELD },
   Release: { alias: "release", type: "integer", default: 1, mandatory: true },

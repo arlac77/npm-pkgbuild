@@ -14,7 +14,7 @@ import {
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { Packager, VERSION_FIELD } from "./packager.mjs";
+import { Packager, VERSION_FIELD, DESCRIPTION_FIELD, NAME_FIELD } from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -228,11 +228,11 @@ const default_array_attribute = { type: "string[]" };
 const fields = compileFields({
   Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
   packager: { alias: "maintainer", type: "string[]" },
-  pkgname: { alias: "name", type: "string[]", mandatory: true },
+  pkgname: { ...NAME_FIELD, type: "string[]" },
   pkgver: { ...VERSION_FIELD },
   pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
   epoch: { type: "integer", default: 0 },
-  pkgdesc: { alias: "description", type: "string", mandatory: true },
+  pkgdesc: { ...DESCRIPTION_FIELD },
   url: { alias: "homepage", type: "string" },
   license: { type: "string[]", mandatory: true },
   install: { type: "string" },

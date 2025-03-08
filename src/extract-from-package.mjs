@@ -29,7 +29,7 @@ export const allInputs = [
 /**
  * All output formats
  */
-export const allOutputs = [DEBIAN, ARCH, RPM, OCI, DOCKER, BUILDAH];
+export const allOutputs = [ARCH, RPM, OCI, DOCKER, BUILDAH, DEBIAN];
 
 /**
  * Node architecture name to os native arch name mapping

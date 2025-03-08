@@ -10,7 +10,7 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { Packager } from "./packager.mjs";
+import { Packager, VERSION_FIELD } from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -229,7 +229,7 @@ const fields = compileFields({
   Name: { alias: "name", type: "string", mandatory: true },
   Summary: { alias: "description", type: "string", mandatory: true },
   License: { alias: "license", type: "string", mandatory: true },
-  Version: { alias: "version", type: "string", mandatory: true },
+  Version: { ...VERSION_FIELD },
   Release: { alias: "release", type: "integer", default: 1, mandatory: true },
   Source0: { alias: "source", type: "string" },
   Group: { alias: "groups", type: "string" },

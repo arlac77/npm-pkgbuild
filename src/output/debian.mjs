@@ -13,7 +13,7 @@ import {
 } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { keyValueTransformer } from "key-value-transformer";
-import { Packager } from "./packager.mjs";
+import { Packager, VERSION_FIELD } from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -179,7 +179,7 @@ const fields = compileFields({
     mandatory: true,
     set: v => v.toLowerCase()
   },
-  Version: { alias: "version", type: "string", mandatory: true },
+  Version: { ...VERSION_FIELD },
   Maintainer: { alias: "maintainer", type: "string", mandatory: true },
   Description: { alias: "description", type: "string", mandatory: true },
   Section: { alias: "groups", type: "string" },

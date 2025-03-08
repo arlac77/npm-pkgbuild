@@ -199,3 +199,11 @@ export class Packager {
     return publish(artifact, publishingDetails, this.properties, logger);
   }
 }
+
+
+export const VERSION_FIELD = {
+  alias: "version",
+  type: "string",
+  mandatory: true,
+  set: v => v.replace("-semantic-release", "")
+};

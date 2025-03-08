@@ -8,7 +8,7 @@ import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
-import { Packager } from "./packager.mjs";
+import { Packager, VERSION_FIELD } from "./packager.mjs";
 import {
   fieldProvider,
   copyEntries,
@@ -208,7 +208,7 @@ export class DOCKER extends Packager {
  */
 const fields = compileFields({
   name: { type: "string", mandatory: true, set: value => value.toLowerCase() },
-  version: { type: "string", mandatory: true },
+  version: { ...VERSION_FIELD },
   description: { type: "string" },
   author: { alias: "maintainer", type: "string" },
   workdir: { type: "string", default: "/", mandatory: true }

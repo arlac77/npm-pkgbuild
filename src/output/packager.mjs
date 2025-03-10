@@ -79,23 +79,39 @@ export class Packager {
     return {};
   }
 
-  async *hookContent(properties) {
-    if (properties.hooks) {
-      for await (const f of extractFunctions(
-        createReadStream(properties.hooks, utf8StreamOptions)
-      )) {
-        const name = this.hookMapping[f.name] || f.name;
-        if (name) {
+  async *hookContent() {
+    const properties = this.properties;
+
+    switch (properties.hooks) {
+      case "string":
+        for await (const f of extractFunctions(
+          createReadStream(properties.hooks, utf8StreamOptions)
+        )) {
+          const name = this.hookMapping[f.name] || f.name;
+          if (name) {
+            yield new StringContentEntry(
+              name,
+              f.body.replaceAll(
+                /\{\{(\w+)\}\}/gm,
+                (match, key, offset, string) =>
+                  properties[key] || "{{" + key + "}}"
+              )
+            );
+          }
+        }
+        break;
+
+      case "object":
+        for (const [name, content] of Object.entries(properties.hooks)) {
           yield new StringContentEntry(
             name,
-            f.body.replaceAll(
+            content.replaceAll(
               /\{\{(\w+)\}\}/gm,
               (match, key, offset, string) =>
                 properties[key] || "{{" + key + "}}"
             )
           );
         }
-      }
     }
   }
 

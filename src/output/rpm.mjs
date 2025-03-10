@@ -131,25 +131,14 @@ export class RPM extends Packager {
 
     const files = [];
 
+    const self = this;
     async function* trailingLines() {
       yield "%define _unpackaged_files_terminate_build 0\n";
       yield `%description\n\n`;
 
-      if (properties.hooks) {
-        for await (const f of extractFunctions(
-          createReadStream(properties.hooks, utf8StreamOptions)
-        )) {
-          const name = this.hookMapping[f.name] || f.name;
-          if (name) {
-            yield `%${name}\n`;
-
-            yield f.body.replaceAll(
-              /\{\{(\w+)\}\}/gm,
-              (match, key, offset, string) =>
-                properties[key] || "{{" + key + "}}"
-            ) + "\n\n";
-          }
-        }
+      for await (const hook of self.hookContent()) {
+        yield `%${hook.name}\n`;
+        yield * hook.string.split("\n").map(l=>l+"\n");
       }
 
       yield `%files\n\n`;

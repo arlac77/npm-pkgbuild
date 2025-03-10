@@ -116,7 +116,7 @@ export class DEBIAN extends Packager {
 
     for await (const file of copyEntries(
       transform(
-        aggregateFifo([...sources, this.hookContent(properties)]),
+        aggregateFifo([...sources, this.hookContent()]),
         transformer
       ),
       staging,

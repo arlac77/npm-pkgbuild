@@ -125,6 +125,15 @@ export class ARCH extends Packager {
     }
     if (properties.hooks) {
       properties.install = `${properties.name}.install`;
+
+      const out = createWriteStream(join(staging, properties.install), utf8StreamOptions);
+
+      for await (const hook of this.hookContent()) {
+        out.write(`${hook.name}() {\n`);
+        out.write(hook.string);
+        out.write(`}\n`);
+      }
+      out.end();
     }
 
     const self = this;
@@ -147,16 +156,6 @@ package() {
 
     if (properties.backup?.[0] === "/") {
       properties.backup = properties.backup.replace(/\//, "");
-    }
-
-    if (properties.hooks) {
-      await pipeline(
-        iterableStringInterceptor(
-          createReadStream(properties.hooks, utf8StreamOptions),
-          createPropertiesInterceptor(properties)
-        ),
-        createWriteStream(join(staging, properties.install), utf8StreamOptions)
-      );
     }
 
     const fp = fieldProvider(properties, fields);

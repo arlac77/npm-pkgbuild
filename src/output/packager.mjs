@@ -1,8 +1,14 @@
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
+import { createReadStream } from "node:fs";
+import { StringContentEntry } from "content-entry";
 import { publish } from "../publish.mjs";
-import { filterOutUnwantedDependencies } from "../util.mjs";
+import {
+  filterOutUnwantedDependencies,
+  extractFunctions,
+  utf8StreamOptions
+} from "../util.mjs";
 
 /**
  * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
@@ -67,6 +73,30 @@ export class Packager {
       node: "nodejs"
     };
     return mapping[name] || name;
+  }
+
+  get hookMapping() {
+    return {};
+  }
+
+  async *hookContent(properties) {
+    if (properties.hooks) {
+      for await (const f of extractFunctions(
+        createReadStream(properties.hooks, utf8StreamOptions)
+      )) {
+        const name = this.hookMapping[f.name] || f.name;
+        if (name) {
+          yield new StringContentEntry(
+            name,
+            f.body.replaceAll(
+              /\{\{(\w+)\}\}/gm,
+              (match, key, offset, string) =>
+                properties[key] || "{{" + key + "}}"
+            )
+          );
+        }
+      }
+    }
   }
 
   makeDepends(

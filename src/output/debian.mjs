@@ -1,12 +1,7 @@
 import { join } from "node:path";
-import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import {
-  ContentEntry,
-  ReadableStreamContentEntry,
-  StringContentEntry
-} from "content-entry";
+import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
 import {
   transform,
   createPropertiesTransformer
@@ -19,21 +14,7 @@ import {
   DESCRIPTION_FIELD,
   NAME_FIELD
 } from "./packager.mjs";
-import {
-  copyEntries,
-  fieldProvider,
-  extractFunctions,
-  utf8StreamOptions,
-  compileFields
-} from "../util.mjs";
-
-/**
- * map install hook named from arch to deb
- */
-const hookMapping = {
-  post_install: "DEBIAN/postinst",
-  post_remove: "DEBIAN/postrm"
-};
+import { copyEntries, fieldProvider, compileFields } from "../util.mjs";
 
 /**
  * Create .deb packages
@@ -84,24 +65,14 @@ export class DEBIAN extends Packager {
     return `${p.name}_${p.version}_${arch}${this.constructor.fileNameExtension}`;
   }
 
-  async *hookFiles(properties) {
-    if (properties.hooks) {
-      for await (const f of extractFunctions(
-        createReadStream(properties.hooks, utf8StreamOptions)
-      )) {
-        const name = hookMapping[f.name];
-        if (name) {
-          yield new StringContentEntry(
-            name,
-            f.body.replaceAll(
-              /\{\{(\w+)\}\}/gm,
-              (match, key, offset, string) =>
-                properties[key] || "{{" + key + "}}"
-            )
-          );
-        }
-      }
-    }
+  /**
+   * Map install hook named from default (arch) to deb.
+   */
+  get hookMapping() {
+    return {
+      post_install: "DEBIAN/postinst",
+      post_remove: "DEBIAN/postrm"
+    };
   }
 
   makeDepends(deps) {
@@ -145,7 +116,7 @@ export class DEBIAN extends Packager {
 
     for await (const file of copyEntries(
       transform(
-        aggregateFifo([...sources, this.hookFiles(properties)]),
+        aggregateFifo([...sources, this.hookContent(properties)]),
         transformer
       ),
       staging,

@@ -10,7 +10,12 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { Packager, VERSION_FIELD, DESCRIPTION_FIELD, NAME_FIELD } from "./packager.mjs";
+import {
+  Packager,
+  VERSION_FIELD,
+  DESCRIPTION_FIELD,
+  NAME_FIELD
+} from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -26,19 +31,6 @@ import {
 function quoteFile(name) {
   return name.match(/\s/) ? '"' + name + '"' : name;
 }
-
-/**
- * map install hook named from arch to rpm
- */
-const hookMapping = {
-  pre_install: "pre",
-  post_install: "post",
-  pre_remove: "preun",
-  post_remove: "postun"
-  /* TODO with logic check $1
-  pre_upgrade:
-  post_upgrade:*/
-};
 
 /**
  * Produce rpm packages.
@@ -108,6 +100,21 @@ export class RPM extends Packager {
     );
   }
 
+  /**
+   * Map install hook named from default (arch) to rpm.
+   */
+  get hookMapping() {
+    return {
+      pre_install: "pre",
+      post_install: "post",
+      pre_remove: "preun",
+      post_remove: "postun"
+      /* TODO with logic check $1
+  pre_upgrade:
+  post_upgrade:*/
+    };
+  }
+
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, tmpdir, staging, destination } = await this.prepare(
       options
@@ -132,7 +139,7 @@ export class RPM extends Packager {
         for await (const f of extractFunctions(
           createReadStream(properties.hooks, utf8StreamOptions)
         )) {
-          const name = hookMapping[f.name];
+          const name = this.hookMapping[f.name] || f.name;
           if (name) {
             yield `%${name}\n`;
 

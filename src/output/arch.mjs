@@ -1,20 +1,20 @@
 import { join } from "node:path";
-import { createReadStream, createWriteStream } from "node:fs";
+import { createWriteStream } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { pipeline } from "node:stream/promises";
 import { execa } from "execa";
 import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
-import {
-  transform,
-  createPropertiesInterceptor
-} from "content-entry-transform";
-import { iterableStringInterceptor } from "iterable-string-interceptor";
+import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
   equalSeparatedKeyValuePairOptions
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { Packager, VERSION_FIELD, DESCRIPTION_FIELD, NAME_FIELD } from "./packager.mjs";
+import {
+  Packager,
+  VERSION_FIELD,
+  DESCRIPTION_FIELD,
+  NAME_FIELD
+} from "./packager.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -126,7 +126,10 @@ export class ARCH extends Packager {
     if (properties.hooks) {
       properties.install = `${properties.name}.install`;
 
-      const out = createWriteStream(join(staging, properties.install), utf8StreamOptions);
+      const out = createWriteStream(
+        join(staging, properties.install),
+        utf8StreamOptions
+      );
 
       for await (const hook of this.hookContent()) {
         out.write(`${hook.name}() {\n`);

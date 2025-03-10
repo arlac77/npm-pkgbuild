@@ -117,9 +117,8 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-6)
     *   [Properties](#properties-3)
     *   [asyncIterator](#asynciterator)
-*   [hookMapping](#hookmapping)
-*   [hookMapping](#hookmapping-1)
 *   [DEBIAN](#debian)
+    *   [hookMapping](#hookmapping)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-7)
 *   [fields](#fields)
@@ -130,6 +129,7 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [quoteFile](#quotefile)
     *   [Parameters](#parameters-8)
 *   [RPM](#rpm)
+    *   [hookMapping](#hookmapping-1)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
 *   [OCI](#oci)
@@ -339,19 +339,15 @@ List all entries.
 
 Returns **AsyncIterable\<ContentEntry>** all entries
 
-## hookMapping
-
-map install hook named from arch to deb
-
-## hookMapping
-
-map install hook named from arch to rpm
-
 ## DEBIAN
 
 **Extends Packager**
 
 Create .deb packages
+
+### hookMapping
+
+Map install hook named from default (arch) to deb.
 
 ### prepare
 
@@ -397,6 +393,10 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 **Extends Packager**
 
 Produce rpm packages.
+
+### hookMapping
+
+Map install hook named from default (arch) to rpm.
 
 ### prepare
 

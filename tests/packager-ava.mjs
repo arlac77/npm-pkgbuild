@@ -47,7 +47,11 @@ test("packager prepareExecute", async t => {
 test("makeDepends", t => {
   const out = new MyPackager({});
 
-  t.deepEqual([], out.makeDepends({}));
-  t.deepEqual([], out.makeDepends([]));
-  t.deepEqual([], out.makeDepends());
+  t.deepEqual(out.makeDepends({}), []);
+  t.deepEqual(out.makeDepends([]), []);
+  t.deepEqual(out.makeDepends(), []);
+  
+  t.deepEqual(out.makeDepends({ a:"=1.2.3}), ["a=1.2.3"]);
+  t.deepEqual(out.makeDepends(["a=1.2.3"]), ["a=1.2.3"]);
+
 });

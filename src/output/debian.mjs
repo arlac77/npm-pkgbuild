@@ -93,13 +93,8 @@ export class DEBIAN extends Packager {
         "mode"
       )
     );
-
-    if (
-      properties.dependencies &&
-      Object.keys(properties.dependencies).length > 0
-    ) {
-      properties.Depends = this.makeDepends(properties.dependencies);
-    }
+  
+    properties.Depends = this.makeDepends(properties.dependencies);
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";

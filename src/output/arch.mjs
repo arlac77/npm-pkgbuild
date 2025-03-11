@@ -117,6 +117,10 @@ export class ARCH extends Packager {
     return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
   }
 
+  dependencyExpression(name, expression) {
+    return quote(`${this.packageName(name)}${normalizeExpression(expression)}`);
+  }
+
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
@@ -143,11 +147,7 @@ export class ARCH extends Packager {
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${self
-    .makeDepends(properties.dependencies, (name, expression) =>
-      quote(`${self.packageName(name)}${normalizeExpression(expression)}`)
-    )
-    .join(" ")})
+  depends=(${self.makeDepends(properties.dependencies).join(" ")})
 
   if [ "$(ls -A $srcdir)" ]
   then

@@ -115,10 +115,11 @@ export class Packager {
     }
   }
 
-  makeDepends(
-    dependencies,
-    exp = (name, expression) => `${name}${expression}`
-  ) {
+  dependencyExpression(name, expression) {
+    return expression ? `${name}${expression}`: name;
+  }
+
+  makeDepends(dependencies) {
     if (!dependencies) {
       return [];
     }
@@ -133,7 +134,7 @@ export class Packager {
     }
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
-      .map(([name, expression]) => exp(name, expression));
+      .map(([name, expression]) => this.dependencyExpression(name, expression));
   }
 
   get fileNameExtension() {

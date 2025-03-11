@@ -75,12 +75,9 @@ export class DEBIAN extends Packager {
     };
   }
 
-  makeDepends(deps) {
-    return super.makeDepends(deps, (name, expression) =>
-      expression
-        ? `${this.packageName(name)} (${expression})`
-        : this.packageName(name)
-    );
+  dependencyExpression(name, expression) {
+    name = this.packageName(name);
+    return expression ? `${name} (${expression})` : name;
   }
 
   async create(sources, transformer, publishingDetails, options, expander) {
@@ -93,8 +90,11 @@ export class DEBIAN extends Packager {
         "mode"
       )
     );
-  
-    properties.Depends = this.makeDepends(properties.dependencies);
+
+    const depends = this.makeDepends(properties.dependencies);
+    if(depends.length) {
+      properties.Depends = depends;
+    }
 
     const fp = fieldProvider(properties, fields);
     const debianControlName = "DEBIAN/control";
@@ -110,10 +110,7 @@ export class DEBIAN extends Packager {
     });
 
     for await (const file of copyEntries(
-      transform(
-        aggregateFifo([...sources, this.hookContent()]),
-        transformer
-      ),
+      transform(aggregateFifo([...sources, this.hookContent()]), transformer),
       staging,
       expander
     )) {

@@ -20,7 +20,6 @@ import {
   copyEntries,
   fieldProvider,
   utf8StreamOptions,
-  extractFunctions,
   compileFields
 } from "../util.mjs";
 
@@ -86,18 +85,14 @@ export class RPM extends Packager {
     return false;
   }
 
-  makeDepends(deps) {
-    return super.makeDepends(
-      deps,
-      (name, expression) =>
-        `${this.packageName(name)}${expression
-          .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
-          .replace(/^\s*$/, "")
-          .replace(
-            /^\s*(<|<=|>|>=|=)\s*(\w+)/,
-            (match, p1, p2) => ` ${p1} ${p2}`
-          )}`
-    );
+  dependencyExpression(name, expression) {
+    return `${this.packageName(name)}${expression
+      .replace(/^\s*(\w+)/, (match, p1) => ` = ${p1}`)
+      .replace(/^\s*$/, "")
+      .replace(
+        /^\s*(<|<=|>|>=|=)\s*(\w+)/,
+        (match, p1, p2) => ` ${p1} ${p2}`
+      )}`;
   }
 
   /**
@@ -138,7 +133,7 @@ export class RPM extends Packager {
 
       for await (const hook of self.hookContent()) {
         yield `%${hook.name}\n`;
-        yield * hook.string.split("\n").map(l=>l+"\n");
+        yield* hook.string.split("\n").map(l => l + "\n");
       }
 
       yield `%files\n\n`;

@@ -132,11 +132,11 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [hookMapping](#hookmapping-1)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
-*   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-10)
 *   [BUILDAH](#buildah)
+*   [OCI](#oci)
 *   [Packager](#packager)
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
@@ -411,12 +411,6 @@ Check for rpmbuild presence.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when rpmbuild executable is present
 
-## OCI
-
-**Extends Packager**
-
-Low level OCI compatible packager
-
 ## DOCKER
 
 **Extends Packager**
@@ -441,6 +435,12 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 **Extends DOCKER**
 
 Use buildah @see <https://buildah.io>
+
+## OCI
+
+**Extends Packager**
+
+Low level OCI compatible packager
 
 ## Packager
 

@@ -138,7 +138,7 @@ export class ARCH extends Packager {
       for await (const hook of this.hookContent()) {
         out.write(`${hook.name}() {\n`);
         out.write(hook.string);
-        out.write(`}\n`);
+        out.write(`\n}\n`);
       }
       out.end();
     }

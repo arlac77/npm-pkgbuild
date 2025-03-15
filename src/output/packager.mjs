@@ -82,7 +82,7 @@ export class Packager {
   async *hookContent() {
     const properties = this.properties;
 
-    switch (properties.hooks) {
+    switch (typeof properties.hooks) {
       case "string":
         for await (const f of extractFunctions(
           createReadStream(properties.hooks, utf8StreamOptions)

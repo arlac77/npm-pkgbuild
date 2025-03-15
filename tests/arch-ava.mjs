@@ -62,9 +62,12 @@ test("arch aarch64 default properties", async t => {
 test("arch", async t => {
   const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
-    new FileContentProvider({
-      base: new URL(source, import.meta.url).pathname
-    })[Symbol.asyncIterator]()
+    new FileContentProvider(
+      {
+        base: new URL(source, import.meta.url).pathname
+      },
+      { group: "wheel", perm: 0o666 }
+    )[Symbol.asyncIterator]()
   );
 
   const properties = {

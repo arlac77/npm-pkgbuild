@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { createWriteStream } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { execa } from "execa";
 import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
@@ -145,6 +145,7 @@ export class ARCH extends Packager {
 
     const self = this;
     async function* trailingLines() {
+      console.log();
       yield `
 package() {
   depends=(${self.makeDepends(properties.dependencies).join(" ")})
@@ -152,6 +153,8 @@ package() {
   if [ "$(ls -A $srcdir)" ]
   then
     cp -rp $srcdir/* "$pkgdir"
+### CHOWN ###
+
   fi
 }
 `;
@@ -177,22 +180,48 @@ package() {
       createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
+    const ownership = [];
+
     for await (const file of copyEntries(
       transform(aggregateFifo(sources), transformer),
       join(staging, "src"),
       expander
     )) {
+      if (file.owner || file.group) {
+        ownership.push(file);
+      }
+
       if (options.verbose) {
         console.log(file.destination);
       }
     }
 
+    if (ownership.length) {
+      const pkgbuild = join(staging, PKGBUILD);
+      let content = await readFile(pkgbuild, utf8StreamOptions);
+      const markerPos = content.indexOf("### CHOWN ###");
+
+      content =
+        content.substring(0, markerPos) +
+        ownership
+          .map(
+            f =>
+              `    chown ${[f.owner || "", f.group || ""].join(":")} \"$pkgdir/${
+                f.destination
+              }\"`
+          )
+          .join("\n") +
+        content.substring(markerPos + 14);
+
+      await writeFile(pkgbuild, content, utf8StreamOptions);
+    }
+
     if (options.verbose) {
       console.log(await readFile(join(staging, PKGBUILD), utf8StreamOptions));
-      console.log("***", staging, "***");
+      /*console.log("***", staging, "***");
       const ls = await execa("ls", ["-lR"], { cwd: staging });
       console.log(ls.stdout);
-      console.log("*** end ***");
+      console.log("*** end ***");*/
     }
 
     if (!options.dry) {
@@ -202,7 +231,7 @@ package() {
         PACKAGER = person(properties.contributors);
       }
 
-      const makepkg = await execa("makepkg", ["-c", "-f", "-e"], {
+      const makepkg = await execa("makepkg", ["--noprogressbar", "-c", "-f", "-e"], {
         cwd: staging,
         env: { PKGDEST: destination, PACKAGER }
       });

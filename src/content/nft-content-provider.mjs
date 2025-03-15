@@ -1,5 +1,5 @@
 import { nodeFileTrace } from "@vercel/nft";
-import { FileSystemEntry } from "content-entry-filesystem";
+import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
@@ -17,11 +17,10 @@ export class NFTContentProvider extends ContentProvider {
     return "nft";
   }
 
-  static get description()
-  {
-  	return "user vercels NFT as source"
+  static get description() {
+    return "user vercels NFT as source";
   }
-  
+
   constructor(definitions, entryProperties) {
     super(definitions, entryProperties);
 
@@ -44,14 +43,10 @@ export class NFTContentProvider extends ContentProvider {
     const { fileList } = await nodeFileTrace(definitions.start);
 
     for (const name of fileList) {
-      const entry = Object.assign(
-        new FileSystemEntry(name, base),
+      yield Object.assign(
+        new FileSystemEntryWithPermissions(name, base),
         this.entryProperties
       );
-
-      yield this.baseProperties
-        ? Object.create(entry, this.baseProperties)
-        : entry;
     }
   }
 }

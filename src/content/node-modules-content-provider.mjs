@@ -5,7 +5,7 @@ import { globby } from "globby";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";
 import { StringContentEntry } from "content-entry";
-import { FileSystemEntry } from "content-entry-filesystem";
+import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
 import { shrinkNPM } from "../npm-shrink.mjs";
@@ -121,7 +121,7 @@ export class NodeModulesContentProvider extends ContentProvider {
             }
           }
           yield Object.assign(
-            new FileSystemEntry(name, nodeModulesDir),
+            new FileSystemEntryWithPermissions(name, nodeModulesDir),
             this.entryProperties
           );
         }

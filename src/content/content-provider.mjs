@@ -11,19 +11,7 @@ export class ContentProvider {
   dir;
 
   constructor(definitions, entryProperties) {
-    if (entryProperties) {
-      this.entryProperties = entryProperties;
-
-      for (const a of ["mode"]) {
-        if (this.entryProperties[a] !== undefined) {
-          if (!this.baseProperties) {
-            this.baseProperties = {};
-          }
-          this.baseProperties[a] = { value: this.entryProperties[a] };
-          delete this.entryProperties[a];
-        }
-      }
-    }
+    this.entryProperties = entryProperties;
   }
 
   /**

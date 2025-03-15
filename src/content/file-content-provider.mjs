@@ -1,10 +1,11 @@
 import { dirname, join } from "node:path";
 import { globby } from "globby";
-import { FileSystemEntry } from "content-entry-filesystem";
+import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
 const DEFAULT_PATTERN = ["**/*", "!.*"];
+
 
 /**
  * Content provided form the file system.
@@ -62,15 +63,10 @@ export class FileContentProvider extends ContentProvider {
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
-      const entry = Object.assign(
-        new FileSystemEntry(name, base),
+      yield Object.assign(
+        new FileSystemEntryWithPermissions(name, base),
         this.entryProperties
       );
-
-      yield this.baseProperties
-        ? Object.create(entry, this.baseProperties)
-        : entry;
-
       count++;
     }
 

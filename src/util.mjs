@@ -5,7 +5,7 @@ import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
 
 export function compileFields(fields) {
-  for(const [k,v] of Object.entries(fields)) {
+  for (const [k, v] of Object.entries(fields)) {
     v.name = k;
   }
 
@@ -171,9 +171,9 @@ export function fieldProvider(properties, fields) {
               yield [name, field.default];
             }
           } else {
-            if(field.mapping) {
+            if (field.mapping) {
               const mappedValue = field.mapping[value];
-              if(mappedValue) {
+              if (mappedValue) {
                 value = mappedValue;
               }
             }
@@ -219,11 +219,9 @@ export async function* copyEntries(
     const destination = join(destinationDirectory, name);
     await mkdir(dirname(destination), { recursive: true });
 
-    const options = { mode: entry.mode };
-
     await pipeline(
       await entry.readStream,
-      createWriteStream(destination, options)
+      createWriteStream(destination, entry.mode ? { mode: entry.mode } : undefined)
     );
 
     yield entry;

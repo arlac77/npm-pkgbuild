@@ -214,15 +214,14 @@ export async function* copyEntries(
       d === undefined ? entry.name : d.endsWith("/") ? join(d, entry.name) : d
     ).replace(/^\//, "");
 
-    const options = entry.mode ? { mode: entry.mode } : {};
     // @ts-ignore
     entry.destination = name;
     const destination = join(destinationDirectory, name);
-    await mkdir(dirname(destination), { recursive: true, ...options });
+    await mkdir(dirname(destination), { recursive: true });
 
     await pipeline(
       await entry.readStream,
-      createWriteStream(destination, options)
+      createWriteStream(destination, entry.mode ? { mode: entry.mode } : undefined)
     );
 
     yield entry;

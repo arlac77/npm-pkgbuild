@@ -8,10 +8,12 @@ import { ContentEntry } from "content-entry";
 export class ContentProvider {
   transformers = [];
   entryProperties;
+  directoryProperties;
   dir;
 
-  constructor(definitions, entryProperties) {
+  constructor(definitions, entryProperties, directoryProperties) {
     this.entryProperties = entryProperties;
+    this.directoryProperties = directoryProperties;
   }
 
   /**

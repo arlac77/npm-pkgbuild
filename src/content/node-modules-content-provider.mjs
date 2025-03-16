@@ -29,11 +29,14 @@ export class NodeModulesContentProvider extends ContentProvider {
 
   withoutDevelpmentDependencies = true;
 
-  constructor(definitions, entryProperties) {
-    if (entryProperties?.destination && !entryProperties.destination.endsWith("/")) {
+  constructor(definitions, entryProperties, directoryProperties) {
+    if (
+      entryProperties?.destination &&
+      !entryProperties.destination.endsWith("/")
+    ) {
       entryProperties.destination += "/";
     }
-    super(definitions, entryProperties);
+    super(definitions, entryProperties, directoryProperties);
     Object.assign(this, definitions);
   }
 
@@ -120,8 +123,9 @@ export class NodeModulesContentProvider extends ContentProvider {
               console.error(e, name);
             }
           }
-          yield Object.assign(
-            new FileSystemEntryWithPermissions(name, nodeModulesDir),
+          yield new FileSystemEntryWithPermissions(
+            name,
+            nodeModulesDir,
             this.entryProperties
           );
         }

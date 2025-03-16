@@ -25,11 +25,14 @@ export class NPMPackContentProvider extends ContentProvider {
     return "use npm pack as source";
   }
 
-  constructor(definitions, entryProperties) {
-    if (entryProperties?.destination && !entryProperties.destination.endsWith("/")) {
+  constructor(definitions, entryProperties, directoryProperties) {
+    if (
+      entryProperties?.destination &&
+      !entryProperties.destination.endsWith("/")
+    ) {
       entryProperties.destination += "/";
     }
-    super(definitions, entryProperties);
+    super(definitions, entryProperties, directoryProperties);
     Object.assign(this, definitions);
   }
 
@@ -40,38 +43,42 @@ export class NPMPackContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {
     const entries = [];
 
-    await pacote.tarball.stream(this.dir, async stream => {
-      const ex = extract();
+    await pacote.tarball.stream(
+      this.dir,
+      async stream => {
+        const ex = extract();
 
-      ex.on("entry", async (header, stream, next) => {
-        stream.on("end", () => next());
+        ex.on("entry", async (header, stream, next) => {
+          stream.on("end", () => next());
 
-        const chunks = [];
-        for await (const chunk of await stream) {
-          chunks.push(chunk);
-        }
+          const chunks = [];
+          for await (const chunk of await stream) {
+            chunks.push(chunk);
+          }
 
-        entries.push(
-          Object.assign(
-            Object.create(
-              new BufferContentEntry(
-                header.name.substring(8),
-                Buffer.concat(chunks)
+          entries.push(
+            Object.assign(
+              Object.create(
+                new BufferContentEntry(
+                  header.name.substring(8),
+                  Buffer.concat(chunks)
+                ),
+                {
+                  mtime: { value: header.mtime },
+                  mode: { value: header.mode }
+                }
               ),
-              {
-                mtime: { value: header.mtime },
-                mode: { value: header.mode }
-              }
-            ),
-            this.entryProperties
-          )
-        );
+              this.entryProperties
+            )
+          );
 
-        stream.resume();
-      });
+          stream.resume();
+        });
 
-      await pipeline(stream, createGunzip(), ex);
-    },{ Arborist });
+        await pipeline(stream, createGunzip(), ex);
+      },
+      { Arborist }
+    );
 
     for (const entry of entries) {
       yield entry;

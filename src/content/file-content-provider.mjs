@@ -6,7 +6,6 @@ import { ContentProvider } from "./content-provider.mjs";
 
 const DEFAULT_PATTERN = ["**/*", "!.*"];
 
-
 /**
  * Content provided form the file system.
  * @param {Object|string} definitions
@@ -25,8 +24,8 @@ export class FileContentProvider extends ContentProvider {
     return "use plain files source";
   }
 
-  constructor(definitions, entryProperties) {
-    super(definitions, entryProperties);
+  constructor(definitions, entryProperties, directoryProperties) {
+    super(definitions, entryProperties, directoryProperties);
 
     if (typeof definitions === "string") {
       if (definitions.endsWith("/")) {
@@ -63,8 +62,9 @@ export class FileContentProvider extends ContentProvider {
     for (const name of await globby(definitions.pattern, {
       cwd: base
     })) {
-      yield Object.assign(
-        new FileSystemEntryWithPermissions(name, base),
+      yield new FileSystemEntryWithPermissions(
+        name,
+        base,
         this.entryProperties
       );
       count++;

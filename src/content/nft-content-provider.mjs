@@ -21,8 +21,8 @@ export class NFTContentProvider extends ContentProvider {
     return "user vercels NFT as source";
   }
 
-  constructor(definitions, entryProperties) {
-    super(definitions, entryProperties);
+  constructor(definitions, entryProperties, directoryProperties) {
+    super(definitions, entryProperties, directoryProperties);
 
     if (typeof definitions === "string") {
       this.definitions = { start: [definitions] };
@@ -43,8 +43,9 @@ export class NFTContentProvider extends ContentProvider {
     const { fileList } = await nodeFileTrace(definitions.start);
 
     for (const name of fileList) {
-      yield Object.assign(
-        new FileSystemEntryWithPermissions(name, base),
+      yield new FileSystemEntryWithPermissions(
+        name,
+        base,
         this.entryProperties
       );
     }

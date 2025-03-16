@@ -1,5 +1,6 @@
 import { dirname, join } from "node:path";
 import { globby } from "globby";
+import { ContentEntry } from "content-entry";
 import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
@@ -54,6 +55,9 @@ export class FileContentProvider extends ContentProvider {
     return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties.destination}`;
   }
 
+  /**
+   * @return {AsyncIterable<ContentEntry>} all entries
+   */
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
     const base = definitions.base;

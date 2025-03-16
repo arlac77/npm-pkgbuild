@@ -109,14 +109,16 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [name](#name-1)
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-4)
+    *   [asyncIterator](#asynciterator)
     *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
     *   [Parameters](#parameters-5)
+    *   [asyncIterator](#asynciterator-1)
     *   [name](#name-3)
 *   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-6)
     *   [Properties](#properties-3)
-    *   [asyncIterator](#asynciterator)
+    *   [asyncIterator](#asynciterator-2)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
     *   [prepare](#prepare)
@@ -300,6 +302,10 @@ Content provided form the file system.
 *   `entryProperties` &#x20;
 *   `directoryProperties` &#x20;
 
+### asyncIterator
+
+Returns **AsyncIterable\<ContentEntry>** all entries
+
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
@@ -318,6 +324,10 @@ Content provided form the file system.
     *   `definitions.base` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base directory where to find the files
 *   `entryProperties` &#x20;
 *   `directoryProperties` &#x20;
+
+### asyncIterator
+
+Returns **AsyncIterable\<ContentEntry>** all entries
 
 ### name
 

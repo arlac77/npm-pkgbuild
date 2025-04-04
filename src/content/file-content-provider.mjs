@@ -1,4 +1,5 @@
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { cwd } from "node:process";
 import { glob } from "node:fs/promises";
 import { ContentEntry } from "content-entry";
 import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
@@ -46,6 +47,8 @@ export class FileContentProvider extends ContentProvider {
       this.definitions = { pattern: DEFAULT_PATTERN, ...definitions };
       this.definitions.pattern = asArray(this.definitions.pattern);
     }
+
+    this.definitions.base = resolve(cwd(), this.definitions.base);
   }
 
   get isPatternMatch() {
@@ -53,7 +56,7 @@ export class FileContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties.destination}`;
+    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties?.destination}`;
   }
 
   /**
@@ -62,7 +65,6 @@ export class FileContentProvider extends ContentProvider {
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
     const base = definitions.base;
-
     const startPos = base.length + 1;
 
     let count = 0;

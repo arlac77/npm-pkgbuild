@@ -1,7 +1,8 @@
 import { dirname, join } from "node:path";
-import { globby } from "globby";
+import { glob } from "node:fs/promises";
 import { ContentEntry } from "content-entry";
 import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
+import { CollectionEntryWithPermissions } from "./collection-entry-with-permissions.mjs";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
@@ -31,7 +32,7 @@ export class FileContentProvider extends ContentProvider {
     if (typeof definitions === "string") {
       if (definitions.endsWith("/")) {
         this.definitions = {
-          base: definitions,
+          base: definitions.substring(0, definitions.length - 1),
           pattern: DEFAULT_PATTERN
         };
       } else {
@@ -62,15 +63,27 @@ export class FileContentProvider extends ContentProvider {
     const definitions = this.definitions;
     const base = definitions.base;
 
+    const startPos = base.length + 1;
+
     let count = 0;
-    for (const name of await globby(definitions.pattern, {
-      cwd: base
+    for await (const entry of glob(definitions.pattern, {
+      cwd: base,
+      withFileTypes: true
     })) {
-      yield new FileSystemEntryWithPermissions(
-        name,
-        base,
-        this.entryProperties
-      );
+      const name = join(entry.parentPath, entry.name).substring(startPos);
+
+      if (entry.isFile()) {
+        yield new FileSystemEntryWithPermissions(
+          name,
+          base,
+          this.entryProperties
+        );
+      } else if (entry.isDirectory()) {
+        yield new CollectionEntryWithPermissions(
+          name,
+          this.directoryProperties
+        );
+      }
       count++;
     }
 

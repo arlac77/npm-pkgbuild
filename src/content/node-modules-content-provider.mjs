@@ -1,11 +1,12 @@
 import { tmpdir, homedir } from "node:os";
 import { join } from "node:path";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
-import { globby } from "globby";
+import { glob } from "node:fs/promises";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";
 import { StringContentEntry } from "content-entry";
 import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
+import { CollectionEntryWithPermissions } from "./collection-entry-with-permissions.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
 import { shrinkNPM } from "../npm-shrink.mjs";
@@ -97,17 +98,24 @@ export class NodeModulesContentProvider extends ContentProvider {
       }
 
       const nodeModulesDir = join(pkgSourceDir, "node_modules");
+      const startPos = nodeModulesDir.length + 1;
 
-      for (const name of await globby("**/*", {
-        cwd: nodeModulesDir
+      for await (const entry of glob("**/*", {
+        cwd: nodeModulesDir,
+        withFileTypes: true
       })) {
-        if (!toBeSkipped.test(name)) {
-          if (name.endsWith("package.json")) {
+        if (!toBeSkipped.test(entry.name)) {
+          const name = join(entry.parentPath, entry.name).substring(startPos);
+
+          if (entry.name.endsWith("package.json")) {
             try {
               const json = shrinkNPM(
                 JSON.parse(
                   //@ts-ignore
-                  await readFile(join(nodeModulesDir, name), utf8StreamOptions)
+                  await readFile(
+                    join(entry.parentPath, entry.name),
+                    utf8StreamOptions
+                  )
                 )
               );
 
@@ -120,14 +128,19 @@ export class NodeModulesContentProvider extends ContentProvider {
 
               continue;
             } catch (e) {
-              console.error(e, name);
+              console.error(e, entry.name);
             }
           }
-          yield new FileSystemEntryWithPermissions(
-            name,
-            nodeModulesDir,
-            this.entryProperties
-          );
+
+          if (entry.isFile()) {
+            yield new FileSystemEntryWithPermissions(
+              name,
+              nodeModulesDir,
+              this.entryProperties
+            );
+          } else if (entry.isDirectory()) {
+              yield new CollectionEntryWithPermissions(name,this.directoryProperties);
+          }
         }
       }
     } catch (e) {

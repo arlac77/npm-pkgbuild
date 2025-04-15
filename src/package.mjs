@@ -1,7 +1,7 @@
 import { constants } from "node:fs";
 import { mkdir, readFile, writeFile, copyFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
-import { globbyStream } from "globby";
+import { glob } from "node:fs/promises";
 import { utf8StreamOptions } from "./util.mjs";
 
 const pkgEntriesToBeRemoved = [
@@ -186,7 +186,7 @@ const defaultOptions = { dry: false };
  * @param {Object} options
  */
 export async function* copyNodeModules(source, dest, options = defaultOptions) {
-  for await (const name of globbyStream(["node_modules/**/package.json"], {
+  for await (const name of glob(["node_modules/**/package.json"], {
     cwd: source
   })) {
     // @ts-ignore
@@ -222,7 +222,7 @@ export async function* copyNodeModule(source, dest, options = defaultOptions) {
     yield pd;
   }
 
-  for await (const f of globbyStream(["**", ...skip], {
+  for await (const f of glob(["**", ...skip], {
     cwd: dirname(pkgFile)
   })) {
     // @ts-ignore

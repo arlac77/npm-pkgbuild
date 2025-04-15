@@ -217,12 +217,20 @@ export async function* copyEntries(
     // @ts-ignore
     entry.destination = name;
     const destination = join(destinationDirectory, name);
-    await mkdir(dirname(destination), { recursive: true });
 
-    await pipeline(
-      await entry.readStream,
-      createWriteStream(destination, entry.mode ? { mode: entry.mode } : undefined)
-    );
+    if (entry.isCollection) {
+      await mkdir(destination, { recursive: true, mode: entry.mode });
+    } else {
+      await mkdir(dirname(destination), { recursive: true });
+
+      await pipeline(
+        await entry.readStream,
+        createWriteStream(
+          destination,
+          entry.mode ? { mode: entry.mode } : undefined
+        )
+      );
+    }
 
     yield entry;
   }

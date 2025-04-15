@@ -61,7 +61,6 @@
     "content-entry-transform": "^1.4.29",
     "execa": "^9.5.2",
     "expression-expander": "^7.2.5",
-    "globby": "^14.1.0",
     "ini": "^5.0.0",
     "iterable-string-interceptor": "^3.0.0",
     "key-value-transformer": "^3.2.3",
@@ -82,8 +81,8 @@
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": ">=22.13.0",
-    "bun": ">=1.1.43"
+    "node": ">=22.14.0",
+    "bun": ">=1.2.8"
   },
   "repository": {
     "type": "git",

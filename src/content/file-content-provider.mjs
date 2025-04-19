@@ -80,13 +80,14 @@ export class FileContentProvider extends ContentProvider {
           base,
           this.entryProperties
         );
+        count++;
       } else if (entry.isDirectory()) {
         yield new CollectionEntryWithPermissions(
           name,
           this.directoryProperties
         );
+        count++;
       }
-      count++;
     }
 
     if (!this.isPatternMatch && count < 1) {

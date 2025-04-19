@@ -211,7 +211,11 @@ export async function* copyEntries(
     const d = entry.destination;
 
     const name = expander(
-      d === undefined ? entry.name : d.endsWith("/") ? join(d, entry.name) : d
+      d === undefined
+        ? entry.name
+        : d.isCollection || d.endsWith("/")
+        ? join(d, entry.name)
+        : d
     ).replace(/^\//, "");
 
     // @ts-ignore

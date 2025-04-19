@@ -14,6 +14,12 @@ export class ContentProvider {
   constructor(definitions, entryProperties, directoryProperties) {
     this.entryProperties = entryProperties;
     this.directoryProperties = directoryProperties;
+    if (this.entryProperties?.destination) {
+      this.directoryProperties = {
+        ...this.directoryProperties,
+        destination: this.entryProperties?.destination
+      };
+    }
   }
 
   /**

@@ -1,9 +1,8 @@
 import { join } from "node:path";
-import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
-import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
@@ -160,9 +159,10 @@ export class RPM extends Packager {
         {
           match: entry => entry.name === specFileName,
           transform: async entry =>
-            new ReadableStreamContentEntry(
+            new IteratorContentEntry(
               entry.name,
-              keyValueTransformer(await entry.readStream, fp, {
+              undefined,
+              keyValueTransformer(await entry.stream, fp, {
                 ...colonSeparatedKeyValuePairOptionsDoublingKeys,
                 trailingLines
               })

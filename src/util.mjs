@@ -1,6 +1,8 @@
 import { join, dirname } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
+import { Readable} from "node:stream";
+
 import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
 
@@ -223,15 +225,15 @@ export async function* copyEntries(
     const destination = join(destinationDirectory, name);
 
     if (entry.isCollection) {
-      await mkdir(destination, { recursive: true, mode: entry.mode });
+      await mkdir(destination, { recursive: true, mode: await entry.mode });
     } else {
       await mkdir(dirname(destination), { recursive: true });
 
       await pipeline(
-        await entry.readStream,
+        Readable.fromWeb(await entry.stream),
         createWriteStream(
           destination,
-          entry.mode ? { mode: entry.mode } : undefined
+          entry.mode ? { mode: await entry.mode } : undefined
         )
       );
     }

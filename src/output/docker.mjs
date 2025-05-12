@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
@@ -117,9 +117,10 @@ export class DOCKER extends Packager {
       name: DOCKERFILE,
       match: entry => entry.name === DOCKERFILE,
       transform: async entry =>
-        new ReadableStreamContentEntry(
+        new IteratorContentEntry(
           entry.name,
-          keyValueTransformer(await entry.readStream, fp, {
+          undefined,
+          keyValueTransformer(await entry.stream, fp, {
             ...labelKeyValuePairs,
             headLines,
             trailingLines

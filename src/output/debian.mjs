@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
   transform,
   createPropertiesTransformer
@@ -102,8 +102,9 @@ export class DEBIAN extends Packager {
     transformer.push({
       match: entry => entry.name === debianControlName,
       transform: async entry =>
-        new ReadableStreamContentEntry(
+        new IteratorContentEntry(
           entry.name,
+          undefined,
           keyValueTransformer(await entry.readStream, fp)
         ),
       createEntryWhenMissing: () => new ContentEntry(debianControlName)

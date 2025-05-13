@@ -86,7 +86,7 @@ export class FileContentProvider extends ContentProvider {
     }
 
     if (!this.isPatternMatch && count < 1) {
-      const file = join(base, this.definitions.pattern[0]);
+      const file = join(baseDir, this.definitions.pattern[0]);
       const error = new Error(`File not found ${file}`);
       error.file = file;
       throw error;

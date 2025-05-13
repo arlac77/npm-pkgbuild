@@ -57,7 +57,7 @@
     "commander": "^13.1.0",
     "compare-versions": "^6.1.1",
     "content-entry": "^14.1.2",
-    "content-entry-filesystem": "^9.0.4",
+    "content-entry-filesystem": "^9.0.5",
     "content-entry-transform": "^1.5.1",
     "execa": "^9.5.3",
     "expression-expander": "^7.2.7",

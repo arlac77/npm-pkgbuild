@@ -7,12 +7,10 @@ async function fcpt(t, definition, destination, list) {
     typeof destination === "string" ? { destination } : destination
   );
 
-  const entries = [];
+  let entries = [];
 
   try {
-    for await (const entry of content) {
-      entries.push(entry);
-    }
+    entries = await Array.fromAsync(content);
   } catch (e) {
     if (Array.isArray(list)) {
       throw e;
@@ -23,15 +21,16 @@ async function fcpt(t, definition, destination, list) {
   }
 
   t.deepEqual(
-    entries.map(e => {
-      const r = { name: e.name, destination: e.destination };
+    await Promise.all(entries.map(async entry => {
+      const r = { name: entry.name, destination: entry.destination };
       for (const a of ["user", "group", "mode"]) {
-        if (e[a]) {
-          r[a] = e[a];
+        const value = await entry[a];
+        if (value) {
+          r[a] = value;
         }
       }
       return r;
-    }),
+    })),
     list
   );
 

@@ -20,6 +20,6 @@ test("NFTContentProvider entries", async t => {
   t.truthy(entries["tests/fixtures/pkg/main.mjs"]);
 
   const e = entries["tests/fixtures/pkg/main.mjs"];
-  t.is(await e.mode, 420);
+  t.is(await e.mode, 0o100644);
   t.is(e.destination, destination);
 });

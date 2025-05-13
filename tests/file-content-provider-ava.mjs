@@ -51,13 +51,13 @@ fcpt.title = (
 test(
   fcpt,
   new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
-  { destination: "dest/package.json", user: "root", group: "sys", mode: 0o640 },
+  { destination: "dest/package.json", user: "root", group: "sys", mode: 0o100640 },
   [
     {
       name: "package.json",
       user: "root",
       group: "sys",
-      mode: 0o640,
+      mode: 0o100640,
       destination: "dest/package.json"
     }
   ]
@@ -69,7 +69,7 @@ test(
     base: new URL("fixtures/skeleton", import.meta.url).pathname
   },
   "dest",
-  [{ name: "package.json", mode: 0o644, destination: "dest" }]
+  [{ name: "package.json", mode: 0o100644, destination: "dest" }]
 );
 
 test(
@@ -79,7 +79,7 @@ test(
     pattern: "**/*.json"
   },
   "dest",
-  [{ name: "package.json", mode: 0o644, destination: "dest" }]
+  [{ name: "package.json", mode: 0o100644, destination: "dest" }]
 );
 
 test(
@@ -99,16 +99,16 @@ test(
   "File not found " // pacman/tmpfiles.conf"
 );
 test(fcpt, new URL("fixtures/content/", import.meta.url).pathname, "dest", [
-  { name: "file1.txt", mode: 0o644, destination: "dest" },
-  { name: "file2 with spaces.txt", mode: 0o644, destination: "dest" },
-  { name: "file2.json", mode: 0o644, destination: "dest" }
+  { name: "file1.txt", mode: 0o100644, destination: "dest" },
+  { name: "file2 with spaces.txt", mode: 0o100644, destination: "dest" },
+  { name: "file2.json", mode: 0o100644, destination: "dest" }
 ]);
 test(
   fcpt,
   new URL("fixtures/content/*.txt", import.meta.url).pathname,
   "dest",
   [
-    { name: "file1.txt", mode: 0o644, destination: "dest" },
-    { name: "file2 with spaces.txt", mode: 0o644, destination: "dest" }
+    { name: "file1.txt", mode: 0o100644, destination: "dest" },
+    { name: "file2 with spaces.txt", mode: 0o100644, destination: "dest" }
   ]
 );

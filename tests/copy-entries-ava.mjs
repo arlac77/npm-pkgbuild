@@ -3,7 +3,7 @@ import { access, mkdtemp, readFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { ReadableStreamContentEntry, StringContentEntry } from "content-entry";
+import { IteratorContentEntry, StringContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { keyValueTransformer } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
@@ -79,9 +79,10 @@ test("copyEntries with transform", async t => {
       {
         match: entry => entry.name === "file1.txt",
         transform: async entry =>
-          new ReadableStreamContentEntry(
+          new IteratorContentEntry(
             entry.name,
-            keyValueTransformer(await entry.readStream, kv)
+            undefined,
+            keyValueTransformer(await entry.stream, kv)
           )
       }
     ]),

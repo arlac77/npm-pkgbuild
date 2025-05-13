@@ -4,9 +4,8 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { glob } from "node:fs/promises";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";
-import { StringContentEntry } from "content-entry";
-import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
-import { CollectionEntryWithPermissions } from "./collection-entry-with-permissions.mjs";
+import { StringContentEntry, CollectionEntry } from "content-entry";
+import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
 import { shrinkNPM } from "../npm-shrink.mjs";
@@ -120,9 +119,10 @@ export class NodeModulesContentProvider extends ContentProvider {
               );
 
               if (json) {
-                yield Object.assign(
-                  new StringContentEntry(name, JSON.stringify(json)),
-                  this.entryProperties
+                new StringContentEntry(
+                  name,
+                  this.entryProperties,
+                  JSON.stringify(json)
                 );
               }
 
@@ -133,13 +133,12 @@ export class NodeModulesContentProvider extends ContentProvider {
           }
 
           if (entry.isFile()) {
-            yield new FileSystemEntryWithPermissions(
-              name,
-              nodeModulesDir,
-              this.entryProperties
-            );
+            yield new FileSystemEntry(name, {
+              ...this.entryProperties,
+              baseDir: nodeModulesDir
+            });
           } else if (entry.isDirectory()) {
-              yield new CollectionEntryWithPermissions(name,this.directoryProperties);
+            yield new CollectionEntry(name, this.directoryProperties);
           }
         }
       }

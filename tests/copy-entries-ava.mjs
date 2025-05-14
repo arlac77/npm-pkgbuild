@@ -78,12 +78,12 @@ test("copyEntries with transform", async t => {
     transform(aggregateFifo([files[Symbol.asyncIterator]()]), [
       {
         match: entry => entry.name === "file1.txt",
-        transform: async entry =>
-          new IteratorContentEntry(
-            entry.name,
-            undefined,
-            keyValueTransformer(await entry.stream, kv)
-          )
+        transform: async entry => {
+          const stream = await entry.stream;
+          return new IteratorContentEntry(entry.name, undefined, () =>
+            keyValueTransformer(stream, kv)
+          );
+        }
       }
     ]),
     tmp
@@ -91,5 +91,6 @@ test("copyEntries with transform", async t => {
   }
 
   const content = await readFile(join(tmp, "file1.txt"), "utf8");
+  console.log(content);
   t.truthy(content.match(/value1value1/));
 });

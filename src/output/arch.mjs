@@ -145,7 +145,6 @@ export class ARCH extends Packager {
 
     const self = this;
     async function* trailingLines() {
-      console.log();
       yield `
 package() {
   depends=(${self.makeDepends(properties.dependencies).join(" ")})

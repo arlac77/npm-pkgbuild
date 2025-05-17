@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { IteratorContentEntry, StringContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
-import { keyValueTransformer } from "key-value-transformer";
+import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, copyEntries } from "npm-pkgbuild";
 
@@ -81,7 +81,7 @@ test("copyEntries with transform", async t => {
         transform: async entry => {
           const stream = await entry.stream;
           return new IteratorContentEntry(entry.name, undefined, () =>
-            keyValueTransformer(stream, kv)
+            keyValueTransformer(Uint8ArraysToLines(stream), kv)
           );
         }
       }

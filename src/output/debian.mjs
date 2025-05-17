@@ -7,7 +7,7 @@ import {
   createPropertiesTransformer
 } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
-import { keyValueTransformer } from "key-value-transformer";
+import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
 import {
   Packager,
   VERSION_FIELD,
@@ -105,7 +105,7 @@ export class DEBIAN extends Packager {
         new IteratorContentEntry(
           entry.name,
           undefined,
-          keyValueTransformer(await entry.readStream, fp)
+          keyValueTransformer(Uint8ArraysToLines(await entry.readStream), fp)
         ),
       createEntryWhenMissing: () => new ContentEntry(debianControlName)
     });

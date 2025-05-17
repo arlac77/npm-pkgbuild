@@ -6,7 +6,8 @@ import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
-  colonSeparatedKeyValuePairOptionsDoublingKeys
+  colonSeparatedKeyValuePairOptionsDoublingKeys,
+  Uint8ArraysToLines
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
@@ -162,7 +163,7 @@ export class RPM extends Packager {
             new IteratorContentEntry(
               entry.name,
               undefined,
-              keyValueTransformer(await entry.stream, fp, {
+              keyValueTransformer(Uint8ArraysToLines(await entry.stream), fp, {
                 ...colonSeparatedKeyValuePairOptionsDoublingKeys,
                 trailingLines
               })

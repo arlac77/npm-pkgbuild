@@ -6,7 +6,8 @@ import { transform } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
   keyValueTransformer,
-  equalSeparatedKeyValuePairOptions
+  equalSeparatedKeyValuePairOptions,
+  Uint8ArraysToLines
 } from "key-value-transformer";
 import {
   Packager,
@@ -120,7 +121,7 @@ export class DOCKER extends Packager {
         new IteratorContentEntry(
           entry.name,
           undefined,
-          keyValueTransformer(await entry.stream, fp, {
+          keyValueTransformer(Uint8ArraysToLines(await entry.stream), fp, {
             ...labelKeyValuePairs,
             headLines,
             trailingLines

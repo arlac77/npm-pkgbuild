@@ -119,14 +119,12 @@ export class NodeModulesContentProvider extends ContentProvider {
               );
 
               if (json) {
-                new StringContentEntry(
+                yield new StringContentEntry(
                   name,
                   this.entryProperties,
                   JSON.stringify(json)
                 );
               }
-
-              continue;
             } catch (e) {
               console.error(e, entry.name);
             }

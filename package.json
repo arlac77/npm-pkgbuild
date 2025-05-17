@@ -63,7 +63,7 @@
     "expression-expander": "^7.2.7",
     "ini": "^5.0.0",
     "iterable-string-interceptor": "^3.0.2",
-    "key-value-transformer": "^3.2.4",
+    "key-value-transformer": "^3.3.0",
     "npm-package-walker": "^8.0.9",
     "npm-packlist": "^10.0.0",
     "pacote": "^21.0.0",

@@ -51,10 +51,10 @@
     "tsc:types": "tsc -d --allowJs --declarationDir dist --emitDeclarationOnly ./src/extract-from-package.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^9.0.2",
-    "@vercel/nft": "^0.29.2",
+    "@npmcli/arborist": "^9.1.0",
+    "@vercel/nft": "^0.29.3",
     "aggregate-async-iterator": "^1.2.2",
-    "commander": "^13.1.0",
+    "commander": "^14.0.0",
     "compare-versions": "^6.1.1",
     "content-entry": "^14.2.2",
     "content-entry-filesystem": "^9.0.9",
@@ -63,7 +63,7 @@
     "expression-expander": "^7.2.7",
     "ini": "^5.0.0",
     "iterable-string-interceptor": "^3.0.2",
-    "key-value-transformer": "^3.2.4",
+    "key-value-transformer": "^3.3.0",
     "npm-package-walker": "^8.0.9",
     "npm-packlist": "^10.0.0",
     "pacote": "^21.0.0",

@@ -1,9 +1,8 @@
 import { dirname, join, resolve } from "node:path";
 import { cwd } from "node:process";
 import { glob } from "node:fs/promises";
-import { ContentEntry } from "content-entry";
-import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
-import { CollectionEntryWithPermissions } from "./collection-entry-with-permissions.mjs";
+import { ContentEntry, CollectionEntry } from "content-entry";
+import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
@@ -60,38 +59,34 @@ export class FileContentProvider extends ContentProvider {
   }
 
   /**
-   * @return {AsyncIterable<ContentEntry>} all entries
+   * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
-    const base = definitions.base;
-    const startPos = base.length + 1;
+    const baseDir = definitions.base;
+    const startPos = baseDir.length + 1;
 
     let count = 0;
     for await (const entry of glob(definitions.pattern, {
-      cwd: base,
+      cwd: baseDir,
       withFileTypes: true
     })) {
       const name = join(entry.parentPath, entry.name).substring(startPos);
 
       if (entry.isFile()) {
-        yield new FileSystemEntryWithPermissions(
-          name,
-          base,
-          this.entryProperties
-        );
+        yield new FileSystemEntry(name, {
+          ...this.entryProperties,
+          baseDir
+        });
         count++;
       } else if (entry.isDirectory()) {
-        yield new CollectionEntryWithPermissions(
-          name,
-          this.directoryProperties
-        );
+        yield new CollectionEntry(name, this.directoryProperties);
         count++;
       }
     }
 
     if (!this.isPatternMatch && count < 1) {
-      const file = join(base, this.definitions.pattern[0]);
+      const file = join(baseDir, this.definitions.pattern[0]);
       const error = new Error(`File not found ${file}`);
       error.file = file;
       throw error;

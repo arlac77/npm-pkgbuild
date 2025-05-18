@@ -57,18 +57,14 @@ export class NPMPackContentProvider extends ContentProvider {
           }
 
           entries.push(
-            Object.assign(
-              Object.create(
-                new BufferContentEntry(
-                  header.name.substring(8),
-                  Buffer.concat(chunks)
-                ),
-                {
-                  mtime: { value: header.mtime },
-                  mode: { value: header.mode }
-                }
-              ),
-              this.entryProperties
+            new BufferContentEntry(
+              header.name.substring(8),
+              {
+                ...this.entryProperties,
+                mtime: header.mtime,
+                mode: header.mode
+              },
+              Buffer.concat(chunks)
             )
           );
 

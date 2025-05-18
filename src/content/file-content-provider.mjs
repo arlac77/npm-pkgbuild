@@ -59,7 +59,7 @@ export class FileContentProvider extends ContentProvider {
   }
 
   /**
-   * @return {AsyncIterable<ContentEntry>} all entries
+   * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;

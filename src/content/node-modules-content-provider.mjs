@@ -4,7 +4,11 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { glob } from "node:fs/promises";
 import Arborist from "@npmcli/arborist";
 import { parse } from "ini";
-import { StringContentEntry, CollectionEntry } from "content-entry";
+import {
+  ContentEntry,
+  StringContentEntry,
+  CollectionEntry
+} from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
 import { ContentProvider } from "./content-provider.mjs";
 import { utf8StreamOptions } from "../util.mjs";
@@ -44,6 +48,10 @@ export class NodeModulesContentProvider extends ContentProvider {
     return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;
   }
 
+  /**
+   * List all entries.
+   * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
+   */
   async *[Symbol.asyncIterator]() {
     try {
       let pkgSourceDir = this.dir;

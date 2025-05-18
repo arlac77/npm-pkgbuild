@@ -91,6 +91,7 @@ export class Packager {
           if (name) {
             yield new StringContentEntry(
               name,
+              undefined,
               f.body.replaceAll(
                 /\{\{(\w+)\}\}/gm,
                 (match, key, offset, string) =>
@@ -105,6 +106,7 @@ export class Packager {
         for (const [name, content] of Object.entries(properties.hooks)) {
           yield new StringContentEntry(
             name,
+            undefined,
             content.replaceAll(
               /\{\{(\w+)\}\}/gm,
               (match, key, offset, string) =>

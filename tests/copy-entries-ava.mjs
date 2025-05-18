@@ -3,9 +3,9 @@ import { access, mkdtemp, readFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { ReadableStreamContentEntry, StringContentEntry } from "content-entry";
+import { IteratorContentEntry, StringContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
-import { keyValueTransformer } from "key-value-transformer";
+import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import { FileContentProvider, copyEntries } from "npm-pkgbuild";
 
@@ -78,11 +78,12 @@ test("copyEntries with transform", async t => {
     transform(aggregateFifo([files[Symbol.asyncIterator]()]), [
       {
         match: entry => entry.name === "file1.txt",
-        transform: async entry =>
-          new ReadableStreamContentEntry(
-            entry.name,
-            keyValueTransformer(await entry.readStream, kv)
-          )
+        transform: async entry => {
+          const stream = await entry.stream;
+          return new IteratorContentEntry(entry.name, undefined, () =>
+            keyValueTransformer(Uint8ArraysToLines(stream), kv)
+          );
+        }
       }
     ]),
     tmp
@@ -90,5 +91,6 @@ test("copyEntries with transform", async t => {
   }
 
   const content = await readFile(join(tmp, "file1.txt"), "utf8");
+  console.log(content);
   t.truthy(content.match(/value1value1/));
 });

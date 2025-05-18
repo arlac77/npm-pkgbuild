@@ -2,11 +2,12 @@ import { join } from "node:path";
 import { createWriteStream } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { execa } from "execa";
-import { ContentEntry, ReadableStreamContentEntry } from "content-entry";
+import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
   keyValueTransformer,
-  equalSeparatedKeyValuePairOptions
+  equalSeparatedKeyValuePairOptions,
+  Uint8ArraysToLines
 } from "key-value-transformer";
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
@@ -145,7 +146,6 @@ export class ARCH extends Packager {
 
     const self = this;
     async function* trailingLines() {
-      console.log();
       yield `
 package() {
   depends=(${self.makeDepends(properties.dependencies).join(" ")})
@@ -170,9 +170,10 @@ package() {
       name: PKGBUILD,
       match: entry => entry.name === PKGBUILD,
       transform: async entry =>
-        new ReadableStreamContentEntry(
+        new IteratorContentEntry(
           "../" + entry.name,
-          keyValueTransformer(await entry.readStream, fp, {
+          undefined,
+          keyValueTransformer(Uint8ArraysToLines(await entry.stream), fp, {
             ...pkgKeyValuePairOptions,
             trailingLines
           })

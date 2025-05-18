@@ -135,7 +135,7 @@ export class OCI extends Packager {
       ).replace(/^\//, "");
 
       into(header, 0, 100, name);
-      intoOctal(header, 100, 8, entry.mode);
+      intoOctal(header, 100, 8, await entry.mode);
       into(header, 124, 12, encodeOctal(size, 12));
       into(header, 136, 12, encodeOctal((await entry.mtime).getTime() / 1000, 12));
      // into(header, 148, 8, encodeOctal(chksum(header), 8));

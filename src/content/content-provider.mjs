@@ -1,4 +1,4 @@
-import { ContentEntry } from "content-entry";
+import { ContentEntry, CollectionEntry } from "content-entry";
 
 /**
  * Source of package content.
@@ -24,7 +24,7 @@ export class ContentProvider {
 
   /**
    * List all entries.
-   * @return {AsyncIterable<ContentEntry>} all entries
+   * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {}
 }

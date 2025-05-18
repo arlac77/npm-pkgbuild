@@ -1,6 +1,6 @@
 import { nodeFileTrace } from "@vercel/nft";
 import { ContentEntry } from "content-entry";
-import { FileSystemEntryWithPermissions } from "./file-system-entry-with-permissions.mjs";
+import { FileSystemEntry } from "content-entry-filesystem";
 import { asArray } from "../util.mjs";
 import { ContentProvider } from "./content-provider.mjs";
 
@@ -42,15 +42,14 @@ export class NFTContentProvider extends ContentProvider {
    */
   async *[Symbol.asyncIterator]() {
     const definitions = this.definitions;
-    const base = definitions.base || process.cwd();
+    const baseDir = definitions.base || process.cwd();
 
     const { fileList } = await nodeFileTrace(definitions.start);
 
     for (const name of fileList) {
-      yield new FileSystemEntryWithPermissions(
+      yield new FileSystemEntry(
         name,
-        base,
-        this.entryProperties
+        { ...this.entryProperties, baseDir }
       );
     }
   }

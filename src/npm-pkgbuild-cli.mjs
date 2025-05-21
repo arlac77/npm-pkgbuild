@@ -113,12 +113,13 @@ program
                   });
                   const arch = proc.stdout.split(/\s*,\s*/)[1];
       
+                  console.log('SKIP', entry.name, arch, properties.arch);
+
                   if(arch === 'ARM aarch64') {
                     return entry;
                   }
 
-                  console.log('skip', entry.name, arch);
-                  return entry;
+                  //return entry;
                 }
               },
               createExpressionTransformer(

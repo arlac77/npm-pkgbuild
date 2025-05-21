@@ -106,19 +106,20 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-3)
     *   [Properties](#properties-2)
+    *   [asyncIterator](#asynciterator)
     *   [name](#name-1)
 *   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-4)
-    *   [asyncIterator](#asynciterator)
+    *   [asyncIterator](#asynciterator-1)
     *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
     *   [Parameters](#parameters-5)
-    *   [asyncIterator](#asynciterator-1)
+    *   [asyncIterator](#asynciterator-2)
     *   [name](#name-3)
 *   [ContentProvider](#contentprovider)
     *   [Parameters](#parameters-6)
     *   [Properties](#properties-3)
-    *   [asyncIterator](#asynciterator-2)
+    *   [asyncIterator](#asynciterator-3)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
     *   [prepare](#prepare)
@@ -283,6 +284,12 @@ Requires .npmrc or NPM\_TOKEN environment
 
 *   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
 
+### asyncIterator
+
+List all entries.
+
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
+
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
@@ -304,7 +311,7 @@ Content provided form the file system.
 
 ### asyncIterator
 
-Returns **AsyncIterable\<ContentEntry>** all entries
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ### name
 
@@ -352,7 +359,7 @@ Source of package content.
 
 List all entries.
 
-Returns **AsyncIterable\<ContentEntry>** all entries
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ## DEBIAN
 

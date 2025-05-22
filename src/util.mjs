@@ -1,7 +1,7 @@
 import { join, dirname } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
-import { Readable} from "node:stream";
+import { Readable } from "node:stream";
 
 import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
@@ -209,35 +209,37 @@ export async function* copyEntries(
   expander = v => v
 ) {
   for await (const entry of source) {
-    // @ts-ignore
-    const d = entry.destination;
+    if (entry) {
+      // @ts-ignore
+      const d = entry.destination;
 
-    const name = expander(
-      d === undefined
-        ? entry.name
-        : d.isCollection || d.endsWith("/")
-        ? join(d, entry.name)
-        : d
-    ).replace(/^\//, "");
+      const name = expander(
+        d === undefined
+          ? entry.name
+          : d.isCollection || d.endsWith("/")
+          ? join(d, entry.name)
+          : d
+      ).replace(/^\//, "");
 
-    // @ts-ignore
-    entry.destination = name;
-    const destination = join(destinationDirectory, name);
+      // @ts-ignore
+      entry.destination = name;
+      const destination = join(destinationDirectory, name);
 
-    if (entry.isCollection) {
-      await mkdir(destination, { recursive: true, mode: await entry.mode });
-    } else {
-      await mkdir(dirname(destination), { recursive: true });
+      if (entry.isCollection) {
+        await mkdir(destination, { recursive: true, mode: await entry.mode });
+      } else {
+        await mkdir(dirname(destination), { recursive: true });
 
-      await pipeline(
-        Readable.fromWeb(await entry.stream),
-        createWriteStream(
-          destination,
-          entry.mode ? { mode: await entry.mode } : undefined
-        )
-      );
+        await pipeline(
+          Readable.fromWeb(await entry.stream),
+          createWriteStream(
+            destination,
+            entry.mode ? { mode: await entry.mode } : undefined
+          )
+        );
+      }
+
+      yield entry;
     }
-
-    yield entry;
   }
 }

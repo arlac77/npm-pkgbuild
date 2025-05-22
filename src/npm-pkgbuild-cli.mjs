@@ -106,24 +106,25 @@ program
             const transformer = [
               {
                 name: "skip-architecutes",
-                match: (entry) => entry.name.endsWith(".node"),
+                match: (entry) => entry.name.endsWith(".node") && entry.filename,
                 async transform(entry) {                  
-                  const proc = await execa("file", ["-b", entry.name], {
+                  const proc = await execa("file", ["-b", entry.filename], {
                     cwd: options.dir
                   });
-                  const arch = proc.stdout.split(/\s*,\s*/)[1];
+                  let arch = proc.stdout.split(/\s*,\s*/)[1];
       
-                  console.log('SKIP', entry.name, arch, properties.arch);
+                  const archs = { "ARM aarch64" : "aarch64" };
+                  arch = archs[arch] || arch;
 
-                  if(arch === 'ARM aarch64') {
+                  if(properties.arch.indexOf(arch) >= 0) {
                     return entry;
                   }
 
-                  //return entry;
+                  console.log('SKIP', entry.name, arch);
                 }
               },
               createExpressionTransformer(
-                entry => uc.fileNameConformsTo(entry.name, "public.text") && !uc.fileNameConformsTo(entry.name, "com.netscape.javascript-source"),
+                entry => entry.isBlob && uc.fileNameConformsTo(entry.name, "public.text") && !uc.fileNameConformsTo(entry.name, "com.netscape.javascript-source"),
                 properties
               )
             ];

@@ -82,7 +82,7 @@
   },
   "engines": {
     "node": ">=22.16.0",
-    "bun": ">=1.2.13"
+    "bun": ">=1.2.14"
   },
   "repository": {
     "type": "git",

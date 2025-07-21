@@ -129,6 +129,7 @@ const skipPattern = [
   "**Gruntfile.js",
   "**karma.conf.js",
   "**verb.md",
+  "API.md",
   "**.nvmrc",
   "**config.gypi",
   "**bower.json",

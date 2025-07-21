@@ -119,8 +119,6 @@ program
                   if(properties.arch.indexOf(arch) >= 0) {
                     return entry;
                   }
-
-                  console.log('SKIP', entry.name, arch);
                 }
               },
               createExpressionTransformer(

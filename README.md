@@ -103,43 +103,43 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
     *   [name](#name)
-*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+*   [FileContentProvider](#filecontentprovider)
     *   [Parameters](#parameters-3)
-    *   [Properties](#properties-2)
     *   [asyncIterator](#asynciterator)
     *   [name](#name-1)
-*   [FileContentProvider](#filecontentprovider)
+*   [NFTContentProvider](#nftcontentprovider)
     *   [Parameters](#parameters-4)
     *   [asyncIterator](#asynciterator-1)
     *   [name](#name-2)
-*   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-5)
-    *   [asyncIterator](#asynciterator-2)
-    *   [name](#name-3)
 *   [ContentProvider](#contentprovider)
-    *   [Parameters](#parameters-6)
-    *   [Properties](#properties-3)
-    *   [asyncIterator](#asynciterator-3)
+    *   [Parameters](#parameters-5)
+    *   [Properties](#properties-2)
+    *   [asyncIterator](#asynciterator-2)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
     *   [prepare](#prepare)
-        *   [Parameters](#parameters-7)
+        *   [Parameters](#parameters-6)
 *   [fields](#fields)
 *   [fields](#fields-1)
 *   [fields](#fields-2)
 *   [fields](#fields-3)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [quoteFile](#quotefile)
-    *   [Parameters](#parameters-8)
+    *   [Parameters](#parameters-7)
 *   [RPM](#rpm)
     *   [hookMapping](#hookmapping-1)
     *   [prepare](#prepare-1)
-        *   [Parameters](#parameters-9)
+        *   [Parameters](#parameters-8)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-10)
+        *   [Parameters](#parameters-9)
 *   [BUILDAH](#buildah)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+    *   [Parameters](#parameters-10)
+    *   [Properties](#properties-3)
+    *   [asyncIterator](#asynciterator-3)
+    *   [name](#name-3)
 *   [Packager](#packager)
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
@@ -262,33 +262,6 @@ Content from npm pack.
 ### Properties
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
-
-## NodeModulesContentProvider
-
-**Extends ContentProvider**
-
-Content from node\_modules.
-Requires .npmrc or NPM\_TOKEN environment
-
-### Parameters
-
-*   `definitions` &#x20;
-*   `entryProperties` &#x20;
-*   `directoryProperties` &#x20;
-
-### Properties
-
-*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
-
-### asyncIterator
-
-List all entries.
-
-Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ### name
 
@@ -463,6 +436,33 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 **Extends DOCKER**
 
 Use buildah @see <https://buildah.io>
+
+## NodeModulesContentProvider
+
+**Extends ContentProvider**
+
+Content from node\_modules.
+Requires .npmrc or NPM\_TOKEN environment
+
+### Parameters
+
+*   `definitions` &#x20;
+*   `entryProperties` &#x20;
+*   `directoryProperties` &#x20;
+
+### Properties
+
+*   `withoutDevelpmentDependencies` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
+### asyncIterator
+
+List all entries.
+
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## Packager
 

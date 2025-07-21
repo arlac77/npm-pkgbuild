@@ -1,5 +1,5 @@
 import { join, resolve } from "node:path";
-import { packageDirectory } from "pkg-dir";
+import { packageDirectory } from "package-directory";
 import { packageWalker } from "npm-package-walker";
 import { createContext } from "expression-expander";
 import { satisfies } from "compare-versions";

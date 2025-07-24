@@ -165,6 +165,7 @@ const toBeSkipped = new RegExp(
       "\\.\\d",
       "\\.map",
       "\\.umd\\.js",
+      "\\.m?js\\.gz",
       "\\.ts",
       "\\.mts",
       "\\.d\\.ts",

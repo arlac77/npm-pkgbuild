@@ -114,7 +114,7 @@ export class NodeModulesContentProvider extends ContentProvider {
         if (!toBeSkipped.test(entry.name)) {
           const name = join(entry.parentPath, entry.name).substring(startPos);
 
-          if (entry.name.endsWith("package.json")) {
+          if (entry.name === "package.json") {
             try {
               const json = shrinkNPM(
                 JSON.parse(
@@ -133,6 +133,7 @@ export class NodeModulesContentProvider extends ContentProvider {
                   JSON.stringify(json)
                 );
               }
+              continue;
             } catch (e) {
               console.error(e, entry.name);
             }
@@ -291,7 +292,8 @@ const toBeSkipped = new RegExp(
       "install_daemon_node.node",
       "tsconfig.build.json",
       "typedoc.json",
-      "webpack.config.js"
+      "webpack.config.js",
+      "tsconfig.build.tsbuildinfo"
     ].join("|") +
     ")$|(node_modules/(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
   "i"

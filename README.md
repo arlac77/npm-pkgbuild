@@ -122,21 +122,21 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [asyncIterator](#asynciterator-3)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
+    *   [attributes](#attributes)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-7)
-*   [fields](#fields)
-*   [fields](#fields-1)
-*   [fields](#fields-2)
-*   [fields](#fields-3)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
+*   [attributes](#attributes-1)
 *   [quoteFile](#quotefile)
     *   [Parameters](#parameters-8)
 *   [RPM](#rpm)
     *   [hookMapping](#hookmapping-1)
+    *   [attributes](#attributes-2)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
+    *   [attributes](#attributes-3)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-10)
 *   [BUILDAH](#buildah)
@@ -371,6 +371,11 @@ Create .deb packages
 
 Map install hook named from default (arch) to deb.
 
+### attributes
+
+*   **See**: <https://www.debian.org/doc/debian-policy/ch-controlfields.html>
+*   **See**: <https://linux.die.net/man/5/deb-control>
+
 ### prepare
 
 #### Parameters
@@ -382,27 +387,14 @@ Map install hook named from default (arch) to deb.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
 
-## fields
-
-*   **See**: <https://www.debian.org/doc/debian-policy/ch-controlfields.html>
-*   **See**: <https://linux.die.net/man/5/deb-control>
-
-## fields
-
-well known package properties
-<https://www.archlinux.org/pacman/PKGBUILD.5.html>
-
-## fields
-
-*   **See**: <https://rpm-packaging-guide.github.io>
-
-## fields
-
-*   **See**: <https://docs.docker.com/engine/reference/builder/>
-
 ## pkgKeyValuePairOptions
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+## attributes
+
+well known package properties
+<https://www.archlinux.org/pacman/PKGBUILD.5.html>
 
 ## quoteFile
 
@@ -419,6 +411,10 @@ Produce rpm packages.
 ### hookMapping
 
 Map install hook named from default (arch) to rpm.
+
+### attributes
+
+*   **See**: <https://rpm-packaging-guide.github.io>
 
 ### prepare
 
@@ -444,6 +440,10 @@ Low level OCI compatible packager
 **Extends Packager**
 
 docker image build
+
+### attributes
+
+*   **See**: <https://docs.docker.com/engine/reference/builder/>
 
 ### prepare
 
@@ -679,7 +679,7 @@ Returns **AsyncIterable<[FunctionDecl](#functiondecl)>**&#x20;
 ### Parameters
 
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `fields` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `attributes` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 Returns **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
 

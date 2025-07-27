@@ -27,9 +27,7 @@ import {
  * @param {Object} properties
  */
 export class Packager {
-  static get fields() {
-    return {};
-  }
+  static attributes = {};
 
   /**
    * @return {{named:object,others:string[]}}
@@ -118,7 +116,7 @@ export class Packager {
   }
 
   dependencyExpression(name, expression) {
-    return expression ? `${name}${expression}`: name;
+    return expression ? `${name}${expression}` : name;
   }
 
   makeDepends(dependencies) {
@@ -144,18 +142,18 @@ export class Packager {
     return this.constructor.fileNameExtension;
   }
 
-  get fields() {
+  get attributes() {
     // @ts-ignore
-    return this.constructor.fields;
+    return this.constructor.attributes;
   }
 
   get properties() {
     const properties = this.#properties;
 
-    for (const field of Object.values(this.fields)) {
+    for (const [name, field] of Object.entries(this.attributes)) {
       if (field.set) {
-        if (properties[field.name] !== undefined) {
-          properties[field.name] = field.set(properties[field.name]);
+        if (properties[name] !== undefined) {
+          properties[name] = field.set(properties[name]);
         } else if (properties[field.alias] !== undefined) {
           properties[field.alias] = field.set(properties[field.alias]);
         }
@@ -164,10 +162,10 @@ export class Packager {
       const e = properties[field.alias];
 
       if (e !== undefined) {
-        properties[field.name] = field.set ? field.set(e) : e;
+        properties[name] = field.set ? field.set(e) : e;
       } else {
         if (field.default !== undefined) {
-          const vak = field.alias || field.name;
+          const vak = field.alias || name;
           if (
             (Array.isArray(properties[vak]) && properties[vak].length === 0) ||
             properties[vak] === undefined

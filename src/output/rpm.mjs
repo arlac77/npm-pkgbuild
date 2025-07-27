@@ -16,12 +16,7 @@ import {
   DESCRIPTION_FIELD,
   NAME_FIELD
 } from "./packager.mjs";
-import {
-  copyEntries,
-  fieldProvider,
-  utf8StreamOptions,
-  compileFields
-} from "../util.mjs";
+import { copyEntries, fieldProvider, utf8StreamOptions } from "../util.mjs";
 
 /**
  * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
@@ -30,6 +25,8 @@ import {
 function quoteFile(name) {
   return name.match(/\s/) ? '"' + name + '"' : name;
 }
+
+const pkglist = { type: "string[]" };
 
 /**
  * Produce rpm packages.
@@ -52,9 +49,30 @@ export class RPM extends Packager {
     return `${p.name}-${p.version}-${p.release}.${p.arch}${this.fileNameExtension}`;
   }
 
-  static get fields() {
-    return fields;
-  }
+  /**
+   * @see https://rpm-packaging-guide.github.io
+   */
+  static attributes = {
+    Name: { ...NAME_FIELD },
+    Summary: { ...DESCRIPTION_FIELD },
+    License: { alias: "license", type: "string", mandatory: true },
+    Version: { ...VERSION_FIELD },
+    Release: { alias: "release", type: "integer", default: 1, mandatory: true },
+    Source0: { alias: "source", type: "string" },
+    Group: { alias: "groups", type: "string" },
+    Packager: { alias: "maintainer", type: "string" },
+    Vendor: { alias: "vendor", type: "string" },
+    BuildArch: {
+      alias: "arch",
+      default: "noarch",
+      type: "string",
+      mandatory: true
+    },
+    URL: { alias: "homepage", type: "string" },
+    Requires: pkglist,
+    Obsoletes: pkglist,
+    Conflicts: pkglist
+  };
 
   static get workspaceLayout() {
     return {
@@ -153,7 +171,7 @@ export class RPM extends Packager {
       }
     }
 
-    const fp = fieldProvider(properties, fields);
+    const fp = fieldProvider(properties, this.attributes);
 
     for await (const file of copyEntries(
       transform(aggregateFifo(sources), [
@@ -215,29 +233,3 @@ export class RPM extends Packager {
     return packageFile;
   }
 }
-
-const pkglist = { type: "string[]" };
-/**
- * @see https://rpm-packaging-guide.github.io
- */
-const fields = compileFields({
-  Name: { ...NAME_FIELD },
-  Summary: { ...DESCRIPTION_FIELD },
-  License: { alias: "license", type: "string", mandatory: true },
-  Version: { ...VERSION_FIELD },
-  Release: { alias: "release", type: "integer", default: 1, mandatory: true },
-  Source0: { alias: "source", type: "string" },
-  Group: { alias: "groups", type: "string" },
-  Packager: { alias: "maintainer", type: "string" },
-  Vendor: { alias: "vendor", type: "string" },
-  BuildArch: {
-    alias: "arch",
-    default: "noarch",
-    type: "string",
-    mandatory: true
-  },
-  URL: { alias: "homepage", type: "string" },
-  Requires: pkglist,
-  Obsoletes: pkglist,
-  Conflicts: pkglist
-});

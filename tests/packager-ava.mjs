@@ -1,14 +1,11 @@
 import test from "ava";
 import { Packager } from "npm-pkgbuild";
-import { compileFields } from "../src/util.mjs";
 
 class MyPackager extends Packager {
-  static get fields() {
-    return compileFields({
-      a: { detault: "av", mandatory: true },
-      b: { default: "bv", set: value => value.toLowerCase() }
-    });
-  }
+  static attributes = {
+    a: { detault: "av", mandatory: true },
+    b: { default: "bv", set: value => value.toLowerCase() }
+  };
 
   static get workspaceLayout() {
     return {
@@ -20,9 +17,9 @@ class MyPackager extends Packager {
   }
 }
 
-test("packager fields", t => {
+test("packager attributes", t => {
   const p = new MyPackager();
-  t.truthy(p.fields.a);
+  t.truthy(p.attributes.a);
 });
 
 test("packager property set", t => {

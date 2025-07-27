@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { createWriteStream } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { execa } from "execa";
+import { default_attribute } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
@@ -21,7 +22,6 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  compileFields,
   normalizeExpression
 } from "../util.mjs";
 
@@ -50,9 +50,11 @@ export const pkgKeyValuePairOptions = {
 };
 
 function keyPrefix(key) {
-  const f = fields[key];
+  const f = ARCH.attributes[key];
   return f?.prefix ? f.prefix + key : key;
 }
+
+const default_array_attribute = { type: "string[]" };
 
 const PKGBUILD = "PKGBUILD";
 
@@ -73,9 +75,43 @@ export class ARCH extends Packager {
     return _ext;
   }
 
-  static get fields() {
-    return fields;
-  }
+  /**
+   * well known package properties
+   * https://www.archlinux.org/pacman/PKGBUILD.5.html
+   */
+  static attributes = {
+    Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
+    packager: { alias: "maintainer", type: "string[]" },
+    pkgname: { ...NAME_FIELD, type: "string[]" },
+    pkgver: { ...VERSION_FIELD },
+    pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
+    epoch: { type: "integer", default: 0 },
+    pkgdesc: { ...DESCRIPTION_FIELD },
+    url: { alias: "homepage", type: "string" },
+    license: { type: "string[]", mandatory: true },
+    install: { type: "string" },
+    changelog: { type: "string" },
+    source: default_array_attribute,
+    validpgpkeys: default_array_attribute,
+    noextract: default_attribute,
+    cksums: default_array_attribute,
+    md5sums: default_array_attribute,
+    sha1sums: default_array_attribute,
+    sha256sums: default_array_attribute,
+    sha384sums: default_array_attribute,
+    sha512sums: default_array_attribute,
+    groups: default_array_attribute,
+    arch: { ...default_array_attribute, default: ["any"], mandatory: true },
+    backup: default_array_attribute,
+    depends: default_array_attribute,
+    makedepends: default_attribute,
+    checkdepends: default_attribute,
+    optdepends: default_attribute,
+    conflicts: default_attribute,
+    provides: default_attribute,
+    replaces: default_attribute,
+    options: default_attribute
+  };
 
   static async prepare(options = {}, variant = {}) {
     if (_prepared === undefined) {
@@ -164,7 +200,7 @@ package() {
       properties.backup = properties.backup.replace(/\//, "");
     }
 
-    const fp = fieldProvider(properties, fields);
+    const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({
       name: PKGBUILD,
@@ -207,9 +243,9 @@ package() {
         ownership
           .map(
             f =>
-              `    chown ${[f.owner || "", f.group || ""].join(":")} \"$pkgdir/${
-                f.destination
-              }\"`
+              `    chown ${[f.owner || "", f.group || ""].join(
+                ":"
+              )} \"$pkgdir/${f.destination}\"`
           )
           .join("\n") +
         content.substring(markerPos + 14);
@@ -232,10 +268,14 @@ package() {
         PACKAGER = person(properties.contributors);
       }
 
-      const makepkg = await execa("makepkg", ["--noprogressbar", "-c", "-f", "-e"], {
-        cwd: staging,
-        env: { PKGDEST: destination, PACKAGER }
-      });
+      const makepkg = await execa(
+        "makepkg",
+        ["--noprogressbar", "-c", "-f", "-e"],
+        {
+          cwd: staging,
+          env: { PKGDEST: destination, PACKAGER }
+        }
+      );
 
       if (options.verbose) {
         console.log(makepkg.stdout);
@@ -249,44 +289,3 @@ package() {
 function person(contributors) {
   return contributors[0].name + " " + contributors[0].email;
 }
-
-const default_attribute = { type: "string" };
-const default_array_attribute = { type: "string[]" };
-
-/**
- * well known package properties
- * https://www.archlinux.org/pacman/PKGBUILD.5.html
- */
-const fields = compileFields({
-  Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
-  packager: { alias: "maintainer", type: "string[]" },
-  pkgname: { ...NAME_FIELD, type: "string[]" },
-  pkgver: { ...VERSION_FIELD },
-  pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
-  epoch: { type: "integer", default: 0 },
-  pkgdesc: { ...DESCRIPTION_FIELD },
-  url: { alias: "homepage", type: "string" },
-  license: { type: "string[]", mandatory: true },
-  install: { type: "string" },
-  changelog: { type: "string" },
-  source: default_array_attribute,
-  validpgpkeys: default_array_attribute,
-  noextract: default_attribute,
-  cksums: default_array_attribute,
-  md5sums: default_array_attribute,
-  sha1sums: default_array_attribute,
-  sha256sums: default_array_attribute,
-  sha384sums: default_array_attribute,
-  sha512sums: default_array_attribute,
-  groups: default_array_attribute,
-  arch: { ...default_array_attribute, default: ["any"], mandatory: true },
-  backup: default_array_attribute,
-  depends: default_array_attribute,
-  makedepends: default_attribute,
-  checkdepends: default_attribute,
-  optdepends: default_attribute,
-  conflicts: default_attribute,
-  provides: default_attribute,
-  replaces: default_attribute,
-  options: default_attribute
-});

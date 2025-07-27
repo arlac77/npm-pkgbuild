@@ -2,17 +2,8 @@ import { join, dirname } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
-
 import { createWriteStream } from "node:fs";
 import { ContentEntry } from "content-entry";
-
-export function compileFields(fields) {
-  for (const [k, v] of Object.entries(fields)) {
-    v.name = k;
-  }
-
-  return fields;
-}
 
 /**
  * @type {BufferEncoding}
@@ -151,17 +142,17 @@ export function asArray(o) {
 /**
  *
  * @param {Object} properties
- * @param {Object} fields
+ * @param {Object} attributes
  * @returns {Function}
  */
-export function fieldProvider(properties, fields) {
+export function fieldProvider(properties, attributes) {
   function av(field, value) {
     return field.type.endsWith("]") ? asArray(value) : value;
   }
 
   return function* controlProperties(k, v, presentKeys) {
     if (k === undefined) {
-      for (const [name, field] of Object.entries(fields)) {
+      for (const [name, field] of Object.entries(attributes)) {
         if (!presentKeys.has(name)) {
           let value = properties[field.alias || name];
           if (value === undefined) {
@@ -185,7 +176,7 @@ export function fieldProvider(properties, fields) {
         }
       }
     } else {
-      yield [k, av(fields[k], properties[k] || v)];
+      yield [k, av(attributes[k], properties[k] || v)];
     }
   };
 }

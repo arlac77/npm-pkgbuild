@@ -14,7 +14,7 @@ import {
   DESCRIPTION_FIELD,
   NAME_FIELD
 } from "./packager.mjs";
-import { copyEntries, fieldProvider, compileFields } from "../util.mjs";
+import { copyEntries, fieldProvider } from "../util.mjs";
 
 /**
  * Create .deb packages
@@ -32,9 +32,45 @@ export class DEBIAN extends Packager {
     return ".deb";
   }
 
-  static get fields() {
-    return fields;
-  }
+  /**
+   * @see https://www.debian.org/doc/debian-policy/ch-controlfields.html
+   * @see https://linux.die.net/man/5/deb-control
+   */
+  static attributes = {
+    Package: {
+      ...NAME_FIELD,
+      set: v => v.toLowerCase()
+    },
+    Version: { ...VERSION_FIELD },
+    Maintainer: { alias: "maintainer", type: "string", mandatory: true },
+    Description: { ...DESCRIPTION_FIELD },
+    Section: { alias: "groups", type: "string" },
+    Priority: { type: "string" },
+    Essential: { type: "boolean" },
+    Origin: { type: "string" },
+    Architecture: {
+      alias: "arch",
+      type: "string",
+      default: "all",
+      mandatory: true,
+      mapping: { aarch64: "arm64" }
+    },
+    Homepage: { alias: "homepage", type: "string" },
+    Bugs: { alias: "bugs", type: "string" },
+    Depends: { type: "string[]" },
+    "Pre-Depends": { type: "string[]" },
+    "Build-Depends": { type: "string[]" },
+    "Build-Depends-Indep": { type: "string[]" },
+    "Build-Depends-Arch": { type: "string[]" },
+    Recommends: { type: "string[]" },
+    Suggests: { type: "string[]" },
+    Provides: { type: "string[]" },
+    Breaks: { type: "string[]" },
+    Replaces: { type: "string[]" },
+    Source: { alias: "source", type: "string" },
+    Uploaders: { mandatory: false },
+    "Installed-Size": {}
+  };
 
   /**
    * @param {Object} options
@@ -59,7 +95,7 @@ export class DEBIAN extends Packager {
     const p = this.properties;
 
     // TODO utility to provide final values
-    const arch = fields.Architecture.mapping[p.arch] || p.arch;
+    const arch = this.attributes.Architecture.mapping[p.arch] || p.arch;
 
     // @ts-ignore
     return `${p.name}_${p.version}_${arch}${this.constructor.fileNameExtension}`;
@@ -92,11 +128,11 @@ export class DEBIAN extends Packager {
     );
 
     const depends = this.makeDepends(properties.dependencies);
-    if(depends.length) {
+    if (depends.length) {
       properties.Depends = depends;
     }
 
-    const fp = fieldProvider(properties, fields);
+    const fp = fieldProvider(properties, this.attributes);
     const debianControlName = "DEBIAN/control";
 
     transformer.push({
@@ -136,47 +172,6 @@ export class DEBIAN extends Packager {
     return join(destination, this.packageFileName);
   }
 }
-
-/**
- * @see https://www.debian.org/doc/debian-policy/ch-controlfields.html
- * @see https://linux.die.net/man/5/deb-control
- */
-
-const fields = compileFields({
-  Package: {
-    ...NAME_FIELD,
-    set: v => v.toLowerCase()
-  },
-  Version: { ...VERSION_FIELD },
-  Maintainer: { alias: "maintainer", type: "string", mandatory: true },
-  Description: { ...DESCRIPTION_FIELD },
-  Section: { alias: "groups", type: "string" },
-  Priority: { type: "string" },
-  Essential: { type: "boolean" },
-  Origin: { type: "string" },
-  Architecture: {
-    alias: "arch",
-    type: "string",
-    default: "all",
-    mandatory: true,
-    mapping: { aarch64: "arm64" }
-  },
-  Homepage: { alias: "homepage", type: "string" },
-  Bugs: { alias: "bugs", type: "string" },
-  Depends: { type: "string[]" },
-  "Pre-Depends": { type: "string[]" },
-  "Build-Depends": { type: "string[]" },
-  "Build-Depends-Indep": { type: "string[]" },
-  "Build-Depends-Arch": { type: "string[]" },
-  Recommends: { type: "string[]" },
-  Suggests: { type: "string[]" },
-  Provides: { type: "string[]" },
-  Breaks: { type: "string[]" },
-  Replaces: { type: "string[]" },
-  Source: { alias: "source", type: "string" },
-  Uploaders: { mandatory: false },
-  "Installed-Size": {}
-});
 
 /*
 @see https://www.debian.org/doc/debian-policy/ch-archive.html#sections

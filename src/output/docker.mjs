@@ -20,8 +20,7 @@ import {
   copyEntries,
   utf8StreamOptions,
   quote,
-  filterOutUnwantedDependencies,
-  compileFields
+  filterOutUnwantedDependencies
 } from "../util.mjs";
 
 const DOCKERFILE = "Dockerfile";
@@ -56,9 +55,16 @@ export class DOCKER extends Packager {
     return `generate container image with ${this.name}`;
   }
 
-  static get fields() {
-    return fields;
-  }
+  /**
+   * @see {@link https://docs.docker.com/engine/reference/builder/}
+   */
+  static attributes = {
+    name: { ...NAME_FIELD, set: value => value.toLowerCase() },
+    version: { ...VERSION_FIELD },
+    description: { ...DESCRIPTION_FIELD },
+    author: { alias: "maintainer", type: "string" },
+    workdir: { type: "string", default: "/", mandatory: true }
+  };
 
   /**
    * Check for docker presence.
@@ -112,7 +118,7 @@ export class DOCKER extends Packager {
       }
     }
 
-    const fp = fieldProvider(properties, fields);
+    const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({
       name: DOCKERFILE,
@@ -203,14 +209,3 @@ export class DOCKER extends Packager {
     }
   }
 }
-
-/**
- * @see {@link https://docs.docker.com/engine/reference/builder/}
- */
-const fields = compileFields({
-  name: { ...NAME_FIELD, set: value => value.toLowerCase() },
-  version: { ...VERSION_FIELD },
-  description: { ...DESCRIPTION_FIELD },
-  author: { alias: "maintainer", type: "string" },
-  workdir: { type: "string", default: "/", mandatory: true }
-});

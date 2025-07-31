@@ -295,6 +295,6 @@ const toBeSkipped = new RegExp(
       "webpack.config.js",
       "tsconfig.build.tsbuildinfo"
     ].join("|") +
-    ")$|(node_modules/(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64))",
+    ")$|(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64)",
   "i"
 );

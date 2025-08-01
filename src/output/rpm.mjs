@@ -2,7 +2,12 @@ import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
-import { integer_attribute, url_attribute, string_attribute } from "pacc";
+import {
+  integer_attribute,
+  url_attribute,
+  string_attribute,
+  string_collection_attribute_writable
+} from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
@@ -26,8 +31,6 @@ import { copyEntries, fieldProvider, utf8StreamOptions } from "../util.mjs";
 function quoteFile(name) {
   return name.match(/\s/) ? '"' + name + '"' : name;
 }
-
-const pkglist = { ...string_attribute, type: "string[]" };
 
 /**
  * Produce rpm packages.
@@ -75,9 +78,9 @@ export class RPM extends Packager {
       mandatory: true
     },
     URL: { ...url_attribute, alias: "homepage" },
-    Requires: pkglist,
-    Obsoletes: pkglist,
-    Conflicts: pkglist
+    Requires: string_collection_attribute_writable,
+    Obsoletes: string_collection_attribute_writable,
+    Conflicts: string_collection_attribute_writable
   };
 
   static get workspaceLayout() {

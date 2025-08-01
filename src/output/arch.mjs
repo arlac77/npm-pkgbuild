@@ -54,8 +54,6 @@ function keyPrefix(key) {
   return f?.prefix ? f.prefix + key : key;
 }
 
-const default_array_attribute = { type: "string[]" };
-
 const PKGBUILD = "PKGBUILD";
 
 let _ext = ".pkg.tar.xz";
@@ -80,9 +78,9 @@ export class ARCH extends Packager {
    * https://www.archlinux.org/pacman/PKGBUILD.5.html
    */
   static attributes = {
-    Maintainer: { ...string_collection_attribute_writable, alias: "maintainer", type: "string[]", prefix: "# " },
-    packager: { ...string_collection_attribute_writable, alias: "maintainer", type: "string[]" },
-    pkgname: { ...pkgbuild_name_attribute, type: "string[]" },
+    Maintainer: { ...string_collection_attribute_writable, alias: "maintainer", prefix: "# " },
+    packager: { ...string_collection_attribute_writable, alias: "maintainer" },
+    pkgname: { ...pkgbuild_name_attribute, collection: true },
     pkgver: pkgbuild_version_attribute,
     pkgrel: {
       ...integer_attribute,
@@ -93,22 +91,22 @@ export class ARCH extends Packager {
     epoch: { ...integer_attribute, default: 0 },
     pkgdesc: pkgbuild_description_attribute,
     url: { ...string_attribute, alias: "homepage" },
-    license: { ...string_collection_attribute_writable, type: "string[]", mandatory: true },
+    license: { ...string_collection_attribute_writable, mandatory: true },
     install: string_attribute,
     changelog: string_attribute,
-    source: default_array_attribute,
-    validpgpkeys: default_array_attribute,
+    source: string_collection_attribute_writable,
+    validpgpkeys: string_collection_attribute_writable,
     noextract: default_attribute,
-    cksums: default_array_attribute,
-    md5sums: default_array_attribute,
-    sha1sums: default_array_attribute,
-    sha256sums: default_array_attribute,
-    sha384sums: default_array_attribute,
-    sha512sums: default_array_attribute,
-    groups: default_array_attribute,
-    arch: { ...default_array_attribute, default: ["any"], mandatory: true },
-    backup: default_array_attribute,
-    depends: default_array_attribute,
+    cksums: string_collection_attribute_writable,
+    md5sums: string_collection_attribute_writable,
+    sha1sums: string_collection_attribute_writable,
+    sha256sums: string_collection_attribute_writable,
+    sha384sums: string_collection_attribute_writable,
+    sha512sums: string_collection_attribute_writable,
+    groups: string_collection_attribute_writable,
+    arch: { ...string_collection_attribute_writable, default: ["any"], mandatory: true },
+    backup: string_collection_attribute_writable,
+    depends: string_collection_attribute_writable,
     makedepends: default_attribute,
     checkdepends: default_attribute,
     optdepends: default_attribute,

@@ -147,7 +147,7 @@ export function asArray(o) {
  */
 export function fieldProvider(properties, attributes) {
   function av(field, value) {
-    return field.type.endsWith("]") ? asArray(value) : value;
+    return field.collection ? asArray(value) : value;
   }
 
   return function* controlProperties(k, v, presentKeys) {

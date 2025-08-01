@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { string_attribute } from "pacc";
+import { string_attribute, string_collection_attribute_writable } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
   transform,
@@ -43,7 +43,7 @@ export class DEBIAN extends Packager {
       set: v => v.toLowerCase()
     },
     Version: pkgbuild_version_attribute,
-    Maintainer: { alias: "maintainer", type: "string", mandatory: true },
+    Maintainer: { ...string_attribute, alias: "maintainer", mandatory: true },
     Description: pkgbuild_description_attribute,
     Section: { ...string_attribute, alias: "groups" },
     Priority: string_attribute,
@@ -58,16 +58,16 @@ export class DEBIAN extends Packager {
     },
     Homepage: { ...string_attribute, alias: "homepage" },
     Bugs: { ...string_attribute, alias: "bugs" },
-    Depends: { type: "string[]" },
-    "Pre-Depends": { type: "string[]" },
-    "Build-Depends": { type: "string[]" },
-    "Build-Depends-Indep": { type: "string[]" },
-    "Build-Depends-Arch": { type: "string[]" },
-    Recommends: { type: "string[]" },
-    Suggests: { type: "string[]" },
-    Provides: { type: "string[]" },
-    Breaks: { type: "string[]" },
-    Replaces: { type: "string[]" },
+    Depends: string_collection_attribute_writable,
+    "Pre-Depends": string_collection_attribute_writable,
+    "Build-Depends": string_collection_attribute_writable,
+    "Build-Depends-Indep": string_collection_attribute_writable,
+    "Build-Depends-Arch": string_collection_attribute_writable,
+    Recommends: string_collection_attribute_writable,
+    Suggests: string_collection_attribute_writable,
+    Provides: string_collection_attribute_writable,
+    Breaks: string_collection_attribute_writable,
+    Replaces: string_collection_attribute_writable,
     Source: { ...string_attribute, alias: "source" },
     Uploaders: { mandatory: false },
     "Installed-Size": {}

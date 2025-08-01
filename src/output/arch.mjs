@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { createWriteStream } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { execa } from "execa";
-import { default_attribute } from "pacc";
+import { default_attribute, string_attribute, string_collection_attribute_writable, integer_attribute } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
@@ -13,9 +13,9 @@ import {
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
   Packager,
-  VERSION_FIELD,
-  DESCRIPTION_FIELD,
-  NAME_FIELD
+  pkgbuild_version_attribute,
+  pkgbuild_description_attribute,
+  pkgbuild_name_attribute
 } from "./packager.mjs";
 import {
   copyEntries,
@@ -80,17 +80,22 @@ export class ARCH extends Packager {
    * https://www.archlinux.org/pacman/PKGBUILD.5.html
    */
   static attributes = {
-    Maintainer: { alias: "maintainer", type: "string[]", prefix: "# " },
-    packager: { alias: "maintainer", type: "string[]" },
-    pkgname: { ...NAME_FIELD, type: "string[]" },
-    pkgver: { ...VERSION_FIELD },
-    pkgrel: { alias: "release", type: "integer", default: 1, mandatory: true },
-    epoch: { type: "integer", default: 0 },
-    pkgdesc: { ...DESCRIPTION_FIELD },
-    url: { alias: "homepage", type: "string" },
-    license: { type: "string[]", mandatory: true },
-    install: { type: "string" },
-    changelog: { type: "string" },
+    Maintainer: { ...string_collection_attribute_writable, alias: "maintainer", type: "string[]", prefix: "# " },
+    packager: { ...string_collection_attribute_writable, alias: "maintainer", type: "string[]" },
+    pkgname: { ...pkgbuild_name_attribute, type: "string[]" },
+    pkgver: pkgbuild_version_attribute,
+    pkgrel: {
+      ...integer_attribute,
+      alias: "release",
+      default: 1,
+      mandatory: true
+    },
+    epoch: { ...integer_attribute, default: 0 },
+    pkgdesc: pkgbuild_description_attribute,
+    url: { ...string_attribute, alias: "homepage" },
+    license: { ...string_collection_attribute_writable, type: "string[]", mandatory: true },
+    install: string_attribute,
+    changelog: string_attribute,
     source: default_array_attribute,
     validpgpkeys: default_array_attribute,
     noextract: default_attribute,

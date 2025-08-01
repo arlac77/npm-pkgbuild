@@ -2,6 +2,11 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
+import {
+  string_attribute,
+  description_attribute,
+  version_attribute_writable
+} from "pacc";
 import { StringContentEntry } from "content-entry";
 import { publish } from "../publish.mjs";
 import {
@@ -154,12 +159,15 @@ export class Packager {
       if (field.set) {
         if (properties[name] !== undefined) {
           properties[name] = field.set(properties[name]);
-        } else if (properties[field.alias] !== undefined) {
+        } else if (
+          field.alias !== undefined &&
+          properties[field.alias] !== undefined
+        ) {
           properties[field.alias] = field.set(properties[field.alias]);
         }
       }
 
-      const e = properties[field.alias];
+      const e = properties[field.alias || name];
 
       if (e !== undefined) {
         properties[name] = field.set ? field.set(e) : e;
@@ -251,21 +259,21 @@ export class Packager {
   }
 }
 
-export const NAME_FIELD = {
+export const pkgbuild_name_attribute = {
+  ...string_attribute,
   alias: "name",
-  type: "string",
   mandatory: true
 };
 
-export const VERSION_FIELD = {
+export const pkgbuild_version_attribute = {
+  ...version_attribute_writable,
   alias: "version",
-  type: "string",
   mandatory: true,
   set: v => v.replace("-semantic-release", "")
 };
 
-export const DESCRIPTION_FIELD = {
+export const pkgbuild_description_attribute = {
+  ...description_attribute,
   alias: "description",
-  type: "string",
   mandatory: true
 };

@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
+import { string_attribute } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
   transform,
@@ -10,9 +11,9 @@ import { aggregateFifo } from "aggregate-async-iterator";
 import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
 import {
   Packager,
-  VERSION_FIELD,
-  DESCRIPTION_FIELD,
-  NAME_FIELD
+  pkgbuild_version_attribute,
+  pkgbuild_description_attribute,
+  pkgbuild_name_attribute
 } from "./packager.mjs";
 import { copyEntries, fieldProvider } from "../util.mjs";
 
@@ -38,25 +39,25 @@ export class DEBIAN extends Packager {
    */
   static attributes = {
     Package: {
-      ...NAME_FIELD,
+      ...pkgbuild_name_attribute,
       set: v => v.toLowerCase()
     },
-    Version: { ...VERSION_FIELD },
+    Version: pkgbuild_version_attribute,
     Maintainer: { alias: "maintainer", type: "string", mandatory: true },
-    Description: { ...DESCRIPTION_FIELD },
-    Section: { alias: "groups", type: "string" },
-    Priority: { type: "string" },
+    Description: pkgbuild_description_attribute,
+    Section: { ...string_attribute, alias: "groups" },
+    Priority: string_attribute,
     Essential: { type: "boolean" },
-    Origin: { type: "string" },
+    Origin: string_attribute,
     Architecture: {
+      ...string_attribute,
       alias: "arch",
-      type: "string",
       default: "all",
       mandatory: true,
       mapping: { aarch64: "arm64" }
     },
-    Homepage: { alias: "homepage", type: "string" },
-    Bugs: { alias: "bugs", type: "string" },
+    Homepage: { ...string_attribute, alias: "homepage" },
+    Bugs: { ...string_attribute, alias: "bugs" },
     Depends: { type: "string[]" },
     "Pre-Depends": { type: "string[]" },
     "Build-Depends": { type: "string[]" },
@@ -67,7 +68,7 @@ export class DEBIAN extends Packager {
     Provides: { type: "string[]" },
     Breaks: { type: "string[]" },
     Replaces: { type: "string[]" },
-    Source: { alias: "source", type: "string" },
+    Source: { ...string_attribute, alias: "source" },
     Uploaders: { mandatory: false },
     "Installed-Size": {}
   };

@@ -16,7 +16,7 @@ test("arch extension", async t => {
 test("arch default properties", async t => {
   const properties = {
     name: "abc",
-    arch: [],
+    //  arch: [],
     version: "1.0.0-semantic-release",
     description: "a description",
     license: "MIT"
@@ -25,14 +25,15 @@ test("arch default properties", async t => {
   const out = new ARCH(properties);
 
   t.deepEqual(out.properties, {
-    type: "arch",
     ...properties,
+    type: "arch",
     epoch: 0,
     arch: ["any"],
     pkgdesc: properties.description,
     version: "1.0.0",
     pkgver: "1.0.0",
     pkgname: properties.name,
+    //   pkgrel: 1,
     release: 1
   });
 });

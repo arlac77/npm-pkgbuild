@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
+import { integer_attribute, url_attribute, string_attribute } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
@@ -12,9 +13,9 @@ import {
 import { aggregateFifo } from "aggregate-async-iterator";
 import {
   Packager,
-  VERSION_FIELD,
-  DESCRIPTION_FIELD,
-  NAME_FIELD
+  pkgbuild_version_attribute,
+  pkgbuild_description_attribute,
+  pkgbuild_name_attribute
 } from "./packager.mjs";
 import { copyEntries, fieldProvider, utf8StreamOptions } from "../util.mjs";
 
@@ -26,7 +27,7 @@ function quoteFile(name) {
   return name.match(/\s/) ? '"' + name + '"' : name;
 }
 
-const pkglist = { type: "string[]" };
+const pkglist = { ...string_attribute, type: "string[]" };
 
 /**
  * Produce rpm packages.
@@ -53,22 +54,27 @@ export class RPM extends Packager {
    * @see https://rpm-packaging-guide.github.io
    */
   static attributes = {
-    Name: { ...NAME_FIELD },
-    Summary: { ...DESCRIPTION_FIELD },
-    License: { alias: "license", type: "string", mandatory: true },
-    Version: { ...VERSION_FIELD },
-    Release: { alias: "release", type: "integer", default: 1, mandatory: true },
-    Source0: { alias: "source", type: "string" },
-    Group: { alias: "groups", type: "string" },
-    Packager: { alias: "maintainer", type: "string" },
-    Vendor: { alias: "vendor", type: "string" },
-    BuildArch: {
-      alias: "arch",
-      default: "noarch",
-      type: "string",
+    Name: pkgbuild_name_attribute,
+    Summary: pkgbuild_description_attribute,
+    License: { ...string_attribute, alias: "license", mandatory: true },
+    Version: pkgbuild_version_attribute,
+    Release: {
+      ...integer_attribute,
+      alias: "release",
+      default: 1,
       mandatory: true
     },
-    URL: { alias: "homepage", type: "string" },
+    Source0: { ...string_attribute, alias: "source" },
+    Group: { ...string_attribute, alias: "groups" },
+    Packager: { ...string_attribute, alias: "maintainer" },
+    Vendor: { ...string_attribute, alias: "vendor" },
+    BuildArch: {
+      ...string_attribute,
+      alias: "arch",
+      default: "noarch",
+      mandatory: true
+    },
+    URL: { ...url_attribute, alias: "homepage" },
     Requires: pkglist,
     Obsoletes: pkglist,
     Conflicts: pkglist

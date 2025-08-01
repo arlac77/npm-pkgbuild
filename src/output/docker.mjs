@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
+import { string_attribute } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
@@ -11,9 +12,9 @@ import {
 } from "key-value-transformer";
 import {
   Packager,
-  VERSION_FIELD,
-  DESCRIPTION_FIELD,
-  NAME_FIELD
+  pkgbuild_version_attribute,
+  pkgbuild_description_attribute,
+  pkgbuild_name_attribute
 } from "./packager.mjs";
 import {
   fieldProvider,
@@ -59,11 +60,14 @@ export class DOCKER extends Packager {
    * @see {@link https://docs.docker.com/engine/reference/builder/}
    */
   static attributes = {
-    name: { ...NAME_FIELD, set: value => value.toLowerCase() },
-    version: { ...VERSION_FIELD },
-    description: { ...DESCRIPTION_FIELD },
-    author: { alias: "maintainer", type: "string" },
-    workdir: { type: "string", default: "/", mandatory: true }
+    name: {
+      ...pkgbuild_name_attribute,
+      set: value => value.toLowerCase()
+    },
+    version: pkgbuild_version_attribute,
+    description: pkgbuild_description_attribute,
+    author: { ...string_attribute, alias: "maintainer" },
+    workdir: { ...string_attribute, default: "/", mandatory: true }
   };
 
   /**

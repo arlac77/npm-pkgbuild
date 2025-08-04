@@ -112,7 +112,7 @@ export class NodeModulesContentProvider extends ContentProvider {
         withFileTypes: true,
         exclude: entry =>
           toBeSkipped.test(entry.name) ||
-          /@types|tslib|node-addon-api|node-gyp/.test(entry.parenPath)
+          /@types|tslib|node-addon-api|node-gyp/.test(entry.parentPath)
       })) {
         const name = join(entry.parentPath, entry.name).substring(startPos);
 

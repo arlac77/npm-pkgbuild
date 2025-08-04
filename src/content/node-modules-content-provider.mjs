@@ -109,11 +109,14 @@ export class NodeModulesContentProvider extends ContentProvider {
 
       for await (const entry of glob("**/*", {
         cwd: nodeModulesDir,
-        withFileTypes: true
+        withFileTypes: true,
+        exclude: entry =>
+          toBeSkipped.test(entry.name) ||
+          /@types|tslib|node-addon-api|node-gyp/.test(entry.parenPath)
       })) {
-        if (!toBeSkipped.test(entry.name)) {
-          const name = join(entry.parentPath, entry.name).substring(startPos);
+        const name = join(entry.parentPath, entry.name).substring(startPos);
 
+        if (entry.isFile()) {
           if (entry.name === "package.json") {
             try {
               const json = shrinkNPM(
@@ -139,14 +142,12 @@ export class NodeModulesContentProvider extends ContentProvider {
             }
           }
 
-          if (entry.isFile()) {
-            yield new FileSystemEntry(name, {
-              ...this.entryProperties,
-              baseDir: nodeModulesDir
-            });
-          } else if (entry.isDirectory()) {
-            yield new CollectionEntry(name, this.directoryProperties);
-          }
+          yield new FileSystemEntry(name, {
+            ...this.entryProperties,
+            baseDir: nodeModulesDir
+          });
+        } else if (entry.isDirectory()) {
+          yield new CollectionEntry(name, this.directoryProperties);
         }
       }
     } catch (e) {
@@ -295,6 +296,6 @@ const toBeSkipped = new RegExp(
       "webpack.config.js",
       "tsconfig.build.tsbuildinfo"
     ].join("|") +
-    ")$|(npm-pkgbuild|@types|node-addon-api|mf-hosting|node-gyp$)|(win32|android|darwin)-(ia32|x64|arm|arm64)",
+    ")$|(win32|android|darwin)-(ia32|x64|arm|arm64)",
   "i"
 );

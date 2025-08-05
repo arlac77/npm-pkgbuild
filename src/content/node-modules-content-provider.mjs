@@ -114,7 +114,7 @@ export class NodeModulesContentProvider extends ContentProvider {
           const path = entry.parentPath.substring(startPos);
           const flag = toBeSkipped.test(entry.name) ||
           /@types|tslib|node-addon-api|node-gyp/.test(path);
-          console.log(path,name,flag);
+          console.log(path,entry.name,flag);
           return flag;
         }
       })) {

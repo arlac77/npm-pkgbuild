@@ -110,9 +110,13 @@ export class NodeModulesContentProvider extends ContentProvider {
       for await (const entry of glob("**/*", {
         cwd: nodeModulesDir,
         withFileTypes: true,
-        exclude: entry =>
-          toBeSkipped.test(entry.name) ||
-          /@types|tslib|node-addon-api|node-gyp/.test(entry.parentPath)
+        exclude: entry => {
+          const path = entry.parentPath.substring(startPos);
+          const flag = toBeSkipped.test(entry.name) ||
+          /@types|tslib|node-addon-api|node-gyp/.test(path);
+          console.log(path,name,flag);
+          return flag;
+        }
       })) {
         const name = join(entry.parentPath, entry.name).substring(startPos);
 

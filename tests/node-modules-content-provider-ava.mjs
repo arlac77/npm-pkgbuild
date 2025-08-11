@@ -33,7 +33,5 @@ test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
 
   const entries = await Array.fromAsync(content);
 
-  console.log(entries);
-
   t.is(entries.length, 0); // not actually filled node-modules
 });

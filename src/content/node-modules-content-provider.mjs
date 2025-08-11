@@ -109,14 +109,24 @@ export class NodeModulesContentProvider extends ContentProvider {
 
       for await (const entry of glob("**/*", {
         cwd: nodeModulesDir,
-        withFileTypes: true,
-        exclude: entry =>
+        withFileTypes: true
+        /*exclude: entry =>
           toBeSkipped.test(entry.name) ||
           /@types|tslib|node-addon-api|node-gyp/.test(
             entry.parentPath.substring(startPos)
           )
+          */
       })) {
+        if (toBeSkipped.test(entry.name)) {
+          continue;
+        }
+
         const name = join(entry.parentPath, entry.name).substring(startPos);
+
+        if (/@types|tslib|node-addon-api|node-gyp/.test(name)) {
+          console.log("SKIP", name);
+          continue;
+        }
 
         if (entry.isFile()) {
           if (entry.name === "package.json") {

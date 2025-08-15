@@ -19,7 +19,7 @@ jobs:
           - ubuntu-latest
         node-version:
           - 22.18.0
-          - 24.5.0
+          - 24.6.0
     steps:
       - name: install dependencies
         run: |

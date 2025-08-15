@@ -1,6 +1,9 @@
 const nameAndVersion = ["name", "version"];
 
-export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDefaults: false }) {
+export function shrinkNPM(
+  pkg,
+  options = { removeKeys: nameAndVersion, removeDefaults: false }
+) {
   const toBeRemoved = [
     "dependencies",
     "sideEffects",
@@ -103,9 +106,7 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDef
     "testling"
   ];
 
-  toBeRemoved.map(key => {
-    delete pkg[key];
-  });
+  toBeRemoved.map(key => delete pkg[key]);
 
   if (options?.removeKeys) {
     options.removeKeys.map(key => {
@@ -113,7 +114,7 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDef
     });
   }
 
-  if(options.removeDefaults) {
+  if (options.removeDefaults) {
     switch (pkg.main) {
       case "index":
       case "./index":
@@ -124,6 +125,8 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDef
     }
   }
 
+  deleteKey(pkg.exports, "types");
+
   for (const key of Object.keys(pkg)) {
     if (key[0] === "_") {
       delete pkg[key];
@@ -131,4 +134,16 @@ export function shrinkNPM(pkg, options = { removeKeys: nameAndVersion, removeDef
   }
 
   return Object.keys(pkg).length === 0 ? undefined : pkg;
+}
+
+function deleteKey(object, key) {
+  if (object) {
+    delete object[key];
+
+    for (const value of Object.values(object)) {
+      if (typeof value === "object" && !Array.isArray(value)) {
+        deleteKey(value, key);
+      }
+    }
+  }
 }

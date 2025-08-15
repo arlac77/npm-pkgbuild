@@ -124,7 +124,6 @@ export class NodeModulesContentProvider extends ContentProvider {
         const name = join(entry.parentPath, entry.name).substring(startPos);
 
         if (/@types|tslib|node-addon-api|node-gyp/.test(name)) {
-          console.log("SKIP", name);
           continue;
         }
 

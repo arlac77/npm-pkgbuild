@@ -99,47 +99,47 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Properties](#properties)
 *   [extractFromPackage](#extractfrompackage)
     *   [Parameters](#parameters-1)
-*   [NodeModulesContentProvider](#nodemodulescontentprovider)
+*   [NPMPackContentProvider](#npmpackcontentprovider)
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
-    *   [asyncIterator](#asynciterator)
     *   [name](#name)
-*   [FileContentProvider](#filecontentprovider)
+*   [NodeModulesContentProvider](#nodemodulescontentprovider)
     *   [Parameters](#parameters-3)
-    *   [asyncIterator](#asynciterator-1)
-    *   [name](#name-1)
-*   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-4)
-    *   [asyncIterator](#asynciterator-2)
-    *   [name](#name-2)
-*   [ContentProvider](#contentprovider)
-    *   [Parameters](#parameters-5)
     *   [Properties](#properties-2)
+    *   [asyncIterator](#asynciterator)
+    *   [name](#name-1)
+*   [FileContentProvider](#filecontentprovider)
+    *   [Parameters](#parameters-4)
+    *   [asyncIterator](#asynciterator-1)
+    *   [name](#name-2)
+*   [NFTContentProvider](#nftcontentprovider)
+    *   [Parameters](#parameters-5)
+    *   [asyncIterator](#asynciterator-2)
+    *   [name](#name-3)
+*   [ContentProvider](#contentprovider)
+    *   [Parameters](#parameters-6)
+    *   [Properties](#properties-3)
     *   [asyncIterator](#asynciterator-3)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
     *   [attributes](#attributes)
     *   [prepare](#prepare)
-        *   [Parameters](#parameters-6)
+        *   [Parameters](#parameters-7)
 *   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
 *   [attributes](#attributes-1)
 *   [quoteFile](#quotefile)
-    *   [Parameters](#parameters-7)
+    *   [Parameters](#parameters-8)
 *   [RPM](#rpm)
     *   [hookMapping](#hookmapping-1)
     *   [attributes](#attributes-2)
     *   [prepare](#prepare-1)
-        *   [Parameters](#parameters-8)
+        *   [Parameters](#parameters-9)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [attributes](#attributes-3)
     *   [prepare](#prepare-2)
-        *   [Parameters](#parameters-9)
+        *   [Parameters](#parameters-10)
 *   [BUILDAH](#buildah)
-*   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-10)
-    *   [Properties](#properties-3)
-    *   [name](#name-3)
 *   [Packager](#packager)
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
@@ -246,6 +246,26 @@ Extract package definition from package.json.
 *   `env` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** as delared in process.env (optional, default `{}`)
 
 Returns **AsyncIterable<[PackageDefinition](#packagedefinition)>**&#x20;
+
+## NPMPackContentProvider
+
+**Extends ContentProvider**
+
+Content from npm pack.
+
+### Parameters
+
+*   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
+*   `directoryProperties` &#x20;
+
+### Properties
+
+*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## NodeModulesContentProvider
 
@@ -443,26 +463,6 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 **Extends DOCKER**
 
 Use buildah @see <https://buildah.io>
-
-## NPMPackContentProvider
-
-**Extends ContentProvider**
-
-Content from npm pack.
-
-### Parameters
-
-*   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
-*   `directoryProperties` &#x20;
-
-### Properties
-
-*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-
-### name
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
 ## Packager
 

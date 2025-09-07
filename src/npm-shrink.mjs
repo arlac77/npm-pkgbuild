@@ -22,6 +22,7 @@ export function shrinkNPM(
     "pika",
     "private",
     "publishConfig",
+    "packageManager",
     "repository",
     "license",
     "licenses",

@@ -166,27 +166,29 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
         *   [Parameters](#parameters-20)
 *   [Field](#field)
     *   [Properties](#properties-4)
-*   [copyNodeModules](#copynodemodules)
+*   [deleteKey](#deletekey)
     *   [Parameters](#parameters-21)
+*   [copyNodeModules](#copynodemodules)
+    *   [Parameters](#parameters-22)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-5)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-22)
-*   [publish](#publish)
     *   [Parameters](#parameters-23)
+*   [publish](#publish)
+    *   [Parameters](#parameters-24)
 *   [utf8StreamOptions](#utf8streamoptions)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-24)
+    *   [Parameters](#parameters-25)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-6)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-25)
-*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-26)
-*   [Expander](#expander)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-27)
-*   [copyEntries](#copyentries)
+*   [Expander](#expander)
     *   [Parameters](#parameters-28)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-29)
 
 ## allInputs
 
@@ -596,6 +598,13 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 *   `default` **any**&#x20;
 *   `mandatory` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**&#x20;
+
+## deleteKey
+
+### Parameters
+
+*   `object` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `key` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ## copyNodeModules
 

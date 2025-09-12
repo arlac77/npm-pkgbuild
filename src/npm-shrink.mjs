@@ -132,6 +132,10 @@ export function shrinkNPM(
   return Object.keys(pkg).length === 0 ? undefined : pkg;
 }
 
+/**
+ * @param {object} object
+ * @param {string} key
+ */
 function deleteKey(object, key) {
   if (object) {
     delete object[key];

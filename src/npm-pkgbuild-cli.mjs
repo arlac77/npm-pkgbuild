@@ -106,7 +106,7 @@ program
             const transformer = [
               {
                 name: "skip-architecutes",
-                match: (entry) => entry.name.endsWith(".node") && entry.filename,
+                match: (entry) => (entry.name.endsWith(".node") || entry.name.endsWith(".bare")) && entry.filename,
                 async transform(entry) {                  
                   const proc = await execa("file", ["-b", entry.filename], {
                     cwd: options.dir

@@ -115,15 +115,19 @@ program
                   const proc = await execa("file", ["-b", entry.filename], {
                     cwd: options.dir
                   });
-                  let arch = proc.stdout.split(/\s*,\s*/)[1];
+                  const parts = proc.stdout.split(/\s*,\s*/);
       
-                  const archs = { "ARM aarch64" : "aarch64" };
-                  arch = archs[arch] || arch;
+                  if(!parts[4].match(/Android/i)) {
+                    let arch = parts[1];
+      
+                    const archs = { "ARM aarch64" : "aarch64" };
+                    arch = archs[arch] || arch;
 
-                  if(properties.arch.indexOf(arch) >= 0) {
-                    return entry;
+                    if(properties.arch.indexOf(arch) >= 0) {
+                      return entry;
+                    }
                   }
-
+  
                   console.log("skip", entry.filename);
                 }
               },

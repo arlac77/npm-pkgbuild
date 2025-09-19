@@ -117,7 +117,7 @@ program
                   });
                   const parts = proc.stdout.split(/\s*,\s*/);
       
-                  if(!parts[4].match(/Android/i)) {
+                  if(parts.length < 4 || (parts.length > 4 && !parts[4].match(/Android/i))) {
                     let arch = parts[1];
       
                     const archs = { "ARM aarch64" : "aarch64" };

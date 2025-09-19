@@ -104,9 +104,13 @@ program
 
             const o = new outputFactory(context.expand(properties));
             const transformer = [
+              { name: "skip-bare-modules",
+                match: entry => entry.isBlob && uc.fileNameConformsTo(entry.name, "public.bare-dynamic-link-library"),
+                async transform(entry) {}
+              },
               {
                 name: "skip-architecutes",
-                match: (entry) => (entry.name.endsWith(".node") || entry.name.endsWith(".bare")) && entry.filename,
+                match: (entry) => entry.name.endsWith(".node") && entry.filename,
                 async transform(entry) {                  
                   const proc = await execa("file", ["-b", entry.filename], {
                     cwd: options.dir
@@ -119,6 +123,8 @@ program
                   if(properties.arch.indexOf(arch) >= 0) {
                     return entry;
                   }
+
+                  console.log("skip", entry.filename);
                 }
               },
               createExpressionTransformer(

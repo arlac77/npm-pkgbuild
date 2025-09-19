@@ -102,13 +102,15 @@ export function shrinkNPM(
     "xo"
   ];
 
-  toBeRemoved.map(key => delete pkg[key]);
-
   if (options?.removeKeys) {
     options.removeKeys.map(key => {
-      delete pkg[key];
+      if (pkg.addon && key !== "name") {
+        delete pkg[key];
+      }
     });
   }
+
+  toBeRemoved.map(key => delete pkg[key]);
 
   if (options.removeDefaults) {
     switch (pkg.main) {

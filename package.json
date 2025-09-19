@@ -67,14 +67,14 @@
     "key-value-transformer": "^3.3.0",
     "npm-package-walker": "^8.0.10",
     "npm-packlist": "^10.0.1",
-    "pacc": "^4.27.0",
+    "pacc": "^4.22.0",
     "package-directory": "^8.1.0",
     "pacote": "^21.0.3",
     "tar-stream": "^3.1.7",
     "uti": "^8.10.0"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.4.1",
     "ava": "^6.4.1",
     "c8": "^10.1.3",
     "documentation": "^14.0.3",

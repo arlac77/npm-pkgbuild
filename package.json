@@ -66,7 +66,7 @@
     "iterable-string-interceptor": "^3.0.2",
     "key-value-transformer": "^3.3.0",
     "npm-package-walker": "^8.0.10",
-    "npm-packlist": "^10.0.1",
+    "npm-packlist": "^10.0.2",
     "pacc": "^4.37.4",
     "package-directory": "^8.1.0",
     "pacote": "^21.0.3",

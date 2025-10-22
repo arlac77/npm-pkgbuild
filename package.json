@@ -62,7 +62,7 @@
     "content-entry-transform": "^1.5.13",
     "execa": "^9.6.0",
     "expression-expander": "^7.2.7",
-    "ini": "^5.0.0",
+    "ini": "^6.0.0",
     "iterable-string-interceptor": "^3.0.2",
     "key-value-transformer": "^3.3.0",
     "npm-package-walker": "^8.0.10",

@@ -183,6 +183,8 @@ export class ARCH extends Packager {
       out.end();
     }
 
+    const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
+
     const self = this;
     async function* trailingLines() {
       yield `
@@ -194,6 +196,7 @@ package() {
     cp -rp $srcdir/* "$pkgdir"
 ### CHOWN ###
 
+    ${verbose}
   fi
 }
 `;

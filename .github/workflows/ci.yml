@@ -21,12 +21,6 @@ jobs:
         node-version:
           - 24.11.1
     steps:
-      - name: install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install ksh curl
-          wget https://github.com/ThePoorPilot/pacman-utils/releases/download/6.0.0-2_2.31-0/pacman-utils_6.0.0-2_amd64.deb
-          sudo apt-get install -f ./pacman-utils_6.0.0-2_amd64.deb
       - name: checkout
         uses: actions/checkout@v6.0.1
       - name: prepare node
@@ -35,6 +29,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: install
         run: npm ci
+      - name: install
+        run: npm ci
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ksh curl
+          wget https://github.com/ThePoorPilot/pacman-utils/releases/download/6.0.0-2_2.31-0/pacman-utils_6.0.0-2_amd64.deb
+          sudo apt-get install -f ./pacman-utils_6.0.0-2_amd64.deb
       - name: test and coverage
         run: npm run cover --if-present
         env:
@@ -49,8 +51,6 @@ jobs:
           path-to-lcov: build/coverage/lcov.info
           parallel: true
         continue-on-error: true
-      - name: install
-        run: npm ci
   release:
     needs:
       - test-node

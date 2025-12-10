@@ -198,6 +198,8 @@ export class Packager {
   /**
    * Prepares artifact generation.
    * @param {Object} options
+   * @param {string} [options.staging]
+   * @param {string} [options.destination]
    * @param {Object} [publishingDetail]
    * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string}>}
    */
@@ -212,7 +214,7 @@ export class Packager {
       properties: this.properties,
       destination: options.destination || tmpdir,
       tmpdir,
-      staging: tmpdir
+      staging: options.staging || tmpdir
     };
 
     // @ts-ignore

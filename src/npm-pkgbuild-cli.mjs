@@ -28,6 +28,7 @@ allInputs.forEach(i => {
 program
   .option("--verbose", "be more verbose", false)
   .option("--dry", "do not execute, only print definitions", false)
+  .option("--staging <dir>","directory where to start packaging process")
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )

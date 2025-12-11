@@ -31,10 +31,14 @@ jobs:
         run: npm ci
       - name: install dependencies
         run: |
+          if [ ! -f /usr/bin/pacman ]
+          then
           sudo apt-get update
-          sudo apt-get install ksh curl
-          wget https://github.com/ThePoorPilot/pacman-utils/releases/download/6.0.0-2_2.31-0/pacman-utils_6.0.0-2_amd64.deb
-          sudo apt-get install -f ./pacman-utils_6.0.0-2_amd64.deb
+          sudo apt-get install ksh
+          sudo apt-get -y install makepkg
+          makepkg -h
+          makepkg --version
+          fi
       - name: test and coverage
         run: npm run cover --if-present
         env:

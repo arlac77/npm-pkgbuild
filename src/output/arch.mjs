@@ -270,9 +270,14 @@ package() {
         PACKAGER = person(properties.contributors);
       }
 
+      const makePackageOptions = ["--noprogressbar", "-m", "-c", "-f", "-e"];
+      if (options.verbose) {
+        makePackageOptions.push("--log");
+      }
+
       const makepkg = await execa(
         "makepkg",
-        ["--noprogressbar", "-c", "-f", "-e"],
+        makePackageOptions,
         {
           cwd: staging,
           env: { PKGDEST: destination, PACKAGER }

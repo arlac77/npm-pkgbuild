@@ -129,7 +129,7 @@ program
                     }
                   }
   
-                  console.log("skip", entry.filename);
+                  //console.log("skip", entry.filename);
                 }
               },
               createExpressionTransformer(

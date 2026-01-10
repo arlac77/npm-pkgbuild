@@ -117,7 +117,7 @@ export async function publish(
 
   const url = publishingDetail.url + "/" + basename(artifactIdentifier);
 
-  logger(`Publishing to ${url}`);
+  logger(`-> ${url}`);
 
   switch (publishingDetail.scheme) {
     case "file:":
@@ -150,7 +150,7 @@ export async function publish(
 
       if (!response.ok) {
         throw new Error(
-          `Unable to publish to ${url}: ${response.statusText}(${response.status})`
+          `Unable to publish to ${url}: ${response.statusText}(${response.status})`, { cause: response }
         );
       }
     }

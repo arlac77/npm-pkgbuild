@@ -17,8 +17,12 @@ import pkg from "../package.json" with { type: "json" };
 program.description(pkg.description).version(pkg.version);
 
 allOutputs.forEach(o => {
-  program.option(`--${o.name}`, o.description);
-  program.option(`--no-${o.name}`, `do not ${o.description} output`);
+  for(const name of [o.name,o.alias]) {
+    if(name) {
+      program.option(`--${name}`, o.description);
+      program.option(`--no-${name}`, `do not ${o.description} output`);
+    }
+  }
 });
 
 allInputs.forEach(i => {

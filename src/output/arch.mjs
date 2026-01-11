@@ -61,12 +61,17 @@ let _prepared;
 let _architecture = "aarch64";
 
 export class ARCH extends Packager {
+
+  static get alias() {
+    return "alpm";
+  }
+
   static get name() {
     return "arch";
   }
 
   static get description() {
-    return "generate Arch-Linux package";
+    return "generate Arch-Linux package (ALPM)";
   }
 
   static get fileNameExtension() {

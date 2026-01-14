@@ -28,7 +28,7 @@ export class NFTContentProvider extends ContentProvider {
     if (typeof definitions === "string") {
       this.start = [definitions];
     } else {
-      this.start = asArray(this.definitions.start);
+      this.start = asArray(definitions.start);
     }
   }
 

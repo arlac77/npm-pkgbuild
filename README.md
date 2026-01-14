@@ -257,34 +257,12 @@ Content from npm pack.
 ### Parameters
 
 *   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
-*   `directoryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
+*   `directoryProperties` &#x20;
 
 ### Properties
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-
-### asyncIterator
-
-List all entries.
-
-Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
-
-## FileContentProvider
-
-**Extends ContentProvider**
-
-Content provided form the file system.
-
-### Parameters
-
-*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
-*   `entryProperties` &#x20;
-*   `directoryProperties` &#x20;
-
-### asyncIterator
-
-Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ### name
 
@@ -370,7 +348,6 @@ Source of package content.
 ### Properties
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-*   `transformers` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<Transformer>**&#x20;
 
 ### asyncIterator
 

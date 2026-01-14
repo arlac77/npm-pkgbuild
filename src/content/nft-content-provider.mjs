@@ -26,25 +26,22 @@ export class NFTContentProvider extends ContentProvider {
     super(definitions, entryProperties, directoryProperties);
 
     if (typeof definitions === "string") {
-      this.definitions = { start: [definitions] };
+      this.start = [definitions];
     } else {
-      this.definitions = definitions;
-      this.definitions.start = asArray(this.definitions.start);
+      this.start = asArray(this.definitions.start);
     }
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.definitions.start} -> ${this.entryProperties.destination}`;
+    return `${this.constructor.name}: ${this.start} -> ${this.entryProperties.destination}`;
   }
 
   /**
    * @return {AsyncIterable<ContentEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
-    const definitions = this.definitions;
-    const baseDir = definitions.base || process.cwd();
-
-    const { fileList } = await nodeFileTrace(definitions.start);
+    const baseDir = this.base || process.cwd();
+    const { fileList } = await nodeFileTrace(this.start);
 
     for (const name of fileList) {
       yield new FileSystemEntry(

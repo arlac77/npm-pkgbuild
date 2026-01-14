@@ -33,7 +33,6 @@ export class NPMPackContentProvider extends ContentProvider {
       entryProperties.destination += "/";
     }
     super(definitions, entryProperties, directoryProperties);
-    Object.assign(this, definitions);
   }
 
   toString() {

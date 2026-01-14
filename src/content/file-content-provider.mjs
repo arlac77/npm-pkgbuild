@@ -23,6 +23,9 @@ export class FileContentProvider extends ContentProvider {
     return "use plain files source";
   }
 
+  base;
+  pattern = DEFAULT_PATTERN;
+
   /**
    * Content provided form the file system.
    * @param {Object|string} definitions
@@ -34,43 +37,40 @@ export class FileContentProvider extends ContentProvider {
 
     if (typeof definitions === "string") {
       if (definitions.endsWith("/")) {
-        this.definitions = {
-          base: definitions.substring(0, definitions.length - 1),
-          pattern: DEFAULT_PATTERN
-        };
+        this.base = definitions.substring(0, definitions.length - 1);
+        this.pattern = DEFAULT_PATTERN;
       } else {
         const base = dirname(definitions);
-        this.definitions = {
-          base,
-          pattern: [definitions.substring(base.length + 1)]
-        };
+        this.base = base;
+        this.pattern = [definitions.substring(base.length + 1)];
       }
     } else {
-      this.definitions = { pattern: DEFAULT_PATTERN, ...definitions };
-      this.definitions.pattern = asArray(this.definitions.pattern);
+      this.base = definitions.base;
+      if(definitions.pattern) {
+        this.pattern = asArray(definitions.pattern);
+      }
     }
 
-    this.definitions.base = resolve(cwd(), this.definitions.base);
+    this.base = resolve(cwd(), this.base);
   }
 
   get isPatternMatch() {
-    return this.definitions.pattern.find(p => p.match(/[\*\?]/));
+    return this.pattern.find(p => p.match(/[\*\?]/));
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.definitions.base}, ${this.definitions.pattern} -> ${this.entryProperties?.destination}`;
+    return `${this.constructor.name}: ${this.base}, ${this.pattern} -> ${this.entryProperties?.destination}`;
   }
 
   /**
    * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
-    const definitions = this.definitions;
-    const baseDir = definitions.base;
+    const baseDir = this.base;
     const startPos = baseDir.length + 1;
 
     let count = 0;
-    for await (const entry of glob(definitions.pattern, {
+    for await (const entry of glob(this.pattern, {
       cwd: baseDir,
       withFileTypes: true
     })) {
@@ -89,7 +89,7 @@ export class FileContentProvider extends ContentProvider {
     }
 
     if (!this.isPatternMatch && count < 1) {
-      const file = join(baseDir, this.definitions.pattern[0]);
+      const file = join(baseDir, this.pattern[0]);
       const error = new Error(`File not found ${file}`);
       error.file = file;
       throw error;

@@ -6,9 +6,6 @@ import { ContentProvider } from "./content-provider.mjs";
 
 /**
  * Content provided form the file system.
- * @param {Object|string} definitions
- * @param {string|string[]} definitions.pattern
- * @param {string} definitions.base base directory where to find the files
  */
 export class NFTContentProvider extends ContentProvider {
   /**
@@ -22,6 +19,16 @@ export class NFTContentProvider extends ContentProvider {
     return "user vercels NFT as source";
   }
 
+  /**
+   * Content provided form the file system.
+   * @param {Object|string} definitions
+   * @param {string} definitions.start base directory where to find the files
+   * @param {Array<Transformer>} [definitions.transformers]
+   * @param {string} [definitions.dir]
+   * @param {Object} [entryProperties]
+   * @param {string} [entryProperties.destination]
+   * @param {Object} [directoryProperties]
+ */
   constructor(definitions, entryProperties, directoryProperties) {
     super(definitions, entryProperties, directoryProperties);
 

@@ -46,7 +46,7 @@ export class NFTContentProvider extends ContentProvider {
    * @return {AsyncIterable<ContentEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
-    const baseDir = this.base || process.cwd();
+    const baseDir = this.dir || process.cwd();
     const { fileList } = await nodeFileTrace(this.start);
 
     for (const name of fileList) {

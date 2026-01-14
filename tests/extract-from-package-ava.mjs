@@ -171,14 +171,14 @@ test(
       sources: [
         new FileContentProvider(
           {
-            base: new URL("../build/efpt-n2", import.meta.url).pathname,
+            dir: new URL("../build/efpt-n2", import.meta.url).pathname,
             pattern: ["*"]
           },
           { destination: "/service/myservice" }
         ),
         new FileContentProvider(
           {
-            base: new URL("../build/efpt-n2/pkg", import.meta.url).pathname,
+            dir: new URL("../build/efpt-n2/pkg", import.meta.url).pathname,
             pattern: ["myconfig.json"]
           },
           { destination: "/etc/myconfig.json" }
@@ -381,7 +381,7 @@ function expected(properties) {
     sources: [
       new FileContentProvider(
         {
-          base: new URL(
+          dir: new URL(
             "../build/efpt-konsum-frontend/node_modules/hosting",
             import.meta.url
           ).pathname,
@@ -398,14 +398,14 @@ function expected(properties) {
       ),
       new FileContentProvider(
         {
-          base: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
+          dir: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
             .pathname
         },
         { destination: "/services/konsum/frontend/" }
       ),
       new FileContentProvider(
         {
-          base: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
+          dir: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
             .pathname
         },
         { destination: "/services/konsum/frontend/" }
@@ -413,7 +413,7 @@ function expected(properties) {
       new FileContentProvider(
         {
           name: "pkgbuild/nginx.conf",
-          base: new URL("../build/efpt-konsum-frontend", import.meta.url)
+          dir: new URL("../build/efpt-konsum-frontend", import.meta.url)
             .pathname
         },
         {
@@ -439,10 +439,10 @@ test(
             type: "npm-pack"
           },
           {
-            base: "build"
+            dir: "build"
           },
           {
-            base: "dist"
+            dir: "dist"
           }
         ],
         "/etc/nginx/sites/common/${name}.conf": {

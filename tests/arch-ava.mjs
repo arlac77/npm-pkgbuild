@@ -65,7 +65,7 @@ test("arch", async t => {
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider(
       {
-        base: new URL(source, import.meta.url).pathname
+        dir: new URL(source, import.meta.url).pathname
       },
       { group: "wheel", perm: 0o666 }
     )[Symbol.asyncIterator]()

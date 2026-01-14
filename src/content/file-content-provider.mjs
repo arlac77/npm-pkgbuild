@@ -23,35 +23,34 @@ export class FileContentProvider extends ContentProvider {
     return "use plain files source";
   }
 
-  base;
   pattern = DEFAULT_PATTERN;
 
   /**
    * Content provided form the file system.
    * @param {Object|string} definitions
    * @param {string|string[]} [definitions.pattern]
-   * @param {string} [definitions.base] base directory where to find the files
+   * @param {string} [definitions.dir] base directory where to find the files
    */
   constructor(definitions, entryProperties, directoryProperties) {
     super(definitions, entryProperties, directoryProperties);
 
     if (typeof definitions === "string") {
       if (definitions.endsWith("/")) {
-        this.base = definitions.substring(0, definitions.length - 1);
+        this.dir = definitions.substring(0, definitions.length - 1);
         this.pattern = DEFAULT_PATTERN;
       } else {
-        const base = dirname(definitions);
-        this.base = base;
-        this.pattern = [definitions.substring(base.length + 1)];
+        const dir = dirname(definitions);
+        this.dir = dir;
+        this.pattern = [definitions.substring(dir.length + 1)];
       }
     } else {
-      this.base = definitions.base;
+      this.dir = definitions.dir;
       if (definitions.pattern) {
         this.pattern = asArray(definitions.pattern);
       }
     }
 
-    this.base = resolve(cwd(), this.base);
+    this.dir = resolve(cwd(), this.dir);
   }
 
   get isPatternMatch() {
@@ -59,14 +58,14 @@ export class FileContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.base}, ${this.pattern} -> ${this.entryProperties?.destination}`;
+    return `${this.constructor.name}: ${this.dir}, ${this.pattern} -> ${this.entryProperties?.destination}`;
   }
 
   /**
    * @return {AsyncIterable<ContentEntry|CollectionEntry>} all entries
    */
   async *[Symbol.asyncIterator]() {
-    const baseDir = this.base;
+    const baseDir = this.dir;
     const startPos = baseDir.length + 1;
 
     let count = 0;

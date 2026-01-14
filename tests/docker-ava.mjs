@@ -15,7 +15,7 @@ test("docker", async t => {
 
   const sources = ["fixtures/content"].map(source =>
     new FileContentProvider({
-      base: new URL(source, import.meta.url).pathname
+      dir: new URL(source, import.meta.url).pathname
     })[Symbol.asyncIterator]()
   );
 

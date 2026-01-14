@@ -90,8 +90,8 @@ function* content2Sources(content, dir) {
       } else {
         switch (typeof definition) {
           case "object":
-            definition.base = definition.base
-              ? join(dir, definition.base)
+            definition.dir = definition.dir
+              ? join(dir, definition.dir)
               : dir;
             break;
           case "string":

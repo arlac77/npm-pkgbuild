@@ -32,7 +32,7 @@ async function preparePacker(sourceDirs = [], dependencies = {}, props) {
 
   const sources = sourceDirs.map(source =>
     new FileContentProvider({
-      base: new URL(source, import.meta.url).pathname
+      dir: new URL(source, import.meta.url).pathname
     })[Symbol.asyncIterator]()
   );
 

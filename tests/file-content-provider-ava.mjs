@@ -66,7 +66,7 @@ test(
 test(
   fcpt,
   {
-    base: new URL("fixtures/skeleton", import.meta.url).pathname
+    dir: new URL("fixtures/skeleton", import.meta.url).pathname
   },
   "dest",
   [{ name: "package.json", mode: 0o100644, destination: "dest" }]
@@ -75,7 +75,7 @@ test(
 test(
   fcpt,
   {
-    base: new URL("fixtures/skeleton", import.meta.url).pathname,
+    dir: new URL("fixtures/skeleton", import.meta.url).pathname,
     pattern: "**/*.json"
   },
   "dest",
@@ -85,7 +85,7 @@ test(
 test(
   fcpt,
   {
-    base: new URL("fixtures/skeleton", import.meta.url).pathname,
+    dir: new URL("fixtures/skeleton", import.meta.url).pathname,
     pattern: "**/*.txt"
   },
   "dest",

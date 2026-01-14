@@ -92,15 +92,15 @@ program
               ...[...options.content, ...options.meta]
                 .filter(x => x)
                 .map(source => {
-                  let [destination, base] = source.split(/:/);
-                  if (!base) {
+                  let [destination, dir] = source.split(/:/);
+                  if (!dir) {
                     destination = "/";
-                    base = source;
+                    dir = source;
                   }
 
                   return new FileContentProvider(
                     {
-                      base
+                      dir
                     },
                     { destination }
                   );

@@ -47,7 +47,7 @@ test("copyEntries destination base dir", async t => {
 
 test("copyEntries plain", async t => {
   const files = new FileContentProvider({
-    base: new URL("fixtures/content", import.meta.url).pathname
+    dir: new URL("fixtures/content", import.meta.url).pathname
   });
 
   const tmp = await mkdtemp(join(tmpdir(), "copy-"));
@@ -63,7 +63,7 @@ test("copyEntries plain", async t => {
 
 test("copyEntries with transform", async t => {
   const files = new FileContentProvider({
-    base: new URL("fixtures/content", import.meta.url).pathname
+    dir: new URL("fixtures/content", import.meta.url).pathname
   });
 
   function* kv(k, v) {

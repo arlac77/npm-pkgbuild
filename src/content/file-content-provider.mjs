@@ -10,9 +10,6 @@ const DEFAULT_PATTERN = ["**/*", "!.*"];
 
 /**
  * Content provided form the file system.
- * @param {Object|string} definitions
- * @param {string|string[]} definitions.pattern
- * @param {string} definitions.base base directory where to find the files
  */
 export class FileContentProvider extends ContentProvider {
   /**
@@ -26,6 +23,12 @@ export class FileContentProvider extends ContentProvider {
     return "use plain files source";
   }
 
+  /**
+   * Content provided form the file system.
+   * @param {Object|string} definitions
+   * @param {string|string[]} [definitions.pattern]
+   * @param {string} [definitions.base] base directory where to find the files
+   */
   constructor(definitions, entryProperties, directoryProperties) {
     super(definitions, entryProperties, directoryProperties);
 

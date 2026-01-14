@@ -11,6 +11,12 @@ export class ContentProvider {
   directoryProperties;
   dir;
 
+  /**
+   * 
+   * @param {Object} definitions 
+   * @param {Object} [entryProperties]
+   * @param {Object} [directoryProperties]
+   */
   constructor(definitions, entryProperties, directoryProperties) {
     this.entryProperties = entryProperties;
     this.directoryProperties = directoryProperties;

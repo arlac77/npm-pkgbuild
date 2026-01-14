@@ -3,10 +3,8 @@ import { ContentEntry, CollectionEntry } from "content-entry";
 /**
  * Source of package content.
  * @property {string} dir
- * @property {Transformer[]} transformers
  */
 export class ContentProvider {
-  transformers;
   entryProperties;
   directoryProperties;
   dir;
@@ -14,14 +12,12 @@ export class ContentProvider {
   /**
    * 
    * @param {Object} definitions 
-   * @param {Array<Transformer>} [definitions.transformers]
    * @param {string} [definitions.dir]
    * @param {Object} [entryProperties]
    * @param {string} [entryProperties.destination]
    * @param {Object} [directoryProperties]
    */
   constructor(definitions, entryProperties, directoryProperties) {
-    this.transformers = definitions.transformers || [];
     this.dir = definitions.dir;
     this.entryProperties = entryProperties;
     this.directoryProperties = directoryProperties;

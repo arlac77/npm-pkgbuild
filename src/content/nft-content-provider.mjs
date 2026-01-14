@@ -23,7 +23,6 @@ export class NFTContentProvider extends ContentProvider {
    * Content provided form the file system.
    * @param {Object|string} definitions
    * @param {string} definitions.start base directory where to find the files
-   * @param {Array<Transformer>} [definitions.transformers]
    * @param {string} [definitions.dir]
    * @param {Object} [entryProperties]
    * @param {string} [entryProperties.destination]

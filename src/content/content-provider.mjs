@@ -17,7 +17,7 @@ export class ContentProvider {
    * @param {Array<Transformer>} [definitions.transformers]
    * @param {string} [definitions.dir]
    * @param {Object} [entryProperties]
-   * @param {Objstringect} [entryProperties.destination]
+   * @param {string} [entryProperties.destination]
    * @param {Object} [directoryProperties]
    */
   constructor(definitions, entryProperties, directoryProperties) {

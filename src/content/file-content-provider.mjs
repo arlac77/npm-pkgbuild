@@ -46,7 +46,7 @@ export class FileContentProvider extends ContentProvider {
       }
     } else {
       this.base = definitions.base;
-      if(definitions.pattern) {
+      if (definitions.pattern) {
         this.pattern = asArray(definitions.pattern);
       }
     }
@@ -90,9 +90,7 @@ export class FileContentProvider extends ContentProvider {
 
     if (!this.isPatternMatch && count < 1) {
       const file = join(baseDir, this.pattern[0]);
-      const error = new Error(`File not found ${file}`);
-      error.file = file;
-      throw error;
+      throw new Error(`File not found ${file}`, { cause: file });
     }
   }
 }

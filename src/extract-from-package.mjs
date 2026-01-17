@@ -90,9 +90,7 @@ function* content2Sources(content, dir) {
       } else {
         switch (typeof definition) {
           case "object":
-            definition.dir = definition.dir
-              ? join(dir, definition.dir)
-              : dir;
+            definition.dir = definition.dir ? join(dir, definition.dir) : dir;
             break;
           case "string":
             definition = join(dir, definition);
@@ -136,159 +134,166 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
   const packages = new Map();
 
-  await packageWalker(async (packageContent, dir, modulePath) => {
-    let i = 0;
+  await packageWalker(
+    async (packageContent, dir, modulePath) => {
+      let i = 0;
 
-    packages.set(packageContent.name, packageContent.version);
+      packages.set(packageContent.name, packageContent.version);
 
-    for (const pkgbuild of asArray(packageContent.pkgbuild)) {
-      if (modulePath.length > 0 && !pkgbuild.variant) {
-        continue;
-      }
-
-      let name = `${packageContent.name}[${i++}]`;
-
-      const fragment = {
-        dir,
-        name,
-        priority: 1,
-        dependencies: packageContent.engines || {},
-        arch: new Set(),
-        restrictArch: new Set()
-      };
-
-      const requires = pkgbuild.requires;
-
-      if (requires) {
-        fragment.requires = requires;
-        delete pkgbuild.requires;
-
-        let fullfilled = true;
-
-        if (requires.properties) {
-          for (const [k, v] of Object.entries(requires.properties)) {
-            if (root?.properties[k] !== v && options[k] !== v) {
-              fullfilled = false;
-              break;
-            }
-
-            fragment.priority += 1;
-          }
-        }
-
-        if (requires.environment) {
-          if (env[requires.environment.has] === undefined) {
-            fullfilled = false;
-          }
-          fragment.priority += 10;
-        }
-
-        if (fullfilled) {
-          if (options.verbose) {
-            console.log(`${name}: requirement fullfilled`, requires);
-          }
-        } else {
-          if (options.verbose) {
-            console.log(`${name}: requirement not fullfilled`, requires);
-          }
+      for (const pkgbuild of asArray(packageContent.pkgbuild)) {
+        if (modulePath.length > 0 && !pkgbuild.variant) {
           continue;
         }
-      } else {
-        if (options.verbose) {
-          console.log(`${name}: load`);
-        }
-      }
 
-      if (packageContent.cpu) {
-        for (const a of asArray(packageContent.cpu)) {
-          fragment.arch.add(npmArchMapping[a]);
-        }
-      }
+        let name = `${packageContent.name}[${i++}]`;
 
-      if (pkgbuild.arch) {
-        for (const a of asArray(pkgbuild.arch)) {
-          if (modulePath.length === 0) {
-            fragment.arch.add(a);
+        const fragment = {
+          dir,
+          name,
+          priority: 1,
+          dependencies: packageContent.engines || {},
+          replaces: {},
+          arch: new Set(),
+          restrictArch: new Set()
+        };
+
+        const requires = pkgbuild.requires;
+
+        if (requires) {
+          fragment.requires = requires;
+          delete pkgbuild.requires;
+
+          let fullfilled = true;
+
+          if (requires.properties) {
+            for (const [k, v] of Object.entries(requires.properties)) {
+              if (root?.properties[k] !== v && options[k] !== v) {
+                fullfilled = false;
+                break;
+              }
+
+              fragment.priority += 1;
+            }
+          }
+
+          if (requires.environment) {
+            if (env[requires.environment.has] === undefined) {
+              fullfilled = false;
+            }
+            fragment.priority += 10;
+          }
+
+          if (fullfilled) {
+            if (options.verbose) {
+              console.log(`${name}: requirement fullfilled`, requires);
+            }
           } else {
-            fragment.restrictArch.add(a);
+            if (options.verbose) {
+              console.log(`${name}: requirement not fullfilled`, requires);
+            }
+            continue;
           }
-        }
-        delete pkgbuild.arch;
-      }
-
-      for (const k of ["hooks"]) {
-        if (pkgbuild[k]) {
-          pkgbuild[k] = resolve(dir, pkgbuild[k]);
-        }
-      }
-
-      for (const k of ["output", "content", "dependencies"]) {
-        if (pkgbuild[k]) {
-          fragment[k] = pkgbuild[k];
-          delete pkgbuild[k];
-        }
-      }
-
-      const properties = {};
-
-      if (modulePath.length >= 1) {
-        fragment.parent =
-          modulePath.length === 1 ? parent : modulePath[modulePath.length - 2];
-      } else {
-        properties.access = packageContent?.publishConfig?.access || "private";
-
-        Object.assign(
-          properties,
-          packageContent.config,
-          Object.fromEntries(
-            ["name", "version", "description", "homepage", "license"]
-              .map(key => [key, packageContent[key]])
-              .filter(([k, v]) => v !== undefined)
-          )
-        );
-
-        if (properties.name) {
-          properties.name = properties.name.replace(/^\@[^\/]+\//, "");
-        }
-
-        if (packageContent.bugs?.url) {
-          properties.bugs = packageContent.bugs.url;
-        }
-
-        if (packageContent.bin) {
-          properties.entrypoints = packageContent.bin;
-        }
-
-        if (packageContent.contributors) {
-          properties.maintainer = packageContent.contributors.map(
-            c => c.name + (c.email ? ` <${c.email}>` : "")
-          );
-        }
-
-        if (typeof packageContent.repository === "string") {
-          properties.source = packageContent.repository;
         } else {
-          if (packageContent.repository?.url) {
-            properties.source = packageContent.repository.url;
+          if (options.verbose) {
+            console.log(`${name}: load`);
           }
         }
+
+        if (packageContent.cpu) {
+          for (const a of asArray(packageContent.cpu)) {
+            fragment.arch.add(npmArchMapping[a]);
+          }
+        }
+
+        if (pkgbuild.arch) {
+          for (const a of asArray(pkgbuild.arch)) {
+            if (modulePath.length === 0) {
+              fragment.arch.add(a);
+            } else {
+              fragment.restrictArch.add(a);
+            }
+          }
+          delete pkgbuild.arch;
+        }
+
+        for (const k of ["hooks"]) {
+          if (pkgbuild[k]) {
+            pkgbuild[k] = resolve(dir, pkgbuild[k]);
+          }
+        }
+
+        for (const k of ["output", "content", "dependencies", "replaces"]) {
+          if (pkgbuild[k]) {
+            fragment[k] = pkgbuild[k];
+            delete pkgbuild[k];
+          }
+        }
+
+        const properties = {};
+
+        if (modulePath.length >= 1) {
+          fragment.parent =
+            modulePath.length === 1
+              ? parent
+              : modulePath[modulePath.length - 2];
+        } else {
+          properties.access =
+            packageContent?.publishConfig?.access || "private";
+
+          Object.assign(
+            properties,
+            packageContent.config,
+            Object.fromEntries(
+              ["name", "version", "description", "homepage", "license"]
+                .map(key => [key, packageContent[key]])
+                .filter(([k, v]) => v !== undefined)
+            )
+          );
+
+          if (properties.name) {
+            properties.name = properties.name.replace(/^\@[^\/]+\//, "");
+          }
+
+          if (packageContent.bugs?.url) {
+            properties.bugs = packageContent.bugs.url;
+          }
+
+          if (packageContent.bin) {
+            properties.entrypoints = packageContent.bin;
+          }
+
+          if (packageContent.contributors) {
+            properties.maintainer = packageContent.contributors.map(
+              c => c.name + (c.email ? ` <${c.email}>` : "")
+            );
+          }
+
+          if (typeof packageContent.repository === "string") {
+            properties.source = packageContent.repository;
+          } else {
+            if (packageContent.repository?.url) {
+              properties.source = packageContent.repository.url;
+            }
+          }
+        }
+
+        fragment.properties = Object.assign(properties, pkgbuild);
+        fragments[fragment.name] = fragment;
+
+        if (pkgbuild.variant) {
+          variants[pkgbuild.variant] = fragment;
+        }
+
+        if (modulePath.length === 0) {
+          root = fragment;
+        }
+        parent = fragment.name;
       }
 
-      fragment.properties = Object.assign(properties, pkgbuild);
-      fragments[fragment.name] = fragment;
-
-      if (pkgbuild.variant) {
-        variants[pkgbuild.variant] = fragment;
-      }
-
-      if (modulePath.length === 0) {
-        root = fragment;
-      }
-      parent = fragment.name;
-    }
-
-    return true;
-  }, await packageDirectory({ cwd: options.dir }));
+      return true;
+    },
+    await packageDirectory({ cwd: options.dir })
+  );
 
   if (root && Object.keys(variants).length === 0) {
     // @ts-ignore
@@ -301,6 +306,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
     let arch = variant.arch;
     let properties = {};
     let dependencies = {};
+    let replaces = {};
     const output = {};
     const content = [];
 
@@ -332,6 +338,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         arch = new Set([...arch, ...fragment.arch]);
         properties = { ...fragment.properties, ...properties };
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
+        replaces = mergeDependencies(replaces, fragment.replaces);
         Object.assign(output, fragment.output);
         for (const def of Object.values(output)) {
           if (def.content && !def.dir) {
@@ -349,6 +356,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
     // @ts-ignore
     Object.assign(properties, root.properties);
     delete properties.dependencies;
+    delete properties.replaces;
 
     properties.variant = name;
 
@@ -357,6 +365,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       content,
       output,
       dependencies,
+      replaces,
       properties
     };
 
@@ -388,7 +397,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
           dependencies: mergeDependencies(
             result.dependencies,
             output.dependencies
-          )
+          ),
+          replaces: mergeDependencies(result.replaces, output.replaces)
         };
 
         const context = createContext({ properties });

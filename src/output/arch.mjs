@@ -15,7 +15,8 @@ import {
   Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
-  pkgbuild_name_attribute
+  pkgbuild_name_attribute,
+  dependency_attribute_collection_writable
 } from "./packager.mjs";
 import {
   copyEntries,
@@ -111,13 +112,13 @@ export class ARCH extends Packager {
     groups: string_collection_attribute_writable,
     arch: { ...string_collection_attribute_writable, default: ["any"], mandatory: true },
     backup: string_collection_attribute_writable,
-    depends: string_collection_attribute_writable,
-    makedepends: default_attribute,
-    checkdepends: default_attribute,
-    optdepends: default_attribute,
-    conflicts: default_attribute,
-    provides: default_attribute,
-    replaces: default_attribute,
+    depends: dependency_attribute_collection_writable,
+    makedepends: dependency_attribute_collection_writable,
+    checkdepends: dependency_attribute_collection_writable,
+    optdepends: dependency_attribute_collection_writable,
+    conflicts: dependency_attribute_collection_writable,
+    provides: dependency_attribute_collection_writable,
+    replaces: dependency_attribute_collection_writable,
     options: default_attribute
   };
 

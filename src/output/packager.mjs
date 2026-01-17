@@ -268,6 +268,13 @@ export const pkgbuild_name_attribute = {
   pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 
+export const dependency_attribute_collection_writable = {
+  ...string_attribute,
+  writable: true,
+  collection: true,
+  pattern: /^[a-z_][a-z0-9_\-]*$/i
+};
+
 export const pkgbuild_version_attribute = {
   ...version_attribute_writable,
   alias: "version",

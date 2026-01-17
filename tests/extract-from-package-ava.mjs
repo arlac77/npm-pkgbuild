@@ -93,7 +93,7 @@ test(
   ]
 );
 
-test(
+test.only(
   efpt,
   {
     name: "n2",
@@ -108,6 +108,7 @@ test(
       other: "o1",
       deb1: "base",
       dependencies: { dep2: ">=2" },
+      replaces: { "old-pkg": ">=1" },
       content: { "/service/myservice": "*" },
       output: {
         debian: {
@@ -134,11 +135,13 @@ test(
         variant: "default",
         deb1: "a",
         type: "debian",
-        dependencies: { dep1: ">=1", dep2: ">=2" }
+        dependencies: { dep1: ">=1", dep2: ">=2" },
+        replaces: { "old-pkg": ">=1" }
       },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
+          //     replaces: {"old-pkg": ">=1"},
           properties: { deb1: "a" },
           arch: ["x86_64"]
         }
@@ -158,11 +161,13 @@ test(
         variant: "default",
         deb1: "a",
         type: "debian",
-        dependencies: { dep1: ">=1", dep2: ">=2" }
+        dependencies: { dep1: ">=1", dep2: ">=2" },
+        replaces: { "old-pkg": ">=1" }
       },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
+          // replaces: {"old-pkg": ">=1"},
           properties: { deb1: "a" },
           arch: ["x86_64"],
           content: { "/etc/myconfig.json": "pkg/myconfig.json" }

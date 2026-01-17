@@ -108,11 +108,12 @@ test.only(
       other: "o1",
       deb1: "base",
       dependencies: { dep2: ">=2" },
-      replaces: { "old-pkg": ">=1" },
+      replaces: { "old-dep2": ">=2.2" },
       content: { "/service/myservice": "*" },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
+          replaces: { "old-dep1": ">=1.1" },
           properties: { deb1: "a" },
           arch: ["x86_64"],
           content: { "/etc/myconfig.json": "pkg/myconfig.json" }
@@ -136,12 +137,11 @@ test.only(
         deb1: "a",
         type: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
-        replaces: { "old-pkg": ">=1" }
+        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" }
       },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
-          //     replaces: {"old-pkg": ">=1"},
           properties: { deb1: "a" },
           arch: ["x86_64"]
         }
@@ -162,12 +162,11 @@ test.only(
         deb1: "a",
         type: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
-        replaces: { "old-pkg": ">=1" }
+        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" }
       },
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
-          // replaces: {"old-pkg": ">=1"},
           properties: { deb1: "a" },
           arch: ["x86_64"],
           content: { "/etc/myconfig.json": "pkg/myconfig.json" }

@@ -15,11 +15,12 @@ export function filterOutUnwantedDependencies() {
 }
 
 export function normalizeExpression(e) {
-  e = e.replace(/\-([\w\d]+)$/, "");
-  if (e.match(/^\d+/)) {
-    return `>=${e}`;
+  if(typeof e === 'string') {
+    e = e.replace(/\-([\w\d]+)$/, "");
+    if (e.match(/^\d+/)) {
+      return `>=${e}`;
+    }
   }
-
   return e;
 }
 

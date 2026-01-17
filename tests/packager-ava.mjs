@@ -48,11 +48,12 @@ test("makeDepends", t => {
   t.deepEqual(out.makeDepends([]), []);
   t.deepEqual(out.makeDepends(), []);
 
-  t.deepEqual(out.makeDepends({ a: "=1.2.3", b: "", c: undefined, d: ">=1" }), [
+  t.deepEqual(out.makeDepends({ a: "=1.2.3", b: "", c: undefined, d: ">=1", "e": true }), [
     "a=1.2.3",
     "b",
     "c",
-    "d>=1"
+    "d>=1",
+    "e"
   ]);
   t.deepEqual(out.makeDepends(["a=1.2.3", "b"]), ["a=1.2.3", "b"]);
 });

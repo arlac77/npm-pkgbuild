@@ -120,8 +120,15 @@ export class Packager {
     }
   }
 
+  /**
+   * forms an expression string form name and expression.
+   * If tere is no valid exression name only is delivered.
+   * @param {string} name 
+   * @param {string|boolean|undefined} expression 
+   * @returns {string}
+   */
   dependencyExpression(name, expression) {
-    return expression ? `${name}${expression}` : name;
+    return typeof expression === 'string' ? `${name}${expression}` : name;
   }
 
   makeDepends(dependencies) {

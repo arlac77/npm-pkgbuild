@@ -264,7 +264,8 @@ export class Packager {
 export const pkgbuild_name_attribute = {
   ...string_attribute,
   alias: "name",
-  mandatory: true
+  mandatory: true,
+  pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 
 export const pkgbuild_version_attribute = {

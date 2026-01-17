@@ -143,51 +143,55 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
         *   [Parameters](#parameters-12)
+    *   [dependencyExpression](#dependencyexpression)
+        *   [Parameters](#parameters-13)
     *   [tmpdir](#tmpdir)
     *   [prepare](#prepare-3)
-        *   [Parameters](#parameters-13)
-    *   [create](#create)
         *   [Parameters](#parameters-14)
+    *   [create](#create)
+        *   [Parameters](#parameters-15)
     *   [workspaceLayout](#workspacelayout)
     *   [prepare](#prepare-4)
-        *   [Parameters](#parameters-15)
+        *   [Parameters](#parameters-16)
 *   [Packager](#packager-1)
-    *   [Parameters](#parameters-16)
+    *   [Parameters](#parameters-17)
     *   [packageName](#packagename-1)
-        *   [Parameters](#parameters-17)
+        *   [Parameters](#parameters-18)
+    *   [dependencyExpression](#dependencyexpression-1)
+        *   [Parameters](#parameters-19)
     *   [tmpdir](#tmpdir-1)
     *   [prepare](#prepare-5)
-        *   [Parameters](#parameters-18)
+        *   [Parameters](#parameters-20)
     *   [create](#create-1)
-        *   [Parameters](#parameters-19)
+        *   [Parameters](#parameters-21)
     *   [workspaceLayout](#workspacelayout-1)
     *   [prepare](#prepare-6)
-        *   [Parameters](#parameters-20)
+        *   [Parameters](#parameters-22)
 *   [Field](#field)
     *   [Properties](#properties-4)
 *   [deleteKey](#deletekey)
-    *   [Parameters](#parameters-21)
+    *   [Parameters](#parameters-23)
 *   [copyNodeModules](#copynodemodules)
-    *   [Parameters](#parameters-22)
+    *   [Parameters](#parameters-24)
 *   [PublishingDetail](#publishingdetail)
     *   [Properties](#properties-5)
 *   [createPublishingDetails](#createpublishingdetails)
-    *   [Parameters](#parameters-23)
+    *   [Parameters](#parameters-25)
 *   [publish](#publish)
-    *   [Parameters](#parameters-24)
+    *   [Parameters](#parameters-26)
 *   [utf8StreamOptions](#utf8streamoptions)
 *   [decodePassword](#decodepassword)
-    *   [Parameters](#parameters-25)
+    *   [Parameters](#parameters-27)
 *   [FunctionDecl](#functiondecl)
     *   [Properties](#properties-6)
 *   [extractFunctions](#extractfunctions)
-    *   [Parameters](#parameters-26)
-*   [fieldProvider](#fieldprovider)
-    *   [Parameters](#parameters-27)
-*   [Expander](#expander)
     *   [Parameters](#parameters-28)
-*   [copyEntries](#copyentries)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-29)
+*   [Expander](#expander)
+    *   [Parameters](#parameters-30)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-31)
 
 ## allInputs
 
@@ -474,6 +478,18 @@ What is the package name in the package eco-system.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
 
+### dependencyExpression
+
+forms an expression string form name and expression.
+If tere is no valid exression name only is delivered.
+
+#### Parameters
+
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `expression` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))**&#x20;
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
 ### tmpdir
 
 Create tmp directory.
@@ -538,6 +554,18 @@ What is the package name in the package eco-system.
 *   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
+
+### dependencyExpression
+
+forms an expression string form name and expression.
+If tere is no valid exression name only is delivered.
+
+#### Parameters
+
+*   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+*   `expression` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))**&#x20;
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 ### tmpdir
 

@@ -28,8 +28,8 @@ export class FileContentProvider extends ContentProvider {
   /**
    * Content provided form the file system.
    * @param {Object|string} definitions
-   * @param {string|string[]} [definitions.pattern]
    * @param {string} [definitions.dir] base directory where to find the files
+   * @param {string|string[]} [definitions.pattern]
    */
   constructor(definitions, entryProperties, directoryProperties) {
     super(definitions, entryProperties, directoryProperties);

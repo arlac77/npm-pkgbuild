@@ -212,7 +212,6 @@ package() {
       properties.backup = properties.backup.replace(/\//, "");
     }
 
-    console.log(properties);
     const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({

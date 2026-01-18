@@ -98,47 +98,47 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Properties](#properties)
 *   [extractFromPackage](#extractfrompackage)
     *   [Parameters](#parameters-1)
-*   [BUILDAH](#buildah)
-*   [ContentProvider](#contentprovider)
+*   [NPMPackContentProvider](#npmpackcontentprovider)
     *   [Parameters](#parameters-2)
     *   [Properties](#properties-1)
-    *   [asyncIterator](#asynciterator)
-*   [FileContentProvider](#filecontentprovider)
-    *   [Parameters](#parameters-3)
-    *   [asyncIterator](#asynciterator-1)
     *   [name](#name)
 *   [NodeModulesContentProvider](#nodemodulescontentprovider)
-    *   [Parameters](#parameters-4)
+    *   [Parameters](#parameters-3)
     *   [Properties](#properties-2)
-    *   [asyncIterator](#asynciterator-2)
+    *   [asyncIterator](#asynciterator)
     *   [name](#name-1)
-*   [NPMPackContentProvider](#npmpackcontentprovider)
-    *   [Parameters](#parameters-5)
-    *   [Properties](#properties-3)
+*   [FileContentProvider](#filecontentprovider)
+    *   [Parameters](#parameters-4)
+    *   [asyncIterator](#asynciterator-1)
     *   [name](#name-2)
 *   [NFTContentProvider](#nftcontentprovider)
-    *   [Parameters](#parameters-6)
-    *   [asyncIterator](#asynciterator-3)
+    *   [Parameters](#parameters-5)
+    *   [asyncIterator](#asynciterator-2)
     *   [name](#name-3)
+*   [ContentProvider](#contentprovider)
+    *   [Parameters](#parameters-6)
+    *   [Properties](#properties-3)
+    *   [asyncIterator](#asynciterator-3)
 *   [DEBIAN](#debian)
     *   [hookMapping](#hookmapping)
     *   [attributes](#attributes)
     *   [prepare](#prepare)
         *   [Parameters](#parameters-7)
+*   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
+*   [attributes](#attributes-1)
 *   [quoteFile](#quotefile)
     *   [Parameters](#parameters-8)
 *   [RPM](#rpm)
     *   [hookMapping](#hookmapping-1)
-    *   [attributes](#attributes-1)
+    *   [attributes](#attributes-2)
     *   [prepare](#prepare-1)
         *   [Parameters](#parameters-9)
-*   [pkgKeyValuePairOptions](#pkgkeyvaluepairoptions)
-*   [attributes](#attributes-2)
 *   [OCI](#oci)
 *   [DOCKER](#docker)
     *   [attributes](#attributes-3)
     *   [prepare](#prepare-2)
         *   [Parameters](#parameters-10)
+*   [BUILDAH](#buildah)
 *   [Packager](#packager)
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
@@ -226,6 +226,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   `properties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** values describing the package attributes
 
     *   `properties.dependencies` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+    *   `properties.replaces` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+    *   `properties.conficts` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 *   `sources` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[ContentProvider](#contentprovider)>** content providers
 *   `output` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** package type
 *   `variant` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** identifier of the variant
@@ -252,47 +254,21 @@ Extract package definition from package.json.
 
 Returns **AsyncIterable<[PackageDefinition](#packagedefinition)>**&#x20;
 
-## BUILDAH
+## NPMPackContentProvider
 
-**Extends DOCKER**
+**Extends ContentProvider**
 
-Use buildah @see <https://buildah.io>
-
-## ContentProvider
-
-Source of package content.
+Content from npm pack.
 
 ### Parameters
 
 *   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
-*   `directoryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
+*   `directoryProperties` &#x20;
 
 ### Properties
 
 *   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
-
-### asyncIterator
-
-List all entries.
-
-Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
-
-## FileContentProvider
-
-**Extends ContentProvider**
-
-Content provided form the file system.
-
-### Parameters
-
-*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
-*   `entryProperties` &#x20;
-*   `directoryProperties` &#x20;
-
-### asyncIterator
-
-Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ### name
 
@@ -325,21 +301,21 @@ Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
 
-## NPMPackContentProvider
+## FileContentProvider
 
 **Extends ContentProvider**
 
-Content from npm pack.
+Content provided form the file system.
 
 ### Parameters
 
-*   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** to be set for each entry
+*   `definitions` **([Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object) | [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String))**&#x20;
+*   `entryProperties` &#x20;
 *   `directoryProperties` &#x20;
 
-### Properties
+### asyncIterator
 
-*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ### name
 
@@ -364,6 +340,26 @@ Returns **AsyncIterable\<ContentEntry>** all entries
 ### name
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the content provider
+
+## ContentProvider
+
+Source of package content.
+
+### Parameters
+
+*   `definitions` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `entryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+*   `directoryProperties` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?**&#x20;
+
+### Properties
+
+*   `dir` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
+
+### asyncIterator
+
+List all entries.
+
+Returns **AsyncIterable<(ContentEntry | CollectionEntry)>** all entries
 
 ## DEBIAN
 
@@ -390,6 +386,15 @@ Map install hook named from default (arch) to deb.
     *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>**&#x20;
+
+## pkgKeyValuePairOptions
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+## attributes
+
+well known package properties
+<https://www.archlinux.org/pacman/PKGBUILD.5.html>
 
 ## quoteFile
 
@@ -424,15 +429,6 @@ Check for rpmbuild presence.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when rpmbuild executable is present
 
-## pkgKeyValuePairOptions
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-## attributes
-
-well known package properties
-<https://www.archlinux.org/pacman/PKGBUILD.5.html>
-
 ## OCI
 
 **Extends Packager**
@@ -461,6 +457,12 @@ Check for docker presence.
     *   `variant.arch` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** true when docker executable is present
+
+## BUILDAH
+
+**Extends DOCKER**
+
+Use buildah @see <https://buildah.io>
 
 ## Packager
 

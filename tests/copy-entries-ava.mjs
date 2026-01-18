@@ -91,6 +91,5 @@ test("copyEntries with transform", async t => {
   }
 
   const content = await readFile(join(tmp, "file1.txt"), "utf8");
-  console.log(content);
   t.truthy(content.match(/value1value1/));
 });

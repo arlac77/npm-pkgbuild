@@ -93,7 +93,7 @@ test(
   ]
 );
 
-test.only(
+test(
   efpt,
   {
     name: "n2",
@@ -114,6 +114,7 @@ test.only(
         debian: {
           dependencies: { dep1: ">=1" },
           replaces: { "old-dep1": ">=1.1" },
+          conflicts: {},
           properties: { deb1: "a" },
           arch: ["x86_64"],
           content: { "/etc/myconfig.json": "pkg/myconfig.json" }
@@ -137,7 +138,8 @@ test.only(
         deb1: "a",
         type: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
-        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" }
+        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" },
+        conflicts: {}
       },
       output: {
         debian: {
@@ -162,7 +164,8 @@ test.only(
         deb1: "a",
         type: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
-        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" }
+        replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" },
+        conflicts: {}
       },
       output: {
         debian: {
@@ -224,7 +227,9 @@ test(
         install: "/n4",
         key: "is arch",
         type: "arch",
-        dependencies: {}
+        dependencies: {},
+        replaces: {},
+        conflicts: {}
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -239,7 +244,9 @@ test(
         install: "/n4",
         key: "is debian",
         type: "debian",
-        dependencies: {}
+        dependencies: {},
+        replaces: {},
+        conflicts: {}
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -254,7 +261,9 @@ test(
         install: "/n4",
         key: "is arch",
         type: "arch",
-        dependencies: {}
+        dependencies: {},
+        replaces: {},
+        conflicts: {}
       },
       output: {
         arch: { properties: { key: "is arch" } }
@@ -269,7 +278,9 @@ test(
         install: "/n4",
         key: "is debian",
         type: "debian",
-        dependencies: {}
+        dependencies: {},
+        replaces: {},
+        conflicts: {}
       },
       output: {
         debian: { properties: { key: "is debian" } }
@@ -380,7 +391,9 @@ function expected(properties) {
       dependencies: {
         "nginx-mainline": ">=1.21.1",
         konsum: ">=4.1.0"
-      }
+      },
+      replaces: {},
+      conflicts: {}
     },
     sources: [
       new FileContentProvider(

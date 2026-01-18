@@ -109,6 +109,7 @@ function* content2Sources(content, dir) {
  * @property {Object} properties values describing the package attributes
  * @property {Object} properties.dependencies
  * @property {Object} properties.replaces
+ * @property {Object} properties.conficts
  * @property {ContentProvider[]} sources content providers
  * @property {Object} output package type
  * @property {Object} variant identifier of the variant
@@ -154,6 +155,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           priority: 1,
           dependencies: packageContent.engines || {},
           replaces: {},
+          conflicts: {},
           arch: new Set(),
           restrictArch: new Set()
         };
@@ -223,7 +225,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           }
         }
 
-        for (const k of ["output", "content", "dependencies", "replaces"]) {
+        for (const k of ["output", "content", "dependencies", "replaces", "conflicts"]) {
           if (pkgbuild[k]) {
             fragment[k] = pkgbuild[k];
             delete pkgbuild[k];
@@ -308,6 +310,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
     let properties = {};
     let dependencies = {};
     let replaces = {};
+    let conflicts = {};
     const output = {};
     const content = [];
 
@@ -340,6 +343,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
         properties = { ...fragment.properties, ...properties };
         dependencies = mergeDependencies(dependencies, fragment.dependencies);
         replaces = mergeDependencies(replaces, fragment.replaces);
+        conflicts = mergeDependencies(conflicts, fragment.conflicts);
         Object.assign(output, fragment.output);
         for (const def of Object.values(output)) {
           if (def.content && !def.dir) {
@@ -358,6 +362,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
     Object.assign(properties, root.properties);
     delete properties.dependencies;
     delete properties.replaces;
+    delete properties.conflicts;
 
     properties.variant = name;
 
@@ -367,6 +372,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
       output,
       dependencies,
       replaces,
+      conflicts,
       properties
     };
 
@@ -399,7 +405,8 @@ export async function* extractFromPackage(options = {}, env = {}) {
             result.dependencies,
             output.dependencies
           ),
-          replaces: mergeDependencies(result.replaces, output.replaces)
+          replaces: mergeDependencies(result.replaces, output.replaces),
+          conflicts: mergeDependencies(result.conflicts, output.conflicts)
         };
 
         const context = createContext({ properties });

@@ -120,8 +120,15 @@ export class Packager {
     }
   }
 
+  /**
+   * forms an expression string form name and expression.
+   * If tere is no valid exression name only is delivered.
+   * @param {string} name 
+   * @param {string|boolean|undefined} expression 
+   * @returns {string}
+   */
   dependencyExpression(name, expression) {
-    return expression ? `${name}${expression}` : name;
+    return typeof expression === 'string' ? `${name}${expression}` : name;
   }
 
   makeDepends(dependencies) {
@@ -268,10 +275,39 @@ export const pkgbuild_name_attribute = {
   pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 
+
+export const dependency_type = {
+  name: "dependency",
+  primitive: false,
+  toExternal: (value, attribute) => {
+
+    console.log("TO EXTERN", value);
+    switch(typeof value) {
+      case 'string':
+        return value;
+      case 'undefined':
+        return value;
+    }
+
+    if (value === undefined) {
+      return undefined;
+    }
+
+    if (Array.isArray(value)) {
+      return value.join(attribute.separator);
+    }
+
+    return Object.entries(value)
+      .map(([name, expression]) => typeof(expression)==='string' ? `${name}${expression}`:name).join(attribute.separator);
+  }
+};
+
 export const dependency_attribute_collection_writable = {
   ...string_attribute,
+  type: dependency_type,
   writable: true,
   collection: true,
+  separator: " ",
   pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 

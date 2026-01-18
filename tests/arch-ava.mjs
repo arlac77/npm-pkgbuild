@@ -77,6 +77,10 @@ test("arch", async t => {
     description: "a description",
     license: "MIT",
     maintainer: ["Herber Müller <herber.mueller@mail.com>"],
+    replaces: {
+      "abc-old" : true,
+      "abc-very-old": ">0.0.1"
+    },
     dependencies: {
       "nginx-mainline": ">=1.21.4",
       konsum: ">=4.3.8"

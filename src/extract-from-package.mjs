@@ -108,6 +108,7 @@ function* content2Sources(content, dir) {
  * @typedef {Object} PackageDefinition
  * @property {Object} properties values describing the package attributes
  * @property {Object} properties.dependencies
+ * @property {Object} properties.replaces
  * @property {ContentProvider[]} sources content providers
  * @property {Object} output package type
  * @property {Object} variant identifier of the variant

@@ -13,9 +13,16 @@ import {
   Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
-  pkgbuild_name_attribute
+  pkgbuild_name_attribute,
+  dependency_attribute_collection_writable
 } from "./packager.mjs";
 import { copyEntries, fieldProvider } from "../util.mjs";
+
+const debian_dependency_attribute_collection_writable =
+{
+  ...dependency_attribute_collection_writable,
+  separator: ","
+};
 
 /**
  * Create .deb packages
@@ -58,16 +65,16 @@ export class DEBIAN extends Packager {
     },
     Homepage: { ...string_attribute, alias: "homepage" },
     Bugs: { ...string_attribute, alias: "bugs" },
-    Depends: string_collection_attribute_writable,
-    "Pre-Depends": string_collection_attribute_writable,
-    "Build-Depends": string_collection_attribute_writable,
-    "Build-Depends-Indep": string_collection_attribute_writable,
-    "Build-Depends-Arch": string_collection_attribute_writable,
-    Recommends: string_collection_attribute_writable,
-    Suggests: string_collection_attribute_writable,
-    Provides: string_collection_attribute_writable,
-    Breaks: string_collection_attribute_writable,
-    Replaces: string_collection_attribute_writable,
+    Depends: debian_dependency_attribute_collection_writable,
+    "Pre-Depends": debian_dependency_attribute_collection_writable,
+    "Build-Depends": debian_dependency_attribute_collection_writable,
+    "Build-Depends-Indep": debian_dependency_attribute_collection_writable,
+    "Build-Depends-Arch": debian_dependency_attribute_collection_writable,
+    Recommends: debian_dependency_attribute_collection_writable,
+    Suggests: debian_dependency_attribute_collection_writable,
+    Provides: debian_dependency_attribute_collection_writable,
+    Breaks: debian_dependency_attribute_collection_writable,
+    Replaces: debian_dependency_attribute_collection_writable,
     Source: { ...string_attribute, alias: "source" },
     Uploaders: { mandatory: false },
     "Installed-Size": {}

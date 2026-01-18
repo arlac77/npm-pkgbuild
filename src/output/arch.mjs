@@ -112,7 +112,7 @@ export class ARCH extends Packager {
     groups: string_collection_attribute_writable,
     arch: { ...string_collection_attribute_writable, default: ["any"], mandatory: true },
     backup: string_collection_attribute_writable,
-    depends: dependency_attribute_collection_writable,
+    depends: { ...dependency_attribute_collection_writable /*, alias: "dependencies" */ },
     makedepends: dependency_attribute_collection_writable,
     checkdepends: dependency_attribute_collection_writable,
     optdepends: dependency_attribute_collection_writable,
@@ -212,6 +212,7 @@ package() {
       properties.backup = properties.backup.replace(/\//, "");
     }
 
+    console.log(properties);
     const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({

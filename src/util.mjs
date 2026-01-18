@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 import { createWriteStream } from "node:fs";
+import { toExternal } from "pacc";
 import { ContentEntry } from "content-entry";
 
 /**
@@ -147,37 +148,38 @@ export function asArray(o) {
  * @returns {Function}
  */
 export function fieldProvider(properties, attributes) {
-  function av(field, value) {
-    return field.collection ? asArray(value) : value;
+  function av(attribute, value) {
+    return attribute.collection ? asArray(value) : value;
   }
 
   return function* controlProperties(k, v, presentKeys) {
     if (k === undefined) {
-      for (const [name, field] of Object.entries(attributes)) {
+      for (const [name, attribute] of Object.entries(attributes)) {
         if (!presentKeys.has(name)) {
-          let value = properties[field.alias || name];
+          let value = properties[attribute.alias || name];
           if (value === undefined) {
-            if (field.default === undefined) {
-              if (field.mandatory) {
-                console.error(`Missing value for mandatory field ${name}`);
+            if (attribute.default === undefined) {
+              if (attribute.mandatory) {
+                console.error(`Missing value for mandatory attribute ${name}`);
               }
             } else {
-              yield [name, field.default];
+              yield [name, toExternal(attribute.default, attribute)];
             }
           } else {
-            if (field.mapping) {
-              const mappedValue = field.mapping[value];
+            if (attribute.mapping) {
+              const mappedValue = attribute.mapping[value];
               if (mappedValue) {
                 value = mappedValue;
               }
             }
 
-            yield [name, av(field, value)];
+            yield [name, av(attribute, toExternal(value, attribute))];
           }
         }
       }
     } else {
-      yield [k, av(attributes[k], properties[k] || v)];
+      const attribute = attributes[k];
+      yield [k, av(attribute, toExternal(properties[k] || v, attribute))];
     }
   };
 }

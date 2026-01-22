@@ -59,19 +59,19 @@
     "compare-versions": "^6.1.1",
     "content-entry": "^14.2.7",
     "content-entry-filesystem": "^9.0.14",
-    "content-entry-transform": "^1.6.0",
+    "content-entry-transform": "^1.6.1",
     "execa": "^9.6.0",
     "expression-expander": "^7.2.8",
     "ini": "^6.0.0",
-    "iterable-string-interceptor": "^3.0.5",
+    "iterable-string-interceptor": "^3.0.6",
     "key-value-transformer": "^3.3.1",
     "npm-package-walker": "^8.0.11",
     "npm-packlist": "^10.0.3",
-    "pacc": "^8.0.3",
+    "pacc": "^8.0.4",
     "package-directory": "^8.1.0",
     "pacote": "^21.0.4",
     "tar-stream": "^3.1.7",
-    "uti": "^8.10.3"
+    "uti": "^8.10.5"
   },
   "devDependencies": {
     "@types/node": "^25.0.9",

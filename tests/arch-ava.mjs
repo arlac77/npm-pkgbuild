@@ -77,6 +77,7 @@ test("arch", async t => {
     description: "a description",
     license: "MIT",
     maintainer: ["Herber Müller <herber.mueller@mail.com>"],
+    provides: ["a=1","b=2"],
     replaces: {
       "abc-old" : true,
       "abc-very-old": ">0.0.1"

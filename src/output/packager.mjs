@@ -286,19 +286,14 @@ export const dependency_type = {
         return value;
     }
 
-    if (value === undefined) {
-      return undefined;
-    }
-
     if (Array.isArray(value)) {
-      return value.join(attribute.separator);
+      return value;
     }
 
     return Object.entries(value)
       .map(([name, expression]) =>
         typeof expression === "string" ? `${name}${expression}` : name
-      )
-      .join(attribute.separator);
+      );
   }
 };
 

@@ -59,7 +59,7 @@
     "compare-versions": "^6.1.1",
     "content-entry": "^14.2.7",
     "content-entry-filesystem": "^9.0.14",
-    "content-entry-transform": "^1.6.1",
+    "content-entry-transform": "^1.6.3",
     "execa": "^9.6.0",
     "expression-expander": "^7.2.8",
     "ini": "^6.0.0",

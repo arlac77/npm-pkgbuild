@@ -114,7 +114,9 @@ export class DEBIAN extends Packager {
    */
   get hookMapping() {
     return {
+      pre_install: "DEBIAN/preinst",
       post_install: "DEBIAN/postinst",
+      pre_remove: "DEBIAN/prerm",
       post_remove: "DEBIAN/postrm"
     };
   }

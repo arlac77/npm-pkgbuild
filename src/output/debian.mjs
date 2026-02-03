@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { string_attribute, string_collection_attribute_writable } from "pacc";
+import { integer_attribute_writable, yesno_attribute_writable, string_attribute_writable } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
   transform,
@@ -50,21 +50,21 @@ export class DEBIAN extends Packager {
       set: v => v.toLowerCase()
     },
     Version: pkgbuild_version_attribute,
-    Maintainer: { ...string_attribute, alias: "maintainer", mandatory: true },
+    Maintainer: { ...string_attribute_writable, alias: "maintainer", mandatory: true },
     Description: pkgbuild_description_attribute,
-    Section: { ...string_attribute, alias: "groups" },
-    Priority: string_attribute,
-    Essential: { type: "boolean" },
-    Origin: string_attribute,
+    Section: { ...string_attribute_writable, alias: "groups" },
+    Priority: string_attribute_writable,
+    Essential: yesno_attribute_writable,
+    Origin: string_attribute_writable,
     Architecture: {
-      ...string_attribute,
+      ...string_attribute_writable,
       alias: "arch",
       default: "all",
       mandatory: true,
       mapping: { aarch64: "arm64" }
     },
-    Homepage: { ...string_attribute, alias: "homepage" },
-    Bugs: { ...string_attribute, alias: "bugs" },
+    Homepage: { ...string_attribute_writable, alias: "homepage" },
+    Bugs: { ...string_attribute_writable, alias: "bugs" },
     Depends: debian_dependency_attribute_collection_writable,
     "Pre-Depends": debian_dependency_attribute_collection_writable,
     "Build-Depends": debian_dependency_attribute_collection_writable,
@@ -75,9 +75,9 @@ export class DEBIAN extends Packager {
     Provides: debian_dependency_attribute_collection_writable,
     Breaks: debian_dependency_attribute_collection_writable,
     Replaces: debian_dependency_attribute_collection_writable,
-    Source: { ...string_attribute, alias: "source" },
+    Source: { ...string_attribute_writable, alias: "source" },
     Uploaders: { mandatory: false },
-    "Installed-Size": {}
+    "Installed-Size": integer_attribute_writable
   };
 
   /**

@@ -4,6 +4,7 @@ import { program, Option } from "commander";
 import { execa } from "execa";
 import { createExpressionTransformer } from "content-entry-transform";
 import { UTIController } from "uti";
+import { expand } from "pacc";
 import additionalUTIs from "./utis.mjs";
 import {
   FileContentProvider,
@@ -61,7 +62,6 @@ program
         sources,
         output,
         variant,
-        context
       } of extractFromPackage(options, process.env)) {
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true
@@ -107,7 +107,9 @@ program
                 })
             );
 
-            const o = new outputFactory(context.expand(properties));
+            const context = { root: properties };
+
+            const o = new outputFactory(expand(properties, context));
             const transformer = [
               { name: "skip-bare-modules",
                 match: entry => entry.isBlob && uc.fileNameConformsTo(entry.name, "public.bare-dynamic-link-library"),
@@ -162,7 +164,7 @@ program
               transformer,
               publishingDetails,
               options,
-              context.expand
+              (object) => expand(object, context)
             );
 
             if (!options.dry) {

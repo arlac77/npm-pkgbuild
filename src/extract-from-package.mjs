@@ -1,7 +1,7 @@
 import { join, resolve } from "node:path";
 import { packageDirectory } from "package-directory";
 import { packageWalker } from "npm-package-walker";
-import { createContext } from "expression-expander";
+import { expand } from "pacc";
 import { satisfies } from "compare-versions";
 import { asArray, mergeDependencies } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
@@ -225,7 +225,13 @@ export async function* extractFromPackage(options = {}, env = {}) {
           }
         }
 
-        for (const k of ["output", "content", "dependencies", "replaces", "conflicts"]) {
+        for (const k of [
+          "output",
+          "content",
+          "dependencies",
+          "replaces",
+          "conflicts"
+        ]) {
           if (pkgbuild[k]) {
             fragment[k] = pkgbuild[k];
             delete pkgbuild[k];
@@ -378,7 +384,6 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
     function* forEachOutput(result) {
       if (Object.entries(result.output).length === 0) {
-        result.context = createContext({ properties: result.properties });
         result.sources = [];
         yield result;
       }
@@ -409,19 +414,19 @@ export async function* extractFromPackage(options = {}, env = {}) {
           conflicts: mergeDependencies(result.conflicts, output.conflicts)
         };
 
-        const context = createContext({ properties });
+        const context = { root: properties };
+
         const sources = [];
-        context.expand(content).reduce((a, { content, dir }) => {
+        expand(content, context).reduce((a, { content, dir }) => {
           a.push(...content2Sources(content, dir));
           return a;
         }, sources);
 
         yield {
-          context,
           variant: { ...result.variant, output: name },
           output: { [name]: output },
           sources,
-          properties: context.expand(properties)
+          properties: expand(properties, context)
         };
       }
     }

@@ -86,7 +86,7 @@ export class Packager {
 
   /**
    * Generate hook content entries
-   * @return {AsyncIterable<ContentEntry>}
+   * @return {AsyncIterable<StringContentEntry>}
    */
   async *hookContent() {
     const properties = this.properties;

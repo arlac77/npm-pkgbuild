@@ -1,6 +1,6 @@
 {
   "name": "npm-pkgbuild",
-  "version": "0.0.0-semantic-release",
+  "version": "20.4.1",
   "publishConfig": {
     "access": "public",
     "provenance": false

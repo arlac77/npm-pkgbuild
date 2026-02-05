@@ -1,6 +1,7 @@
 [![npm](https://img.shields.io/npm/v/npm-pkgbuild.svg)](https://www.npmjs.com/package/npm-pkgbuild)
 [![License](https://img.shields.io/badge/License-0BSD-blue.svg)](https://spdx.org/licenses/0BSD.html)
 [![Typed with TypeScript](https://flat.badgen.net/badge/icon/Typed?icon=typescript\&label\&labelColor=blue\&color=555555)](https://typescriptlang.org)
+[![install size](https://packagephobia.now.sh/badge?p=npm-pkgbuild/@20.4.1)](https://packagephobia.now.sh/result?p=npm-pkgbuild@20.4.1)
 [![bundlejs](https://deno.bundlejs.com/?q=npm-pkgbuild\&badge=detailed)](https://bundlejs.com/?q=npm-pkgbuild)
 [![downloads](http://img.shields.io/npm/dm/npm-pkgbuild.svg?style=flat-square)](https://npmjs.org/package/npm-pkgbuild)
 [![GitHub Issues](https://img.shields.io/github/issues/arlac77/npm-pkgbuild.svg?style=flat-square)](https://github.com/arlac77/npm-pkgbuild/issues)

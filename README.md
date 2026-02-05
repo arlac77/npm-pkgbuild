@@ -143,6 +143,7 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-11)
     *   [packageName](#packagename)
         *   [Parameters](#parameters-12)
+    *   [hookContent](#hookcontent)
     *   [dependencyExpression](#dependencyexpression)
         *   [Parameters](#parameters-13)
     *   [tmpdir](#tmpdir)
@@ -157,6 +158,7 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Parameters](#parameters-17)
     *   [packageName](#packagename-1)
         *   [Parameters](#parameters-18)
+    *   [hookContent](#hookcontent-1)
     *   [dependencyExpression](#dependencyexpression-1)
         *   [Parameters](#parameters-19)
     *   [tmpdir](#tmpdir-1)
@@ -480,9 +482,15 @@ What is the package name in the package eco-system.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
 
+### hookContent
+
+Generate hook content entries
+
+Returns **AsyncIterable\<ContentEntry>**&#x20;
+
 ### dependencyExpression
 
-forms an expression string form name and expression.
+Forms an expression string form name and expression.
 If tere is no valid exression name only is delivered.
 
 #### Parameters
@@ -557,9 +565,15 @@ What is the package name in the package eco-system.
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** package name in the target eco-system
 
+### hookContent
+
+Generate hook content entries
+
+Returns **AsyncIterable\<ContentEntry>**&#x20;
+
 ### dependencyExpression
 
-forms an expression string form name and expression.
+Forms an expression string form name and expression.
 If tere is no valid exression name only is delivered.
 
 #### Parameters

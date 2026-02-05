@@ -4,6 +4,7 @@ import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import {
   expand,
+  expandContextDoubbleCurly,
   string_attribute,
   description_attribute,
   version_attribute_writable
@@ -91,8 +92,7 @@ export class Packager {
     const properties = this.properties;
 
     const context = {
-      leadIn: "{{",
-      leadOut: "}}",
+      ...expandContextDoubbleCurly,
       root: properties
     };
 

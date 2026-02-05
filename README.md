@@ -486,7 +486,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Generate hook content entries
 
-Returns **AsyncIterable\<ContentEntry>**&#x20;
+Returns **AsyncIterable\<StringContentEntry>**&#x20;
 
 ### dependencyExpression
 
@@ -569,7 +569,7 @@ Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 Generate hook content entries
 
-Returns **AsyncIterable\<ContentEntry>**&#x20;
+Returns **AsyncIterable\<StringContentEntry>**&#x20;
 
 ### dependencyExpression
 

@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import {
+  expand,
   string_attribute,
   description_attribute,
   version_attribute_writable
@@ -82,8 +83,18 @@ export class Packager {
     return {};
   }
 
+  /**
+   * Generate hook content entries
+   * @return {AsyncIterable<ContentEntry>}
+   */
   async *hookContent() {
     const properties = this.properties;
+
+    const context = {
+      leadIn: "{{",
+      leadOut: "}}",
+      root: properties
+    };
 
     switch (typeof properties.hooks) {
       case "string":
@@ -95,11 +106,7 @@ export class Packager {
             yield new StringContentEntry(
               name,
               undefined,
-              f.body.replaceAll(
-                /\{\{(\w+)\}\}/gm,
-                (match, key, offset, string) =>
-                  properties[key] || "{{" + key + "}}"
-              )
+              expand(f.body, context)
             );
           }
         }
@@ -110,18 +117,14 @@ export class Packager {
           yield new StringContentEntry(
             name,
             undefined,
-            content.replaceAll(
-              /\{\{(\w+)\}\}/gm,
-              (match, key, offset, string) =>
-                properties[key] || "{{" + key + "}}"
-            )
+            expand(content, context)
           );
         }
     }
   }
 
   /**
-   * forms an expression string form name and expression.
+   * Forms an expression string form name and expression.
    * If tere is no valid exression name only is delivered.
    * @param {string} name
    * @param {string|boolean|undefined} expression
@@ -290,10 +293,9 @@ export const dependency_type = {
       return value;
     }
 
-    return Object.entries(value)
-      .map(([name, expression]) =>
-        typeof expression === "string" ? `${name}${expression}` : name
-      );
+    return Object.entries(value).map(([name, expression]) =>
+      typeof expression === "string" ? `${name}${expression}` : name
+    );
   }
 };
 

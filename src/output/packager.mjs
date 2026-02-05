@@ -117,7 +117,7 @@ export class Packager {
       case "object":
         for (const [name, content] of Object.entries(properties.hooks)) {
           yield new StringContentEntry(
-            name,
+            this.hookMapping[name] || name,
             entryProps,
             expand(content, context)
           );

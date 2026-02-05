@@ -96,6 +96,8 @@ export class Packager {
       root: properties
     };
 
+    const entryProps = { mode: 0o775 };
+
     switch (typeof properties.hooks) {
       case "string":
         for await (const f of extractFunctions(
@@ -105,7 +107,7 @@ export class Packager {
           if (name) {
             yield new StringContentEntry(
               name,
-              undefined,
+              entryProps,
               expand(f.body, context)
             );
           }
@@ -116,7 +118,7 @@ export class Packager {
         for (const [name, content] of Object.entries(properties.hooks)) {
           yield new StringContentEntry(
             name,
-            undefined,
+            entryProps,
             expand(content, context)
           );
         }

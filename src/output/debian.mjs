@@ -1,7 +1,11 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { integer_attribute_writable, yesno_attribute_writable, string_attribute_writable } from "pacc";
+import {
+  integer_attribute_writable,
+  yesno_attribute_writable,
+  string_attribute_writable
+} from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
   transform,
@@ -18,11 +22,12 @@ import {
 } from "./packager.mjs";
 import { copyEntries, fieldProvider } from "../util.mjs";
 
-const debian_dependency_attribute_collection_writable =
-{
+const debian_dependency_attribute_collection_writable = {
   ...dependency_attribute_collection_writable,
   separator: ","
 };
+
+const CONTROL_NAME = "DEBIAN/control";
 
 /**
  * Create .deb packages
@@ -50,7 +55,11 @@ export class DEBIAN extends Packager {
       set: v => v.toLowerCase()
     },
     Version: pkgbuild_version_attribute,
-    Maintainer: { ...string_attribute_writable, alias: "maintainer", mandatory: true },
+    Maintainer: {
+      ...string_attribute_writable,
+      alias: "maintainer",
+      mandatory: true
+    },
     Description: pkgbuild_description_attribute,
     Section: { ...string_attribute_writable, alias: "groups" },
     Priority: string_attribute_writable,
@@ -129,9 +138,11 @@ export class DEBIAN extends Packager {
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
+    const hooks = new Set(Object.values(this.hookMapping));
+
     transformer.push(
       createPropertiesTransformer(
-        entry => (entry.name.match(/DEBIAN\/.*(inst|rm)/) ? true : false),
+        entry => hooks.has(entry.name),
         { mode: { value: 0o775 } },
         "mode"
       )
@@ -143,17 +154,16 @@ export class DEBIAN extends Packager {
     }
 
     const fp = fieldProvider(properties, this.attributes);
-    const debianControlName = "DEBIAN/control";
 
     transformer.push({
-      match: entry => entry.name === debianControlName,
+      match: entry => entry.name === CONTROL_NAME,
       transform: async entry =>
         new IteratorContentEntry(
           entry.name,
           undefined,
           keyValueTransformer(Uint8ArraysToLines(await entry.readStream), fp)
         ),
-      createEntryWhenMissing: () => new ContentEntry(debianControlName)
+      createEntryWhenMissing: () => new ContentEntry(CONTROL_NAME)
     });
 
     for await (const file of copyEntries(
@@ -168,7 +178,7 @@ export class DEBIAN extends Packager {
     }
 
     if (options.verbose) {
-      console.log(await readFile(join(staging, debianControlName), "utf8"));
+      console.log(await readFile(join(staging, CONTROL_NAME), "utf8"));
     }
 
     if (!options.dry) {

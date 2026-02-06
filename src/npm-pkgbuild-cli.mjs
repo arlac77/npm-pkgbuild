@@ -18,8 +18,8 @@ import pkg from "../package.json" with { type: "json" };
 program.description(pkg.description).version(pkg.version);
 
 allOutputs.forEach(o => {
-  for(const name of [o.name,o.alias]) {
-    if(name) {
+  for (const name of [o.name, o.alias]) {
+    if (name) {
       program.option(`--${name}`, o.description);
       program.option(`--no-${name}`, `do not ${o.description} output`);
     }
@@ -33,7 +33,7 @@ allInputs.forEach(i => {
 program
   .option("--verbose", "be more verbose", false)
   .option("--dry", "do not execute, only print definitions", false)
-  .option("--staging <dir>","directory where to start packaging process")
+  .option("--staging <dir>", "directory where to start packaging process")
   .option("-D --define <a=b>", "define property", (str, former = {}) =>
     Object.assign(former, Object.fromEntries([str.split(/=/)]))
   )
@@ -61,7 +61,7 @@ program
         properties,
         sources,
         output,
-        variant,
+        variant
       } of extractFromPackage(options, process.env)) {
         for (const inputFactory of allInputs.filter(
           inputFactory => options[inputFactory.name] === true
@@ -111,35 +111,48 @@ program
 
             const o = new outputFactory(expand(properties, context));
             const transformer = [
-              { name: "skip-bare-modules",
-                match: entry => entry.isBlob && uc.fileNameConformsTo(entry.name, "public.bare-dynamic-link-library"),
+              {
+                name: "skip-bare-modules",
+                match: entry =>
+                  entry.isBlob &&
+                  uc.fileNameConformsTo(
+                    entry.name,
+                    "public.bare-dynamic-link-library"
+                  ),
                 async transform(entry) {}
               },
               {
                 name: "skip-architecutes",
-                match: (entry) => entry.name.endsWith(".node") && entry.filename,
-                async transform(entry) {                  
+                match: entry => entry.name.endsWith(".node") && entry.filename,
+                async transform(entry) {
                   const proc = await execa("file", ["-b", entry.filename], {
                     cwd: options.dir
                   });
                   const parts = proc.stdout.split(/\s*,\s*/);
-      
-                  if(parts.length < 4 || (parts.length > 4 && !parts[4].match(/Android/i))) {
+
+                  if (
+                    parts.length < 4 ||
+                    (parts.length > 4 && !parts[4].match(/Android/i))
+                  ) {
                     let arch = parts[1];
-      
-                    const archs = { "ARM aarch64" : "aarch64" };
+
+                    const archs = { "ARM aarch64": "aarch64" };
                     arch = archs[arch] || arch;
 
-                    if(properties.arch.indexOf(arch) >= 0) {
+                    if (properties.arch.indexOf(arch) >= 0) {
                       return entry;
                     }
                   }
-  
+
                   //console.log("skip", entry.filename);
                 }
               },
               createExpressionTransformer(
-                entry => entry.isBlob && uc.fileNameConformsTo(entry.name, "public.text") && !uc.fileNameConformsTo(entry.name, "com.netscape.javascript-source"),
+                entry =>
+                  entry.isBlob &&
+                  uc.fileNameConformsTo(entry.name, "public.text") &&
+                  (!uc.fileNameConformsTo(entry.name, "public.source-code") ||
+                    uc.fileNameConformsTo(entry.name, "public.configuration")),
                 properties
               )
             ];
@@ -156,7 +169,10 @@ program
               console.log("  " + sources.join("\n  "));
               console.log("dependencies:");
               console.log(kv(properties.dependencies, "  "));
-              console.log("publish:", publishingDetails.map(pd=>pd.url));
+              console.log(
+                "publish:",
+                publishingDetails.map(pd => pd.url)
+              );
             }
 
             const artifact = await o.create(
@@ -164,7 +180,7 @@ program
               transformer,
               publishingDetails,
               options,
-              (object) => expand(object, context)
+              object => expand(object, context)
             );
 
             if (!options.dry) {

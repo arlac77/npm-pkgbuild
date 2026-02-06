@@ -68,9 +68,9 @@
     "npm-packlist": "^10.0.3",
     "pacc": "^8.7.0",
     "package-directory": "^8.2.0",
-    "pacote": "^21.1.0",
+    "pacote": "^21.2.0",
     "tar-stream": "^3.1.7",
-    "uti": "^8.10.5"
+    "uti": "^8.10.6"
   },
   "devDependencies": {
     "@types/node": "^25.2.1",

@@ -255,7 +255,7 @@ package() {
         ownership
           .map(
             f =>
-              `    chown ${[f.owner || "", f.group || ""].join(
+              `    chown ${[f.owner ?? "", f.group ?? ""].join(
                 ":"
               )} \"$pkgdir/${f.destination}\"`
           )

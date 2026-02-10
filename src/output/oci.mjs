@@ -119,7 +119,7 @@ export class OCI extends Packager {
 
     let pos = 0;
 
-    for await (const entry of aggregateFifo(sources)) {
+    for await (const entry of aggregateFifo((await Array.fromAsync(sources)).flat())) {
       //      const size = await entry.size;
       const buffer = await entry.buffer;
       const size = buffer.length;

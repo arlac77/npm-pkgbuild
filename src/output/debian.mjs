@@ -167,7 +167,12 @@ export class DEBIAN extends Packager {
     });
 
     for await (const file of copyEntries(
-      transform(aggregateFifo([...sources, this.hookContent()]), transformer),
+      transform(
+        aggregateFifo(
+          [await Array.fromAsync(sources), this.hookContent()].flat()
+        ),
+        transformer
+      ),
       staging,
       expander
     )) {

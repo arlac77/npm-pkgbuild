@@ -138,9 +138,8 @@ export class RPM extends Packager {
   }
 
   async create(sources, transformer, publishingDetails, options, expander) {
-    const { properties, tmpdir, staging, destination } = await this.prepare(
-      options
-    );
+    const { properties, tmpdir, staging, destination } =
+      await this.prepare(options);
 
     properties.Requires = this.makeDepends(properties.dependencies);
 
@@ -183,7 +182,7 @@ export class RPM extends Packager {
     const fp = fieldProvider(properties, this.attributes);
 
     for await (const file of copyEntries(
-      transform(aggregateFifo(sources), [
+      transform(aggregateFifo((await Array.fromAsync(sources)).flat()), [
         {
           match: entry => entry.name === specFileName,
           transform: async entry =>

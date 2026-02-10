@@ -141,7 +141,10 @@ export class DOCKER extends Packager {
     });
 
     for await (const file of copyEntries(
-      transform(aggregateFifo(sources), transformer),
+      transform(
+        aggregateFifo((await Array.fromAsync(sources)).flat()),
+        transformer
+      ),
       staging,
       expander
     )) {

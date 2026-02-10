@@ -2,7 +2,12 @@ import { join } from "node:path";
 import { createWriteStream } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { execa } from "execa";
-import { default_attribute, string_attribute, string_collection_attribute_writable, integer_attribute } from "pacc";
+import {
+  default_attribute,
+  string_attribute,
+  string_collection_attribute_writable,
+  integer_attribute
+} from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import {
@@ -62,7 +67,6 @@ let _prepared;
 let _architecture = "aarch64";
 
 export class ARCH extends Packager {
-
   static get alias() {
     return "alpm";
   }
@@ -84,7 +88,11 @@ export class ARCH extends Packager {
    * https://www.archlinux.org/pacman/PKGBUILD.5.html
    */
   static attributes = {
-    Maintainer: { ...string_collection_attribute_writable, alias: "maintainer", prefix: "# " },
+    Maintainer: {
+      ...string_collection_attribute_writable,
+      alias: "maintainer",
+      prefix: "# "
+    },
     packager: { ...string_collection_attribute_writable, alias: "maintainer" },
     pkgname: { ...pkgbuild_name_attribute, collection: true },
     pkgver: pkgbuild_version_attribute,
@@ -110,9 +118,15 @@ export class ARCH extends Packager {
     sha384sums: string_collection_attribute_writable,
     sha512sums: string_collection_attribute_writable,
     groups: string_collection_attribute_writable,
-    arch: { ...string_collection_attribute_writable, default: ["any"], mandatory: true },
+    arch: {
+      ...string_collection_attribute_writable,
+      default: ["any"],
+      mandatory: true
+    },
     backup: string_collection_attribute_writable,
-    depends: { ...dependency_attribute_collection_writable /*, alias: "dependencies" */ },
+    depends: {
+      ...dependency_attribute_collection_writable /*, alias: "dependencies" */
+    },
     makedepends: dependency_attribute_collection_writable,
     checkdepends: dependency_attribute_collection_writable,
     optdepends: dependency_attribute_collection_writable,
@@ -232,7 +246,10 @@ package() {
     const ownership = [];
 
     for await (const file of copyEntries(
-      transform(aggregateFifo(sources), transformer),
+      transform(
+        aggregateFifo((await Array.fromAsync(sources)).flat()),
+        transformer
+      ),
       join(staging, "src"),
       expander
     )) {
@@ -281,14 +298,10 @@ package() {
         makePackageOptions.push("--log");
       }
 
-      const makepkg = await execa(
-        "makepkg",
-        makePackageOptions,
-        {
-          cwd: staging,
-          env: { PKGDEST: destination, PACKAGER }
-        }
-      );
+      const makepkg = await execa("makepkg", makePackageOptions, {
+        cwd: staging,
+        env: { PKGDEST: destination, PACKAGER }
+      });
 
       if (options.verbose) {
         console.log(makepkg.stdout);

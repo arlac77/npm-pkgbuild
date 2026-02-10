@@ -15,7 +15,6 @@ import {
   equalSeparatedKeyValuePairOptions,
   Uint8ArraysToLines
 } from "key-value-transformer";
-import { aggregateFifo } from "aggregate-async-iterator";
 import {
   Packager,
   pkgbuild_version_attribute,
@@ -28,7 +27,8 @@ import {
   fieldProvider,
   quote,
   utf8StreamOptions,
-  normalizeExpression
+  normalizeExpression,
+  aggregate
 } from "../util.mjs";
 
 function* keyValueLines(key, value, options) {
@@ -247,7 +247,7 @@ package() {
 
     for await (const file of copyEntries(
       transform(
-        aggregateFifo((await Array.fromAsync(sources)).flat()),
+        aggregate(sources),
         transformer
       ),
       join(staging, "src"),

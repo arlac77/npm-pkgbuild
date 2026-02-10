@@ -11,7 +11,6 @@ import {
   transform,
   createPropertiesTransformer
 } from "content-entry-transform";
-import { aggregateFifo } from "aggregate-async-iterator";
 import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
 import {
   Packager,
@@ -20,7 +19,7 @@ import {
   pkgbuild_name_attribute,
   dependency_attribute_collection_writable
 } from "./packager.mjs";
-import { copyEntries, fieldProvider } from "../util.mjs";
+import { copyEntries, fieldProvider, aggregate } from "../util.mjs";
 
 const debian_dependency_attribute_collection_writable = {
   ...dependency_attribute_collection_writable,
@@ -167,12 +166,7 @@ export class DEBIAN extends Packager {
     });
 
     for await (const file of copyEntries(
-      transform(
-        aggregateFifo(
-          [await Array.fromAsync(sources), this.hookContent()].flat()
-        ),
-        transformer
-      ),
+      transform(aggregate(sources, this.hookContent()), transformer),
       staging,
       expander
     )) {

@@ -3,8 +3,8 @@ import { createWriteStream } from "node:fs";
 import { createGzip } from "node:zlib";
 import { createHash } from "node:crypto";
 import { pipeline } from "node:stream/promises";
-import { aggregateFifo } from "aggregate-async-iterator";
 import { Packager } from "./packager.mjs";
+import { aggregate } from "../util.mjs";
 
 const MEDIA_TYPE_MANIFEST = "application/vnd.oci.image.manifest.v1+json";
 const MEDIA_TYPE_CONFIG = "application/vnd.oci.image.config.v1+json";
@@ -119,7 +119,7 @@ export class OCI extends Packager {
 
     let pos = 0;
 
-    for await (const entry of aggregateFifo((await Array.fromAsync(sources)).flat())) {
+    for await (const entry of aggregate(sources)) {
       //      const size = await entry.size;
       const buffer = await entry.buffer;
       const size = buffer.length;

@@ -5,6 +5,7 @@ import { Readable } from "node:stream";
 import { createWriteStream } from "node:fs";
 import { toExternal } from "pacc";
 import { ContentEntry } from "content-entry";
+import { aggregateFifo } from "aggregate-async-iterator";
 
 /**
  * @type {BufferEncoding}
@@ -16,7 +17,7 @@ export function filterOutUnwantedDependencies() {
 }
 
 export function normalizeExpression(e) {
-  if(typeof e === 'string') {
+  if (typeof e === "string") {
     e = e.replace(/\-([\w\d]+)$/, "");
     if (e.match(/^\d+/)) {
       return `>=${e}`;
@@ -211,8 +212,8 @@ export async function* copyEntries(
         d === undefined
           ? entry.name
           : d.isCollection || d.endsWith("/")
-          ? join(d, entry.name)
-          : d
+            ? join(d, entry.name)
+            : d
       ).replace(/^\//, "");
 
       // @ts-ignore
@@ -236,4 +237,8 @@ export async function* copyEntries(
       yield entry;
     }
   }
+}
+
+export async function* aggregate(...args) {
+  yield* aggregateFifo((await Promise.all(args)).flat());
 }

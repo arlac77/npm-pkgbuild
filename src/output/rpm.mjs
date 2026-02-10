@@ -15,14 +15,18 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys,
   Uint8ArraysToLines
 } from "key-value-transformer";
-import { aggregateFifo } from "aggregate-async-iterator";
 import {
   Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute
 } from "./packager.mjs";
-import { copyEntries, fieldProvider, utf8StreamOptions } from "../util.mjs";
+import {
+  copyEntries,
+  fieldProvider,
+  utf8StreamOptions,
+  aggregate
+} from "../util.mjs";
 
 /**
  * @typedef {import('../publish.mjs').PublishingDetail} PublishingDetail
@@ -168,7 +172,7 @@ export class RPM extends Packager {
       }
 
       for await (const file of copyEntries(
-	transform(aggregateFifo((await Array.fromAsync(sources)).flat()), transformer),
+        transform(aggregate(sources), transformer),
         staging,
         expander
       )) {
@@ -182,7 +186,7 @@ export class RPM extends Packager {
     const fp = fieldProvider(properties, this.attributes);
 
     for await (const file of copyEntries(
-      transform(aggregateFifo((await Array.fromAsync(sources)).flat()), [
+      transform(aggregate(sources), [
         {
           match: entry => entry.name === specFileName,
           transform: async entry =>

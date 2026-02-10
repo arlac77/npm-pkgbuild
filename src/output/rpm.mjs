@@ -168,7 +168,7 @@ export class RPM extends Packager {
       }
 
       for await (const file of copyEntries(
-        transform(sources, transformer),
+	transform(aggregateFifo((await Array.fromAsync(sources)).flat()), transformer),
         staging,
         expander
       )) {

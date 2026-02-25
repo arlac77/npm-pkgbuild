@@ -68,7 +68,7 @@
     "npm-packlist": "^10.0.4",
     "pacc": "^9.2.5",
     "package-directory": "^8.2.0",
-    "pacote": "^21.3.1",
+    "pacote": "^21.4.0",
     "tar-stream": "^3.1.7",
     "uti": "^8.11.1"
   },

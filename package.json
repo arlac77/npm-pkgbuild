@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": false
   },
-  "packageManager": "npm@11.10.0",
+  "packageManager": "npm@11.13.0",
   "types": "./types/module.d.mts",
   "exports": {
     ".": {

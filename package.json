@@ -61,7 +61,7 @@
     "content-entry-filesystem": "^9.0.14",
     "content-entry-transform": "^1.6.7",
     "execa": "^9.6.0",
-    "ini": "^6.0.0",
+    "ini": "^7.0.0",
     "iterable-string-interceptor": "^3.0.8",
     "key-value-transformer": "^3.3.1",
     "npm-package-walker": "^8.0.11",

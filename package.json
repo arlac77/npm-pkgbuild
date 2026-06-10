@@ -71,7 +71,7 @@
     "ava": "^8.0.1",
     "c8": "^11.0.0",
     "documentation": "^14.0.3",
-    "semantic-release": "^25.0.3",
+    "semantic-release": "^25.0.5",
     "stream-buffers": "^3.0.3"
   },
   "overrides": {

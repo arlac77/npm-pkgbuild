@@ -59,7 +59,7 @@
     "iterable-string-interceptor": "^3.0.8",
     "key-value-transformer": "^3.3.2",
     "npm-package-walker": "^8.0.11",
-    "npm-packlist": "^11.2.0",
+    "npm-packlist": "^11.3.0",
     "pacc": "^10.0.2",
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",
@@ -67,7 +67,7 @@
     "uti": "^8.11.2"
   },
   "devDependencies": {
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.0.1",
     "ava": "^8.0.1",
     "c8": "^11.0.0",
     "documentation": "^14.0.3",

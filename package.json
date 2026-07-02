@@ -46,7 +46,7 @@
     "lint:docs": "documentation lint ./src**/*.mjs"
   },
   "dependencies": {
-    "@npmcli/arborist": "^9.8.0",
+    "@npmcli/arborist": "^9.9.0",
     "@vercel/nft": "^1.10.2",
     "aggregate-async-iterator": "^1.2.5",
     "commander": "^15.0.0",

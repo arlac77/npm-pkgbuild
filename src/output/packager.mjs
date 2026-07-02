@@ -5,7 +5,8 @@ import { createReadStream } from "node:fs";
 import {
   expand,
   expandContextDoubbleCurly,
-  string_attribute,
+  string_collection_attribute_writable,
+  name_attribute,
   description_attribute,
   version_attribute_writable
 } from "pacc";
@@ -274,7 +275,7 @@ export class Packager {
 }
 
 export const pkgbuild_name_attribute = {
-  ...string_attribute,
+  ...name_attribute,
   alias: "name",
   mandatory: true,
   pattern: /^[a-z_][a-z0-9_\-]*$/i
@@ -302,10 +303,8 @@ export const dependency_type = {
 };
 
 export const dependency_attribute_collection_writable = {
-  ...string_attribute,
+  ...string_collection_attribute_writable,
   type: dependency_type,
-  writable: true,
-  collection: true,
   separator: " ",
   pattern: /^[a-z_][a-z0-9_\-]*$/i
 };

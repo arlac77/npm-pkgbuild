@@ -90,50 +90,77 @@ export class ARCH extends Packager {
   static attributes = {
     Maintainer: {
       ...string_collection_attribute_writable,
+      name: "Maintainer",
       alias: "maintainer",
       prefix: "# "
     },
-    packager: { ...string_collection_attribute_writable, alias: "maintainer" },
-    pkgname: { ...pkgbuild_name_attribute, collection: true },
-    pkgver: pkgbuild_version_attribute,
+    packager: {
+      ...string_collection_attribute_writable,
+      name: "packager",
+      alias: "maintainer"
+    },
+    pkgname: { ...pkgbuild_name_attribute, name: "pkgname", collection: true },
+    pkgver: { ...pkgbuild_version_attribute, name: "pkgver" },
     pkgrel: {
       ...integer_attribute,
+      name: "pkgrel",
       alias: "release",
       default: 1,
       mandatory: true
     },
-    epoch: { ...integer_attribute, default: 0 },
-    pkgdesc: pkgbuild_description_attribute,
-    url: { ...string_attribute, alias: "homepage" },
-    license: { ...string_collection_attribute_writable, mandatory: true },
-    install: string_attribute,
-    changelog: string_attribute,
-    source: string_collection_attribute_writable,
-    validpgpkeys: string_collection_attribute_writable,
-    noextract: default_attribute,
-    cksums: string_collection_attribute_writable,
-    md5sums: string_collection_attribute_writable,
-    sha1sums: string_collection_attribute_writable,
-    sha256sums: string_collection_attribute_writable,
-    sha384sums: string_collection_attribute_writable,
-    sha512sums: string_collection_attribute_writable,
-    groups: string_collection_attribute_writable,
+    epoch: { ...integer_attribute, name: "epoch", default: 0 },
+    pkgdesc: { ...pkgbuild_description_attribute, name: "pkgdesc" },
+    url: { ...string_attribute, name: "url", alias: "homepage" },
+    license: {
+      ...string_collection_attribute_writable,
+      name: "license",
+      mandatory: true
+    },
+    install: { ...string_attribute, name: "install" },
+    changelog: { ...string_attribute, name: "changelog" },
+    source: { ...string_collection_attribute_writable, name: "source" },
+    validpgpkeys: {
+      ...string_collection_attribute_writable,
+      name: "validpgpkeys"
+    },
+    noextract: { ...default_attribute, name: "noextract" },
+    cksums: { ...string_collection_attribute_writable, name: "cksums" },
+    md5sums: { ...string_collection_attribute_writable, name: "md5sums" },
+    sha1sums: { ...string_collection_attribute_writable, name: "sha1sums" },
+    sha256sums: { ...string_collection_attribute_writable, name: "sha256sums" },
+    sha384sums: { ...string_collection_attribute_writable, name: "sha384sums" },
+    sha512sums: { ...string_collection_attribute_writable, name: "sha512sums" },
+    groups: { ...string_collection_attribute_writable, name: "groups" },
     arch: {
       ...string_collection_attribute_writable,
+      name: "arch",
       default: ["any"],
       mandatory: true
     },
-    backup: string_collection_attribute_writable,
+    backup: { ...string_collection_attribute_writable, name: "backup" },
     depends: {
-      ...dependency_attribute_collection_writable /*, alias: "dependencies" */
+      ...dependency_attribute_collection_writable /*, alias: "dependencies" */,
+      name: "depends"
     },
-    makedepends: dependency_attribute_collection_writable,
-    checkdepends: dependency_attribute_collection_writable,
-    optdepends: dependency_attribute_collection_writable,
-    conflicts: dependency_attribute_collection_writable,
-    provides: dependency_attribute_collection_writable,
-    replaces: dependency_attribute_collection_writable,
-    options: default_attribute
+    makedepends: {
+      ...dependency_attribute_collection_writable,
+      name: "makedepends"
+    },
+    checkdepends: {
+      ...dependency_attribute_collection_writable,
+      name: "checkdepends"
+    },
+    optdepends: {
+      ...dependency_attribute_collection_writable,
+      name: "optdepends"
+    },
+    conflicts: {
+      ...dependency_attribute_collection_writable,
+      name: "conflicts"
+    },
+    provides: { ...dependency_attribute_collection_writable, name: "provides" },
+    replaces: { ...dependency_attribute_collection_writable, name: "replaces" },
+    options: { ...default_attribute, name: "options" }
   };
 
   static async prepare(options = {}, variant = {}) {
@@ -246,10 +273,7 @@ package() {
     const ownership = [];
 
     for await (const file of copyEntries(
-      transform(
-        aggregate(sources),
-        transformer
-      ),
+      transform(aggregate(sources), transformer),
       join(staging, "src"),
       expander
     )) {

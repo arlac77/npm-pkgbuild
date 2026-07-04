@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": false
   },
-  "packageManager": "npm@11.16.0",
+  "packageManager": "npm@11.18.0",
   "exports": {
     ".": {
       "default": "./src/module.mjs"

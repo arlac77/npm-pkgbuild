@@ -4,7 +4,8 @@ import { execa } from "execa";
 import {
   integer_attribute_writable,
   yesno_attribute_writable,
-  string_attribute_writable
+  string_attribute_writable,
+  string_collection_attribute_writable
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
@@ -51,41 +52,82 @@ export class DEBIAN extends Packager {
   static attributes = {
     Package: {
       ...pkgbuild_name_attribute,
+      name: "Package",
       set: v => v.toLowerCase()
     },
-    Version: pkgbuild_version_attribute,
+    Version: { ...pkgbuild_version_attribute, name: "Version" },
     Maintainer: {
       ...string_attribute_writable,
+      name: "Maintainer",
       alias: "maintainer",
       mandatory: true
     },
-    Description: pkgbuild_description_attribute,
-    Section: { ...string_attribute_writable, alias: "groups" },
-    Priority: string_attribute_writable,
-    Essential: yesno_attribute_writable,
-    Origin: string_attribute_writable,
+    Description: { ...pkgbuild_description_attribute, name: "Description" },
+    Section: { ...string_attribute_writable, name: "Section", alias: "groups" },
+    Priority: { ...string_attribute_writable, name: "Priority" },
+    Essential: { ...yesno_attribute_writable, name: "Essential" },
+    Origin: { ...string_attribute_writable, name: "Origin" },
     Architecture: {
       ...string_attribute_writable,
+      name: "Architecture",
       alias: "arch",
       default: "all",
       mandatory: true,
       mapping: { aarch64: "arm64" }
     },
-    Homepage: { ...string_attribute_writable, alias: "homepage" },
-    Bugs: { ...string_attribute_writable, alias: "bugs" },
-    Depends: debian_dependency_attribute_collection_writable,
-    "Pre-Depends": debian_dependency_attribute_collection_writable,
-    "Build-Depends": debian_dependency_attribute_collection_writable,
-    "Build-Depends-Indep": debian_dependency_attribute_collection_writable,
-    "Build-Depends-Arch": debian_dependency_attribute_collection_writable,
-    Recommends: debian_dependency_attribute_collection_writable,
-    Suggests: debian_dependency_attribute_collection_writable,
-    Provides: debian_dependency_attribute_collection_writable,
-    Breaks: debian_dependency_attribute_collection_writable,
-    Replaces: debian_dependency_attribute_collection_writable,
-    Source: { ...string_attribute_writable, alias: "source" },
-    Uploaders: { mandatory: false },
-    "Installed-Size": integer_attribute_writable
+    Homepage: {
+      ...string_attribute_writable,
+      name: "Homepage",
+      alias: "homepage"
+    },
+    Bugs: { ...string_attribute_writable, name: "Bugs", alias: "bugs" },
+    Depends: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Depends"
+    },
+    "Pre-Depends": {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Pre-Depends"
+    },
+    "Build-Depends": {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Build-Depends"
+    },
+    "Build-Depends-Indep": {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Build-Depends-Indep"
+    },
+    "Build-Depends-Arch": {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Build-Depends-Arch"
+    },
+    Recommends: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Recommends"
+    },
+    Suggests: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Suggests"
+    },
+    Provides: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Provides"
+    },
+    Breaks: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Breaks"
+    },
+    Replaces: {
+      ...debian_dependency_attribute_collection_writable,
+      name: "Replaces"
+    },
+    Source: { ...string_attribute_writable, name: "Source", alias: "source" },
+    Uploaders: {
+      ...string_collection_attribute_writable,
+      name: "Uploaders",
+      mandatory: false
+    },
+    "Installed-Size": { ...integer_attribute_writable, name: "Installed-Size" }
   };
 
   /**

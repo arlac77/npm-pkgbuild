@@ -213,15 +213,12 @@ export class Packager {
    * @param {Object} options
    * @param {string} [options.staging]
    * @param {string} [options.destination]
-   * @param {boolean} [options.noPreserve] do not preserve (tmp) directories
    * @param {Object} [publishingDetail]
    * @returns {Promise<{properties:Object, destination:string, tmpdir:string, staging:string}>}
    */
   async prepare(options, publishingDetail) {
-    if (!options.noPreserve) {
-      if (this.#prepared) {
-        return this.#prepared;
-      }
+    if (this.#prepared) {
+      return this.#prepared;
     }
 
     const tmpdir = await this.tmpdir;
@@ -255,9 +252,7 @@ export class Packager {
       await mkdir(out.destination, mdo);
     }
 
-    if (!options.noPreserve) {
-      this.#prepared = out;
-    }
+    this.#prepared = out;
     return out;
   }
 

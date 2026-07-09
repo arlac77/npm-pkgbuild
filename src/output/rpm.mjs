@@ -61,30 +61,37 @@ export class RPM extends Packager {
    * @see https://rpm-packaging-guide.github.io
    */
   static attributes = {
-    Name: pkgbuild_name_attribute,
-    Summary: pkgbuild_description_attribute,
-    License: { ...string_attribute, alias: "license", mandatory: true },
-    Version: pkgbuild_version_attribute,
+    Name: { ...pkgbuild_name_attribute, name: "Name" },
+    Summary: { ...pkgbuild_description_attribute, name: "Summary" },
+    License: {
+      ...string_attribute,
+      name: "License",
+      alias: "license",
+      mandatory: true
+    },
+    Version: { ...pkgbuild_version_attribute, name: "Version" },
     Release: {
       ...integer_attribute,
+      name: "Release",
       alias: "release",
       default: 1,
       mandatory: true
     },
-    Source0: { ...string_attribute, alias: "source" },
-    Group: { ...string_attribute, alias: "groups" },
-    Packager: { ...string_attribute, alias: "maintainer" },
-    Vendor: { ...string_attribute, alias: "vendor" },
+    Source0: { ...string_attribute, name: "Source0", alias: "source" },
+    Group: { ...string_attribute, name: "Group", alias: "groups" },
+    Packager: { ...string_attribute, name: "Packager", alias: "maintainer" },
+    Vendor: { ...string_attribute, name: "Vendor", alias: "vendor" },
     BuildArch: {
       ...string_attribute,
+      name: "BuildArch",
       alias: "arch",
       default: "noarch",
       mandatory: true
     },
-    URL: { ...url_attribute, alias: "homepage" },
-    Requires: string_collection_attribute_writable,
-    Obsoletes: string_collection_attribute_writable,
-    Conflicts: string_collection_attribute_writable
+    URL: { ...url_attribute, name: "URL", alias: "homepage" },
+    Requires: { ...string_collection_attribute_writable, name: "Requires" },
+    Obsoletes: { ...string_collection_attribute_writable, name: "Obsoletes" },
+    Conflicts: { ...string_collection_attribute_writable, name: "Conflicts" }
   };
 
   static get workspaceLayout() {

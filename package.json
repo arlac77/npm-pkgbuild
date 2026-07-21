@@ -53,7 +53,7 @@
     "compare-versions": "^6.1.1",
     "content-entry": "^14.2.7",
     "content-entry-filesystem": "^9.0.14",
-    "content-entry-transform": "^1.6.9",
+    "content-entry-transform": "^1.7.0",
     "execa": "^10.0.0",
     "ini": "^7.0.0",
     "iterable-string-interceptor": "^3.0.8",

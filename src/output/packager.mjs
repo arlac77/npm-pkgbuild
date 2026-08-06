@@ -94,7 +94,7 @@ export class Packager {
 
     const context = {
       ...expandContextDoubbleCurly,
-      root: properties
+      current: properties
     };
 
     const entryProps = { mode: 0o775 };

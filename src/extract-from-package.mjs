@@ -414,7 +414,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
           conflicts: mergeDependencies(result.conflicts, output.conflicts)
         };
 
-        const context = { root: properties };
+        const context = { current: properties };
 
         const sources = [];
         expand(content, context).reduce((a, { content, dir }) => {

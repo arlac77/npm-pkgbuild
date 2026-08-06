@@ -107,7 +107,7 @@ program
                 })
             );
 
-            const context = { root: properties };
+            const context = { current: properties };
 
             const o = new outputFactory(expand(properties, context));
             const transformer = [

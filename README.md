@@ -187,12 +187,14 @@ See [mf-hosting](https://www.npmjs.com/package/mf-hosting) or [mf-hosting-fronte
     *   [Properties](#properties-6)
 *   [extractFunctions](#extractfunctions)
     *   [Parameters](#parameters-28)
-*   [fieldProvider](#fieldprovider)
+*   [asArray](#asarray)
     *   [Parameters](#parameters-29)
-*   [Expander](#expander)
+*   [fieldProvider](#fieldprovider)
     *   [Parameters](#parameters-30)
-*   [copyEntries](#copyentries)
+*   [Expander](#expander)
     *   [Parameters](#parameters-31)
+*   [copyEntries](#copyentries)
+    *   [Parameters](#parameters-32)
 
 ## allInputs
 
@@ -723,6 +725,16 @@ Extract shell functions from a given text.
 *   `source` **AsyncIterable<[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>**&#x20;
 
 Returns **AsyncIterable<[FunctionDecl](#functiondecl)>**&#x20;
+
+## asArray
+
+Convert scalar or iterable into Array.
+
+### Parameters
+
+*   `value` **any**&#x20;
+
+Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)\<any>**&#x20;
 
 ## fieldProvider
 

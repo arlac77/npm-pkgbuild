@@ -74,15 +74,14 @@ export class FileContentProvider extends ContentProvider {
       withFileTypes: true
     })) {
       const name = join(entry.parentPath, entry.name).substring(startPos);
-
       if (entry.isFile()) {
         yield new FileSystemEntry(name, {
-          ...this.entryProperties,
+          ...this.propertiesFor(name),
           baseDir
         });
         count++;
       } else if (entry.isDirectory()) {
-        yield new CollectionEntry(name, this.directoryProperties);
+        yield new CollectionEntry(name, this.propertiesFor(name, true));
         count++;
       }
     }

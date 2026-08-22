@@ -52,7 +52,7 @@ export class NFTContentProvider extends ContentProvider {
     for (const name of fileList) {
       yield new FileSystemEntry(
         name,
-        { ...this.entryProperties, baseDir }
+        { ...this.propertiesFor(name), baseDir }
       );
     }
   }

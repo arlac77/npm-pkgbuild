@@ -1,9 +1,9 @@
 import { join, resolve } from "node:path";
 import { packageDirectory } from "package-directory";
 import { packageWalker } from "npm-package-walker";
-import { expand } from "pacc";
+import { expand, asArray } from "pacc";
 import { satisfies } from "compare-versions";
-import { asArray, mergeDependencies } from "./util.mjs";
+import { mergeDependencies } from "./util.mjs";
 import { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs";
 import { NodeModulesContentProvider } from "./content/node-modules-content-provider.mjs";
 import { FileContentProvider } from "./content/file-content-provider.mjs";

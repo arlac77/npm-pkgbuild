@@ -3,7 +3,7 @@ import { cwd } from "node:process";
 import { glob } from "node:fs/promises";
 import { ContentEntry, CollectionEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
-import { asArray } from "../util.mjs";
+import { asArray } from "pacc";
 import { ContentProvider } from "./content-provider.mjs";
 
 const DEFAULT_PATTERN = ["**/*", "!.*"];

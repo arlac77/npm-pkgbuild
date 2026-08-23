@@ -1,7 +1,7 @@
 import { nodeFileTrace } from "@vercel/nft";
 import { ContentEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
-import { asArray } from "../util.mjs";
+import { asArray } from "pacc";
 import { ContentProvider } from "./content-provider.mjs";
 
 /**

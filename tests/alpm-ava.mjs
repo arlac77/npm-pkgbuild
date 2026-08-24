@@ -8,12 +8,12 @@ import {
   ARCH
 } from "npm-pkgbuild";
 
-test("arch extension", async t => {
+test("alpm extension", async t => {
   await ARCH.prepare({ verbose: false }, { arch: "aarch64" });
   t.true(ARCH.fileNameExtension.startsWith(".pkg.tar."));
 });
 
-test("arch default properties", async t => {
+test("alpm default properties", async t => {
   const properties = {
     name: "abc",
     //  arch: [],
@@ -38,7 +38,7 @@ test("arch default properties", async t => {
   });
 });
 
-test("arch aarch64 default properties", async t => {
+test("alpm aarch64 default properties", async t => {
   const properties = {
     name: "abc",
     arch: ["aarch64"],
@@ -60,7 +60,7 @@ test("arch aarch64 default properties", async t => {
   });
 });
 
-test("arch", async t => {
+test("alpm", async t => {
   const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider(

@@ -230,13 +230,14 @@ export class ARCH extends Packager {
       out.end();
     }
 
+    const depends = this.makeDepends(properties.dependencies).join(" ");
+    const dependsStatement = depends.length ? `depends=(${depends})`: "";
     const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
 
-    const self = this;
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${self.makeDepends(properties.dependencies).join(" ")})
+  ${dependsStatement}
 
   if [ "$(ls -A $srcdir)" ]
   then

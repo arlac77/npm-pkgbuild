@@ -56,11 +56,12 @@ export class NPMPackContentProvider extends ContentProvider {
             chunks.push(chunk);
           }
 
+          const name = header.name.substring(8);
           entries.push(
             new BufferContentEntry(
-              header.name.substring(8),
+              name,
               {
-                ...this.entryProperties,
+                ...this.propertiesFor(name),
                 mtime: header.mtime,
                 mode: header.mode
               },

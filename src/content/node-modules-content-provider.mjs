@@ -143,7 +143,7 @@ export class NodeModulesContentProvider extends ContentProvider {
               if (json) {
                 yield new StringContentEntry(
                   name,
-                  this.entryProperties,
+                  this.propertiesFor(name),
                   JSON.stringify(json)
                 );
               }
@@ -154,11 +154,11 @@ export class NodeModulesContentProvider extends ContentProvider {
           }
 
           yield new FileSystemEntry(name, {
-            ...this.entryProperties,
+            ...this.propertiesFor(name),
             baseDir: nodeModulesDir
           });
         } else if (entry.isDirectory()) {
-          yield new CollectionEntry(name, this.directoryProperties);
+          yield new CollectionEntry(name, this.propertiesFor(name, true));
         }
       }
     } catch (e) {

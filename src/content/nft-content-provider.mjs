@@ -1,7 +1,7 @@
 import { nodeFileTrace } from "@vercel/nft";
 import { ContentEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
-import { asArray } from "../util.mjs";
+import { asArray } from "pacc";
 import { ContentProvider } from "./content-provider.mjs";
 
 /**
@@ -52,7 +52,7 @@ export class NFTContentProvider extends ContentProvider {
     for (const name of fileList) {
       yield new FileSystemEntry(
         name,
-        { ...this.entryProperties, baseDir }
+        { ...this.propertiesFor(name), baseDir }
       );
     }
   }

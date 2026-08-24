@@ -230,18 +230,19 @@ export class ARCH extends Packager {
       out.end();
     }
 
+    const depends = this.makeDepends(properties.dependencies).join(" ");
+    const dependsStatement = depends.length ? `depends=(${depends})` : "";
     const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
 
-    const self = this;
     async function* trailingLines() {
       yield `
 package() {
-  depends=(${self.makeDepends(properties.dependencies).join(" ")})
+  ${dependsStatement}
 
   if [ "$(ls -A $srcdir)" ]
   then
     cp -rp $srcdir/* "$pkgdir"
-### CHOWN ###
+### PERMISSION ###
 
     ${verbose}
   fi
@@ -270,15 +271,15 @@ package() {
       createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
-    const ownership = [];
+    const permissions = [];
 
     for await (const file of copyEntries(
       transform(aggregate(sources), transformer),
       join(staging, "src"),
       expander
     )) {
-      if (file.owner || file.group) {
-        ownership.push(file);
+      if (file.user || file.group || file.mode) {
+        permissions.push(file);
       }
 
       if (options.verbose) {
@@ -286,22 +287,30 @@ package() {
       }
     }
 
-    if (ownership.length) {
+    if (permissions.length) {
       const pkgbuild = join(staging, PKGBUILD);
       let content = await readFile(pkgbuild, utf8StreamOptions);
-      const markerPos = content.indexOf("### CHOWN ###");
+      const markerPos = content.indexOf("### PERMISSION ###");
+
+      const flags = {
+        user: ["-u", f => f.user],
+        group: ["-g", f => f.group],
+        mode: ["-m", f => Number(f.mode).toString(8)]
+      };
 
       content =
         content.substring(0, markerPos) +
-        ownership
-          .map(
-            f =>
-              `    chown ${[f.owner ?? "", f.group ?? ""].join(
-                ":"
-              )} \"$pkgdir/${f.destination}\"`
-          )
+        permissions
+          .filter(f=>f.isBlob)
+          .map(f => {
+            const options = Object.keys(flags)
+              .filter(name => f[name])
+              .map(name => `${flags[name][0]} ${flags[name][1](f)}`)
+              .join(" ");
+            return `    install -D ${options} \"$srcdir/${f.name}\" \"$pkgdir/${f.destination}\"`;
+          })
           .join("\n") +
-        content.substring(markerPos + 14);
+        content.substring(markerPos + 18);
 
       await writeFile(pkgbuild, content, utf8StreamOptions);
     }

@@ -3,7 +3,7 @@ import { cwd } from "node:process";
 import { glob } from "node:fs/promises";
 import { ContentEntry, CollectionEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
-import { asArray } from "../util.mjs";
+import { asArray } from "pacc";
 import { ContentProvider } from "./content-provider.mjs";
 
 const DEFAULT_PATTERN = ["**/*", "!.*"];
@@ -74,15 +74,14 @@ export class FileContentProvider extends ContentProvider {
       withFileTypes: true
     })) {
       const name = join(entry.parentPath, entry.name).substring(startPos);
-
       if (entry.isFile()) {
         yield new FileSystemEntry(name, {
-          ...this.entryProperties,
+          ...this.propertiesFor(name, false),
           baseDir
         });
         count++;
       } else if (entry.isDirectory()) {
-        yield new CollectionEntry(name, this.directoryProperties);
+        yield new CollectionEntry(name, this.propertiesFor(name, true));
         count++;
       }
     }

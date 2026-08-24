@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 import { createWriteStream } from "node:fs";
-import { toExternal } from "pacc";
+import { toExternal, asArray } from "pacc";
 import { ContentEntry } from "content-entry";
 import { aggregateFifo } from "aggregate-async-iterator";
 
@@ -136,10 +136,6 @@ export function quote(v, qc = "'") {
 
   if (typeof v === "string" || v instanceof String)
     return v.match(/^\w+$/) ? v : qc + v + qc;
-}
-
-export function asArray(o) {
-  return Array.isArray(o) ? o : o ? [o] : [];
 }
 
 /**

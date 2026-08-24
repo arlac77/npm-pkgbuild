@@ -36,7 +36,7 @@ export class ContentProvider {
    *
    * @param {string} name
    * @param {boolean} isCollection
-   * @returns {Object}
+   * @returns {Object|undefined}
    */
   propertiesFor(name, isCollection) {
     for (const [pattern, properties] of Object.entries(this.properties)) {

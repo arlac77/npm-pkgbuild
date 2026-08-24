@@ -76,7 +76,7 @@ export class FileContentProvider extends ContentProvider {
       const name = join(entry.parentPath, entry.name).substring(startPos);
       if (entry.isFile()) {
         yield new FileSystemEntry(name, {
-          ...this.propertiesFor(name),
+          ...this.propertiesFor(name, false),
           baseDir
         });
         count++;

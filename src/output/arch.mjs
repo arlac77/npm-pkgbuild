@@ -231,7 +231,7 @@ export class ARCH extends Packager {
     }
 
     const depends = this.makeDepends(properties.dependencies).join(" ");
-    const dependsStatement = depends.length ? `depends=(${depends})`: "";
+    const dependsStatement = depends.length ? `depends=(${depends})` : "";
     const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
 
     async function* trailingLines() {
@@ -295,7 +295,8 @@ package() {
       content =
         content.substring(0, markerPos) +
         permissions
-          .filter(f=>f.user||f.group).map(
+          .filter(f => f.user || f.group)
+          .map(
             f =>
               `    chown ${[f.owner ?? "", f.group ?? ""].join(
                 ":"

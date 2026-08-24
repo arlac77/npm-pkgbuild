@@ -242,7 +242,7 @@ package() {
   if [ "$(ls -A $srcdir)" ]
   then
     cp -rp $srcdir/* "$pkgdir"
-### CHOWN ###
+### PERMISSION ###
 
     ${verbose}
   fi
@@ -271,15 +271,15 @@ package() {
       createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
-    const ownership = [];
+    const permissions = [];
 
     for await (const file of copyEntries(
       transform(aggregate(sources), transformer),
       join(staging, "src"),
       expander
     )) {
-      if (file.owner || file.group) {
-        ownership.push(file);
+      if (file.owner || file.group || file.mode) {
+        permissions.push(file);
       }
 
       if (options.verbose) {
@@ -287,15 +287,15 @@ package() {
       }
     }
 
-    if (ownership.length) {
+    if (permissions.length) {
       const pkgbuild = join(staging, PKGBUILD);
       let content = await readFile(pkgbuild, utf8StreamOptions);
-      const markerPos = content.indexOf("### CHOWN ###");
+      const markerPos = content.indexOf("### PERMISSION ###");
 
       content =
         content.substring(0, markerPos) +
-        ownership
-          .map(
+        permissions
+          .filter(f=>f.user||f.group).map(
             f =>
               `    chown ${[f.owner ?? "", f.group ?? ""].join(
                 ":"

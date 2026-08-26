@@ -11,7 +11,7 @@
       "default": "./src/module.mjs"
     }
   },
-  "description": "create ArchLinux, RPM and Debian packages from npm packages",
+  "description": "create ALPM, RPM and Debian packages from npm packages",
   "keywords": [
     "ArchLinux",
     "arch-linux",

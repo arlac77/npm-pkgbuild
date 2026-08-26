@@ -68,7 +68,7 @@ let _architecture = "aarch64";
 
 export class ALPM extends Packager {
   static get alias() {
-    return "alpm";
+    return "arch";
   }
 
   static get name() {
@@ -295,13 +295,13 @@ package() {
       const flags = {
         user: ["-u", f => f.user],
         group: ["-g", f => f.group],
-        mode: ["-m", f => Number(f.mode).toString(8)]
+        mode: ["-m", f => Number(f.mode && 0o7777).toString(8)] // TODO why only 12 bits
       };
 
       content =
         content.substring(0, markerPos) +
         permissions
-          .filter(f=>f.isBlob)
+          .filter(f => f.isBlob)
           .map(f => {
             const options = Object.keys(flags)
               .filter(name => f[name])

@@ -13,7 +13,7 @@ export { NPMPackContentProvider } from "./content/npm-pack-content-provider.mjs"
 export { NFTContentProvider } from "./content/nft-content-provider.mjs";
 export { DEBIAN } from "./output/debian.mjs";
 export { RPM } from "./output/rpm.mjs";
-export { ARCH } from "./output/arch.mjs";
+export { ALPM } from "./output/alpm.mjs";
 export { OCI } from "./output/oci.mjs";
 export { DOCKER } from "./output/docker.mjs";
 export { Packager } from "./output/packager.mjs";

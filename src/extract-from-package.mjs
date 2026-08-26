@@ -10,7 +10,7 @@ import { FileContentProvider } from "./content/file-content-provider.mjs";
 import { NFTContentProvider } from "./content/nft-content-provider.mjs";
 import { ContentProvider } from "./content/content-provider.mjs";
 import { DEBIAN } from "./output/debian.mjs";
-import { ARCH } from "./output/arch.mjs";
+import { ALPM } from "./output/alpm.mjs";
 import { RPM } from "./output/rpm.mjs";
 import { OCI } from "./output/oci.mjs";
 import { DOCKER } from "./output/docker.mjs";
@@ -29,7 +29,7 @@ export const allInputs = [
 /**
  * All output formats
  */
-export const allOutputs = [ARCH, RPM, OCI, DOCKER, BUILDAH, DEBIAN];
+export const allOutputs = [ALPM, RPM, OCI, DOCKER, BUILDAH, DEBIAN];
 
 /**
  * Node architecture name to os native arch name mapping

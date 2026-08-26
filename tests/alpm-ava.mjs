@@ -5,12 +5,12 @@ import { tmpdir } from "node:os";
 import {
   FileContentProvider,
   createPublishingDetails,
-  ARCH
+  ALPM
 } from "npm-pkgbuild";
 
 test("alpm extension", async t => {
-  await ARCH.prepare({ verbose: false }, { arch: "aarch64" });
-  t.true(ARCH.fileNameExtension.startsWith(".pkg.tar."));
+  await ALPM.prepare({ verbose: false }, { arch: "aarch64" });
+  t.true(ALPM.fileNameExtension.startsWith(".pkg.tar."));
 });
 
 test("alpm default properties", async t => {
@@ -22,7 +22,7 @@ test("alpm default properties", async t => {
     license: "MIT"
   };
 
-  const out = new ARCH(properties);
+  const out = new ALPM(properties);
 
   t.deepEqual(out.properties, {
     ...properties,
@@ -46,7 +46,7 @@ test("alpm aarch64 default properties", async t => {
     description: "a description"
   };
 
-  const out = new ARCH(properties);
+  const out = new ALPM(properties);
 
   t.deepEqual(out.properties, {
     type: "arch",
@@ -88,7 +88,7 @@ test("alpm", async t => {
     }
   };
 
-  const out = new ARCH(properties);
+  const out = new ALPM(properties);
 
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const transformer = [];
@@ -96,7 +96,7 @@ test("alpm", async t => {
     destination,
     verbose: true
   });
-  t.is(fileName, join(destination, "abc-1.0.0-1-any" + ARCH.fileNameExtension));
+  t.is(fileName, join(destination, "abc-1.0.0-1-any" + ALPM.fileNameExtension));
 
   const s = await stat(fileName);
   t.true(s.size >= 800, `package file size ${s.size}`);

@@ -56,7 +56,7 @@ export const pkgKeyValuePairOptions = {
 };
 
 function keyPrefix(key) {
-  const f = ARCH.attributes[key];
+  const f = ALPM.attributes[key];
   return f?.prefix ? f.prefix + key : key;
 }
 
@@ -66,7 +66,7 @@ let _ext = ".pkg.tar.xz";
 let _prepared;
 let _architecture = "aarch64";
 
-export class ARCH extends Packager {
+export class ALPM extends Packager {
   static get alias() {
     return "alpm";
   }

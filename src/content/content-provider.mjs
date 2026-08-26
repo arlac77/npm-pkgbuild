@@ -1,3 +1,4 @@
+import picomatch from "picomatch";
 import { ContentEntry, CollectionEntry } from "content-entry";
 
 /**
@@ -30,6 +31,13 @@ export class ContentProvider {
         destination: this.entryProperties?.destination
       };
     }
+
+    this.permissions = new Map(
+      Object.entries(this.properties).map(([pattern, properties]) => [
+        picomatch(pattern),
+        properties
+      ])
+    );
   }
 
   /**
@@ -39,23 +47,11 @@ export class ContentProvider {
    * @returns {Object|undefined}
    */
   propertiesFor(name, isCollection) {
-    for (const [pattern, properties] of Object.entries(this.properties)) {
-      if (pattern === name) {
-        return properties;
-      }
-      if (pattern.endsWith("**/*")) {
-        const prefix = pattern.substring(0, pattern.length - 4);
-        if (name.startsWith(prefix)) {
-          return properties;
-        }
-      }
-      if (pattern.endsWith("*")) {
-        const prefix = pattern.substring(0, pattern.length - 1);
-        if (name.startsWith(prefix)) {
-          if (name.substring(prefix.length).indexOf("/") < 0) {
-            return properties;
-          }
-        }
+    for (const [matcher, properties] of this.permissions) {
+      if (matcher(name)) {
+        return isCollection && properties.collection
+          ? properties.collection
+          : properties;
       }
     }
 

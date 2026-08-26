@@ -63,6 +63,7 @@
     "pacc": "^11.6.0",
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",
+    "picomatch": "^4.0.7",
     "tar-stream": "^3.1.7",
     "uti": "^8.11.3"
   },

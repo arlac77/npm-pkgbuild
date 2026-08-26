@@ -27,12 +27,14 @@ test(
   {
     dir: "somewhere",
     properties: {
+      "a/*.key": { mode: 0o600 },
       "a/b/*": { user: "u1" },
       "**/*": { user: "u2" }
     }
   },
   {
     "a/b/c": { user: "u1" },
-    "a/a": { user: "u2" }
+    "a/a": { user: "u2" },
+    "a/x.key": { mode: 0o600 }
   }
 );

@@ -26,7 +26,7 @@ test("alpm default properties", async t => {
 
   t.deepEqual(out.properties, {
     ...properties,
-    type: "arch",
+    type: "alpm",
     epoch: 0,
     arch: ["any"],
     pkgdesc: properties.description,
@@ -49,7 +49,7 @@ test("alpm aarch64 default properties", async t => {
   const out = new ALPM(properties);
 
   t.deepEqual(out.properties, {
-    type: "arch",
+    type: "alpm",
     ...properties,
     epoch: 0,
     arch: ["aarch64"],

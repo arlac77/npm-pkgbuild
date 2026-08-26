@@ -72,7 +72,7 @@ export class ALPM extends Packager {
   }
 
   static get name() {
-    return "arch";
+    return "alpm";
   }
 
   static get description() {

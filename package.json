@@ -14,8 +14,8 @@
   "description": "create ALPM, RPM and Debian packages from npm packages",
   "keywords": [
     "ArchLinux",
-    "arch-linux",
     "alpm",
+    "arch-linux",
     "aur",
     "buildah",
     "deb",

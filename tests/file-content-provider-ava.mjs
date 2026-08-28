@@ -1,11 +1,8 @@
 import test from "ava";
 import { FileContentProvider } from "npm-pkgbuild";
 
-async function fcpt(t, definition, destination, list) {
-  const content = new FileContentProvider(
-    definition,
-    typeof destination === "string" ? { destination } : destination
-  );
+async function fcpt(t, definition, list) {
+  const content = new FileContentProvider(definition);
 
   let entries = [];
 
@@ -21,16 +18,18 @@ async function fcpt(t, definition, destination, list) {
   }
 
   t.deepEqual(
-    await Promise.all(entries.map(async entry => {
-      const r = { name: entry.name, destination: entry.destination };
-      for (const a of ["user", "group", "mode"]) {
-        const value = await entry[a];
-        if (value) {
-          r[a] = value;
+    await Promise.all(
+      entries.map(async entry => {
+        const r = { name: entry.name, destination: entry.destination };
+        for (const a of ["user", "group", "mode"]) {
+          const value = await entry[a];
+          if (value) {
+            r[a] = value;
+          }
         }
-      }
-      return r;
-    })),
+        return r;
+      })
+    ),
     list
   );
 
@@ -38,20 +37,18 @@ async function fcpt(t, definition, destination, list) {
   t.is(exists.filter(e => e).length, entries.length);
 }
 
-fcpt.title = (
-  providedTitle = "FileContentProvider list",
-  definition,
-  destination,
-  list
-) =>
+fcpt.title = (providedTitle = "FileContentProvider list", definition, list) =>
   ` ${providedTitle} ${JSON.stringify(definition)} -> ${JSON.stringify(
     list
   )}`.trim();
 
 test(
   fcpt,
-  new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
-  { destination: "dest/package.json", user: "root", group: "sys", mode: 0o100640 },
+  {
+    dir: new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
+    destination: "dest/package.json",
+    permissions: { "**/*": { user: "root", group: "sys", mode: 0o100640 } }
+  },
   [
     {
       name: "package.json",
@@ -66,9 +63,9 @@ test(
 test(
   fcpt,
   {
-    dir: new URL("fixtures/skeleton", import.meta.url).pathname
+    dir: new URL("fixtures/skeleton", import.meta.url).pathname + '/',
+    destination: "dest"
   },
-  "dest",
   [{ name: "package.json", mode: 0o100644, destination: "dest" }]
 );
 
@@ -76,9 +73,9 @@ test(
   fcpt,
   {
     dir: new URL("fixtures/skeleton", import.meta.url).pathname,
-    pattern: "**/*.json"
+    pattern: "**/*.json",
+    destination: "dest"
   },
-  "dest",
   [{ name: "package.json", mode: 0o100644, destination: "dest" }]
 );
 
@@ -86,27 +83,35 @@ test(
   fcpt,
   {
     dir: new URL("fixtures/skeleton", import.meta.url).pathname,
-    pattern: "**/*.txt"
+    pattern: "**/*.txt",
+    destination: "dest"
   },
-  "dest",
   []
 );
 
 test(
   fcpt,
-  "pacman/tmpfiles.conf",
-  "dest",
+  { dir: "pacman/tmpfiles.conf", destination: "dest" },
   "File not found " // pacman/tmpfiles.conf"
 );
-test(fcpt, new URL("fixtures/content/", import.meta.url).pathname, "dest", [
-  { name: "file1.txt", mode: 0o100644, destination: "dest" },
-  { name: "file2 with spaces.txt", mode: 0o100644, destination: "dest" },
-  { name: "file2.json", mode: 0o100644, destination: "dest" }
-]);
 test(
   fcpt,
-  new URL("fixtures/content/*.txt", import.meta.url).pathname,
-  "dest",
+  {
+    dir: new URL("fixtures/content/", import.meta.url).pathname,
+    destination: "dest"
+  },
+  [
+    { name: "file1.txt", mode: 0o100644, destination: "dest" },
+    { name: "file2 with spaces.txt", mode: 0o100644, destination: "dest" },
+    { name: "file2.json", mode: 0o100644, destination: "dest" }
+  ]
+);
+test(
+  fcpt,
+  {
+    dir: new URL("fixtures/content/*.txt", import.meta.url).pathname,
+    destination: "dest"
+  },
   [
     { name: "file1.txt", mode: 0o100644, destination: "dest" },
     { name: "file2 with spaces.txt", mode: 0o100644, destination: "dest" }

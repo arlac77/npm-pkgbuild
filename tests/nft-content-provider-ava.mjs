@@ -7,9 +7,8 @@ test("NFTContentProvider entries", async t => {
   const content = new NFTContentProvider(
     {
       start: [new URL("fixtures/pkg/main.mjs", import.meta.url).pathname],
-     // dir: new URL("fixtures/pkg", import.meta.url).pathname
-    },
-    { destination }
+      destination
+    }
   );
 
   const entries = {};

@@ -2,16 +2,22 @@ import test from "ava";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { constants } from "node:fs";
+import { exec } from "node:child_process";
+import { promisify } from 'node:util';
 import { NodeModulesContentProvider } from "npm-pkgbuild";
 import { access, mkdtemp } from "node:fs/promises";
 import { copyEntries } from "npm-pkgbuild";
 
 test("NodeModules entries", async t => {
+  const dir = new URL("fixtures/pkg", import.meta.url).pathname;
+
+  const execp = promisify(exec);
+  const npm = await execp("npm install", { cwd: dir });
   const content = new NodeModulesContentProvider({
-    dir: new URL("fixtures/pkg", import.meta.url).pathname
+    dir
   });
 
-  t.is(content.dir, new URL("fixtures/pkg", import.meta.url).pathname);
+  t.is(content.dir, dir);
 
   const tmp = await mkdtemp(
     join(tmpdir(), "NodeModulesContentProvider-destination")
@@ -27,11 +33,11 @@ test("NodeModules entries", async t => {
 
 test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
   const content = new NodeModulesContentProvider({
-    withoutDevelpmentDependencies: false,
-    dir: new URL("fixtures/pkg", import.meta.url).pathname
+    dir: new URL("fixtures/pkg", import.meta.url).pathname,
+    withoutDevelpmentDependencies: false
   });
 
   const entries = await Array.fromAsync(content);
 
-  t.is(entries.length, 0); // not actually filled node-modules
+  t.is(entries.length, 5);
 });

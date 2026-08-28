@@ -25,19 +25,11 @@ export class NPMPackContentProvider extends ContentProvider {
     return "use npm pack as source";
   }
 
-  constructor(definitions, entryProperties, directoryProperties) {
-    if (
-      entryProperties?.destination &&
-      !entryProperties.destination.endsWith("/")
-    ) {
-      entryProperties.destination += "/";
+  constructor(definitions) {
+    if (definitions?.destination && !definitions.destination.endsWith("/")) {
+      definitions.destination += "/";
     }
-    super(definitions, entryProperties, directoryProperties);
-    Object.assign(this, definitions);
-  }
-
-  toString() {
-    return `${this.constructor.name}: ${this.dir} -> ${this.entryProperties.destination}`;
+    super(definitions);
   }
 
   async *[Symbol.asyncIterator]() {

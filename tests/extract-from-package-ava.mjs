@@ -1,5 +1,5 @@
 import test from "ava";
-import { arch as hostArch } from "node:process";
+import { arch } from "node:process";
 import { join } from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
 import {
@@ -76,7 +76,7 @@ test(
     name: "@some-org_new/n1",
     description: "d1",
     version: "1.2.3",
-    cpu: hostArch,
+    cpu: arch,
     pkgbuild: {}
   },
   [
@@ -86,7 +86,7 @@ test(
         description: "d1",
         version: "1.2.3",
         access: "private",
-        arch: [npmArchMapping[hostArch]],
+        arch: [npmArchMapping[arch]],
         variant: "default"
       }
     }
@@ -176,20 +176,16 @@ test(
         }
       },
       sources: [
-        new FileContentProvider(
-          {
-            dir: new URL("../build/efpt-n2", import.meta.url).pathname,
-            pattern: ["*"]
-          },
-          { destination: "/service/myservice" }
-        ),
-        new FileContentProvider(
-          {
-            dir: new URL("../build/efpt-n2/pkg", import.meta.url).pathname,
-            pattern: ["myconfig.json"]
-          },
-          { destination: "/etc/myconfig.json" }
-        )
+        new FileContentProvider({
+          dir: new URL("../build/efpt-n2", import.meta.url).pathname,
+          pattern: ["*"],
+          destination: "/service/myservice"
+        }),
+        new FileContentProvider({
+          dir: new URL("../build/efpt-n2/pkg", import.meta.url).pathname,
+          pattern: ["myconfig.json"],
+          destination: "/etc/myconfig.json"
+        })
       ]
     }
   ]
@@ -207,7 +203,7 @@ test(
       v7: {
         pkgbuild: {
           output: {
-            arch: { properties: { key: "is arch" } },
+            alpm: { properties: { key: "is alpm" } },
             debian: { properties: { key: "is debian" } }
           },
           install: "/v7",
@@ -225,14 +221,14 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is arch",
-        type: "arch",
+        key: "is alpm",
+        type: "alpm",
         dependencies: {},
         replaces: {},
         conflicts: {}
       },
       output: {
-        arch: { properties: { key: "is arch" } }
+        alpm: { properties: { key: "is alpm" } }
       }
     },
     {
@@ -259,14 +255,14 @@ test(
         access: "private",
         variant: "v7",
         install: "/n4",
-        key: "is arch",
-        type: "arch",
+        key: "is alpm",
+        type: "alpm",
         dependencies: {},
         replaces: {},
         conflicts: {}
       },
       output: {
-        arch: { properties: { key: "is arch" } }
+        alpm: { properties: { key: "is alpm" } }
       }
     },
     {
@@ -396,48 +392,34 @@ function expected(properties) {
       conflicts: {}
     },
     sources: [
-      new FileContentProvider(
-        {
-          dir: new URL(
-            "../build/efpt-konsum-frontend/node_modules/hosting",
-            import.meta.url
-          ).pathname,
-          pattern: ["a.service"]
-        },
-        { destination: "/usr/lib/systemd/system/myservice.service" }
-      ),
-      new NPMPackContentProvider(
-        {
-          dir: new URL("../build/efpt-konsum-frontend", import.meta.url)
-            .pathname
-        },
-        { destination: "/services/konsum/frontend/" }
-      ),
-      new FileContentProvider(
-        {
-          dir: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
-            .pathname
-        },
-        { destination: "/services/konsum/frontend/" }
-      ),
-      new FileContentProvider(
-        {
-          dir: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
-            .pathname
-        },
-        { destination: "/services/konsum/frontend/" }
-      ),
-      new FileContentProvider(
-        {
-          name: "pkgbuild/nginx.conf",
-          dir: new URL("../build/efpt-konsum-frontend", import.meta.url)
-            .pathname
-        },
-        {
-          destination: "/etc/nginx/sites/common/konsum-frontend.conf",
-          owner: "root"
-        }
-      )
+      new FileContentProvider({
+        dir: new URL(
+          "../build/efpt-konsum-frontend/node_modules/hosting",
+          import.meta.url
+        ).pathname,
+        pattern: ["a.service"],
+        destination: "/usr/lib/systemd/system/myservice.service"
+      }),
+      new NPMPackContentProvider({
+        dir: new URL("../build/efpt-konsum-frontend", import.meta.url).pathname,
+        destination: "/services/konsum/frontend/"
+      }),
+      new FileContentProvider({
+        dir: new URL("../build/efpt-konsum-frontend/build", import.meta.url)
+          .pathname,
+        destination: "/services/konsum/frontend/"
+      }),
+      new FileContentProvider({
+        dir: new URL("../build/efpt-konsum-frontend/dist", import.meta.url)
+          .pathname,
+        destination: "/services/konsum/frontend/"
+      }),
+      new FileContentProvider({
+        name: "pkgbuild/nginx.conf",
+        dir: new URL("../build/efpt-konsum-frontend", import.meta.url).pathname,
+        destination: "/etc/nginx/sites/common/konsum-frontend.conf",
+        owner: "root"
+      })
     ]
   };
 }
@@ -479,7 +461,7 @@ test(
       hosting: {
         pkgbuild: {
           output: {
-            arch: {},
+            alpm: {},
             debian: {}
           },
           arch: ["x86_64", "aarch64", "armv7"],
@@ -490,7 +472,7 @@ test(
     }
   },
   [
-    { ...expected({ type: "arch" }), output: { arch: {} } },
+    { ...expected({ type: "alpm" }), output: { alpm: {} } },
     { ...expected({ type: "debian" }), output: { debian: {} } }
   ]
 );

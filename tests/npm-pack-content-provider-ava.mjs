@@ -6,9 +6,9 @@ test("NPMPack entries", async t => {
 
   const content = new NPMPackContentProvider(
     {
-      dir: new URL("fixtures/pkg", import.meta.url).pathname
-    },
-    { destination }
+      dir: new URL("fixtures/pkg", import.meta.url).pathname,
+      destination
+    }
   );
 
   const entries = {};

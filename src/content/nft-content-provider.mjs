@@ -24,12 +24,10 @@ export class NFTContentProvider extends ContentProvider {
    * @param {Object|string} definitions
    * @param {string} definitions.start base directory where to find the files
    * @param {string} [definitions.dir]
-   * @param {Object} [entryProperties]
-   * @param {string} [entryProperties.destination]
-   * @param {Object} [directoryProperties]
+   * @param {string} [definitions.destination]
  */
-  constructor(definitions, entryProperties, directoryProperties) {
-    super(definitions, entryProperties, directoryProperties);
+  constructor(definitions) {
+    super(definitions);
 
     if (typeof definitions === "string") {
       this.start = [definitions];
@@ -39,7 +37,7 @@ export class NFTContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.start} -> ${this.entryProperties.destination}`;
+    return `${this.constructor.name}: ${this.start} -> ${this.destination}`;
   }
 
   /**

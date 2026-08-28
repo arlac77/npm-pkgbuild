@@ -23,34 +23,37 @@ export class FileContentProvider extends ContentProvider {
     return "use plain files source";
   }
 
-  pattern = DEFAULT_PATTERN;
-
   /**
    * Content provided form the file system.
    * @param {Object|string} definitions
    * @param {string} [definitions.dir] base directory where to find the files
    * @param {string|string[]} [definitions.pattern]
+   * @param {string} [definitions.destination]
    */
-  constructor(definitions, entryProperties, directoryProperties) {
-    super(definitions, entryProperties, directoryProperties);
+  constructor(definitions) {
+    let dir;
 
     if (typeof definitions === "string") {
-      if (definitions.endsWith("/")) {
-        this.dir = definitions.substring(0, definitions.length - 1);
-        this.pattern = DEFAULT_PATTERN;
-      } else {
-        const dir = dirname(definitions);
-        this.dir = dir;
-        this.pattern = [definitions.substring(dir.length + 1)];
-      }
+      dir = definitions;
+      definitions = {};
     } else {
-      this.dir = definitions.dir;
-      if (definitions.pattern) {
-        this.pattern = asArray(definitions.pattern);
-      }
+      dir = definitions.dir;
     }
 
-    this.dir = resolve(cwd(), this.dir);
+    if (dir.endsWith("/")) {
+      definitions.dir = dir.substring(0, dir.length - 1);
+    } else if (!definitions.pattern) {
+      definitions.dir = dirname(dir);
+      definitions.pattern = [dir.substring(definitions.dir.length + 1)];
+    }
+
+    definitions.dir = resolve(cwd(), definitions.dir);
+
+    super(definitions);
+
+    this.pattern = definitions.pattern
+      ? asArray(definitions.pattern)
+      : DEFAULT_PATTERN;
   }
 
   get isPatternMatch() {
@@ -58,7 +61,7 @@ export class FileContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.dir}, ${this.pattern} -> ${this.entryProperties?.destination}`;
+    return `${this.constructor.name}: ${this.dir}, ${this.pattern} -> ${this.destination}`;
   }
 
   /**

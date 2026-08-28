@@ -98,12 +98,7 @@ program
                     dir = source;
                   }
 
-                  return new FileContentProvider(
-                    {
-                      dir
-                    },
-                    { destination }
-                  );
+                  return new FileContentProvider({ dir, destination });
                 })
             );
 

@@ -67,23 +67,12 @@ function mergeArchs(a, b) {
  */
 function* content2Sources(content, dir) {
   for (const [destination, definitions] of Object.entries(content)) {
-    const allEntryProperties = {};
-
-    for (const a of entryAttributeNames) {
-      if (definitions[a] !== undefined) {
-        allEntryProperties[a] = definitions[a];
-        delete definitions[a];
-      }
-    }
-
     for (let definition of asArray(definitions)) {
-      const entryProperties = { ...allEntryProperties, destination };
-
       if (definition.type) {
         const type = allInputs.find(i => i.name === definition.type);
         if (type) {
           delete definition.type;
-          yield new type({ ...definition, dir }, entryProperties);
+          yield new type({ ...definition, dir, destination });
         } else {
           throw new Error(`Unknown content provider '${type}'`);
         }
@@ -93,12 +82,12 @@ function* content2Sources(content, dir) {
             definition.dir = definition.dir ? join(dir, definition.dir) : dir;
             break;
           case "string":
-            definition = join(dir, definition);
+            definition = { dir: join(dir, definition) };
             break;
           default:
             throw new Error(`Unsupported content value '${definition}'`);
         }
-        yield new FileContentProvider(definition, entryProperties);
+        yield new FileContentProvider({ ...definition, destination });
       }
     }
   }

@@ -6,38 +6,40 @@ import { ContentEntry, CollectionEntry } from "content-entry";
  * @property {string} dir
  */
 export class ContentProvider {
-  entryProperties;
-  directoryProperties;
   dir;
-  properties;
 
   /**
    *
    * @param {Object} definitions
    * @param {string} [definitions.dir]
-   * @param {Object} [definitions.properties]
-   * @param {Object} [entryProperties]
-   * @param {string} [entryProperties.destination]
-   * @param {Object} [directoryProperties]
+   * @param {string} [definitions.destination]
+   * @param {Object} [definitions.permissions]
    */
-  constructor(definitions, entryProperties, directoryProperties) {
+  constructor(definitions) {
     this.dir = definitions.dir;
-    this.properties = definitions.properties ?? {};
-    this.entryProperties = entryProperties;
-    this.directoryProperties = directoryProperties;
-    if (this.entryProperties?.destination) {
-      this.directoryProperties = {
-        ...this.directoryProperties,
-        destination: this.entryProperties?.destination
-      };
-    }
+    this.defaultProperties = { destination: definitions.destination };
 
-    this.permissions = new Map(
-      Object.entries(this.properties).map(([pattern, properties]) => [
-        picomatch(pattern),
-        properties
-      ])
-    );
+    if (definitions.permissions) {
+      if (
+        Object.values(definitions.permissions).find(v => typeof v !== "object")
+      ) {
+        Object.assign(this.defaultProperties, definitions.permissions);
+      } else {
+        this.permissions = new Map(
+          Object.entries(definitions.permissions).map(
+            ([pattern, properties]) => [picomatch(pattern), properties]
+          )
+        );
+      }
+    }
+  }
+
+  get destination() {
+    return this.defaultProperties.destination;
+  }
+
+  toString() {
+    return `${this.constructor.name}: ${this.dir} -> ${this.destination}`;
   }
 
   /**
@@ -47,18 +49,17 @@ export class ContentProvider {
    * @returns {Object|undefined}
    */
   propertiesFor(name, isCollection) {
-    for (const [matcher, properties] of this.permissions) {
-      if (matcher(name)) {
-        return isCollection && properties.collection
-          ? properties.collection
-          : properties;
+    if (this.permissions) {
+      for (const [matcher, properties] of this.permissions) {
+        if (matcher(name)) {
+          return isCollection && properties.collection
+            ? { ...properties.collection, destination: this.destination }
+            : { ...properties, destination: this.destination };
+        }
       }
     }
 
-    if (isCollection) {
-      return this.directoryProperties;
-    }
-    return this.entryProperties;
+    return this.defaultProperties;
   }
 
   /**

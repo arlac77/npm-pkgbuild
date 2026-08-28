@@ -63,12 +63,11 @@ test("alpm aarch64 default properties", async t => {
 test("alpm", async t => {
   const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
-    new FileContentProvider(
-      {
-        dir: new URL(source, import.meta.url).pathname
-      },
-      { group: "wheel", perm: 0o666 }
-    )[Symbol.asyncIterator]()
+    new FileContentProvider({
+      dir: new URL(source, import.meta.url).pathname,
+      group: "wheel",
+      perm: 0o666
+    })[Symbol.asyncIterator]()
   );
 
   const properties = {
@@ -77,9 +76,9 @@ test("alpm", async t => {
     description: "a description",
     license: "MIT",
     maintainer: ["Herber Müller <herber.mueller@mail.com>"],
-    provides: ["a=1","b=2"],
+    provides: ["a=1", "b=2"],
     replaces: {
-      "abc-old" : true,
+      "abc-old": true,
       "abc-very-old": ">0.0.1"
     },
     dependencies: {

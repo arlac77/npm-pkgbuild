@@ -64,11 +64,11 @@ test("alpm", async t => {
   const publishingDetails = createPublishingDetails(["somewhere"]);
   const sources = ["fixtures/content", "fixtures/pkg"].map(source =>
     new FileContentProvider({
-      dir: new URL(source, import.meta.url).pathname + '/',
+      dir: new URL(source, import.meta.url).pathname + "/",
       group: "wheel",
       mode: 0o666,
       permissions: {
-        "**/*.txt" : { mode: 0o600 }
+        "**/*.txt": { mode: 0o600 }
       }
     })[Symbol.asyncIterator]()
   );

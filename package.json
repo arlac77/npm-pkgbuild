@@ -53,8 +53,8 @@
     "commander": "^15.0.0",
     "compare-versions": "^6.1.1",
     "content-entry": "^15.0.2",
-    "content-entry-filesystem": "^9.1.1",
-    "content-entry-transform": "^1.7.3",
+    "content-entry-filesystem": "^9.1.2",
+    "content-entry-transform": "^1.7.4",
     "execa": "^10.0.1",
     "ini": "^7.0.0",
     "iterable-string-interceptor": "^3.0.8",
@@ -65,11 +65,11 @@
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",
     "picomatch": "^4.0.7",
-    "tar-stream": "^3.1.7",
+    "tar-stream": "^3.2.1",
     "uti": "^8.11.3"
   },
   "devDependencies": {
-    "@types/node": "^26.3.0",
+    "@types/node": "^26.4.0",
     "ava": "^8.0.1",
     "c8": "^12.0.0",
     "documentation": "^14.0.3",
@@ -77,7 +77,7 @@
     "stream-buffers": "^3.0.3"
   },
   "engines": {
-    "node": ">=24.19.0"
+    "node": ">=24.20.0"
   },
   "repository": {
     "type": "git",

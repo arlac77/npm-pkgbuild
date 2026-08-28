@@ -295,7 +295,7 @@ package() {
       const flags = {
         user: ["-u", f => f.user],
         group: ["-g", f => f.group],
-        mode: ["-m", f => Number(f.mode && 0o7777).toString(8)] // TODO why only 12 bits
+        mode: ["-m", f => Number(f.mode & 0o7777).toString(8)] // TODO why only 12 bits
       };
 
       content =

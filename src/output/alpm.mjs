@@ -241,7 +241,7 @@ package() {
 
   if [ "$(ls -A $srcdir)" ]
   then
-    cp -rp $srcdir/* "$pkgdir"
+    #cp -rp $srcdir/* "$pkgdir"
 ### PERMISSION ###
 
     ${verbose}
@@ -271,48 +271,48 @@ package() {
       createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
-    const permissions = [];
+    const install = [];
 
     for await (const file of copyEntries(
       transform(aggregate(sources), transformer),
       join(staging, "src"),
       expander
     )) {
-      if (file.user || file.group || file.mode) {
-        permissions.push(file);
+      const flags = {
+        user: ["-u", value => value],
+        group: ["-g", value => value],
+        mode: ["-m", value => Number(value & 0o7777).toString(8)]
+      };
+
+      const options = [];
+      for (const [name, config] of Object.entries(flags)) {
+        const value = await file[name];
+        if (value !== undefined) {
+          options.push(`${config[0]} ${config[1](value)}`);
+        }
       }
+
+        install.push(
+          `    install ${file.isBlob ? '-D' : '-d' } ${options.join(" ")} \"$srcdir/${file.name}\" \"$pkgdir/${file.destination}\"`
+        );
 
       if (options.verbose) {
         console.log(file.destination);
       }
     }
 
-    if (permissions.length) {
+    if (install.length) {
       const pkgbuild = join(staging, PKGBUILD);
-      let content = await readFile(pkgbuild, utf8StreamOptions);
+      const content = await readFile(pkgbuild, utf8StreamOptions);
       const markerPos = content.indexOf("### PERMISSION ###");
 
-      const flags = {
-        user: ["-u", f => f.user],
-        group: ["-g", f => f.group],
-        mode: ["-m", f => Number(f.mode & 0o7777).toString(8)] // TODO why only 12 bits
-      };
-
-      content =
+      await writeFile(
+        pkgbuild,
         content.substring(0, markerPos) +
-        permissions
-          .filter(f => f.isBlob)
-          .map(f => {
-            const options = Object.keys(flags)
-              .filter(name => f[name])
-              .map(name => `${flags[name][0]} ${flags[name][1](f)}`)
-              .join(" ");
-            return `    install -D ${options} \"$srcdir/${f.name}\" \"$pkgdir/${f.destination}\"`;
-          })
-          .join("\n") +
-        content.substring(markerPos + 18);
-
-      await writeFile(pkgbuild, content, utf8StreamOptions);
+          install.join("\n") +
+          content.substring(markerPos + 18),
+        utf8StreamOptions
+      );
     }
 
     if (options.verbose) {

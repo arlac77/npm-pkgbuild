@@ -287,14 +287,14 @@ package() {
       const options = [];
       for (const [name, config] of Object.entries(flags)) {
         const value = await file[name];
+
         if (value !== undefined) {
           options.push(`${config[0]} ${config[1](value)}`);
         }
       }
-
-        install.push(
-          `    install ${file.isBlob ? '-D' : '-d' } ${options.join(" ")} \"$srcdir/${file.name}\" \"$pkgdir/${file.destination}\"`
-        );
+      install.push(
+        `    install ${file.isBlob ? "-D" : "-d"} ${options.join(" ")} \"$srcdir/${file.name}\" \"$pkgdir/${file.destination}\"`
+      );
 
       if (options.verbose) {
         console.log(file.destination);

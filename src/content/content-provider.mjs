@@ -4,9 +4,13 @@ import { ContentEntry, CollectionEntry } from "content-entry";
 /**
  * Source of package content.
  * @property {string} dir
+ * @property {string} destination
+ * @property {Object} defaultProperties
+ * @property {Map<Object,Object>} permissions
  */
 export class ContentProvider {
   dir;
+  defaultProperties;
 
   /**
    *
@@ -25,10 +29,15 @@ export class ContentProvider {
       ) {
         Object.assign(this.defaultProperties, definitions.permissions);
       } else {
+        const entries = definitions.permissions.entries
+          ? definitions.permissions.entries()
+          : Object.entries(definitions.permissions);
+
         this.permissions = new Map(
-          Object.entries(definitions.permissions).map(
-            ([pattern, properties]) => [picomatch(pattern), properties]
-          )
+          entries.map(([pattern, properties]) => [
+            picomatch(pattern),
+            properties
+          ])
         );
       }
     }
@@ -46,12 +55,18 @@ export class ContentProvider {
    *
    * @param {string} name
    * @param {boolean} isCollection
-   * @returns {Object|undefined}
+   * @returns {Object}
    */
   propertiesFor(name, isCollection) {
     if (this.permissions) {
       for (const [matcher, properties] of this.permissions) {
         if (matcher(name)) {
+          /*console.log("A",name, {
+            mode: properties.mode,
+            user: properties.user,
+            group: properties.group,
+            destination: this.destination
+          });*/
           return isCollection && properties.collection
             ? { ...properties.collection, destination: this.destination }
             : { ...properties, destination: this.destination };

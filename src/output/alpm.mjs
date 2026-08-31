@@ -279,7 +279,7 @@ package() {
       expander
     )) {
       const flags = {
-        user: ["-u", value => value],
+        user: ["-o", value => value],
         group: ["-g", value => value],
         mode: ["-m", value => Number(value & 0o7777).toString(8)]
       };

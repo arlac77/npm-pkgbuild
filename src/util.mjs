@@ -154,10 +154,16 @@ export function fieldProvider(properties, attributes) {
       for (const [name, attribute] of Object.entries(attributes)) {
         if (!presentKeys.has(name)) {
           let value = properties[attribute.alias || name];
-          if (value === undefined) {
+          if (
+            value === undefined ||
+            (attribute.collection && value.size === 0)
+          ) {
             if (attribute.default === undefined) {
               if (attribute.mandatory) {
                 console.error(`Missing value for mandatory attribute ${name}`);
+              }
+              if (attribute.skipEmplty) {
+                continue;
               }
             } else {
               yield [name, toExternal(attribute.default, attribute)];

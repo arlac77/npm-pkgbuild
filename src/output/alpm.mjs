@@ -137,7 +137,7 @@ export class ALPM extends Packager {
       default: ["any"],
       mandatory: true
     },
-    backup: { ...string_collection_attribute_writable, name: "backup" },
+    backup: { ...string_collection_attribute_writable, name: "backup", skipEmpty: true },
     depends: {
       ...dependency_attribute_collection_writable /*, alias: "dependencies" */,
       name: "depends"

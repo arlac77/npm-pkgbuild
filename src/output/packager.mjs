@@ -287,7 +287,6 @@ export const dependency_type = {
   toExternal: (value, attribute) => {
     switch (typeof value) {
       case "string":
-        return value;
       case "undefined":
         return value;
     }

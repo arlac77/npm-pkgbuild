@@ -137,7 +137,11 @@ export class ALPM extends Packager {
       default: ["any"],
       mandatory: true
     },
-    backup: { ...string_collection_attribute_writable, name: "backup", skipEmpty: true },
+    backup: {
+      ...string_collection_attribute_writable,
+      name: "backup",
+      skipEmpty: true
+    },
     depends: {
       ...dependency_attribute_collection_writable /*, alias: "dependencies" */,
       name: "depends"
@@ -156,10 +160,15 @@ export class ALPM extends Packager {
     },
     conflicts: {
       ...dependency_attribute_collection_writable,
-      name: "conflicts"
+      name: "conflicts",
+      skipEmpty: true
     },
     provides: { ...dependency_attribute_collection_writable, name: "provides" },
-    replaces: { ...dependency_attribute_collection_writable, name: "replaces" },
+    replaces: {
+      ...dependency_attribute_collection_writable,
+      name: "replaces",
+      skipEmpty: true
+    },
     options: { ...default_attribute, name: "options" }
   };
 
@@ -241,7 +250,6 @@ package() {
 
   if [ "$(ls -A $srcdir)" ]
   then
-    #cp -rp $srcdir/* "$pkgdir"
 ### PERMISSION ###
 
     ${verbose}

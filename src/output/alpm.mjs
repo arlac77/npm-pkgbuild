@@ -250,6 +250,7 @@ package() {
 
   if [ "$(ls -A $srcdir)" ]
   then
+    cp -rp $srcdir/* "$pkgdir"
 ### PERMISSION ###
 
     ${verbose}
@@ -279,37 +280,33 @@ package() {
       createEntryWhenMissing: () => new ContentEntry(PKGBUILD)
     });
 
-    const install = [];
+    const permission = [];
 
     for await (const file of copyEntries(
       transform(aggregate(sources), transformer),
       join(staging, "src"),
       expander
     )) {
-      const flags = {
-        user: ["-o", value => value],
-        group: ["-g", value => value],
-        mode: ["-m", value => Number(value & 0o7777).toString(8)]
-      };
-
-      const options = [];
-      for (const [name, config] of Object.entries(flags)) {
-        const value = await file[name];
-
-        if (value !== undefined) {
-          options.push(`${config[0]} ${config[1](value)}`);
-        }
+      if(file.destination !== '../PKGBUILD') {
+      if (file.owner || file.group) {
+        permission.push(
+          `    chown ${[file.owner ?? "", file.group ?? ""].join(":")} \"$pkgdir/${file.destination}\"`
+        );
       }
-      install.push(
-        `    install ${file.isBlob ? "-D" : "-d"} ${options.join(" ")} \"$srcdir/${file.name}\" \"$pkgdir/${file.destination}\"`
-      );
+      const mode = (await file.mode) & 0o7777;
+      if (mode) {
+        permission.push(
+          `    chmod ${Number(mode).toString(8)} \"$pkgdir/${file.destination}\"`
+        );
+      }
+      }
 
       if (options.verbose) {
         console.log(file.destination);
       }
     }
 
-    if (install.length) {
+    if (permission.length) {
       const pkgbuild = join(staging, PKGBUILD);
       const content = await readFile(pkgbuild, utf8StreamOptions);
       const markerPos = content.indexOf("### PERMISSION ###");
@@ -317,7 +314,7 @@ package() {
       await writeFile(
         pkgbuild,
         content.substring(0, markerPos) +
-          install.join("\n") +
+          permission.join("\n") +
           content.substring(markerPos + 18),
         utf8StreamOptions
       );

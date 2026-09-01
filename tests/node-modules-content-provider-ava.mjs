@@ -17,6 +17,7 @@ test("NodeModules entries", async t => {
     dir
   });
 
+  t.true(content.withoutDevelpmentDependencies);
   t.is(content.dir, dir);
 
   const tmp = await mkdtemp(
@@ -36,6 +37,8 @@ test("NodeModules entries withoutDevelpmentDependencies=false", async t => {
     dir: new URL("fixtures/pkg", import.meta.url).pathname,
     withoutDevelpmentDependencies: false
   });
+
+  t.false(content.withoutDevelpmentDependencies);
 
   const entries = await Array.fromAsync(content);
 

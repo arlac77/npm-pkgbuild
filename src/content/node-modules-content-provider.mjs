@@ -39,8 +39,10 @@ export class NodeModulesContentProvider extends ContentProvider {
     }
     super(definitions);
 
-    this.withoutDevelpmentDependencies =
-      definitions.withoutDevelpmentDependencies;
+    if (definitions.withoutDevelpmentDependencies !== undefined) {
+      this.withoutDevelpmentDependencies =
+        definitions.withoutDevelpmentDependencies;
+    }
   }
 
   /**

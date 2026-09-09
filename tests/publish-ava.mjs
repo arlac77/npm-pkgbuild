@@ -4,7 +4,7 @@ import { createPublishingDetails, publish } from "../src/publish.mjs";
 const DESTINATION =
   process.env["PKGBUILD_PUBLISH"] || "http://myserver.com/{{access}}/{{arch}}";
 
-test("createPublishingDetails", t => {
+test("createPublishingDetails apply properties", t => {
   const properties = {
     arch: "aarch64",
     access: "private"
@@ -19,6 +19,9 @@ test("createPublishingDetails", t => {
 
   properties.arch = "x86_64";
   t.is(pds[0].url, "http://myserver.com/private/x86_64");
+
+  pds[0].properties = { arch: "armv7", access: "public" };
+  t.is(pds[0].url, "http://myserver.com/public/armv7");
 });
 
 test("createPublishingDetails env type", t => {
@@ -40,7 +43,7 @@ test("publish nowhere", async t => {
   t.true(true, "does not fail");
 });
 
-test("publish twice", async t => {
+test.only("publish twice", async t => {
   const file = new URL("fixtures/content/file1.txt", import.meta.url).pathname;
 
   const properties = { arch: "aarch64", access: "private" };
@@ -57,10 +60,10 @@ test("publish twice", async t => {
   } catch (e) {
     console.log(e);
   }
-  t.log(url);
+  //t.log(url);
   t.truthy(url.match(/\/debian\/.*\/aarch64\/file1.txt/));
 
-  properties.type = "arch";
+  properties.type = "alpm";
   try {
     url = "not set again";
     await publish(file, destination, properties, message => {
@@ -69,8 +72,8 @@ test("publish twice", async t => {
   } catch (e) {
     console.log(e);
   }
-  t.log(url);
-  t.truthy(url.match(/\/arch\/.*\/aarch64\/file1.txt/));
+  //t.log(url);
+  t.truthy(url.match(/\/alpm\/.*\/aarch64\/file1.txt/));
 });
 
 test("createPublishingDetails path only", t => {

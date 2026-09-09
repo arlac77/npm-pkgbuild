@@ -47,7 +47,7 @@ export function createPublishingDetails(locations = [], properties) {
     }
   }
 
-  const vm = k => properties?.[k] || k;
+  const vm = k => properties?.[k] ?? k;
 
   return locations.map(location => {
     let url = location;
@@ -59,7 +59,7 @@ export function createPublishingDetails(locations = [], properties) {
       get url() {
         return url.replace(
           /\{\{(\w+)\}\}/gm,
-          (match, key, offset, string) => properties?.[key] || "{{" + key + "}}"
+          (match, key, offset, string) => properties?.[key] ?? "{{" + key + "}}"
         );
       }
     };

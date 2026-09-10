@@ -61,7 +61,7 @@
     "key-value-transformer": "^3.3.2",
     "npm-package-walker": "^8.0.11",
     "npm-packlist": "^11.3.0",
-    "pacc": "^11.9.0",
+    "pacc": "^11.10.0",
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",
     "picomatch": "^4.0.7",
@@ -69,7 +69,7 @@
     "uti": "^8.11.3"
   },
   "devDependencies": {
-    "@types/node": "^26.5.0",
+    "@types/node": "^26.5.1",
     "ava": "^8.0.1",
     "c8": "^12.0.0",
     "documentation": "^14.0.3",

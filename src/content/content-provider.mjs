@@ -48,7 +48,8 @@ export class ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.dir} -> ${this.destination}`;
+    const str = `${this.constructor.name}: ${this.dir}`;
+    return this.destination ? str + ' -> ' + this.destination : str;
   }
 
   /**

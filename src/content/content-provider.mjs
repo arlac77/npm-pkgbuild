@@ -61,12 +61,6 @@ export class ContentProvider {
     if (this.permissions) {
       for (const [matcher, properties] of this.permissions) {
         if (matcher(name)) {
-          /*console.log("A",name, {
-            mode: properties.mode,
-            user: properties.user,
-            group: properties.group,
-            destination: this.destination
-          });*/
           return isCollection && properties.collection
             ? { ...properties.collection, destination: this.destination }
             : { ...properties, destination: this.destination };

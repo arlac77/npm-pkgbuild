@@ -66,7 +66,7 @@ test("alpm", async t => {
     new FileContentProvider({
       dir: new URL(source, import.meta.url).pathname + "/",
       group: "wheel",
-      mode: 0o666,
+     // mode: 0o666,
       permissions: {
         "**/*.txt": { mode: 0o600 }
       }

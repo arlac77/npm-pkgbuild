@@ -41,11 +41,21 @@ test(
 );
 
 test("ContentProvider constructor", t => {
-  const cp = new ContentProvider({ dir: "dir", destination: "dest" });
+  const cp1 = new ContentProvider({ dir: "dir", destination: "dest" });
 
-  t.is(cp.dir, "dir");
-  t.is(cp.destination, "dest");
-  t.deepEqual(cp.defaultProperties, { destination: "dest" });
+  t.is(cp1.dir, "dir");
+  t.is(cp1.destination, "dest");
+  t.deepEqual(cp1.defaultProperties, { destination: "dest" });
+
+  t.is(cp1.toString(), "ContentProvider: dir -> dest");
+
+  const cp2 = new ContentProvider({ dir: "dir" });
+
+  t.is(cp2.dir, "dir");
+  t.is(cp2.destination, undefined);
+  t.deepEqual(cp2.defaultProperties, {});
+
+  t.is(cp2.toString(), "ContentProvider: dir");
 });
 
 test("ContentProvider constructor with permissions", t => {

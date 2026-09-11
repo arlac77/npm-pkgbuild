@@ -6,7 +6,7 @@ import { ContentEntry, CollectionEntry } from "content-entry";
  * @property {string} dir
  * @property {string} destination
  * @property {Object} defaultProperties
- * @property {Map<Object,Object>} permissions
+ * @property {Map<Object,Object>|Object} permissions
  */
 export class ContentProvider {
   dir;
@@ -21,17 +21,18 @@ export class ContentProvider {
    */
   constructor(definitions) {
     this.dir = definitions.dir;
-    this.defaultProperties = { destination: definitions.destination };
+    delete definitions.dir;
 
     if (definitions.permissions) {
-      if (
-        Object.values(definitions.permissions).find(v => typeof v !== "object")
-      ) {
-        Object.assign(this.defaultProperties, definitions.permissions);
+      const permissions = definitions.permissions;
+      delete definitions.permissions;
+
+      if (Object.values(permissions).find(v => typeof v !== "object")) {
+        Object.assign(definitions, permissions);
       } else {
-        const entries = definitions.permissions.entries
-          ? definitions.permissions.entries()
-          : Object.entries(definitions.permissions);
+        const entries = permissions.entries
+          ? permissions.entries()
+          : Object.entries(permissions);
 
         this.permissions = new Map(
           entries.map(([pattern, properties]) => [
@@ -41,6 +42,8 @@ export class ContentProvider {
         );
       }
     }
+
+    this.defaultProperties = { ...definitions };
   }
 
   get destination() {
@@ -49,7 +52,7 @@ export class ContentProvider {
 
   toString() {
     const str = `${this.constructor.name}: ${this.dir}`;
-    return this.destination ? str + ' -> ' + this.destination : str;
+    return this.destination ? str + " -> " + this.destination : str;
   }
 
   /**

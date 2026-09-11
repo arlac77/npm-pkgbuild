@@ -21,7 +21,7 @@ async function fcpt(t, definition, list) {
     await Promise.all(
       entries.map(async entry => {
         const r = { name: entry.name, destination: entry.destination };
-        for (const a of ["user", "group", "mode"]) {
+        for (const a of ["owner", "group", "mode"]) {
           const value = await entry[a];
           if (value) {
             r[a] = value;
@@ -47,12 +47,12 @@ test(
   {
     dir: new URL("fixtures/skeleton/package.json", import.meta.url).pathname,
     destination: "dest/package.json",
-    permissions: { "**/*": { user: "root", group: "sys", mode: 0o100640 } }
+    permissions: { "**/*": { owner: "root", group: "sys", mode: 0o100640 } }
   },
   [
     {
       name: "package.json",
-      user: "root",
+      owner: "root",
       group: "sys",
       mode: 0o100640,
       destination: "dest/package.json"

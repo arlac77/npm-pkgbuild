@@ -37,7 +37,8 @@ export class NFTContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.start} -> ${this.destination}`;
+    const str = `${this.constructor.name}: ${this.start}`;
+    return this.destination ? str + " -> " + this.destination : str;
   }
 
   /**

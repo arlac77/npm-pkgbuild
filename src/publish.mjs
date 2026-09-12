@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
 import { mkdir, copyFile } from "node:fs/promises";
+import { asArray } from "pacc";
 import { decodePassword } from "./util.mjs";
 
 /**
@@ -22,8 +23,8 @@ import { decodePassword } from "./util.mjs";
  * @param {string} [properties.username]
  * @return {PublishingDetail[]}
  */
-export function createPublishingDetails(locations = [], properties) {
-  locations = [...locations];
+export function createPublishingDetails(locations, properties) {
+  locations = asArray(locations);
 
   let publishPropertyFound = false;
 
@@ -150,7 +151,8 @@ export async function publish(
 
       if (!response.ok) {
         throw new Error(
-          `Unable to publish to ${url}: ${response.statusText}(${response.status})`, { cause: response }
+          `Unable to publish to ${url}: ${response.statusText}(${response.status})`,
+          { cause: response }
         );
       }
     }

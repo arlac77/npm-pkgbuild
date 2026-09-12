@@ -61,7 +61,8 @@ export class FileContentProvider extends ContentProvider {
   }
 
   toString() {
-    return `${this.constructor.name}: ${this.dir}, ${this.pattern} -> ${this.destination}`;
+    const str = `${this.constructor.name}: ${this.dir}, ${this.pattern}`;
+    return this.destination ? str + " -> " + this.destination : str;
   }
 
   /**

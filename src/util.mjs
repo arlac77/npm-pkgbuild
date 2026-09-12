@@ -162,7 +162,7 @@ export function fieldProvider(properties, attributes) {
               if (attribute.mandatory) {
                 console.error(`Missing value for mandatory attribute ${name}`);
               }
-              if (attribute.skipEmplty) {
+              if (attribute.skipEmpty) {
                 continue;
               }
             } else {
@@ -171,7 +171,7 @@ export function fieldProvider(properties, attributes) {
           } else {
             if (attribute.mapping) {
               const mappedValue = attribute.mapping[value];
-              if (mappedValue) {
+              if (mappedValue !== undefined) {
                 value = mappedValue;
               }
             }

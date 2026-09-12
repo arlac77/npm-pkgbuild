@@ -5,7 +5,8 @@ import {
   integer_attribute_writable,
   yesno_attribute_writable,
   string_attribute_writable,
-  string_collection_attribute_writable
+  string_collection_attribute_writable,
+  toExternal
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
@@ -18,7 +19,8 @@ import {
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
-  dependency_attribute_collection_writable
+  dependency_attribute_collection_writable,
+  architectureType
 } from "./packager.mjs";
 import { copyEntries, fieldProvider, aggregate } from "../util.mjs";
 
@@ -73,6 +75,7 @@ export class DEBIAN extends Packager {
       alias: "arch",
       default: "all",
       mandatory: true,
+      type: architectureType,
       mapping: { aarch64: "arm64" }
     },
     Homepage: {
@@ -153,7 +156,7 @@ export class DEBIAN extends Packager {
     const p = this.properties;
 
     // TODO utility to provide final values
-    const arch = this.attributes.Architecture.mapping[p.arch] || p.arch;
+    const arch = toExternal(p.arch, this.attributes.Architecture);
 
     // @ts-ignore
     return `${p.name}_${p.version}_${arch}${this.constructor.fileNameExtension}`;

@@ -14,17 +14,19 @@ test("makeDepends", t => {
   t.deepEqual(["d1", "d2 (1.0.0)"], out.makeDepends({ d1: "", d2: "1.0.0" }));
 });
 
-test("debian lowercase names", t => {
+test("debian lowercase name + arch mapping", t => {
   const out = new DEBIAN({
     name: "ABC",
     license: "MIT",
     version: "1.0.0",
-    maintainer: "hugo"
+    maintainer: "hugo",
+    arch: "aarch64"
   });
 
   t.is(out.properties.name, "abc");
+  //t.is(out.properties.arch, "arm64");
 
-  t.is(out.packageFileName, "abc_1.0.0_all.deb");
+  t.is(out.packageFileName, "abc_1.0.0_arm64.deb");
 });
 
 async function preparePacker(sourceDirs = [], dependencies = {}, props) {

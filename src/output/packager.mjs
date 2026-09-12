@@ -301,6 +301,21 @@ export const dependency_type = {
   }
 };
 
+export const architectureType = {
+  name: "dependency",
+  primitive: true,
+
+  toInternal: (value, attribute) => {
+ //   console.log("architectureType toInternal", value);
+    return value;
+  },
+
+  toExternal: (value, attribute) => {
+  //  console.log("architectureType toExternal", value);
+    return attribute.mapping[value] ?? value;
+  }
+};
+
 export const dependency_attribute_collection_writable = {
   ...string_collection_attribute_writable,
   type: dependency_type,

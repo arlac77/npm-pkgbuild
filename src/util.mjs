@@ -182,7 +182,7 @@ export function fieldProvider(properties, attributes) {
       }
     } else {
       const attribute = attributes[k];
-      yield [k, av(attribute, toExternal(properties[k] || v, attribute))];
+      yield [k, av(attribute, toExternal(properties[k] ?? v, attribute))];
     }
   };
 }

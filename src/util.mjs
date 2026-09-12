@@ -222,17 +222,20 @@ export async function* copyEntries(
       entry.destination = name;
       const destination = join(destinationDirectory, name);
 
+      let options;
+      const mode = await entry.mode;
+      if (mode) {
+        options = { mode };
+      }
+
       if (entry.isCollection) {
-        await mkdir(destination, { recursive: true, mode: await entry.mode });
+        await mkdir(destination, { recursive: true, ...options });
       } else {
         await mkdir(dirname(destination), { recursive: true });
 
         await pipeline(
           Readable.fromWeb(await entry.stream),
-          createWriteStream(
-            destination,
-            entry.mode ? { mode: await entry.mode } : undefined
-          )
+          createWriteStream(destination, options)
         );
       }
 

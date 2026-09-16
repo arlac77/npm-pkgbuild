@@ -20,7 +20,8 @@ import {
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
-  dependency_attribute_collection_writable
+  dependency_attribute_collection_writable,
+  arch_attribute_writable
 } from "../types.mjs";
 import {
   copyEntries,
@@ -124,6 +125,7 @@ export class ALPM extends Packager {
     },
     license: {
       ...string_collection_attribute_writable,
+      separator: undefined,
       name: "license",
       skipEmpty: true
     },
@@ -177,10 +179,8 @@ export class ALPM extends Packager {
       skipEmpty: true
     },
     arch: {
-      ...string_collection_attribute_writable,
-      name: "arch",
-      default: ["any"],
-      mandatory: true
+      ...arch_attribute_writable,
+      default: ["any"]
     },
     backup: {
       ...string_collection_attribute_writable,

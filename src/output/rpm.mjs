@@ -19,7 +19,8 @@ import { Packager } from "./packager.mjs";
 import {
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
-  pkgbuild_name_attribute
+  pkgbuild_name_attribute,
+  arch_attribute_writable
 } from "../types.mjs";
 import {
   copyEntries,
@@ -79,17 +80,23 @@ export class RPM extends Packager {
     },
     source: { ...string_attribute, externalName: "Source0", name: "source" },
     groups: { ...string_attribute, externalName: "Group", name: "groups" },
-    maintainer: { ...string_attribute, name: "maintainer", externalName: "Packager" },
+    maintainer: {
+      ...string_attribute,
+      name: "maintainer",
+      externalName: "Packager"
+    },
     vendor: { ...string_attribute, externalName: "Vendor", name: "vendor" },
     arch: {
-      ...string_attribute,
+      ...arch_attribute_writable,
       externalName: "BuildArch",
-      name: "arch",
       default: "noarch",
-      mandatory: true
+      mapping: { any: "noarch" }
     },
     URL: { ...url_attribute, name: "URL", alias: "homepage" },
-    Requires: { ...string_collection_attribute_writable, name: "Requires" },
+    dependencies: {
+      ...string_collection_attribute_writable,
+      externalName: "Requires"
+    },
     Obsoletes: { ...string_collection_attribute_writable, name: "Obsoletes" },
     Conflicts: { ...string_collection_attribute_writable, name: "Conflicts" }
   };
@@ -152,7 +159,7 @@ export class RPM extends Packager {
     const { properties, tmpdir, staging, destination } =
       await this.prepare(options);
 
-    properties.Requires = this.makeDepends(properties.dependencies);
+    properties.dependencies = this.makeDepends(properties.dependencies);
 
     if (properties.Packager?.length > 1) {
       // TODO how to write several Packages ?

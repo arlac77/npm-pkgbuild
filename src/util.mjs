@@ -145,15 +145,11 @@ export function quote(v, qc = "'") {
  * @returns {Function}
  */
 export function fieldProvider(properties, attributes) {
-  function av(attribute, value) {
-    return attribute.collection ? asArray(value) : value;
-  }
-
-  return function* controlProperties(k, v, presentKeys) {
+  return function* controlProperties(key, value, presentKeys) {
     let filter;
 
-    if (k) {
-      filter = attribute => attribute.name === k;
+    if (key) {
+      filter = attribute => attribute.name === key;
     }
 
     for (const [name, value] of iterateToExternal(

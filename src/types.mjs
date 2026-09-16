@@ -1,20 +1,16 @@
 import {
   types,
+  primitive_type,
   string_collection_attribute_writable,
   name_attribute,
   description_attribute,
-  version_attribute_writable
+  version_attribute_writable,
+  string_attribute_writable
 } from "pacc";
 
-export const pkgbuild_name_attribute = {
-  ...name_attribute,
-  mandatory: true,
-  pattern: /^[a-z_][a-z0-9_\-]*$/i
-};
-
 export const dependency_type = {
+  ...primitive_type,
   name: "dependency",
-  primitive: false,
   toExternal: (value, attribute) => {
     switch (typeof value) {
       case "string":
@@ -36,9 +32,9 @@ export const dependency_type = {
   }
 };
 
-export const architectureType = {
+export const architecture_type = {
+  ...primitive_type,
   name: "architecture",
-  primitive: true,
 
   toInternal: (value, attribute) => {
     //   console.log("architectureType toInternal", value);
@@ -47,8 +43,22 @@ export const architectureType = {
 
   toExternal: (value, attribute) => {
     //  console.log("architectureType toExternal", value);
-    return attribute.mapping[value] ?? value;
+    return attribute.mapping?.[value] ?? value;
   }
+};
+
+export const arch_attribute_writable = {
+  ...string_attribute_writable,
+  name: "arch",
+  default: "all",
+  mandatory: true,
+  type: architecture_type
+};
+
+export const pkgbuild_name_attribute = {
+  ...name_attribute,
+  mandatory: true,
+  pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 
 export const dependency_attribute_collection_writable = {

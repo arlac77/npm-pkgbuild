@@ -21,7 +21,7 @@ import {
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
   dependency_attribute_collection_writable,
-  architectureType
+  arch_attribute_writable
 } from "../types.mjs";
 
 const debian_dependency_attribute_collection_writable = {
@@ -70,13 +70,10 @@ export class DEBIAN extends Packager {
       mandatory: true
     },
     arch: {
-      ...string_attribute_writable,
-      name: "arch",
+      ...arch_attribute_writable,
       externalName: "Architecture",
       default: "all",
-      mandatory: true,
-      type: architectureType,
-      mapping: { aarch64: "arm64" }
+      mapping: { aarch64: "arm64", any: "all" }
     },
     groups: {
       ...string_attribute_writable,

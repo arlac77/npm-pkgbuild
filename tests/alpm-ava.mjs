@@ -31,7 +31,7 @@ test("alpm default properties", async t => {
     pkgname: ["abc"],
     pkgrel: 1,
     md5sums: ["SKIP"],
-    license: "MIT"
+    license: ["MIT"],
   });
 });
 
@@ -53,7 +53,7 @@ test("alpm aarch64 default properties", async t => {
     pkgver: "1.0.0",
     pkgname: ["abc"],
     pkgrel: 1,
-    license: "MIT",
+    license: ["MIT"],
     md5sums: ["SKIP"],
   });
 });

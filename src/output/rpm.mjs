@@ -15,12 +15,12 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys,
   Uint8ArraysToLines
 } from "key-value-transformer";
+import { Packager } from "./packager.mjs";
 import {
-  Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute
-} from "./packager.mjs";
+} from "../types.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -61,30 +61,30 @@ export class RPM extends Packager {
    * @see https://rpm-packaging-guide.github.io
    */
   static attributes = {
-    Name: { ...pkgbuild_name_attribute, name: "Name" },
-    Summary: { ...pkgbuild_description_attribute, name: "Summary" },
-    License: {
+    name: { ...pkgbuild_name_attribute, externalName: "Name" },
+    description: { ...pkgbuild_description_attribute, externalName: "Summary" },
+    license: {
       ...string_attribute,
-      name: "License",
-      alias: "license",
+      name: "license",
+      externalName: "License",
       mandatory: true
     },
-    Version: { ...pkgbuild_version_attribute, name: "Version" },
-    Release: {
+    version: { ...pkgbuild_version_attribute, externalName: "Version" },
+    release: {
       ...integer_attribute,
-      name: "Release",
-      alias: "release",
+      externalName: "Release",
+      name: "release",
       default: 1,
       mandatory: true
     },
-    Source0: { ...string_attribute, name: "Source0", alias: "source" },
-    Group: { ...string_attribute, name: "Group", alias: "groups" },
-    Packager: { ...string_attribute, name: "Packager", alias: "maintainer" },
-    Vendor: { ...string_attribute, name: "Vendor", alias: "vendor" },
-    BuildArch: {
+    source: { ...string_attribute, externalName: "Source0", name: "source" },
+    groups: { ...string_attribute, externalName: "Group", name: "groups" },
+    maintainer: { ...string_attribute, name: "maintainer", externalName: "Packager" },
+    vendor: { ...string_attribute, externalName: "Vendor", name: "vendor" },
+    arch: {
       ...string_attribute,
-      name: "BuildArch",
-      alias: "arch",
+      externalName: "BuildArch",
+      name: "arch",
       default: "noarch",
       mandatory: true
     },

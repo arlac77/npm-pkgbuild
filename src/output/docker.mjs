@@ -12,10 +12,12 @@ import {
 } from "key-value-transformer";
 import {
   Packager,
+} from "./packager.mjs";
+import {
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute
-} from "./packager.mjs";
+} from "../types.mjs";
 import {
   fieldProvider,
   copyEntries,

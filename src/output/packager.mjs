@@ -2,14 +2,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
-import {
-  expand,
-  expandContextDoubbleCurly,
-  string_collection_attribute_writable,
-  name_attribute,
-  description_attribute,
-  version_attribute_writable
-} from "pacc";
+import { expand, expandContextDoubbleCurly, iterateToExternal } from "pacc";
 import { StringContentEntry } from "content-entry";
 import { publish } from "../publish.mjs";
 import {
@@ -58,7 +51,7 @@ export class Packager {
     return false;
   }
 
-  #properties;
+  properties;
   #prepared;
 
   /**
@@ -66,7 +59,13 @@ export class Packager {
    * @param {Object} properties
    */
   constructor(properties) {
-    this.#properties = { ...properties, type: this.constructor.name };
+    this.properties = { ...properties, type: this.constructor.name };
+  }
+
+  get externalProperties() {
+    return Object.fromEntries([
+      ...iterateToExternal(this.properties, this.constructor.attributes)
+    ]);
   }
 
   /**
@@ -165,41 +164,6 @@ export class Packager {
     return this.constructor.attributes;
   }
 
-  get properties() {
-    const properties = this.#properties;
-
-    for (const [name, field] of Object.entries(this.attributes)) {
-      if (field.set) {
-        if (properties[name] !== undefined) {
-          properties[name] = field.set(properties[name]);
-        } else if (
-          field.alias !== undefined &&
-          properties[field.alias] !== undefined
-        ) {
-          properties[field.alias] = field.set(properties[field.alias]);
-        }
-      }
-
-      const e = properties[field.alias || name];
-
-      if (e !== undefined) {
-        properties[name] = field.set ? field.set(e) : e;
-      } else {
-        if (field.default !== undefined) {
-          const vak = field.alias || name;
-          if (
-            (Array.isArray(properties[vak]) && properties[vak].length === 0) ||
-            properties[vak] === undefined
-          ) {
-            properties[vak] = field.default;
-          }
-        }
-      }
-    }
-
-    return properties;
-  }
-
   /**
    * Create tmp directory.
    * @return {Promise<string>} directory path
@@ -225,9 +189,9 @@ export class Packager {
 
     const out = {
       properties: this.properties,
-      destination: options.destination || tmpdir,
+      destination: options.destination ?? tmpdir,
       tmpdir,
-      staging: options.staging || tmpdir
+      staging: options.staging ?? tmpdir
     };
 
     // @ts-ignore
@@ -273,65 +237,3 @@ export class Packager {
     return publish(artifact, publishingDetails, this.properties, logger);
   }
 }
-
-export const pkgbuild_name_attribute = {
-  ...name_attribute,
-  alias: "name",
-  mandatory: true,
-  pattern: /^[a-z_][a-z0-9_\-]*$/i
-};
-
-export const dependency_type = {
-  name: "dependency",
-  primitive: false,
-  toExternal: (value, attribute) => {
-    switch (typeof value) {
-      case "string":
-      case "undefined":
-        return value;
-    }
-
-    if (Array.isArray(value)) {
-      return value;
-    }
-
-    return Object.entries(value).map(([name, expression]) =>
-      typeof expression === "string" ? `${name}${expression}` : name
-    );
-  }
-};
-
-export const architectureType = {
-  name: "dependency",
-  primitive: true,
-
-  toInternal: (value, attribute) => {
- //   console.log("architectureType toInternal", value);
-    return value;
-  },
-
-  toExternal: (value, attribute) => {
-  //  console.log("architectureType toExternal", value);
-    return attribute.mapping[value] ?? value;
-  }
-};
-
-export const dependency_attribute_collection_writable = {
-  ...string_collection_attribute_writable,
-  type: dependency_type,
-  separator: " ",
-  pattern: /^[a-z_][a-z0-9_\-]*$/i
-};
-
-export const pkgbuild_version_attribute = {
-  ...version_attribute_writable,
-  alias: "version",
-  mandatory: true,
-  set: v => v.replace("-semantic-release", "")
-};
-
-export const pkgbuild_description_attribute = {
-  ...description_attribute,
-  alias: "description",
-  mandatory: true
-};

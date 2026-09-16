@@ -16,7 +16,6 @@ test("alpm extension", async t => {
 test("alpm default properties", async t => {
   const properties = {
     name: "abc",
-    //  arch: [],
     version: "1.0.0-semantic-release",
     description: "a description",
     license: "MIT"
@@ -24,17 +23,15 @@ test("alpm default properties", async t => {
 
   const out = new ALPM(properties);
 
-  t.deepEqual(out.properties, {
-    ...properties,
-    type: "alpm",
+  t.deepEqual(out.externalProperties, {
     epoch: 0,
     arch: ["any"],
     pkgdesc: properties.description,
-    version: "1.0.0",
     pkgver: "1.0.0",
-    pkgname: properties.name,
-    //   pkgrel: 1,
-    release: 1
+    pkgname: ["abc"],
+    pkgrel: 1,
+    md5sums: ["SKIP"],
+    license: "MIT"
   });
 });
 
@@ -43,20 +40,21 @@ test("alpm aarch64 default properties", async t => {
     name: "abc",
     arch: ["aarch64"],
     version: "1.0.0",
-    description: "a description"
+    description: "a description",
+    license: "MIT"
   };
 
   const out = new ALPM(properties);
 
-  t.deepEqual(out.properties, {
-    type: "alpm",
-    ...properties,
+  t.deepEqual(out.externalProperties, {
     epoch: 0,
     arch: ["aarch64"],
-    pkgdesc: properties.description,
-    pkgver: properties.version,
-    pkgname: properties.name,
-    release: 1
+    pkgdesc: "a description",
+    pkgver: "1.0.0",
+    pkgname: ["abc"],
+    pkgrel: 1,
+    license: "MIT",
+    md5sums: ["SKIP"],
   });
 });
 
@@ -66,7 +64,7 @@ test("alpm", async t => {
     new FileContentProvider({
       dir: new URL(source, import.meta.url).pathname + "/",
       group: "wheel",
-     // mode: 0o666,
+      // mode: 0o666,
       permissions: {
         "**/*.txt": { mode: 0o600 }
       }
@@ -77,7 +75,7 @@ test("alpm", async t => {
     name: "abc",
     version: "1.0.0",
     description: "a description",
-    license: "MIT",
+    //   license: "MIT",
     maintainer: ["Herber Müller <herber.mueller@mail.com>"],
     provides: ["a=1", "b=2"],
     replaces: {
@@ -85,8 +83,7 @@ test("alpm", async t => {
       "abc-very-old": ">0.0.1"
     },
     dependencies: {
-      "nginx-mainline": ">=1.21.4",
-      konsum: ">=4.3.8"
+      "nginx-mainline": ">=1.21.4"
     }
   };
 

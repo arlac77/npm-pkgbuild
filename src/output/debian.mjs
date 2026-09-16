@@ -6,7 +6,7 @@ import {
   yesno_attribute_writable,
   string_attribute_writable,
   string_collection_attribute_writable,
-  toExternal
+  types
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import {
@@ -14,15 +14,15 @@ import {
   createPropertiesTransformer
 } from "content-entry-transform";
 import { keyValueTransformer, Uint8ArraysToLines } from "key-value-transformer";
+import { Packager } from "./packager.mjs";
+import { copyEntries, fieldProvider, aggregate } from "../util.mjs";
 import {
-  Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
   dependency_attribute_collection_writable,
   architectureType
-} from "./packager.mjs";
-import { copyEntries, fieldProvider, aggregate } from "../util.mjs";
+} from "../types.mjs";
 
 const debian_dependency_attribute_collection_writable = {
   ...dependency_attribute_collection_writable,
@@ -52,85 +52,129 @@ export class DEBIAN extends Packager {
    * @see https://linux.die.net/man/5/deb-control
    */
   static attributes = {
-    Package: {
+    name: {
       ...pkgbuild_name_attribute,
-      name: "Package",
-      set: v => v.toLowerCase()
+      externalName: "Package",
+      type: types["lowercase-string"]
     },
-    Version: { ...pkgbuild_version_attribute, name: "Version" },
-    Maintainer: {
+    description: {
+      ...pkgbuild_description_attribute,
+      externalName: "Description",
+      skipEmpty: true
+    },
+    version: { ...pkgbuild_version_attribute, externalName: "Version" },
+    maintainer: {
       ...string_attribute_writable,
-      name: "Maintainer",
-      alias: "maintainer",
+      name: "maintainer",
+      externalName: "Maintainer",
       mandatory: true
     },
-    Description: { ...pkgbuild_description_attribute, name: "Description" },
-    Section: { ...string_attribute_writable, name: "Section", alias: "groups" },
-    Priority: { ...string_attribute_writable, name: "Priority" },
-    Essential: { ...yesno_attribute_writable, name: "Essential" },
-    Origin: { ...string_attribute_writable, name: "Origin" },
-    Architecture: {
+    arch: {
       ...string_attribute_writable,
-      name: "Architecture",
-      alias: "arch",
+      name: "arch",
+      externalName: "Architecture",
       default: "all",
       mandatory: true,
       type: architectureType,
       mapping: { aarch64: "arm64" }
     },
-    Homepage: {
+    groups: {
       ...string_attribute_writable,
-      name: "Homepage",
-      alias: "homepage"
+      name: "groups",
+      externalName: "Section",
+      skipEmpty: true
     },
-    Bugs: { ...string_attribute_writable, name: "Bugs", alias: "bugs" },
-    Depends: {
+    Priority: {
+      ...string_attribute_writable,
+      name: "Priority",
+      skipEmpty: true
+    },
+    Essential: {
+      ...yesno_attribute_writable,
+      name: "Essential",
+      skipEmpty: true
+    },
+    Origin: { ...string_attribute_writable, name: "Origin", skipEmpty: true },
+    homepage: {
+      ...string_attribute_writable,
+      name: "homepage",
+      externalName: "Homepage",
+      skipEmpty: true
+    },
+    Bugs: {
+      ...string_attribute_writable,
+      name: "bugs",
+      externalName: "Bugs",
+      skipEmpty: true
+    },
+    dependencies: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Depends"
+      name: "dependencies",
+      externalName: "Depends",
+      skipEmpty: true
     },
     "Pre-Depends": {
       ...debian_dependency_attribute_collection_writable,
-      name: "Pre-Depends"
+      name: "Pre-Depends",
+      skipEmpty: true
     },
     "Build-Depends": {
       ...debian_dependency_attribute_collection_writable,
-      name: "Build-Depends"
+      name: "Build-Depends",
+      skipEmpty: true
     },
     "Build-Depends-Indep": {
       ...debian_dependency_attribute_collection_writable,
-      name: "Build-Depends-Indep"
+      name: "Build-Depends-Indep",
+      skipEmpty: true
     },
     "Build-Depends-Arch": {
       ...debian_dependency_attribute_collection_writable,
-      name: "Build-Depends-Arch"
+      name: "Build-Depends-Arch",
+      skipEmpty: true
     },
     Recommends: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Recommends"
+      name: "Recommends",
+      skipEmpty: true
     },
     Suggests: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Suggests"
+      name: "Suggests",
+      skipEmpty: true
     },
     Provides: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Provides"
+      name: "Provides",
+      skipEmpty: true
     },
     Breaks: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Breaks"
+      name: "Breaks",
+      skipEmpty: true
     },
     Replaces: {
       ...debian_dependency_attribute_collection_writable,
-      name: "Replaces"
+      name: "Replaces",
+      skipEmpty: true
     },
-    Source: { ...string_attribute_writable, name: "Source", alias: "source" },
+    source: {
+      ...string_attribute_writable,
+      name: "source",
+      externalName: "Source",
+      skipEmpty: true
+    },
     Uploaders: {
       ...string_collection_attribute_writable,
       name: "Uploaders",
-      mandatory: false
+      mandatory: false,
+      skipEmpty: true
     },
-    "Installed-Size": { ...integer_attribute_writable, name: "Installed-Size" }
+    "Installed-Size": {
+      ...integer_attribute_writable,
+      name: "Installed-Size",
+      skipEmpty: true
+    }
   };
 
   /**
@@ -153,13 +197,8 @@ export class DEBIAN extends Packager {
   }
 
   get packageFileName() {
-    const p = this.properties;
-
-    // TODO utility to provide final values
-    const arch = toExternal(p.arch, this.attributes.Architecture);
-
-    // @ts-ignore
-    return `${p.name}_${p.version}_${arch}${this.constructor.fileNameExtension}`;
+    const p = this.externalProperties;
+    return `${p.Package}_${p.Version}_${p.Architecture}${this.constructor.fileNameExtension}`;
   }
 
   /**
@@ -192,10 +231,7 @@ export class DEBIAN extends Packager {
       )
     );
 
-    const depends = this.makeDepends(properties.dependencies);
-    if (depends.length) {
-      properties.Depends = depends;
-    }
+    properties.dependencies = this.makeDepends(properties.dependencies);
 
     const fp = fieldProvider(properties, this.attributes);
 

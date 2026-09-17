@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { execa } from "execa";
-import { string_attribute } from "pacc";
+import { string_attribute_writable, types } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
 import { aggregateFifo } from "aggregate-async-iterator";
@@ -64,12 +64,12 @@ export class DOCKER extends Packager {
   static attributes = {
     name: {
       ...pkgbuild_name_attribute,
-      set: value => value.toLowerCase()
+      type: types["lowercase-string"]
     },
     version: pkgbuild_version_attribute,
     description: pkgbuild_description_attribute,
-    author: { ...string_attribute, alias: "maintainer" },
-    workdir: { ...string_attribute, default: "/", mandatory: true }
+    maintainer: { ...string_attribute_writable, name: "maintainer", externalName: "author" },
+    workdir: { ...string_attribute_writable, default: "/", mandatory: true }
   };
 
   /**

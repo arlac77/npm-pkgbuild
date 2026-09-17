@@ -37,12 +37,10 @@ export const architecture_type = {
   name: "architecture",
 
   toInternal: (value, attribute) => {
-    //   console.log("architectureType toInternal", value);
     return value;
   },
 
   toExternal: (value, attribute) => {
-    //  console.log("architectureType toExternal", value);
     return attribute.mapping?.[value] ?? value;
   }
 };
@@ -64,7 +62,7 @@ export const pkgbuild_name_attribute = {
 export const dependency_attribute_collection_writable = {
   ...string_collection_attribute_writable,
   type: dependency_type,
-  separator: " ",
+  separator: undefined,
   pattern: /^[a-z_][a-z0-9_\-]*$/i
 };
 

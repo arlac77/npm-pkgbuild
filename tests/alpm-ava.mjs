@@ -13,12 +13,14 @@ test("alpm extension", async t => {
   t.true(ALPM.fileNameExtension.startsWith(".pkg.tar."));
 });
 
-test("alpm default properties", async t => {
+test("alpm properties", async t => {
   const properties = {
     name: "abc",
     version: "1.0.0-semantic-release",
     description: "a description",
-    license: "MIT"
+    license: "MIT",
+    groups: new Set(["g1"]),
+    backup: ["b1"]
   };
 
   const out = new ALPM(properties);
@@ -32,10 +34,12 @@ test("alpm default properties", async t => {
     pkgrel: 1,
     md5sums: ["SKIP"],
     license: ["MIT"],
+    groups: ["g1"],
+    backup: ["b1"]
   });
 });
 
-test("alpm aarch64 default properties", async t => {
+test("alpm aarch64 properties", async t => {
   const properties = {
     name: "abc",
     arch: ["aarch64"],

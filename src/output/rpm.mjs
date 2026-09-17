@@ -5,8 +5,7 @@ import { execa } from "execa";
 import {
   integer_attribute_writable,
   url_attribute_writable,
-  string_attribute_writable,
-  string_collection_attribute_writable
+  string_attribute_writable
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
@@ -82,7 +81,8 @@ export class RPM extends Packager {
     source: {
       ...string_attribute_writable,
       externalName: "Source0",
-      name: "source"
+      name: "source",
+      skipEmpty: true
     },
     groups: {
       ...string_attribute_writable,
@@ -115,10 +115,19 @@ export class RPM extends Packager {
     },
     dependencies: {
       ...dependency_attribute_collection_writable,
-      externalName: "Requires"
+      externalName: "Requires",
+      skipEmpty: true
     },
-    Obsoletes: { ...dependency_attribute_collection_writable, name: "Obsoletes" },
-    Conflicts: { ...dependency_attribute_collection_writable, name: "Conflicts" }
+    Obsoletes: {
+      ...dependency_attribute_collection_writable,
+      name: "Obsoletes",
+      skipEmpty: true
+    },
+    Conflicts: {
+      ...dependency_attribute_collection_writable,
+      name: "Conflicts",
+      skipEmpty: true
+    }
   };
 
   static get workspaceLayout() {

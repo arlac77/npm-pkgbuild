@@ -2,7 +2,12 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
-import { expand, expandContextDoubbleCurly, iterateToExternal } from "pacc";
+import {
+  expand,
+  expandContextDoubbleCurly,
+  attributeIterator,
+  iterateToExternal
+} from "pacc";
 import { StringContentEntry } from "content-entry";
 import { publish } from "../publish.mjs";
 import {
@@ -60,6 +65,14 @@ export class Packager {
    */
   constructor(properties) {
     this.properties = { ...properties, type: this.constructor.name };
+
+    for (const [path, attribute] of attributeIterator(
+      this.constructor.attributes,
+      attribute => attribute.default !== undefined
+    )) {
+      const name = path.join(".");
+      this.properties[name] ??= attribute.default;
+    }
   }
 
   get externalProperties() {

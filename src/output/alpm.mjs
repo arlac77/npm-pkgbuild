@@ -134,11 +134,13 @@ export class ALPM extends Packager {
     source: {
       ...string_collection_attribute_writable,
       name: "source",
+      separator: undefined,
       skipEmpty: true
     },
     validpgpkeys: {
       ...string_collection_attribute_writable,
       name: "validpgpkeys",
+      separator: undefined,
       skipEmpty: true
     },
     noextract: { ...default_attribute, name: "noextract", skipEmpty: true },
@@ -150,32 +152,37 @@ export class ALPM extends Packager {
     md5sums: {
       ...string_collection_attribute_writable,
       name: "md5sums",
+      separator: undefined,
       default: ["SKIP"]
-      // skipEmpty: true
     },
     sha1sums: {
       ...string_collection_attribute_writable,
       name: "sha1sums",
+      separator: undefined,
       skipEmpty: true
     },
     sha256sums: {
       ...string_collection_attribute_writable,
       name: "sha256sums",
+      separator: undefined,
       skipEmpty: true
     },
     sha384sums: {
       ...string_collection_attribute_writable,
       name: "sha384sums",
+      separator: undefined,
       skipEmpty: true
     },
     sha512sums: {
       ...string_collection_attribute_writable,
       name: "sha512sums",
+      separator: undefined,
       skipEmpty: true
     },
     groups: {
       ...string_collection_attribute_writable,
       name: "groups",
+      separator: undefined,
       skipEmpty: true
     },
     arch: {
@@ -185,6 +192,7 @@ export class ALPM extends Packager {
     backup: {
       ...string_collection_attribute_writable,
       name: "backup",
+      separator: undefined,
       skipEmpty: true
     },
     dependencies: {
@@ -223,7 +231,12 @@ export class ALPM extends Packager {
       name: "replaces",
       skipEmpty: true
     },
-    options: { ...default_attribute, name: "options", skipEmpty: true }
+    options: {
+      ...default_attribute,
+      name: "options",
+      separator: undefined,
+      skipEmpty: true
+    }
   };
 
   static async prepare(options = {}, variant = {}) {

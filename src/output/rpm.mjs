@@ -3,9 +3,9 @@ import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
 import {
-  integer_attribute,
-  url_attribute,
-  string_attribute,
+  integer_attribute_writable,
+  url_attribute_writable,
+  string_attribute_writable,
   string_collection_attribute_writable
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
@@ -20,7 +20,8 @@ import {
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
-  arch_attribute_writable
+  arch_attribute_writable,
+  dependency_attribute_collection_writable
 } from "../types.mjs";
 import {
   copyEntries,
@@ -65,40 +66,59 @@ export class RPM extends Packager {
     name: { ...pkgbuild_name_attribute, externalName: "Name" },
     description: { ...pkgbuild_description_attribute, externalName: "Summary" },
     license: {
-      ...string_attribute,
+      ...string_attribute_writable,
       name: "license",
       externalName: "License",
       mandatory: true
     },
     version: { ...pkgbuild_version_attribute, externalName: "Version" },
     release: {
-      ...integer_attribute,
+      ...integer_attribute_writable,
       externalName: "Release",
       name: "release",
       default: 1,
       mandatory: true
     },
-    source: { ...string_attribute, externalName: "Source0", name: "source" },
-    groups: { ...string_attribute, externalName: "Group", name: "groups" },
+    source: {
+      ...string_attribute_writable,
+      externalName: "Source0",
+      name: "source"
+    },
+    groups: {
+      ...string_attribute_writable,
+      externalName: "Group",
+      name: "groups",
+      skipEmpty: true
+    },
     maintainer: {
-      ...string_attribute,
+      ...string_attribute_writable,
       name: "maintainer",
       externalName: "Packager"
     },
-    vendor: { ...string_attribute, externalName: "Vendor", name: "vendor" },
+    vendor: {
+      ...string_attribute_writable,
+      externalName: "Vendor",
+      name: "vendor",
+      skipEmpty: true
+    },
     arch: {
       ...arch_attribute_writable,
       externalName: "BuildArch",
       default: "noarch",
       mapping: { any: "noarch" }
     },
-    URL: { ...url_attribute, name: "URL", alias: "homepage" },
+    URL: {
+      ...url_attribute_writable,
+      name: "URL",
+      alias: "homepage",
+      skipEmpty: true
+    },
     dependencies: {
-      ...string_collection_attribute_writable,
+      ...dependency_attribute_collection_writable,
       externalName: "Requires"
     },
-    Obsoletes: { ...string_collection_attribute_writable, name: "Obsoletes" },
-    Conflicts: { ...string_collection_attribute_writable, name: "Conflicts" }
+    Obsoletes: { ...dependency_attribute_collection_writable, name: "Obsoletes" },
+    Conflicts: { ...dependency_attribute_collection_writable, name: "Conflicts" }
   };
 
   static get workspaceLayout() {

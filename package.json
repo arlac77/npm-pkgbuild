@@ -57,11 +57,11 @@
     "content-entry-transform": "^1.7.6",
     "execa": "^10.0.1",
     "ini": "^7.0.0",
-    "iterable-string-interceptor": "^3.0.8",
+    "iterable-string-interceptor": "^3.1.0",
     "key-value-transformer": "^3.3.2",
     "npm-package-walker": "^8.0.11",
     "npm-packlist": "^11.3.0",
-    "pacc": "^11.13.0",
+    "pacc": "^11.15.0",
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",
     "picomatch": "^4.0.7",
@@ -69,7 +69,7 @@
     "uti": "^8.11.3"
   },
   "devDependencies": {
-    "@types/node": "^26.6.1",
+    "@types/node": "^26.6.2",
     "ava": "^8.0.1",
     "c8": "^12.0.0",
     "documentation": "^14.0.3",

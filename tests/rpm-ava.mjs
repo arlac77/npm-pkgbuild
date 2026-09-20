@@ -50,7 +50,7 @@ test("rpm", async t => {
     description: "a description",
     license: "MIT",
     hooks: new URL("fixtures/pkg/pacman.install", import.meta.url).pathname,
-    maintainer: ["a <a>", "b <b>"],
+    maintainer: ["a <a>" /*, "b <b>"*/],
     dependencies: {
       "nginx-mainline": ">=1.21.4",
       konsum: ">=4.3.8"

@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 import { createWriteStream } from "node:fs";
-import { toExternal, asArray } from "pacc";
+import { asArray, iterateToExternal } from "pacc";
 import { ContentEntry } from "content-entry";
 import { aggregateFifo } from "aggregate-async-iterator";
 
@@ -145,44 +145,21 @@ export function quote(v, qc = "'") {
  * @returns {Function}
  */
 export function fieldProvider(properties, attributes) {
-  function av(attribute, value) {
-    return attribute.collection ? asArray(value) : value;
-  }
+  return function* controlProperties(key, value, presentKeys) {
+    let filter;
 
-  return function* controlProperties(k, v, presentKeys) {
-    if (k === undefined) {
-      for (const [name, attribute] of Object.entries(attributes)) {
-        if (!presentKeys.has(name)) {
-          let value = properties[attribute.alias || name];
-          if (
-            value === undefined ||
-            (attribute.collection && value.size === 0)
-          ) {
-            if (attribute.default === undefined) {
-              if (attribute.mandatory) {
-                console.error(`Missing value for mandatory attribute ${name}`);
-              }
-              if (attribute.skipEmpty) {
-                continue;
-              }
-            } else {
-              yield [name, toExternal(attribute.default, attribute)];
-            }
-          } else {
-            if (attribute.mapping) {
-              const mappedValue = attribute.mapping[value];
-              if (mappedValue !== undefined) {
-                value = mappedValue;
-              }
-            }
+    if (key) {
+      filter = attribute => attribute.name === key;
+    }
 
-            yield [name, av(attribute, toExternal(value, attribute))];
-          }
-        }
-      }
-    } else {
-      const attribute = attributes[k];
-      yield [k, av(attribute, toExternal(properties[k] ?? v, attribute))];
+    for (const [name, value] of iterateToExternal(
+      properties,
+      attributes,
+      filter
+    )) {
+      //if (!presentKeys.has(name)) { }
+
+      yield [name, value];
     }
   };
 }

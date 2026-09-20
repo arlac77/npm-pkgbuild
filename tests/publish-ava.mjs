@@ -43,7 +43,7 @@ test("publish nowhere", async t => {
   t.true(true, "does not fail");
 });
 
-test.only("publish twice", async t => {
+test("publish twice", async t => {
   const file = new URL("fixtures/content/file1.txt", import.meta.url).pathname;
 
   const properties = { arch: "aarch64", access: "private" };

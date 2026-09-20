@@ -23,8 +23,9 @@ test("debian lowercase name + arch mapping", t => {
     arch: "aarch64"
   });
 
-  t.is(out.properties.name, "abc");
-  //t.is(out.properties.arch, "arm64");
+  const properties = out.externalProperties;
+  t.is(properties.Package, "abc");
+  t.is(properties.Architecture, "arm64");
 
   t.is(out.packageFileName, "abc_1.0.0_arm64.deb");
 });
@@ -50,7 +51,7 @@ async function preparePacker(sourceDirs = [], dependencies = {}, props) {
   };
 
   const out = new DEBIAN(properties);
-
+  
   const transformer = [];
   const destination = await mkdtemp(join(tmpdir(), out.constructor.name));
   const fileName = await out.create(sources, transformer, publishingDetails, {

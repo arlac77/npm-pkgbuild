@@ -1,6 +1,7 @@
 import {
+  asArray,
   types,
-  primitive_type,
+  string_type,
   string_collection_attribute_writable,
   name_attribute,
   description_attribute,
@@ -9,7 +10,7 @@ import {
 } from "pacc";
 
 export const dependency_type = {
-  ...primitive_type,
+  ...string_type,
   name: "dependency",
   toExternal: (value, attribute) => {
     switch (typeof value) {
@@ -26,6 +27,14 @@ export const dependency_type = {
       return value;
     }
 
+    if (value instanceof Set) {
+      if (value.size === 0 && attribute.skipEmpty) {
+        return undefined;
+      }
+
+      return asArray(value);
+    }
+
     return Object.entries(value).map(([name, expression]) =>
       typeof expression === "string" ? `${name}${expression}` : name
     );
@@ -33,7 +42,7 @@ export const dependency_type = {
 };
 
 export const architecture_type = {
-  ...primitive_type,
+  ...string_type,
   name: "architecture",
 
   toInternal: (value, attribute) => {

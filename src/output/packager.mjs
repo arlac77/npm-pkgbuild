@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { mkdtemp, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import {
+  asArray,
   expand,
   expandContextDoubbleCurly,
   attributeIterator,
@@ -154,14 +155,15 @@ export class Packager {
       return [];
     }
 
-    if (Array.isArray(dependencies)) {
+    if (Array.isArray(dependencies) || dependencies instanceof Set) {
       dependencies = Object.fromEntries(
-        dependencies.map(d => {
+        asArray(dependencies).map(d => {
           const m = d.match(/^([^=<>]+)(.*)/);
           return [m[1], m[2]];
         })
       );
     }
+    
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(([name, expression]) => this.dependencyExpression(name, expression));

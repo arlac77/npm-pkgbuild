@@ -287,9 +287,6 @@ export class ALPM extends Packager {
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
-    /*if (properties.source) {
-      properties.md5sums = ["SKIP"];
-    }*/
     if (properties.hooks) {
       properties.install = `${properties.name}.install`;
 
@@ -306,7 +303,15 @@ export class ALPM extends Packager {
       out.end();
     }
 
-    const depends = this.makeDepends(properties.dependencies).join(" ");
+    if (properties.backup?.[0] === "/") {
+      properties.backup = properties.backup.replace(/\//, "");
+    }
+
+    const dependencies = properties.dependencies;
+    delete properties.dependencies;
+    const fp = fieldProvider(properties, this.attributes);
+
+    const depends = this.makeDepends(dependencies).join(" ");
     const dependsStatement = depends.length ? `depends=(${depends})` : "";
     const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
 
@@ -325,12 +330,6 @@ package() {
 }
 `;
     }
-
-    if (properties.backup?.[0] === "/") {
-      properties.backup = properties.backup.replace(/\//, "");
-    }
-
-    const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({
       name: PKGBUILD,

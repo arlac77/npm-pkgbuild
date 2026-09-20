@@ -15,13 +15,14 @@ import {
   equalSeparatedKeyValuePairOptions,
   Uint8ArraysToLines
 } from "key-value-transformer";
+import { Packager } from "./packager.mjs";
 import {
-  Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
   pkgbuild_name_attribute,
-  dependency_attribute_collection_writable
-} from "./packager.mjs";
+  dependency_attribute_collection_writable,
+  arch_attribute_writable
+} from "../types.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -88,88 +89,154 @@ export class ALPM extends Packager {
    * https://www.archlinux.org/pacman/PKGBUILD.5.html
    */
   static attributes = {
-    Maintainer: {
+    name: {
+      ...pkgbuild_name_attribute,
+      collection: true,
+      externalName: "pkgname"
+    },
+    description: { ...pkgbuild_description_attribute, externalName: "pkgdesc" },
+    version: { ...pkgbuild_version_attribute, externalName: "pkgver" },
+    maintainer: {
       ...string_collection_attribute_writable,
-      name: "Maintainer",
-      alias: "maintainer",
-      prefix: "# "
+      externalName: "Maintainer",
+      name: "maintainer",
+      prefix: "# ",
+      skipEmpty: true
     },
     packager: {
       ...string_collection_attribute_writable,
       name: "packager",
-      alias: "maintainer"
+      alias: "maintainer",
+      skipEmpty: true
     },
-    pkgname: { ...pkgbuild_name_attribute, name: "pkgname", collection: true },
-    pkgver: { ...pkgbuild_version_attribute, name: "pkgver" },
-    pkgrel: {
+    release: {
       ...integer_attribute,
-      name: "pkgrel",
-      alias: "release",
+      name: "release",
+      externalName: "pkgrel",
       default: 1,
       mandatory: true
     },
     epoch: { ...integer_attribute, name: "epoch", default: 0 },
-    pkgdesc: { ...pkgbuild_description_attribute, name: "pkgdesc" },
-    url: { ...string_attribute, name: "url", alias: "homepage" },
+    url: {
+      ...string_attribute,
+      name: "url",
+      alias: "homepage",
+      skipEmpty: true
+    },
     license: {
       ...string_collection_attribute_writable,
+      separator: undefined,
       name: "license",
-      mandatory: true
+      skipEmpty: true
     },
-    install: { ...string_attribute, name: "install" },
-    changelog: { ...string_attribute, name: "changelog" },
-    source: { ...string_collection_attribute_writable, name: "source" },
+    install: { ...string_attribute, name: "install", skipEmpty: true },
+    changelog: { ...string_attribute, name: "changelog", skipEmpty: true },
+    source: {
+      ...string_collection_attribute_writable,
+      name: "source",
+      separator: undefined,
+      skipEmpty: true
+    },
     validpgpkeys: {
       ...string_collection_attribute_writable,
-      name: "validpgpkeys"
+      name: "validpgpkeys",
+      separator: undefined,
+      skipEmpty: true
     },
-    noextract: { ...default_attribute, name: "noextract" },
-    cksums: { ...string_collection_attribute_writable, name: "cksums" },
-    md5sums: { ...string_collection_attribute_writable, name: "md5sums" },
-    sha1sums: { ...string_collection_attribute_writable, name: "sha1sums" },
-    sha256sums: { ...string_collection_attribute_writable, name: "sha256sums" },
-    sha384sums: { ...string_collection_attribute_writable, name: "sha384sums" },
-    sha512sums: { ...string_collection_attribute_writable, name: "sha512sums" },
-    groups: { ...string_collection_attribute_writable, name: "groups" },
-    arch: {
+    noextract: { ...default_attribute, name: "noextract", skipEmpty: true },
+    cksums: {
       ...string_collection_attribute_writable,
-      name: "arch",
-      default: ["any"],
-      mandatory: true
+      name: "cksums",
+      skipEmpty: true
+    },
+    md5sums: {
+      ...string_collection_attribute_writable,
+      name: "md5sums",
+      separator: undefined,
+      default: ["SKIP"]
+    },
+    sha1sums: {
+      ...string_collection_attribute_writable,
+      name: "sha1sums",
+      separator: undefined,
+      skipEmpty: true
+    },
+    sha256sums: {
+      ...string_collection_attribute_writable,
+      name: "sha256sums",
+      separator: undefined,
+      skipEmpty: true
+    },
+    sha384sums: {
+      ...string_collection_attribute_writable,
+      name: "sha384sums",
+      separator: undefined,
+      skipEmpty: true
+    },
+    sha512sums: {
+      ...string_collection_attribute_writable,
+      name: "sha512sums",
+      separator: undefined,
+      skipEmpty: true
+    },
+    groups: {
+      ...string_collection_attribute_writable,
+      name: "groups",
+      separator: undefined,
+      skipEmpty: true
+    },
+    arch: {
+      ...arch_attribute_writable,
+      default: ["any"]
     },
     backup: {
       ...string_collection_attribute_writable,
       name: "backup",
+      separator: undefined,
       skipEmpty: true
     },
-    depends: {
-      ...dependency_attribute_collection_writable /*, alias: "dependencies" */,
-      name: "depends"
+    dependencies: {
+      ...dependency_attribute_collection_writable,
+      name: "dependencies",
+      externalName: "depends",
+      skipEmpty: true
     },
     makedepends: {
       ...dependency_attribute_collection_writable,
-      name: "makedepends"
+      name: "makedepends",
+      skipEmpty: true
     },
     checkdepends: {
       ...dependency_attribute_collection_writable,
-      name: "checkdepends"
+      name: "checkdepends",
+      skipEmpty: true
     },
     optdepends: {
       ...dependency_attribute_collection_writable,
-      name: "optdepends"
+      name: "optdepends",
+      skipEmpty: true
     },
     conflicts: {
       ...dependency_attribute_collection_writable,
       name: "conflicts",
       skipEmpty: true
     },
-    provides: { ...dependency_attribute_collection_writable, name: "provides" },
+    provides: {
+      ...dependency_attribute_collection_writable,
+      name: "provides",
+      skipEmpty: true
+    },
     replaces: {
       ...dependency_attribute_collection_writable,
       name: "replaces",
       skipEmpty: true
     },
-    options: { ...default_attribute, name: "options" }
+    options: {
+      ...default_attribute,
+      name: "options",
+      separator: undefined,
+      skipEmpty: true
+    }
   };
 
   static async prepare(options = {}, variant = {}) {
@@ -209,8 +276,8 @@ export class ALPM extends Packager {
   }
 
   get packageFileName() {
-    const p = this.properties;
-    return `${p.name}-${p.version}-${p.release}-${p.arch}${this.fileNameExtension}`;
+    const p = this.externalProperties;
+    return `${p.pkgname}-${p.pkgver}-${p.pkgrel}-${p.arch}${this.fileNameExtension}`;
   }
 
   dependencyExpression(name, expression) {
@@ -220,9 +287,6 @@ export class ALPM extends Packager {
   async create(sources, transformer, publishingDetails, options, expander) {
     const { properties, staging, destination } = await this.prepare(options);
 
-    if (properties.source) {
-      properties.md5sums = ["SKIP"];
-    }
     if (properties.hooks) {
       properties.install = `${properties.name}.install`;
 
@@ -239,7 +303,15 @@ export class ALPM extends Packager {
       out.end();
     }
 
-    const depends = this.makeDepends(properties.dependencies).join(" ");
+    if (properties.backup?.[0] === "/") {
+      properties.backup = properties.backup.replace(/\//, "");
+    }
+
+    const dependencies = properties.dependencies;
+    delete properties.dependencies;
+    const fp = fieldProvider(properties, this.attributes);
+
+    const depends = this.makeDepends(dependencies).join(" ");
     const dependsStatement = depends.length ? `depends=(${depends})` : "";
     const verbose = options.verbose ? 'ls -laR "$pkgdir"' : "";
 
@@ -258,12 +330,6 @@ package() {
 }
 `;
     }
-
-    if (properties.backup?.[0] === "/") {
-      properties.backup = properties.backup.replace(/\//, "");
-    }
-
-    const fp = fieldProvider(properties, this.attributes);
 
     transformer.push({
       name: PKGBUILD,
@@ -287,18 +353,18 @@ package() {
       join(staging, "src"),
       expander
     )) {
-      if(file.destination !== '../PKGBUILD') {
-      if (file.owner || file.group) {
-        permission.push(
-          `    chown ${[file.owner ?? "", file.group ?? ""].join(":")} \"$pkgdir/${file.destination}\"`
-        );
-      }
-      const mode = (await file.mode) & 0o7777;
-      if (mode) {
-        permission.push(
-          `    chmod ${Number(mode).toString(8)} \"$pkgdir/${file.destination}\"`
-        );
-      }
+      if (file.destination !== "../PKGBUILD") {
+        if (file.owner || file.group) {
+          permission.push(
+            `    chown ${[file.owner ?? "", file.group ?? ""].join(":")} \"$pkgdir/${file.destination}\"`
+          );
+        }
+        const mode = (await file.mode) & 0o7777;
+        if (mode) {
+          permission.push(
+            `    chmod ${Number(mode).toString(8)} \"$pkgdir/${file.destination}\"`
+          );
+        }
       }
 
       if (options.verbose) {

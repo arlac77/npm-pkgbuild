@@ -1,10 +1,21 @@
 import test from "ava";
+import { string_attribute_writable, types } from "pacc";
 import { Packager } from "npm-pkgbuild";
 
 class MyPackager extends Packager {
   static attributes = {
-    a: { detault: "av", mandatory: true },
-    b: { default: "bv", set: value => value.toLowerCase() }
+    a: {
+      ...string_attribute_writable,
+      name: "a",
+      detault: "av",
+      mandatory: true
+    },
+    b: {
+      ...string_attribute_writable,
+      type: types['lowercase-string'],
+      name: "b",
+      default: "bv"
+    }
   };
 
   static get workspaceLayout() {
@@ -24,7 +35,7 @@ test("packager attributes", t => {
 
 test("packager property set", t => {
   const p = new MyPackager({ b: "ABC" });
-  t.is(p.properties.b, "abc");
+  t.is(p.externalProperties.b, "abc");
 });
 
 test("packager properties", t => {
@@ -48,12 +59,9 @@ test("makeDepends", t => {
   t.deepEqual(out.makeDepends([]), []);
   t.deepEqual(out.makeDepends(), []);
 
-  t.deepEqual(out.makeDepends({ a: "=1.2.3", b: "", c: undefined, d: ">=1", "e": true }), [
-    "a=1.2.3",
-    "b",
-    "c",
-    "d>=1",
-    "e"
-  ]);
+  t.deepEqual(
+    out.makeDepends({ a: "=1.2.3", b: "", c: undefined, d: ">=1", e: true }),
+    ["a=1.2.3", "b", "c", "d>=1", "e"]
+  );
   t.deepEqual(out.makeDepends(["a=1.2.3", "b"]), ["a=1.2.3", "b"]);
 });

@@ -3,10 +3,9 @@ import { readFile } from "node:fs/promises";
 import { cp } from "node:fs/promises";
 import { execa } from "execa";
 import {
-  integer_attribute,
-  url_attribute,
-  string_attribute,
-  string_collection_attribute_writable
+  integer_attribute_writable,
+  url_attribute_writable,
+  string_attribute_writable
 } from "pacc";
 import { ContentEntry, IteratorContentEntry } from "content-entry";
 import { transform } from "content-entry-transform";
@@ -15,12 +14,14 @@ import {
   colonSeparatedKeyValuePairOptionsDoublingKeys,
   Uint8ArraysToLines
 } from "key-value-transformer";
+import { Packager } from "./packager.mjs";
 import {
-  Packager,
   pkgbuild_version_attribute,
   pkgbuild_description_attribute,
-  pkgbuild_name_attribute
-} from "./packager.mjs";
+  pkgbuild_name_attribute,
+  arch_attribute_writable,
+  dependency_attribute_collection_writable
+} from "../types.mjs";
 import {
   copyEntries,
   fieldProvider,
@@ -61,37 +62,72 @@ export class RPM extends Packager {
    * @see https://rpm-packaging-guide.github.io
    */
   static attributes = {
-    Name: { ...pkgbuild_name_attribute, name: "Name" },
-    Summary: { ...pkgbuild_description_attribute, name: "Summary" },
-    License: {
-      ...string_attribute,
-      name: "License",
-      alias: "license",
+    name: { ...pkgbuild_name_attribute, externalName: "Name" },
+    description: { ...pkgbuild_description_attribute, externalName: "Summary" },
+    license: {
+      ...string_attribute_writable,
+      name: "license",
+      externalName: "License",
       mandatory: true
     },
-    Version: { ...pkgbuild_version_attribute, name: "Version" },
-    Release: {
-      ...integer_attribute,
-      name: "Release",
-      alias: "release",
+    version: { ...pkgbuild_version_attribute, externalName: "Version" },
+    release: {
+      ...integer_attribute_writable,
+      externalName: "Release",
+      name: "release",
       default: 1,
       mandatory: true
     },
-    Source0: { ...string_attribute, name: "Source0", alias: "source" },
-    Group: { ...string_attribute, name: "Group", alias: "groups" },
-    Packager: { ...string_attribute, name: "Packager", alias: "maintainer" },
-    Vendor: { ...string_attribute, name: "Vendor", alias: "vendor" },
-    BuildArch: {
-      ...string_attribute,
-      name: "BuildArch",
-      alias: "arch",
-      default: "noarch",
-      mandatory: true
+    source: {
+      ...string_attribute_writable,
+      externalName: "Source0",
+      name: "source",
+      skipEmpty: true
     },
-    URL: { ...url_attribute, name: "URL", alias: "homepage" },
-    Requires: { ...string_collection_attribute_writable, name: "Requires" },
-    Obsoletes: { ...string_collection_attribute_writable, name: "Obsoletes" },
-    Conflicts: { ...string_collection_attribute_writable, name: "Conflicts" }
+    groups: {
+      ...string_attribute_writable,
+      externalName: "Group",
+      name: "groups",
+      skipEmpty: true
+    },
+    maintainer: {
+      ...string_attribute_writable,
+      name: "maintainer",
+      externalName: "Packager"
+    },
+    vendor: {
+      ...string_attribute_writable,
+      externalName: "Vendor",
+      name: "vendor",
+      skipEmpty: true
+    },
+    arch: {
+      ...arch_attribute_writable,
+      externalName: "BuildArch",
+      default: "noarch",
+      mapping: { any: "noarch" }
+    },
+    URL: {
+      ...url_attribute_writable,
+      name: "URL",
+      alias: "homepage",
+      skipEmpty: true
+    },
+    dependencies: {
+      ...dependency_attribute_collection_writable,
+      externalName: "Requires",
+      skipEmpty: true
+    },
+    Obsoletes: {
+      ...dependency_attribute_collection_writable,
+      name: "Obsoletes",
+      skipEmpty: true
+    },
+    Conflicts: {
+      ...dependency_attribute_collection_writable,
+      name: "Conflicts",
+      skipEmpty: true
+    }
   };
 
   static get workspaceLayout() {
@@ -152,7 +188,7 @@ export class RPM extends Packager {
     const { properties, tmpdir, staging, destination } =
       await this.prepare(options);
 
-    properties.Requires = this.makeDepends(properties.dependencies);
+    properties.dependencies = this.makeDepends(properties.dependencies);
 
     if (properties.Packager?.length > 1) {
       // TODO how to write several Packages ?

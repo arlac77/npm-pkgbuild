@@ -288,7 +288,7 @@ export class ALPM extends Packager {
     const { properties, staging, destination } = await this.prepare(options);
 
     if (properties.hooks) {
-      properties.install = `${properties.name}.install`;
+      let parts = 0;
 
       const out = createWriteStream(
         join(staging, properties.install),
@@ -296,11 +296,16 @@ export class ALPM extends Packager {
       );
 
       for await (const hook of this.hookContent()) {
+        parts++;
         out.write(`${hook.name}() {\n`);
         out.write(hook.string);
         out.write(`\n}\n`);
       }
       out.end();
+
+      if(parts > 0) {
+        properties.install = `${properties.name}.install`;
+      }
     }
 
     if (properties.backup?.[0] === "/") {

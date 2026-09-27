@@ -288,10 +288,11 @@ export class ALPM extends Packager {
     const { properties, staging, destination } = await this.prepare(options);
 
     if (properties.hooks) {
+      let installFileName = `${properties.name}.install`;
       let parts = 0;
 
       const out = createWriteStream(
-        join(staging, properties.install),
+        join(staging, installFileName),
         utf8StreamOptions
       );
 
@@ -304,7 +305,7 @@ export class ALPM extends Packager {
       out.end();
 
       if(parts > 0) {
-        properties.install = `${properties.name}.install`;
+        properties.install = installFileName;
       }
     }
 

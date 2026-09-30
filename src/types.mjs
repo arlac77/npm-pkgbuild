@@ -45,7 +45,7 @@ export const architecture_type = {
   ...string_type,
   name: "architecture",
 
-  toInternal: (value, attribute) => {
+  toInternal: (value, attribute, defaultValue) => {
     return value;
   },
 
@@ -59,6 +59,19 @@ export const arch_attribute_writable = {
   name: "arch",
   default: "all",
   mandatory: true,
+  values: new Set([
+    "aarch64",
+    "armv7h",
+    "mips",
+    "mipsel",
+    "ppc",
+    "s390",
+    "s390x",
+    "x32",
+    "x86_64",
+    "ppc64",
+    "any"
+  ]),
   type: architecture_type
 };
 

@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 import { createWriteStream } from "node:fs";
-import { asArray, iterateToExternal } from "pacc";
+import { iterateToExternal } from "pacc";
 import { ContentEntry } from "content-entry";
 import { aggregateFifo } from "aggregate-async-iterator";
 

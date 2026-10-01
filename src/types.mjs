@@ -6,7 +6,7 @@ import {
   name_attribute,
   description_attribute,
   version_attribute_writable,
-  string_attribute_writable
+  architecture_attribute_writable
 } from "pacc";
 
 export const dependency_type = {
@@ -55,23 +55,10 @@ export const architecture_type = {
 };
 
 export const arch_attribute_writable = {
-  ...string_attribute_writable,
+  ...architecture_attribute_writable,
   name: "arch",
   default: "all",
   mandatory: true,
-  values: new Set([
-    "aarch64",
-    "armv7h",
-    "mips",
-    "mipsel",
-    "ppc",
-    "s390",
-    "s390x",
-    "x32",
-    "x86_64",
-    "ppc64",
-    "any"
-  ]),
   type: architecture_type
 };
 

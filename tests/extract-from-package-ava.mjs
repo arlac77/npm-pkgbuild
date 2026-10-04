@@ -110,6 +110,7 @@ test(
       dependencies: { dep2: ">=2" },
       replaces: { "old-dep2": ">=2.2" },
       content: { "/service/myservice": "*" },
+      groups: "bl",
       output: {
         debian: {
           dependencies: { dep1: ">=1" },
@@ -127,6 +128,7 @@ test(
       properties: {
         name: "n3",
         description: "d1",
+        groups: "bl",
         version: "1.2.3",
         other: "o1",
         license: "BSD",
@@ -153,6 +155,7 @@ test(
       properties: {
         name: "n3",
         description: "d1",
+        groups: "bl",
         version: "1.2.3",
         other: "o1",
         license: "BSD",

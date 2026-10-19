@@ -55,7 +55,7 @@
     "content-entry": "^15.0.4",
     "content-entry-filesystem": "^9.1.6",
     "content-entry-transform": "^1.7.11",
-    "execa": "^10.2.0",
+    "execa": "^10.1.1",
     "ini": "^7.0.0",
     "key-value-transformer": "^3.3.2",
     "npm-package-walker": "^8.0.11",

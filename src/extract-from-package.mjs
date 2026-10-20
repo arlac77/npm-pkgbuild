@@ -393,6 +393,7 @@ export async function* extractFromPackage(options = {}, env = {}) {
 
         const properties = {
           type: name,
+          packaging: name,
           ...result.properties,
           ...output.properties,
           dependencies: mergeDependencies(

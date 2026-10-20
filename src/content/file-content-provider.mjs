@@ -3,7 +3,6 @@ import { cwd } from "node:process";
 import { glob } from "node:fs/promises";
 import { ContentEntry, CollectionEntry } from "content-entry";
 import { FileSystemEntry } from "content-entry-filesystem";
-import { asArray } from "pacc";
 import { ContentProvider } from "./content-provider.mjs";
 
 const DEFAULT_PATTERN = ["**/*", "!.*"];
@@ -51,9 +50,7 @@ export class FileContentProvider extends ContentProvider {
 
     super(definitions);
 
-    this.pattern = definitions.pattern
-      ? asArray(definitions.pattern)
-      : DEFAULT_PATTERN;
+    this.pattern ??= DEFAULT_PATTERN;
   }
 
   get isPatternMatch() {

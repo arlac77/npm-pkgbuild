@@ -1,4 +1,5 @@
 import picomatch from "picomatch";
+import { asArray } from "pacc";
 import { ContentEntry, CollectionEntry } from "content-entry";
 
 /**
@@ -17,11 +18,17 @@ export class ContentProvider {
    * @param {Object} definitions
    * @param {string} [definitions.dir]
    * @param {string} [definitions.destination]
+   * @param {string[]} [definitions.pattern]
    * @param {Object} [definitions.permissions]
    */
   constructor(definitions) {
     this.dir = definitions.dir;
     delete definitions.dir;
+
+    if(definitions.pattern) {
+      this.pattern = asArray(definitions.pattern);
+      delete definitions.pattern;
+    }
 
     if (definitions.permissions) {
       const permissions = definitions.permissions;

@@ -139,6 +139,7 @@ test(
         variant: "default",
         deb1: "a",
         type: "debian",
+        packaging: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
         replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" },
         conflicts: {}
@@ -166,6 +167,7 @@ test(
         variant: "default",
         deb1: "a",
         type: "debian",
+        packaging: "debian",
         dependencies: { dep1: ">=1", dep2: ">=2" },
         replaces: { "old-dep1": ">=1.1", "old-dep2": ">=2.2" },
         conflicts: {}
@@ -226,6 +228,7 @@ test(
         install: "/n4",
         key: "is alpm",
         type: "alpm",
+        packaging: "alpm",
         dependencies: {},
         replaces: {},
         conflicts: {}
@@ -243,6 +246,7 @@ test(
         install: "/n4",
         key: "is debian",
         type: "debian",
+        packaging: "debian",
         dependencies: {},
         replaces: {},
         conflicts: {}
@@ -260,6 +264,7 @@ test(
         install: "/n4",
         key: "is alpm",
         type: "alpm",
+        packaging: "alpm",
         dependencies: {},
         replaces: {},
         conflicts: {}
@@ -277,6 +282,7 @@ test(
         install: "/n4",
         key: "is debian",
         type: "debian",
+        packaging: "debian",
         dependencies: {},
         replaces: {},
         conflicts: {}
@@ -475,8 +481,8 @@ test(
     }
   },
   [
-    { ...expected({ type: "alpm" }), output: { alpm: {} } },
-    { ...expected({ type: "debian" }), output: { debian: {} } }
+    { ...expected({ type: "alpm", packaging: "alpm" }), output: { alpm: {} } },
+    { ...expected({ type: "debian", packaging: "debian" }), output: { debian: {} } }
   ]
 );
 

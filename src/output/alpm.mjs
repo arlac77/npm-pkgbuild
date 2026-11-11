@@ -143,7 +143,7 @@ export class ALPM extends Packager {
       separator: undefined,
       skipEmpty: true
     },
-    noextract: { ...default_attribute, name: "noextract", skipEmpty: true },
+    noextract: { ...string_collection_attribute_writable, name: "noextract", skipEmpty: true },
     cksums: {
       ...string_collection_attribute_writable,
       name: "cksums",

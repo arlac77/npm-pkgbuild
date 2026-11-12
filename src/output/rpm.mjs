@@ -130,14 +130,13 @@ export class RPM extends Packager {
     }
   };
 
-  static get workspaceLayout() {
-    return {
-      named: {
-        staging: "BUILDROOT"
-      },
-      others: ["RPMS", "SRPMS", "SOURCES", "SPECS"]
-    };
-  }
+  static workspaceLayout = {
+    staging: "BUILDROOT",
+    RPMS: "RPMS",
+    SRPMS: "SRPMS",
+    SOURCES: "SOURCES",
+    SPECS: "SPECS"
+  };
 
   /**
    * Check for rpmbuild presence.

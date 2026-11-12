@@ -39,14 +39,9 @@ export class Packager {
   /**
    * @return {{named:object,others:string[]}}
    */
-  static get workspaceLayout() {
-    return {
-      named: {
-        staging: ""
-      },
-      others: []
-    };
-  }
+  static workspaceLayout = {
+    staging: "staging"
+  };
 
   /**
    * @param {Object} options
@@ -163,7 +158,7 @@ export class Packager {
         })
       );
     }
-    
+
     return Object.entries(dependencies)
       .filter(filterOutUnwantedDependencies())
       .map(([name, expression]) => this.dependencyExpression(name, expression));
@@ -201,34 +196,25 @@ export class Packager {
     }
 
     const tmpdir = await this.tmpdir;
-
     const out = {
       properties: this.properties,
       destination: options.destination ?? tmpdir,
-      tmpdir,
-      staging: options.staging ?? tmpdir
+      tmpdir
     };
-
-    // @ts-ignore
-    const l = this.constructor.workspaceLayout;
 
     const mdo = { recursive: true };
 
-    await Promise.all(l.others.map(d => mkdir(join(tmpdir, d), mdo)));
-
-    for (const nd of Object.entries(l.named).map(([name, d]) => [
-      name,
-      join(tmpdir, d),
-      mkdir(join(tmpdir, d), mdo)
-    ])) {
-      await nd[2];
-      out[nd[0]] = nd[1];
+    if (publishingDetail?.scheme === "file:") {
+      out.destination = publishingDetail.url;
+      await mkdir(out.destination, mdo);
     }
 
-    if (publishingDetail) {
-      out.destination =
-        publishingDetail.scheme === "file:" ? publishingDetail.url : tmpdir;
-      await mkdir(out.destination, mdo);
+    for (const [name, dir] of Object.entries(
+      this.constructor.workspaceLayout
+    )) {
+      const fullName = join(tmpdir, dir);
+      await mkdir(fullName, mdo);
+      out[name] = fullName;
     }
 
     this.#prepared = out;

@@ -12,20 +12,19 @@ class MyPackager extends Packager {
     },
     b: {
       ...string_attribute_writable,
-      type: types['lowercase-string'],
+      type: types["lowercase-string"],
       name: "b",
       default: "bv"
     }
   };
 
-  static get workspaceLayout() {
-    return {
-      named: {
-        staging: "BUILDROOT"
-      },
-      others: ["RPMS", "SRPMS", "SOURCES", "SPECS"]
-    };
-  }
+  static workspaceLayout = {
+    staging: "BUILDROOT",
+    RPMS: "RPMS",
+    SRPMS: "SRPMS",
+    SOURCES: "SOURCES",
+    SPECS: "SPECS"
+  };
 }
 
 test("packager attributes", t => {

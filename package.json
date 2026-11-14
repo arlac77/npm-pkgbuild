@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@npmcli/arborist": "^10.0.4",
-    "@vercel/nft": "^1.11.1",
+    "@vercel/nft": "^1.11.2",
     "aggregate-async-iterator": "^1.2.5",
     "commander": "^15.1.0",
     "compare-versions": "^6.1.1",
@@ -59,7 +59,7 @@
     "ini": "^7.0.0",
     "key-value-transformer": "^3.3.2",
     "npm-package-walker": "^8.0.11",
-    "npm-packlist": "^11.3.0",
+    "npm-packlist": "^11.3.1",
     "pacc": "^14.4.0",
     "package-directory": "^8.2.0",
     "pacote": "^22.0.0",

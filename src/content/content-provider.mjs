@@ -25,6 +25,10 @@ export class ContentProvider {
     this.dir = definitions.dir;
     delete definitions.dir;
 
+    if (definitions?.destination && !definitions.destination.endsWith("/")) {
+      definitions.destination += "/";
+    }
+
     if(definitions.pattern) {
       this.pattern = asArray(definitions.pattern);
       delete definitions.pattern;

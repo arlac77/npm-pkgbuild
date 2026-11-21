@@ -34,6 +34,10 @@ export class NodeModulesContentProvider extends ContentProvider {
   withoutDevelpmentDependencies = true;
 
   constructor(definitions) {
+    if (definitions?.destination && !definitions.destination.endsWith("/")) {
+      definitions.destination += "/";
+    }
+
     super(definitions);
 
     if (definitions.withoutDevelpmentDependencies !== undefined) {

@@ -25,6 +25,14 @@ export class NPMPackContentProvider extends ContentProvider {
     return "use npm pack as source";
   }
 
+  constructor(definitions) {
+    if (definitions?.destination && !definitions.destination.endsWith("/")) {
+      definitions.destination += "/";
+    }
+
+    super(definitions);
+  }
+
   async *[Symbol.asyncIterator]() {
     const entries = [];
 
